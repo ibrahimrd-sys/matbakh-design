@@ -5,6 +5,22 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-07-30b — guards simplified, import path added
+
+- Pre-commit hook cut from 118 lines to 59. Content scanning removed: it caused
+  three false positives (tokens.css, media.js twice) and caught nothing real.
+  The hook now checks filenames and counts only — business documents, credential
+  files, the vault marker, and recipe files beyond the template and demo.
+- Hook shebang changed to `#!/bin/bash`. `#!/usr/bin/env bash` cannot resolve
+  under GitHub Desktop's restricted PATH.
+- The deeper content scan remains in `scan.sh`, which is advisory and run on
+  demand, where a false positive costs nothing.
+- `import-screen.sh` added. The repository is now the system of record for
+  prototypes; Claude Design is a drafting tool with a one-way import. The script
+  applies all four required transformations — kebab-case name, asset path
+  rewrite, MEDIA() fallback patch, noindex stamp — and prints the manifest
+  snippet to add.
+
 ## 2026-07-30 — 2026.07.30
 
 - Repository restructured: prototypes moved to `prototypes/` with kebab-case
