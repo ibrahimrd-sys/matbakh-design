@@ -39,14 +39,21 @@ body[data-device] [data-om-starter="ios-frame"] > div:nth-child(2),
 body[data-device] [data-om-starter="ios-frame"] > div:nth-child(4){display:none!important}
 body[data-device] [data-screen="cook"]{padding-top:calc(env(safe-area-inset-top,8px) + 10px)!important;padding-bottom:calc(env(safe-area-inset-bottom,6px) + 8px)!important}
 body[data-device] [data-screen="recipe"] [data-scroll]{padding-bottom:calc(env(safe-area-inset-bottom,10px) + 8px)}
-/* The IOSDevice content wrapper is `flex:1;overflow:auto` with no min-height:0.
-   A column flex child defaults to min-height:auto, so it grows to fit its
-   content rather than being constrained to the frame — and the inner
-   [data-scroll] then has nothing to overflow, so it never scrolls. Constrain
-   the chain and let the inner container own the scrolling. */
-body[data-device] [data-om-starter="ios-frame"] > div:nth-child(3){height:100%!important;min-height:0!important;overflow:hidden!important}
-body[data-device] [data-om-starter="ios-frame"] > div:nth-child(3) > div{min-height:0!important;overflow:hidden!important}
-body[data-device] [data-screen]{height:100%!important;min-height:0!important}
+/* SCROLLING.
+   Measured on the recipe screen: [data-scroll] was 1209px tall with 1209px of
+   content — sized by its content, so nothing overflowed and nothing scrolled.
+   Every ancestor up to <body> was content-sized: the iOS frame reported 1209px
+   despite being declared 402x874, so `height:100%` on [data-screen] resolved
+   against an auto height and the whole chain collapsed.
+
+   Percentage heights need a definite height above them. This gives the screen
+   one — the frame's own 874px on a desktop, the real viewport on a device —
+   after which [data-scroll]'s `flex:1;min-height:0` can do its job.
+
+   Cook mode was equally broken; it just never noticed, because 582px of
+   content fits inside the window. */
+[data-screen]{height:874px}
+body[data-device] [data-screen]{height:100dvh!important}
 </style>
 </helmet>
 <template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"><rect width="240" height="240" fill="#F4EFE6"></rect><rect x="82" y="58" width="76" height="124" rx="16" fill="#A2542F"></rect><text x="120" y="139" text-anchor="middle" font-family="Georgia,serif" font-size="46" fill="#F4EFE6">M</text></svg></template>

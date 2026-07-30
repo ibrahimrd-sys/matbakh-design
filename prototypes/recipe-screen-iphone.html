@@ -16,6 +16,21 @@
 <style>
 body{margin:0;background:#231E18;font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
 a{color:#A2542F;text-decoration:none}a:hover{color:#8A4526}
+/* SCROLLING.
+   Measured on the recipe screen: [data-scroll] was 1209px tall with 1209px of
+   content — sized by its content, so nothing overflowed and nothing scrolled.
+   Every ancestor up to <body> was content-sized: the iOS frame reported 1209px
+   despite being declared 402x874, so `height:100%` on [data-screen] resolved
+   against an auto height and the whole chain collapsed.
+
+   Percentage heights need a definite height above them. This gives the screen
+   one — the frame's own 874px on a desktop, the real viewport on a device —
+   after which [data-scroll]'s `flex:1;min-height:0` can do its job.
+
+   Cook mode was equally broken; it just never noticed, because 582px of
+   content fits inside the window. */
+[data-screen]{height:874px}
+body[data-device] [data-screen]{height:100dvh!important}
 </style>
 </helmet>
 
