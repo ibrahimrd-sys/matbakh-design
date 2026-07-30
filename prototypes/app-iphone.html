@@ -62,8 +62,8 @@ body[data-device] [data-screen="recipe"] [data-scroll]{padding-bottom:calc(env(s
 
 <div data-scroll ref="{{ scrollRef }}" style="flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;touch-action:pan-y">
 
-<div style="position:relative;height:318px;background:#E4DACA">
-<img alt="" ref="{{ heroRef }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block"></img>
+<div style="position:relative;background:#E4DACA">
+<img alt="" ref="{{ heroRef }}" style="width:100%;height:auto;min-height:248px;max-height:58vh;object-fit:contain;display:block"></img>
 <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,17,13,.55) 0 84px,rgba(20,17,13,.05) 150px,rgba(20,17,13,.82) 100%)"></div>
 <div onClick="{{ enterCook }}" style="cursor:pointer;position:absolute;left:16px;top:56px;display:flex;flex-direction:column;justify-content:center;height:52px;padding:0 16px;border-radius:12px;background:{{ accent }};color:#FFFFFF;box-shadow:0 4px 18px rgba(0,0,0,.3);white-space:nowrap">
 <sc-if value="{{ showEn }}" hint-placeholder-val="{{ true }}"><div style="font-size:15px;font-weight:600;line-height:1.15">{{ ctaEn }}</div></sc-if>
