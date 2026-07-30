@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Matbakh — ingredient editor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+<style>
+:root{
+  --paper:#F4EFE6; --card:#FBF8F2; --card-alt:#F8F4EC; --ink:#221E1A;
+  --ink-60:rgba(34,30,26,.60); --ink-40:rgba(34,30,26,.40);
+  --hairline:rgba(34,30,26,.14); --terracotta:#A2542F; --terracotta-deep:#8A4526;
+  --teal:#2F5A55; --running:#12894A; --danger:#E01B22;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --sans:'IBM Plex Sans',system-ui,sans-serif;
+  --arabic:'Noto Naskh Arabic',serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);
+     font-size:14px;-webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+button{font:inherit;cursor:pointer}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-60)}
+
+/* ── masthead ─────────────────────────────────────────────────────────── */
+header{display:flex;align-items:center;gap:14px;padding:14px 20px;
+       border-bottom:1.5px solid var(--hairline);background:var(--card);flex:none}
+header h1{margin:0;font-size:17px;font-weight:600;letter-spacing:-.01em}
+header .ar{font-family:var(--arabic);font-size:15px;color:var(--ink-60)}
+.spacer{flex:1}
+.btn{padding:8px 14px;border-radius:9px;border:1.5px solid var(--hairline);
+     background:#FFF;color:var(--ink);font-size:13px;font-weight:500}
+.btn:hover{border-color:var(--terracotta);color:var(--terracotta)}
+.btn.solid{background:var(--terracotta);border-color:var(--terracotta);color:#FFF}
+.btn.solid:hover{background:var(--terracotta-deep);color:#FFF}
+.btn:disabled{opacity:.4;cursor:not-allowed;border-color:var(--hairline);color:var(--ink-40)}
+.count{font-family:var(--mono);font-size:11px;color:var(--ink-60);white-space:nowrap}
+
+/* ── three columns ────────────────────────────────────────────────────── */
+main{flex:1;min-height:0;display:grid;grid-template-columns:296px 1fr 288px}
+@media (max-width:1080px){main{grid-template-columns:240px 1fr}.rail{display:none}}
+@media (max-width:720px){main{grid-template-columns:1fr}.list{display:none}}
+
+/* list */
+.list{border-right:1.5px solid var(--hairline);display:flex;flex-direction:column;min-height:0;background:var(--card)}
+.search{padding:11px 12px;border-bottom:1px solid var(--hairline);display:flex;gap:8px}
+.search input{flex:1;min-width:0;padding:8px 10px;border-radius:8px;border:1.5px solid var(--hairline);
+              background:#FFF;font:inherit;font-size:13px;color:var(--ink)}
+.search input:focus{outline:none;border-color:var(--terracotta)}
+.rows{flex:1;min-height:0;overflow-y:auto}
+.row{padding:9px 12px;border-bottom:1px solid var(--hairline);cursor:pointer;display:flex;gap:9px;align-items:baseline}
+.row:hover{background:var(--card-alt)}
+.row.on{background:var(--terracotta);color:#FFF}
+.row.on .k,.row.on .a{color:rgba(255,255,255,.8)}
+.row .n{flex:1;min-width:0;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .a{font-family:var(--arabic);font-size:13px;color:var(--ink-60);white-space:nowrap}
+.row .k{font-family:var(--mono);font-size:9.5px;color:var(--ink-40)}
+.row.bad{box-shadow:inset 3px 0 0 var(--danger)}
+
+/* form */
+.form{overflow-y:auto;padding:22px 26px 60px;min-height:0}
+.grp{margin-bottom:26px}
+.grp>.eyebrow{display:block;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--hairline)}
+.f{display:grid;grid-template-columns:118px 1fr;gap:10px;align-items:center;margin-bottom:9px}
+.f>label{font-size:12.5px;color:var(--ink-60)}
+.f input,.f select{width:100%;padding:8px 10px;border-radius:8px;border:1.5px solid var(--hairline);
+                   background:#FFF;font:inherit;font-size:13.5px;color:var(--ink)}
+.f input:focus,.f select:focus{outline:none;border-color:var(--terracotta)}
+.f input.ar{font-family:var(--arabic);font-size:15px;direction:rtl;text-align:right}
+.f input.num{font-family:var(--mono)}
+.f .hint{grid-column:2;font-size:11.5px;color:var(--ink-40);margin-top:-4px}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.nut{display:grid;grid-template-columns:repeat(5,1fr);gap:8px}
+.nut label{display:block;font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;
+           text-transform:uppercase;color:var(--ink-40);margin-bottom:4px}
+.empty{padding:60px 26px;color:var(--ink-40);font-size:14px;line-height:1.7;max-width:46ch}
+
+/* validation rail — the signature: every rule matbakh.py enforces, live */
+.rail{border-left:1.5px solid var(--hairline);background:var(--card);display:flex;
+      flex-direction:column;min-height:0}
+.rail h2{margin:0;padding:13px 15px 11px;border-bottom:1px solid var(--hairline);
+         font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+         color:var(--ink-60);font-weight:500;display:flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--running);flex:none}
+.dot.bad{background:var(--danger)}
+.issues{flex:1;min-height:0;overflow-y:auto;padding:6px 0}
+.issue{padding:9px 15px;border-bottom:1px solid var(--hairline);cursor:pointer;font-size:12.5px;line-height:1.45}
+.issue:hover{background:var(--card-alt)}
+.issue .w{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+          color:var(--danger);display:block;margin-bottom:3px}
+.issue.warn .w{color:var(--terracotta)}
+.ok{padding:16px 15px;font-size:12.5px;color:var(--ink-60);line-height:1.5}
+.stats{border-top:1.5px solid var(--hairline);padding:12px 15px;font-family:var(--mono);
+       font-size:10.5px;line-height:1.9;color:var(--ink-60)}
+.stats b{color:var(--ink);font-weight:600}
+
+/* USDA lookup — a drawer, so the ingredient stays visible behind it */
+.scrim{position:fixed;inset:0;background:rgba(20,17,13,.34);z-index:40}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(460px,100%);background:var(--paper);
+  border-left:1.5px solid var(--hairline);z-index:41;display:flex;flex-direction:column;
+  box-shadow:-18px 0 44px rgba(0,0,0,.16)}
+.drawer .dh{padding:14px 17px;border-bottom:1.5px solid var(--hairline);background:var(--card);
+  display:flex;align-items:center;gap:10px;flex:none}
+.drawer .dh h3{margin:0;font-size:15px;font-weight:600}
+.drawer .db{flex:1;min-height:0;overflow-y:auto}
+.drawer .df{padding:12px 17px;border-bottom:1px solid var(--hairline);background:var(--card);flex:none}
+.hit{padding:11px 17px;border-bottom:1px solid var(--hairline);cursor:pointer}
+.hit:hover{background:var(--card-alt)}
+.hit .d{font-size:13px;line-height:1.4;margin-bottom:5px}
+.hit .m{font-family:var(--mono);font-size:10px;letter-spacing:.06em;color:var(--ink-40);
+  display:flex;gap:10px;flex-wrap:wrap}
+.hit .m b{color:var(--terracotta);font-weight:600}
+.badge{font-family:var(--mono);font-size:9px;letter-spacing:.1em;text-transform:uppercase;
+  padding:2px 6px;border-radius:4px;background:rgba(34,30,26,.07);color:var(--ink-60)}
+.badge.fnd{background:rgba(18,137,74,.13);color:var(--running)}
+.badge.brand{background:rgba(224,27,34,.1);color:var(--danger)}
+.note{padding:13px 17px;font-size:12.5px;line-height:1.55;color:var(--ink-60)}
+.note b{color:var(--ink)}
+.keyrow{display:flex;gap:7px;align-items:center;margin-top:9px}
+.keyrow input{flex:1;font-family:var(--mono);font-size:11.5px}
+.queue{font-family:var(--mono);font-size:10.5px;color:var(--ink-60);white-space:nowrap}
+/* last, and !important: this must beat any display set above it. */
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Ingredients</h1>
+  <div class="ar">المكونات</div>
+  <div class="spacer"></div>
+  <div class="count" id="count"></div>
+  <input type="file" id="file" accept=".yaml,.yml" class="hidden">
+  <button class="btn" onclick="document.getElementById('file').click()">Open a file</button>
+  <button class="btn" id="addBtn" disabled>Add ingredient</button>
+  <button class="btn solid" id="saveBtn" disabled>Download YAML</button>
+</header>
+
+<main>
+  <section class="list">
+    <div class="search">
+      <input id="q" placeholder="Search English or Arabic…">
+    </div>
+    <div class="rows" id="rows"></div>
+  </section>
+
+  <section class="form" id="form">
+    <div class="empty">
+      <p><strong>Open <span style="font-family:var(--mono);font-size:13px">ingredients.yaml</span> to begin.</strong></p>
+      <p>It's in the vault at <span style="font-family:var(--mono);font-size:12.5px">matbakh-private/03-catalogue/ref/</span>.
+         Nothing is uploaded — the file is read in your browser and stays on your machine.</p>
+      <p>Edit, then download. Put the downloaded file back in the vault, replacing the old one.</p>
+    </div>
+  </section>
+
+  <aside class="rail">
+    <h2><span class="dot" id="dot"></span> Checks</h2>
+    <div class="issues" id="issues"></div>
+    <div class="stats" id="stats"></div>
+  </aside>
+</main>
+
+<div class="scrim hidden" id="scrim"></div>
+<aside class="drawer hidden" id="drawer">
+  <div class="dh">
+    <h3 id="dTitle">USDA lookup</h3>
+    <div class="spacer"></div>
+    <div class="queue" id="dQueue"></div>
+    <button class="btn" id="dClose">Close</button>
+  </div>
+  <div class="df">
+    <input id="dQ" placeholder="Search USDA — try the plainest name">
+    <div class="keyrow">
+      <span class="eyebrow" style="white-space:nowrap">API key</span>
+      <input id="dKey" placeholder="DEMO_KEY">
+      <button class="btn sm" id="dSearch" style="padding:6px 10px;font-size:12px">Search</button>
+    </div>
+  </div>
+  <div class="db" id="dBody"></div>
+</aside>
+
+<script>
+const UNITS = ['g','ml','count','tsp','tbsp','kg','L'];
+const CLASSES = {
+  continuous:'Scales with servings — flour, meat, stock, rice',
+  discrete:'Whole or half units — onions, eggs, lemons',
+  seasoning:'Scales sub-linearly — doubling servings does not double the salt',
+  fixed:'Does not scale — water for boiling, oil for frying depth'
+};
+const NUT = ['kcal','protein','carb','fat','fiber'];
+
+let data = null, sel = null, order = [];
+
+/* ── validation. Same rules matbakh.py enforces, applied as you type, so a
+      file can't be saved in a state the validator would reject. ─────────── */
+function check(){
+  const out = [];
+  if(!data) return out;
+  const keys = Object.keys(data);
+  keys.forEach(k=>{
+    const v = data[k] || {};
+    const nm = (v.name && v.name.en) || k;
+    if(!/^[a-z0-9_]+$/.test(k))
+      out.push({k,lvl:'error',msg:`${k} — key must be lowercase letters, digits and underscores`});
+    if(!v.name || !v.name.en)
+      out.push({k,lvl:'error',msg:`${k} — no English name`});
+    if(!v.cls)
+      out.push({k,lvl:'error',msg:`${nm} — no scaling class. Servings cannot be computed without it.`});
+    else if(!CLASSES[v.cls])
+      out.push({k,lvl:'error',msg:`${nm} — unknown scaling class "${v.cls}"`});
+    if(!v.unit || !UNITS.includes(v.unit))
+      out.push({k,lvl:'error',msg:`${nm} — unit must be one of ${UNITS.join(', ')}`});
+    if(v.divisible !== undefined && v.cls !== 'discrete')
+      out.push({k,lvl:'warn',msg:`${nm} — divisible only affects discrete items; it does nothing here`});
+    if(!v.name || !v.name.ar)
+      out.push({k,lvl:'warn',msg:`${nm} — no Arabic name. Egypt launches Arabic-first.`});
+    if(!v.nutrition)
+      out.push({k,lvl:'warn',msg:`${nm} — no nutrition, so recipes using it cannot compute per-serving figures`});
+    if(v.cost !== undefined || v.price !== undefined)
+      out.push({k,lvl:'error',msg:`${nm} — remove cost. Prices come from the market feed.`});
+  });
+  return out;
+}
+
+function paintRail(){
+  const issues = check();
+  const errs = issues.filter(i=>i.lvl==='error');
+  document.getElementById('dot').className = 'dot' + (errs.length?' bad':'');
+  const box = document.getElementById('issues');
+  if(!data){ box.innerHTML=''; document.getElementById('stats').textContent=''; return; }
+  box.innerHTML = issues.length
+    ? issues.map(i=>`<div class="issue ${i.lvl==='warn'?'warn':''}" data-k="${i.k}">
+        <span class="w">${i.lvl}</span>${esc(i.msg)}</div>`).join('')
+    : `<div class="ok">Nothing to fix. Every ingredient has a scaling class, a unit and an English name.</div>`;
+  [...box.querySelectorAll('.issue')].forEach(el=>
+    el.onclick = ()=>{ select(el.dataset.k); });
+
+  const n = Object.keys(data).length;
+  const ar = Object.values(data).filter(v=>v.name&&v.name.ar).length;
+  const nut = Object.values(data).filter(v=>v.nutrition).length;
+  document.getElementById('stats').innerHTML =
+    `<b>${n}</b> ingredients<br><b>${ar}</b> with Arabic · <b>${n-ar}</b> without<br>` +
+    `<b>${nut}</b> with nutrition · <b>${n-nut}</b> without<br>` +
+    `<b>${errs.length}</b> error · <b>${issues.length-errs.length}</b> warning`;
+  document.getElementById('saveBtn').disabled = errs.length>0;
+  document.getElementById('saveBtn').textContent = errs.length ? 'Fix errors to download' : 'Download YAML';
+}
+
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+/* ── list ─────────────────────────────────────────────────────────────── */
+function paintList(){
+  const q = document.getElementById('q').value.trim().toLowerCase();
+  const bad = new Set(check().filter(i=>i.lvl==='error').map(i=>i.k));
+  const rows = document.getElementById('rows');
+  order = Object.keys(data||{}).filter(k=>{
+    if(!q) return true;
+    const v = data[k]||{};
+    return k.includes(q) || ((v.name&&v.name.en)||'').toLowerCase().includes(q)
+        || ((v.name&&v.name.ar)||'').includes(q);
+  });
+  rows.innerHTML = order.map(k=>{
+    const v = data[k]||{};
+    return `<div class="row ${k===sel?'on':''} ${bad.has(k)?'bad':''}" data-k="${k}">
+      <span class="n">${esc((v.name&&v.name.en)||k)}</span>
+      <span class="a">${esc((v.name&&v.name.ar)||'')}</span>
+      <span class="k">${esc(v.cls||'?').slice(0,4)}</span></div>`;
+  }).join('');
+  [...rows.querySelectorAll('.row')].forEach(el=>el.onclick=()=>select(el.dataset.k));
+  document.getElementById('count').textContent =
+    q ? `${order.length} of ${Object.keys(data).length}` : `${Object.keys(data).length} ingredients`;
+}
+
+function select(k){ sel = k; paintList(); paintForm(); }
+
+/* ── form ─────────────────────────────────────────────────────────────── */
+function paintForm(){
+  const el = document.getElementById('form');
+  if(!sel || !data[sel]){ el.innerHTML = '<div class="empty"><p>Pick an ingredient from the list, or add one.</p></div>'; return; }
+  const v = data[sel];
+  v.name = v.name || {};
+  const nut = v.nutrition || {};
+  el.innerHTML = `
+    <div class="grp">
+      <span class="eyebrow">Identity</span>
+      <div class="f"><label>Key</label><input id="i_key" class="num" value="${esc(sel)}"></div>
+      <div class="f"><div></div><div class="hint">Used by recipes and by the price feed. Changing it breaks any recipe already referring to it.</div></div>
+      <div class="f"><label>Name, English</label><input id="i_en" value="${esc(v.name.en||'')}"></div>
+      <div class="f"><label>الاسم بالعربية</label><input id="i_ar" class="ar" value="${esc(v.name.ar||'')}"></div>
+      <div class="f"><label>Icon</label><input id="i_glyph" class="num" value="${esc(v.glyph||'')}"></div>
+    </div>
+
+    <div class="grp">
+      <span class="eyebrow">How it scales</span>
+      <div class="f"><label>Unit</label><select id="i_unit">${
+        UNITS.map(u=>`<option ${v.unit===u?'selected':''}>${u}</option>`).join('')}</select></div>
+      <div class="f"><label>Scaling class</label><select id="i_cls">
+        <option value="">— choose —</option>${
+        Object.keys(CLASSES).map(c=>`<option value="${c}" ${v.cls===c?'selected':''}>${c}</option>`).join('')}
+      </select></div>
+      <div class="f"><div></div><div class="hint" id="clsHint">${esc(CLASSES[v.cls]||'Required. Without it, servings cannot be computed.')}</div></div>
+      <div class="f" id="divRow" style="${v.cls==='discrete'?'':'display:none'}">
+        <label>Can be halved</label>
+        <select id="i_div"><option value="false" ${!v.divisible?'selected':''}>No — a whole one only</option>
+        <option value="true" ${v.divisible?'selected':''}>Yes — half is sensible</option></select></div>
+    </div>
+
+    <div class="grp">
+      <span class="eyebrow">Buying it</span>
+      <div class="f"><label>Pack size</label><input id="i_pack" class="num" type="number" value="${v.pack??''}" placeholder="blank if sold loose"></div>
+      <div class="f"><label>Hint</label><div class="pair">
+        <input id="i_buyen" value="${esc((v.buy&&v.buy.en)||'')}" placeholder="1 bunch">
+        <input id="i_buyar" class="ar" value="${esc((v.buy&&v.buy.ar)||'')}" placeholder="ربطة"></div></div>
+      <div class="f"><div></div><div class="hint">What a shopper looks for on the shelf. No price — that comes from the market feed.</div></div>
+    </div>
+
+    <div class="grp">
+      <span class="eyebrow">Nutrition, per 100 ${v.unit==='ml'?'ml':'g'}</span>
+      <div class="nut">${NUT.map(n=>`<div><label>${n}</label>
+        <input id="i_${n}" class="num" type="number" step="0.01" value="${nut[n]??''}"></div>`).join('')}</div>
+      <div class="f" style="margin-top:10px"><div></div><div>
+        <button class="btn sm" id="lookupBtn">Look up in USDA</button>
+        <button class="btn sm" id="gapsBtn" style="margin-left:6px">Fill every gap</button>
+        <div class="hint" style="grid-column:1;margin-top:7px">Recipes compute their per-serving figures from these, so anything left blank leaves a hole in every recipe using this ingredient.</div>
+      </div></div>
+    </div>
+
+    <div class="grp">
+      <button class="btn" id="delBtn" style="border-color:var(--danger);color:var(--danger)">Delete this ingredient</button>
+    </div>`;
+
+  const put = (id, fn) => { const e = document.getElementById(id); if(e) e.oninput = e.onchange = fn; };
+  put('i_en', e=>{ v.name.en = e.target.value; paintList(); paintRail(); });
+  put('i_ar', e=>{ v.name.ar = e.target.value; paintList(); paintRail(); });
+  put('i_glyph', e=>{ v.glyph = e.target.value || undefined; });
+  put('i_unit', e=>{ v.unit = e.target.value; paintForm(); paintRail(); });
+  put('i_cls', e=>{
+    v.cls = e.target.value || undefined;
+    if(v.cls !== 'discrete') delete v.divisible;
+    paintForm(); paintList(); paintRail();
+  });
+  put('i_div', e=>{ v.divisible = e.target.value === 'true'; });
+  put('i_pack', e=>{ const n = parseFloat(e.target.value); v.pack = isNaN(n)?undefined:n; });
+  put('i_buyen', e=>{ v.buy = v.buy||{}; v.buy.en = e.target.value; });
+  put('i_buyar', e=>{ v.buy = v.buy||{}; v.buy.ar = e.target.value; });
+  NUT.forEach(n => put('i_'+n, e=>{
+    const x = parseFloat(e.target.value);
+    v.nutrition = v.nutrition||{};
+    if(isNaN(x)) delete v.nutrition[n]; else v.nutrition[n] = x;
+    if(!Object.keys(v.nutrition).length) delete v.nutrition;
+    paintRail();
+  }));
+  const keyEl = document.getElementById('i_key');
+  keyEl.onchange = e=>{
+    const nk = e.target.value.trim();
+    if(!nk || nk===sel) return;
+    if(data[nk]){ alert(`"${nk}" already exists. Keys must be unique.`); e.target.value = sel; return; }
+    const rebuilt = {};
+    Object.keys(data).forEach(k => rebuilt[k===sel?nk:k] = data[k]);
+    data = rebuilt; sel = nk; paintList(); paintForm(); paintRail();
+  };
+  document.getElementById('lookupBtn').onclick = ()=>openDrawer((v.name&&v.name.en)||sel);
+  document.getElementById('gapsBtn').onclick = fillGaps;
+  document.getElementById('delBtn').onclick = ()=>{
+    if(!confirm(`Delete ${(v.name.en)||sel}? Any recipe using it will fail validation.`)) return;
+    delete data[sel]; sel = null; paintList(); paintForm(); paintRail();
+  };
+}
+
+/* ── YAML out. Regenerated, so comments in the original are not preserved;
+      section headings are rebuilt from the icon grouping. ──────────────── */
+function q(s){
+  s = String(s==null?'':s);
+  return /^[A-Za-z\u0600-\u06FF][\w \u0600-\u06FF().,\-\/]*$/.test(s) && s === s.trim()
+    ? s : '"' + s.replace(/"/g,'\\"') + '"';
+}
+function toYaml(){
+  const L = [];
+  L.push('# INGREDIENT REFERENCE');
+  L.push('# Edited with tools/ingredient-editor.html');
+  L.push('#');
+  L.push('# NO COST FIELD. Prices come from the market feed, keyed on the id.');
+  L.push('# nutrition is per 100 g / 100 ml, USDA basis.');
+  L.push('');
+  Object.keys(data).forEach(k=>{
+    const v = data[k];
+    L.push(k + ':');
+    if(v.glyph) L.push('  glyph: ' + v.glyph);
+    L.push(`  name: { en: ${q(v.name&&v.name.en)}, ar: ${q(v.name&&v.name.ar)} }`);
+    L.push('  unit: ' + v.unit);
+    L.push('  cls: ' + v.cls);
+    if(v.cls==='discrete') L.push('  divisible: ' + (v.divisible?'true':'false'));
+    if(v.pack!=null) L.push('  pack: ' + v.pack);
+    if(v.buy) L.push(`  buy: { en: ${q(v.buy.en)}, ar: ${q(v.buy.ar)} }`);
+    if(v.nutrition){
+      L.push('  # per 100 ' + (v.unit==='ml'?'ml':'g'));
+      L.push('  nutrition: { ' + NUT.filter(n=>v.nutrition[n]!=null)
+        .map(n=>`${n}: ${v.nutrition[n]}`).join(', ') + ' }');
+    }
+    L.push('');
+  });
+  return L.join('\n');
+}
+
+
+/* ── USDA FoodData Central ────────────────────────────────────────────────
+   The key is never written into this file. It lives in your browser's local
+   storage, because USDA deactivates any key it finds published in a code
+   repository — and this file sits in a public one.
+
+   DEMO_KEY works immediately at a low rate limit. A free key from
+   api.data.gov lifts it, which matters when filling many gaps in one sitting.
+
+   Nutrient numbers are USDA's: 1008 energy, 1003 protein, 1005 carbohydrate,
+   1004 fat, 1079 fibre. Foundation and SR Legacy foods report per 100 g, which
+   is the basis this reference uses. Branded entries are per serving and are
+   marked, because taking them at face value would be wrong.            */
+const FDC = { 1008:'kcal', 1003:'protein', 1005:'carb', 1004:'fat', 1079:'fiber' };
+let gapQueue = [];
+
+const keyOf = () => localStorage.getItem('matbakh_fdc_key') || 'DEMO_KEY';
+
+function openDrawer(term, queue){
+  gapQueue = queue || [];
+  document.getElementById('dKey').value =
+    localStorage.getItem('matbakh_fdc_key') || '';
+  document.getElementById('dQ').value = term || '';
+  document.getElementById('scrim').classList.remove('hidden');
+  document.getElementById('drawer').classList.remove('hidden');
+  paintQueue();
+  document.getElementById('dBody').innerHTML =
+    '<div class="note">Search for the plainest form of the ingredient. ' +
+    '<b>Coriander, fresh</b> finds more than <b>fresh coriander leaves, chopped</b>.</div>';
+  if(term) usdaSearch();
+  else document.getElementById('dQ').focus();
+}
+function closeDrawer(){
+  gapQueue = [];
+  document.getElementById('scrim').classList.add('hidden');
+  document.getElementById('drawer').classList.add('hidden');
+}
+function paintQueue(){
+  const q = document.getElementById('dQueue');
+  q.textContent = gapQueue.length ? `${gapQueue.length} more to fill` : '';
+  document.getElementById('dTitle').textContent =
+    sel && data[sel] ? `USDA — ${(data[sel].name&&data[sel].name.en)||sel}` : 'USDA lookup';
+}
+
+async function usdaSearch(){
+  const term = document.getElementById('dQ').value.trim();
+  const body = document.getElementById('dBody');
+  if(!term){ body.innerHTML = '<div class="note">Type something to search for.</div>'; return; }
+  body.innerHTML = '<div class="note">Searching USDA…</div>';
+  const url = 'https://api.nal.usda.gov/fdc/v1/foods/search'
+    + '?query=' + encodeURIComponent(term)
+    + '&pageSize=14&dataType=' + encodeURIComponent('Foundation,SR Legacy,Survey (FNDDS)')
+    + '&api_key=' + encodeURIComponent(keyOf());
+  let res;
+  try{ res = await fetch(url); }
+  catch(err){
+    body.innerHTML = '<div class="note"><b>Could not reach USDA.</b><br>' +
+      'Either there is no internet connection, or the browser blocked the request ' +
+      'because this page was opened straight from disk. Opening it over the ' +
+      'published site instead usually fixes the second one.</div>';
+    return;
+  }
+  if(res.status === 403 || res.status === 429){
+    body.innerHTML = '<div class="note"><b>' +
+      (res.status===429 ? 'Rate limit reached.' : 'That key was rejected.') + '</b><br>' +
+      'DEMO_KEY allows only a handful of requests an hour. Get a free key at ' +
+      '<b>api.data.gov</b>, paste it above, and it will be remembered on this ' +
+      'machine — never written into the file.</div>';
+    return;
+  }
+  if(!res.ok){ body.innerHTML = `<div class="note">USDA returned ${res.status}.</div>`; return; }
+  const json = await res.json();
+  const foods = json.foods || [];
+  if(!foods.length){
+    body.innerHTML = '<div class="note">Nothing found. Try a plainer or more ' +
+      'general term — USDA indexes <b>Onions, raw</b> rather than <b>red onion</b>.</div>';
+    return;
+  }
+  body.innerHTML = foods.map((f,i)=>{
+    const n = {};
+    (f.foodNutrients||[]).forEach(x=>{ const k = FDC[x.nutrientId]; if(k) n[k] = x.value; });
+    const branded = f.dataType === 'Branded';
+    const cls = f.dataType === 'Foundation' ? 'fnd' : branded ? 'brand' : '';
+    window['__fdc_'+i] = n;
+    return `<div class="hit" data-i="${i}">
+      <div class="d">${esc(f.description)}</div>
+      <div class="m">
+        <span class="badge ${cls}">${esc(f.dataType||'—')}</span>
+        ${n.kcal!=null?`<span><b>${n.kcal}</b> kcal</span>`:''}
+        ${n.protein!=null?`<span>${n.protein} protein</span>`:''}
+        ${n.carb!=null?`<span>${n.carb} carb</span>`:''}
+        ${n.fat!=null?`<span>${n.fat} fat</span>`:''}
+        ${branded?'<span style="color:var(--danger)">per serving, not per 100 g</span>':''}
+      </div></div>`;
+  }).join('');
+  [...body.querySelectorAll('.hit')].forEach(el=>el.onclick=()=>apply(window['__fdc_'+el.dataset.i]));
+}
+
+function apply(n){
+  if(!sel || !data[sel]) return;
+  const v = data[sel];
+  v.nutrition = v.nutrition || {};
+  NUT.forEach(k=>{ if(n[k]!=null) v.nutrition[k] = Math.round(n[k]*100)/100; });
+  if(v.unit === 'ml'){
+    alert(`${(v.name&&v.name.en)||sel} is measured in ml, and USDA reports per 100 g.\n\n` +
+          `For anything denser or lighter than water — oil, honey, cream — these ` +
+          `figures need adjusting for density. They have been filled in as given.`);
+  }
+  if(gapQueue.length){
+    const next = gapQueue.shift();
+    select(next);
+    document.getElementById('dQ').value = (data[next].name && data[next].name.en) || next;
+    paintQueue(); paintRail(); usdaSearch();
+  } else {
+    closeDrawer(); paintForm(); paintRail(); paintList();
+  }
+}
+
+function fillGaps(){
+  const missing = Object.keys(data).filter(k=>!data[k].nutrition);
+  if(!missing.length){ alert('Every ingredient already has nutrition figures.'); return; }
+  const first = missing.shift();
+  select(first);
+  openDrawer((data[first].name && data[first].name.en) || first, missing);
+}
+
+document.getElementById('dClose').onclick = closeDrawer;
+document.getElementById('scrim').onclick = closeDrawer;
+document.getElementById('dSearch').onclick = usdaSearch;
+document.getElementById('dQ').onkeydown = e=>{ if(e.key==='Enter') usdaSearch(); };
+document.getElementById('dKey').onchange = e=>{
+  const k = e.target.value.trim();
+  if(k) localStorage.setItem('matbakh_fdc_key', k);
+  else localStorage.removeItem('matbakh_fdc_key');
+};
+
+/* ── wiring ───────────────────────────────────────────────────────────── */
+document.getElementById('file').onchange = e=>{
+  const f = e.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = ()=>{
+    try{
+      const parsed = jsyaml.load(r.result);
+      if(!parsed || typeof parsed !== 'object') throw new Error('not a mapping of ingredients');
+      data = parsed; sel = Object.keys(data)[0] || null;
+      document.getElementById('addBtn').disabled = false;
+      paintList(); paintForm(); paintRail();
+    }catch(err){
+      alert('That file could not be read as an ingredient reference.\n\n' + err.message);
+    }
+  };
+  r.readAsText(f);
+  e.target.value = '';
+};
+document.getElementById('q').oninput = paintList;
+document.getElementById('addBtn').onclick = ()=>{
+  let k = 'new_ingredient', n = 2;
+  while(data[k]) k = 'new_ingredient_' + n++;
+  data[k] = { name:{en:'',ar:''}, unit:'g', cls:'continuous', glyph:'jar' };
+  sel = k; document.getElementById('q').value=''; paintList(); paintForm(); paintRail();
+  const f = document.getElementById('i_en'); if(f) f.focus();
+};
+document.getElementById('saveBtn').onclick = ()=>{
+  const blob = new Blob([toYaml()], {type:'text/yaml;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = 'ingredients.yaml'; a.click();
+  URL.revokeObjectURL(a.href);
+};
+window.addEventListener('beforeunload', e=>{ if(data){ e.preventDefault(); e.returnValue=''; } });
+if(typeof jsyaml === 'undefined'){
+  document.getElementById('form').innerHTML =
+    '<div class="empty"><p><strong>The YAML library did not load.</strong></p>' +
+    '<p>This tool reads it from a CDN, so it needs an internet connection the first time. ' +
+    'Check your connection and reload.</p></div>';
+}
+</script>
+</body>
+</html>

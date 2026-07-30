@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Matbakh — recipe editor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+<style>
+:root{
+  --paper:#F4EFE6; --card:#FBF8F2; --card-alt:#F8F4EC; --ink:#221E1A;
+  --ink-60:rgba(34,30,26,.60); --ink-40:rgba(34,30,26,.40);
+  --hairline:rgba(34,30,26,.14); --terracotta:#A2542F; --terracotta-deep:#8A4526;
+  --teal:#2F5A55; --running:#12894A; --danger:#E01B22;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --sans:'IBM Plex Sans',system-ui,sans-serif;
+  --arabic:'Noto Naskh Arabic',serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:14px;
+     -webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+button{font:inherit;cursor:pointer}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-60)}
+header{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1.5px solid var(--hairline);
+       background:var(--card);flex:none}
+header h1{margin:0;font-size:17px;font-weight:600;letter-spacing:-.01em}
+header .ar{font-family:var(--arabic);font-size:15px;color:var(--ink-60)}
+.spacer{flex:1}
+.btn{padding:8px 13px;border-radius:9px;border:1.5px solid var(--hairline);background:#FFF;
+     color:var(--ink);font-size:13px;font-weight:500}
+.btn:hover{border-color:var(--terracotta);color:var(--terracotta)}
+.btn.solid{background:var(--terracotta);border-color:var(--terracotta);color:#FFF}
+.btn.solid:hover{background:var(--terracotta-deep);color:#FFF}
+.btn:disabled{opacity:.4;cursor:not-allowed;border-color:var(--hairline);color:var(--ink-40)}
+.btn.sm{padding:5px 9px;font-size:11.5px;border-radius:7px}
+.loaded{font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--ink-40);white-space:nowrap}
+.loaded b{color:var(--running);font-weight:600}
+.loaded s{color:var(--danger);text-decoration:none;font-weight:600}
+
+main{flex:1;min-height:0;display:grid;grid-template-columns:250px 1fr 300px}
+@media (max-width:1140px){main{grid-template-columns:210px 1fr}.rail{display:none}}
+@media (max-width:760px){main{grid-template-columns:1fr}.outline{display:none}}
+
+/* outline — the arc, which is also how a cook experiences the recipe */
+.outline{border-right:1.5px solid var(--hairline);background:var(--card);display:flex;flex-direction:column;min-height:0}
+.outline .hd{padding:11px 13px;border-bottom:1px solid var(--hairline);display:flex;align-items:center;gap:8px}
+.steps{flex:1;min-height:0;overflow-y:auto}
+.st{padding:10px 13px;border-bottom:1px solid var(--hairline);cursor:pointer;display:flex;gap:10px;align-items:baseline}
+.st:hover{background:var(--card-alt)}
+.st.on{background:var(--terracotta);color:#FFF}
+.st.on .no,.st.on .meta{color:rgba(255,255,255,.78)}
+.st.bad{box-shadow:inset 3px 0 0 var(--danger)}
+.st .no{font-family:var(--mono);font-size:10.5px;color:var(--ink-40);flex:none}
+.st .nm{flex:1;min-width:0;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.st .meta{font-family:var(--mono);font-size:9.5px;color:var(--ink-40);white-space:nowrap}
+.nav{padding:10px 13px;border-top:1px solid var(--hairline);display:flex;gap:6px;flex-wrap:wrap}
+
+.pane{overflow-y:auto;padding:20px 24px 70px;min-height:0}
+.grp{margin-bottom:24px}
+.grp>.eyebrow{display:block;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--hairline)}
+.f{display:grid;grid-template-columns:112px 1fr;gap:10px;align-items:center;margin-bottom:8px}
+.f>label{font-size:12.5px;color:var(--ink-60)}
+input,select,textarea{width:100%;padding:8px 10px;border-radius:8px;border:1.5px solid var(--hairline);
+  background:#FFF;font:inherit;font-size:13.5px;color:var(--ink)}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--terracotta)}
+textarea{resize:vertical;min-height:52px;line-height:1.5}
+.ar{font-family:var(--arabic);font-size:15px;direction:rtl;text-align:right}
+.num{font-family:var(--mono)}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.trio{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.hint{grid-column:2;font-size:11.5px;color:var(--ink-40);margin-top:-3px;line-height:1.45}
+
+/* tiles — one action each, which is the unit a cook actually performs */
+.tile{border:1.5px solid var(--hairline);border-radius:11px;padding:12px;margin-bottom:9px;background:var(--card)}
+.tile .th{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.tile .th .eyebrow{flex:1}
+.empty{padding:50px 24px;color:var(--ink-40);font-size:14px;line-height:1.7;max-width:48ch}
+.empty strong{color:var(--ink)}
+.empty code{font-family:var(--mono);font-size:12.5px;background:var(--card);padding:1px 5px;border-radius:4px}
+
+.rail{border-left:1.5px solid var(--hairline);background:var(--card);display:flex;flex-direction:column;min-height:0}
+.rail h2{margin:0;padding:13px 15px 11px;border-bottom:1px solid var(--hairline);font-family:var(--mono);
+  font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-60);font-weight:500;
+  display:flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--running);flex:none}
+.dot.bad{background:var(--danger)}
+.issues{flex:1;min-height:0;overflow-y:auto}
+.issue{padding:9px 15px;border-bottom:1px solid var(--hairline);cursor:pointer;font-size:12.5px;line-height:1.45}
+.issue:hover{background:var(--card-alt)}
+.issue .w{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--danger);display:block;margin-bottom:3px}
+.issue.warn .w{color:var(--terracotta)}
+.ok{padding:16px 15px;font-size:12.5px;color:var(--ink-60);line-height:1.5}
+/* last, and !important: this must beat any display set above it. */
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Recipe</h1>
+  <div class="ar">وصفة</div>
+  <div class="spacer"></div>
+  <div class="loaded" id="loaded"></div>
+  <input type="file" id="file" accept=".yaml,.yml" multiple class="hidden">
+  <button class="btn" onclick="document.getElementById('file').click()">Open files</button>
+  <button class="btn" id="newBtn" disabled>New recipe</button>
+  <button class="btn solid" id="saveBtn" disabled>Download YAML</button>
+</header>
+
+<main>
+  <section class="outline">
+    <div class="hd"><span class="eyebrow">The arc</span><div class="spacer"></div>
+      <button class="btn sm" id="metaBtn">Recipe</button></div>
+    <div class="steps" id="steps"></div>
+    <div class="nav">
+      <button class="btn sm" id="addStep" disabled>Add step</button>
+      <button class="btn sm" id="upStep" disabled>Move up</button>
+      <button class="btn sm" id="downStep" disabled>Move down</button>
+    </div>
+  </section>
+
+  <section class="pane" id="pane">
+    <div class="empty">
+      <p><strong>Open your reference files to begin.</strong></p>
+      <p>Select all three at once — hold Ctrl while clicking:</p>
+      <p><code>ingredients.yaml</code> from the vault,<br>
+         <code>activities.yaml</code> and <code>chrome.yaml</code> from <code>content/lexicon/</code>.</p>
+      <p>Add a recipe file too if you're editing one, or start a new one. Nothing is
+         uploaded; files are read in your browser.</p>
+    </div>
+  </section>
+
+  <aside class="rail">
+    <h2><span class="dot" id="dot"></span> Checks</h2>
+    <div class="issues" id="issues"></div>
+  </aside>
+</main>
+
+<script>
+let ING=null, ACT=null, CHR=null, R=null, view={mode:'meta', step:0};
+const LOC=['en','ar'];
+
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const stations = () => CHR ? Object.keys(CHR.stations) : [];
+const notes = () => CHR ? Object.keys(CHR.note_kinds) : [];
+const acts = () => ACT ? Object.keys(ACT) : [];
+
+function blank(){
+  return { id:'new_recipe', source_locale:'en', status:'draft',
+    title:{en:'',ar:''}, why:{en:'',ar:''},
+    servings:{base:4,presets:[2,4,8],max_scale:1.5},
+    hands_on_minutes:null, hero:'assets/', price_source:'el_obour',
+    nutrition_per_serving:{}, intermediates:{}, steps:[], shorts:{} };
+}
+
+/* ── validation, mirroring matbakh.py so nothing surprises you later ───── */
+function check(){
+  const o=[]; if(!R) return o;
+  const at=(i)=>({go:()=>{view={mode:'step',step:i};paint();}});
+  const prose=(n,label,jump)=>{
+    if(!n||typeof n!=='object'){o.push({lvl:'error',msg:`${label} — needs text`,...jump});return;}
+    if(!n[R.source_locale]) o.push({lvl:'error',msg:`${label} — missing ${R.source_locale}`,...jump});
+    LOC.forEach(l=>{ if(!n[l]) o.push({lvl:'warn',msg:`${label} — no ${l} translation yet`,...jump}); });
+  };
+  const meta={go:()=>{view={mode:'meta'};paint();}};
+  if(!R.id||!/^[a-z0-9_]+$/.test(R.id)) o.push({lvl:'error',msg:'id — lowercase letters, digits and underscores',...meta});
+  prose(R.title,'title',meta);
+  if(R.why) prose(R.why,'why',meta);
+  if(!R.servings||!R.servings.base) o.push({lvl:'error',msg:'servings.base — nothing can scale without it',...meta});
+  if(!R.servings||!R.servings.max_scale) o.push({lvl:'warn',msg:'no max_scale — the reader cannot warn on batch size',...meta});
+  if(!R.steps||!R.steps.length){o.push({lvl:'error',msg:'no steps yet',...meta});return o;}
+
+  const made=new Set(), bought={};
+  (R.steps||[]).forEach((s,i)=>{
+    const j=at(i), tag=`step ${i+1}`;
+    if(!stations().includes(s.station)) o.push({lvl:'error',msg:`${tag} — unknown station "${s.station||'—'}"`,...j});
+    const tl=s.tiles||[];
+    if(!tl.length) o.push({lvl:'error',msg:`${tag} — no tiles`,...j});
+    if(s.ordered && tl.length<2) o.push({lvl:'warn',msg:`${tag} — ordered with ${tl.length} tile; ordering is meaningless`,...j});
+    const hasP=!!s.photo, hasD=!!s.doneness;
+    if(hasP!==hasD) o.push({lvl:'warn',msg:`${tag} — has ${hasP?'a photo but no doneness cue':'a doneness cue but no photo'}`,...j});
+    if(hasD) prose(s.doneness,`${tag} doneness`,j);
+    if(s.note){
+      if(!notes().includes(s.note.kind)) o.push({lvl:'error',msg:`${tag} — unknown note kind "${s.note.kind||'—'}"`,...j});
+      prose(s.note.text,`${tag} note`,j);
+    }
+    let cont=false;
+    tl.forEach((t,k)=>{
+      const tg=`${tag} tile ${k+1}`;
+      if(t.do){ if(!acts().includes(t.do)) o.push({lvl:'error',msg:`${tg} — "${t.do}" is not in the activity lexicon`,...j}); }
+      else if(t.verb){ prose(t.verb,`${tg} verb`,j); if(!t.glyph) o.push({lvl:'error',msg:`${tg} — a bespoke verb needs an icon`,...j}); }
+      else o.push({lvl:'error',msg:`${tg} — needs an activity or a bespoke verb`,...j});
+      if(t.qualifier) prose(t.qualifier,`${tg} qualifier`,j);
+      if(t.short && !(R.shorts||{})[t.short]) o.push({lvl:'error',msg:`${tg} — short "${t.short}" is not defined`,...j});
+      (t.items||[]).forEach(it=>{
+        if(!it.id){o.push({lvl:'error',msg:`${tg} — an item with no ingredient`,...j});return;}
+        if(it.id.startsWith('@')){
+          const key=it.id.slice(1);
+          if(!(R.intermediates||{})[key]) o.push({lvl:'error',msg:`${tg} — "${it.id}" is not declared`,...j});
+          else if(!made.has(key)) o.push({lvl:'error',msg:`${tg} — uses "${it.id}" before a step makes it`,...j});
+          return;
+        }
+        const ref=ING&&ING[it.id];
+        if(!ref){o.push({lvl:'error',msg:`${tg} — "${it.id}" is not in the ingredient reference`,...j});return;}
+        if(!ref.cls) o.push({lvl:'error',msg:`${tg} — "${it.id}" has no scaling class`,...j});
+        if(ref.cls==='continuous') cont=true;
+        if(it.amt!=null && !it.carried){
+          if(bought[it.id]) o.push({lvl:'warn',msg:`${tg} — "${it.id}" already bought in ${bought[it.id]}; mark carried or the list double-counts`,...j});
+          else bought[it.id]=tag;
+        }
+      });
+    });
+    if(s.makes){ if(!(R.intermediates||{})[s.makes]) o.push({lvl:'error',msg:`${tag} — makes "${s.makes}" which is not declared`,...j}); made.add(s.makes); }
+    if(s.timer){
+      if(!s.timer.minutes) o.push({lvl:'error',msg:`${tag} — timer with no minutes`,...j});
+      prose(s.timer.label,`${tag} timer label`,j);
+      if(s.timer.mass_sensitive && !cont) o.push({lvl:'warn',msg:`${tag} — timer scales with the batch but nothing here scales continuously`,...j});
+    }
+  });
+  Object.keys(R.intermediates||{}).forEach(k=>{
+    if(!made.has(k)) o.push({lvl:'error',msg:`intermediate "${k}" is declared but no step makes it`,...meta});
+    prose(R.intermediates[k].name,`intermediate "${k}" name`,meta);
+  });
+  const used=new Set();
+  (R.steps||[]).forEach(s=>(s.tiles||[]).forEach(t=>t.short&&used.add(t.short)));
+  Object.keys(R.shorts||{}).forEach(k=>{
+    prose(R.shorts[k].title,`short "${k}" title`,meta);
+    if(!R.shorts[k].clip) o.push({lvl:'warn',msg:`short "${k}" has no clip yet — renders as TO BE SHOT`,...meta});
+    if(!used.has(k)) o.push({lvl:'warn',msg:`short "${k}" is defined but no tile uses it`,...meta});
+  });
+  return o;
+}
+
+/* ── nutrition, computed from the step data ───────────────────────────── */
+function computeNutrition(){
+  if(!ING||!R) return null;
+  const NUT=['kcal','protein','carb','fat','fiber'], sum={}, gaps=[];
+  NUT.forEach(n=>sum[n]=0);
+  const seen=new Set();
+  (R.steps||[]).forEach(s=>(s.tiles||[]).forEach(t=>(t.items||[]).forEach(it=>{
+    if(!it.id||it.id.startsWith('@')||it.amt==null||it.carried) return;
+    if(seen.has(it.id)) return; seen.add(it.id);
+    const ref=ING[it.id]; if(!ref) return;
+    if(!ref.nutrition){ gaps.push(`${(ref.name&&ref.name.en)||it.id} has no nutrition`); return; }
+    if(ref.unit!=='g'&&ref.unit!=='ml'){ gaps.push(`${(ref.name&&ref.name.en)||it.id} is measured in ${ref.unit}, so grams are unknown`); return; }
+    NUT.forEach(n=>{ if(ref.nutrition[n]!=null) sum[n]+=ref.nutrition[n]*it.amt/100; });
+  })));
+  const base=(R.servings&&R.servings.base)||1, per={};
+  NUT.forEach(n=>per[n]=Math.round(sum[n]/base*10)/10);
+  return {per,gaps};
+}
+
+/* ── painting ─────────────────────────────────────────────────────────── */
+function paint(){ paintOutline(); paintPane(); paintRail(); paintLoaded(); }
+
+function paintLoaded(){
+  const m=(ok,l)=>ok?`<b>${l}</b>`:`<s>${l}</s>`;
+  document.getElementById('loaded').innerHTML =
+    m(!!ING,'ingredients')+' · '+m(!!ACT,'activities')+' · '+m(!!CHR,'chrome');
+  const ready = ING&&ACT&&CHR;
+  document.getElementById('newBtn').disabled = !ready;
+  document.getElementById('addStep').disabled = !R;
+  document.getElementById('upStep').disabled = !R;
+  document.getElementById('downStep').disabled = !R;
+}
+
+function paintOutline(){
+  const box=document.getElementById('steps');
+  if(!R){box.innerHTML='';return;}
+  const bad=new Set();
+  check().filter(i=>i.lvl==='error').forEach(i=>{const m=/^step (\d+)/.exec(i.msg);if(m)bad.add(+m[1]-1);});
+  box.innerHTML=(R.steps||[]).map((s,i)=>{
+    const st=CHR&&CHR.stations[s.station];
+    let nm=st?(st.name.en):(s.station||'—');
+    if(s.qualifier&&s.qualifier.en) nm+=' · '+s.qualifier.en;
+    const bits=[]; if(s.timer)bits.push(s.timer.minutes+'′'); if(s.heat)bits.push('h'+s.heat);
+    return `<div class="st ${view.mode==='step'&&view.step===i?'on':''} ${bad.has(i)?'bad':''}" data-i="${i}">
+      <span class="no">${String(i+1).padStart(2,'0')}</span>
+      <span class="nm">${esc(nm)}</span><span class="meta">${bits.join(' ')}</span></div>`;
+  }).join('');
+  [...box.querySelectorAll('.st')].forEach(el=>el.onclick=()=>{view={mode:'step',step:+el.dataset.i};paint();});
+}
+
+function paintRail(){
+  const iss=check(), errs=iss.filter(i=>i.lvl==='error');
+  document.getElementById('dot').className='dot'+(errs.length?' bad':'');
+  const box=document.getElementById('issues');
+  if(!R){box.innerHTML='';return;}
+  box.innerHTML = iss.length
+    ? iss.map((i,n)=>`<div class="issue ${i.lvl==='warn'?'warn':''}" data-n="${n}">
+        <span class="w">${i.lvl}</span>${esc(i.msg)}</div>`).join('')
+    : '<div class="ok">Valid. Every activity, ingredient and intermediate resolves.</div>';
+  [...box.querySelectorAll('.issue')].forEach(el=>{
+    const i=iss[+el.dataset.n]; if(i.go) el.onclick=i.go;
+  });
+  document.getElementById('saveBtn').disabled=!!errs.length;
+  document.getElementById('saveBtn').textContent=errs.length?`${errs.length} error${errs.length>1?'s':''} to fix`:'Download YAML';
+}
+
+function proseField(label,obj,key,ph,multi){
+  const T=multi?'textarea':'input';
+  return `<div class="f"><label>${label}</label><div class="pair">
+    <${T} data-p="${key}.en" placeholder="${ph||''}">${multi?esc(obj&&obj.en):''}</${T}>
+    <${T} class="ar" data-p="${key}.ar">${multi?esc(obj&&obj.ar):''}</${T}></div></div>`;
+}
+
+function paintPane(){
+  const el=document.getElementById('pane');
+  if(!R){return;}
+  el.innerHTML = view.mode==='meta' ? metaHtml() : stepHtml(view.step);
+  wire(el);
+}
+
+function metaHtml(){
+  const s=R.servings||{}, n=R.nutrition_per_serving||{};
+  return `
+  <div class="grp"><span class="eyebrow">The dish</span>
+    <div class="f"><label>id</label><input class="num" data-v="id" value="${esc(R.id)}"></div>
+    <div class="f"><label>Status</label><select data-v="status">
+      ${['draft','tested','published'].map(x=>`<option ${R.status===x?'selected':''}>${x}</option>`).join('')}
+    </select></div>
+    <div class="f"><div></div><div class="hint">Cook it before marking it tested. Published requires every string translated.</div></div>
+    <div class="f"><label>Title</label><div class="pair">
+      <input data-v="title.en" value="${esc(R.title&&R.title.en)}">
+      <input class="ar" data-v="title.ar" value="${esc(R.title&&R.title.ar)}"></div></div>
+    <div class="f"><label>Why this one</label><div class="pair">
+      <textarea data-v="why.en">${esc(R.why&&R.why.en)}</textarea>
+      <textarea class="ar" data-v="why.ar">${esc(R.why&&R.why.ar)}</textarea></div></div>
+    <div class="f"><div></div><div class="hint">What makes this version worth cooking instead of the one on YouTube. Concrete claims, not adjectives.</div></div>
+  </div>
+
+  <div class="grp"><span class="eyebrow">Scale and time</span>
+    <div class="f"><label>Serves</label><div class="trio">
+      <input class="num" type="number" data-v="servings.base" value="${s.base??''}" placeholder="base">
+      <input class="num" data-v="servings.presets" value="${(s.presets||[]).join(', ')}" placeholder="2, 4, 8">
+      <input class="num" type="number" step="0.1" data-v="servings.max_scale" value="${s.max_scale??''}" placeholder="max ×"></div></div>
+    <div class="f"><div></div><div class="hint">Base yield, the preset buttons, and the multiplier past which the method itself changes.</div></div>
+    <div class="f"><label>Hands-on min</label><input class="num" type="number" data-v="hands_on_minutes" value="${R.hands_on_minutes??''}"></div>
+    <div class="f"><label>Hero photo</label><input class="num" data-v="hero" value="${esc(R.hero)}"></div>
+  </div>
+
+  <div class="grp"><span class="eyebrow">Nutrition, per serving</span>
+    <div class="trio" style="grid-template-columns:repeat(4,1fr)">
+      ${['energy_kcal','protein_g','fat_g','carbs_g'].map(k=>`<div>
+        <label class="eyebrow" style="display:block;margin-bottom:4px">${k.replace(/_/g,' ')}</label>
+        <input class="num" type="number" step="0.1" data-v="nutrition_per_serving.${k}" value="${n[k]??''}"></div>`).join('')}
+    </div>
+    <div class="f" style="margin-top:10px"><div></div><div>
+      <button class="btn sm" id="calcBtn">Compute from the ingredients</button>
+      <div class="hint" style="grid-column:1;margin-top:6px" id="calcNote">Adds up what the steps actually use, divided by the base yield.</div>
+    </div></div>
+  </div>
+
+  <div class="grp"><span class="eyebrow">Intermediates</span>
+    <div class="hint" style="grid-column:1;margin-bottom:9px">Things the recipe makes and then uses — stock, takliya. They never reach the shopping list.</div>
+    ${Object.keys(R.intermediates||{}).map(k=>`
+      <div class="tile"><div class="th"><span class="eyebrow">@${esc(k)}</span>
+        <button class="btn sm" data-delint="${esc(k)}">Remove</button></div>
+        <div class="pair">
+          <input data-int="${esc(k)}.en" value="${esc(R.intermediates[k].name&&R.intermediates[k].name.en)}" placeholder="Stock">
+          <input class="ar" data-int="${esc(k)}.ar" value="${esc(R.intermediates[k].name&&R.intermediates[k].name.ar)}" placeholder="المرق">
+        </div></div>`).join('')}
+    <button class="btn sm" id="addInt">Add an intermediate</button>
+  </div>
+
+  <div class="grp"><span class="eyebrow">Technique shorts</span>
+    ${Object.keys(R.shorts||{}).map(k=>`
+      <div class="tile"><div class="th"><span class="eyebrow">${esc(k)}</span>
+        <button class="btn sm" data-delshort="${esc(k)}">Remove</button></div>
+        <div class="pair" style="margin-bottom:8px">
+          <input data-sh="${esc(k)}.title.en" value="${esc(R.shorts[k].title&&R.shorts[k].title.en)}" placeholder="Title">
+          <input class="ar" data-sh="${esc(k)}.title.ar" value="${esc(R.shorts[k].title&&R.shorts[k].title.ar)}"></div>
+        <div class="trio">
+          <input class="num" type="number" data-sh="${esc(k)}.secs" value="${R.shorts[k].secs??''}" placeholder="secs">
+          <input class="num" data-sh="${esc(k)}.poster" value="${esc(R.shorts[k].poster)}" placeholder="assets/…">
+          <input class="num" data-sh="${esc(k)}.clip" value="${esc(R.shorts[k].clip)}" placeholder="clip, if shot"></div>
+      </div>`).join('')}
+    <button class="btn sm" id="addShort">Add a short</button>
+  </div>`;
+}
+
+function stepHtml(i){
+  const s=R.steps[i]; if(!s) return '<div class="empty"><p>No step here.</p></div>';
+  const st=CHR.stations;
+  return `
+  <div class="grp"><span class="eyebrow">Step ${i+1} — where the cook stands</span>
+    <div class="f"><label>Station</label><select data-s="station">
+      <option value="">— choose —</option>
+      ${stations().map(k=>`<option value="${k}" ${s.station===k?'selected':''}>${st[k].name.en} · ${st[k].name.ar}</option>`).join('')}
+    </select></div>
+    <div class="f"><label>Qualifier</label><div class="pair">
+      <input data-s="qualifier.en" value="${esc(s.qualifier&&s.qualifier.en)}" placeholder="stock">
+      <input class="ar" data-s="qualifier.ar" value="${esc(s.qualifier&&s.qualifier.ar)}" placeholder="المرق"></div></div>
+    <div class="f"><div></div><div class="hint">Renders as "Stove · stock". Leave blank if the station name alone is clear.</div></div>
+    <div class="f"><label>Order matters</label><select data-s="ordered">
+      <option value="false" ${!s.ordered?'selected':''}>No — any order is fine</option>
+      <option value="true" ${s.ordered?'selected':''}>Yes — out of sequence ruins it</option></select></div>
+    <div class="f"><label>Heat</label><select data-s="heat">
+      <option value="">none</option>
+      ${[1,2,3].map(h=>`<option value="${h}" ${s.heat==h?'selected':''}>${h} — ${['low','medium','high'][h-1]}</option>`).join('')}
+    </select></div>
+    <div class="f"><label>Makes</label><select data-s="makes"><option value="">nothing</option>
+      ${Object.keys(R.intermediates||{}).map(k=>`<option value="${k}" ${s.makes===k?'selected':''}>@${k}</option>`).join('')}
+    </select></div>
+  </div>
+
+  <div class="grp"><span class="eyebrow">Actions</span>
+    ${(s.tiles||[]).map((t,k)=>tileHtml(t,i,k)).join('')}
+    <button class="btn sm" id="addTile">Add an action</button>
+  </div>
+
+  <div class="grp"><span class="eyebrow">How it should look when done</span>
+    <div class="f"><label>Photo</label><input class="num" data-s="photo" value="${esc(s.photo)}" placeholder="assets/…"></div>
+    <div class="f"><label>Doneness</label><div class="pair">
+      <textarea data-s="doneness.en">${esc(s.doneness&&s.doneness.en)}</textarea>
+      <textarea class="ar" data-s="doneness.ar">${esc(s.doneness&&s.doneness.ar)}</textarea></div></div>
+    <div class="f"><div></div><div class="hint">What the cook sees or hears, not the clock. "Straw-gold at the edges. One shade past this is bitter."</div></div>
+  </div>
+
+  <div class="grp"><span class="eyebrow">Timer</span>
+    <div class="f"><label>Minutes</label><input class="num" type="number" data-s="timer.minutes" value="${(s.timer&&s.timer.minutes)??''}"></div>
+    ${s.timer?`<div class="f"><label>Label</label><div class="pair">
+      <input data-s="timer.label.en" value="${esc(s.timer.label&&s.timer.label.en)}">
+      <input class="ar" data-s="timer.label.ar" value="${esc(s.timer.label&&s.timer.label.ar)}"></div></div>
+    <div class="f"><label>Scales</label><select data-s="timer.mass_sensitive">
+      <option value="false" ${!s.timer.mass_sensitive?'selected':''}>No — a rest or a proof</option>
+      <option value="true" ${s.timer.mass_sensitive?'selected':''}>Yes — longer for a bigger batch</option></select></div>`:''}
+  </div>
+
+  <div class="grp"><span class="eyebrow">Warning</span>
+    <div class="f"><label>Kind</label><select data-s="note.kind"><option value="">none</option>
+      ${notes().map(k=>`<option value="${k}" ${s.note&&s.note.kind===k?'selected':''}>${CHR.note_kinds[k].label.en}</option>`).join('')}
+    </select></div>
+    ${s.note?`<div class="f"><label>Text</label><div class="pair">
+      <textarea data-s="note.text.en">${esc(s.note.text&&s.note.text.en)}</textarea>
+      <textarea class="ar" data-s="note.text.ar">${esc(s.note.text&&s.note.text.ar)}</textarea></div></div>`:''}
+  </div>
+
+  <div class="grp"><button class="btn sm" id="delStep" style="border-color:var(--danger);color:var(--danger)">Delete step ${i+1}</button></div>`;
+}
+
+function tileHtml(t,si,ti){
+  const items=t.items||[];
+  return `<div class="tile"><div class="th">
+    <span class="eyebrow">Action ${ti+1}</span>
+    <button class="btn sm" data-deltile="${ti}">Remove</button></div>
+    <div class="f"><label>Does what</label><select data-t="${ti}.do">
+      <option value="">— bespoke wording —</option>
+      ${acts().map(k=>`<option value="${k}" ${t.do===k?'selected':''}>${ACT[k].verb.en} · ${ACT[k].verb.ar}</option>`).join('')}
+    </select></div>
+    ${t.do?`<div class="f"><label>Qualifier</label><div class="pair">
+        <input data-t="${ti}.qualifier.en" value="${esc(t.qualifier&&t.qualifier.en)}" placeholder="fine">
+        <input class="ar" data-t="${ti}.qualifier.ar" value="${esc(t.qualifier&&t.qualifier.ar)}" placeholder="ناعم"></div></div>`
+      :`<div class="f"><label>Verb</label><div class="pair">
+        <input data-t="${ti}.verb.en" value="${esc(t.verb&&t.verb.en)}" placeholder="Pour over, listen for the hiss">
+        <input class="ar" data-t="${ti}.verb.ar" value="${esc(t.verb&&t.verb.ar)}"></div></div>
+       <div class="f"><label>Icon</label><input class="num" data-t="${ti}.glyph" value="${esc(t.glyph)}" placeholder="pour"></div>`}
+    ${items.map((it,k)=>`
+      <div class="f"><label>${k?'and':'On what'}</label><div class="trio" style="grid-template-columns:1fr 90px 108px">
+        <select data-t="${ti}.items.${k}.id">
+          <option value="">— choose —</option>
+          ${Object.keys(R.intermediates||{}).map(x=>`<option value="@${x}" ${it.id==='@'+x?'selected':''}>@${x}</option>`).join('')}
+          ${ING?Object.keys(ING).map(x=>`<option value="${x}" ${it.id===x?'selected':''}>${(ING[x].name&&ING[x].name.en)||x}${ING[x].name&&ING[x].name.ar?' · '+ING[x].name.ar:''}</option>`).join(''):''}
+        </select>
+        <input class="num" type="number" step="0.25" data-t="${ti}.items.${k}.amt" value="${it.amt??''}" placeholder="${ING&&ING[it.id]?ING[it.id].unit:'amt'}">
+        <select data-t="${ti}.items.${k}.carried">
+          <option value="false" ${!it.carried?'selected':''}>buy it</option>
+          <option value="true" ${it.carried?'selected':''}>carried over</option></select>
+      </div></div>`).join('')}
+    <div class="f"><div></div><div>
+      <button class="btn sm" data-additem="${ti}">Add another ingredient</button>
+      <select data-t="${ti}.short" style="width:auto;display:inline-block;margin-left:6px">
+        <option value="">no short</option>
+        ${Object.keys(R.shorts||{}).map(k=>`<option value="${k}" ${t.short===k?'selected':''}>${k}</option>`).join('')}
+      </select></div></div>
+  </div>`;
+}
+
+/* ── input wiring ─────────────────────────────────────────────────────── */
+function setPath(obj,path,val){
+  const p=path.split('.'); let o=obj;
+  for(let i=0;i<p.length-1;i++){ if(o[p[i]]==null||typeof o[p[i]]!=='object') o[p[i]]={}; o=o[p[i]]; }
+  if(val===''||val==null) delete o[p[p.length-1]]; else o[p[p.length-1]]=val;
+}
+function coerce(el){
+  let v=el.value;
+  if(v==='true')return true; if(v==='false')return false;
+  if(el.type==='number'){ const n=parseFloat(v); return isNaN(n)?'':n; }
+  return v;
+}
+function wire(root){
+  root.querySelectorAll('[data-v]').forEach(el=>el.onchange=()=>{
+    const p=el.dataset.v;
+    if(p==='servings.presets'){ R.servings.presets=el.value.split(',').map(x=>parseInt(x.trim(),10)).filter(x=>!isNaN(x)); }
+    else setPath(R,p,coerce(el));
+    paint();
+  });
+  root.querySelectorAll('[data-s]').forEach(el=>el.onchange=()=>{
+    setPath(R.steps[view.step],el.dataset.s,coerce(el)); paint();
+  });
+  root.querySelectorAll('[data-t]').forEach(el=>el.onchange=()=>{
+    const [ti,...rest]=el.dataset.t.split('.');
+    const t=R.steps[view.step].tiles[+ti];
+    if(rest[0]==='do'&&!el.value){ delete t.do; } 
+    setPath(t,rest.join('.'),coerce(el));
+    if(rest[0]==='do'&&el.value) delete t.verb;
+    paint();
+  });
+  root.querySelectorAll('[data-int]').forEach(el=>el.onchange=()=>{
+    const [k,l]=el.dataset.int.split('.');
+    R.intermediates[k].name=R.intermediates[k].name||{}; R.intermediates[k].name[l]=el.value; paintRail();
+  });
+  root.querySelectorAll('[data-sh]').forEach(el=>el.onchange=()=>{
+    setPath(R.shorts,el.dataset.sh,coerce(el)); paintRail();
+  });
+  const on=(id,fn)=>{const e=document.getElementById(id); if(e)e.onclick=fn;};
+  on('addTile',()=>{R.steps[view.step].tiles=R.steps[view.step].tiles||[];R.steps[view.step].tiles.push({items:[{}]});paint();});
+  on('delStep',()=>{ if(confirm(`Delete step ${view.step+1}?`)){R.steps.splice(view.step,1);view={mode:'meta'};paint();} });
+  on('addInt',()=>{ const k=prompt('Key for the intermediate, eg stock'); if(!k)return;
+    R.intermediates=R.intermediates||{}; R.intermediates[k]={glyph:'pot',name:{en:'',ar:''}}; paint(); });
+  on('addShort',()=>{ const k=prompt('Key for the short, eg takliya_colour'); if(!k)return;
+    R.shorts=R.shorts||{}; R.shorts[k]={secs:20,poster:'assets/',title:{en:'',ar:''}}; paint(); });
+  on('calcBtn',()=>{
+    const r=computeNutrition(); if(!r)return;
+    R.nutrition_per_serving={energy_kcal:r.per.kcal,protein_g:r.per.protein,fat_g:r.per.fat,carbs_g:r.per.carb};
+    paint();
+    const note=document.getElementById('calcNote');
+    if(note) note.innerHTML = r.gaps.length
+      ? 'Computed, but incomplete: '+esc(r.gaps.join('; '))+'. The figures above are low by whatever those contribute.'
+      : 'Computed from every ingredient in the steps.';
+  });
+  root.querySelectorAll('[data-deltile]').forEach(el=>el.onclick=()=>{
+    R.steps[view.step].tiles.splice(+el.dataset.deltile,1); paint(); });
+  root.querySelectorAll('[data-additem]').forEach(el=>el.onclick=()=>{
+    const t=R.steps[view.step].tiles[+el.dataset.additem]; t.items=t.items||[]; t.items.push({}); paint(); });
+  root.querySelectorAll('[data-delint]').forEach(el=>el.onclick=()=>{
+    delete R.intermediates[el.dataset.delint]; paint(); });
+  root.querySelectorAll('[data-delshort]').forEach(el=>el.onclick=()=>{
+    delete R.shorts[el.dataset.delshort]; paint(); });
+}
+
+/* ── YAML out ─────────────────────────────────────────────────────────── */
+function q(s){
+  s=String(s==null?'':s);
+  return /^[A-Za-z\u0600-\u06FF][\w \u0600-\u06FF().,\-\/…'’]*$/.test(s)&&s===s.trim()
+    ? s : '"'+s.replace(/"/g,'\\"')+'"';
+}
+function toYaml(){
+  const L=[], P=(n,t)=>L.push(' '.repeat(n)+t);
+  P(0,`id: ${R.id}`); P(0,`source_locale: ${R.source_locale||'en'}`); P(0,`status: ${R.status||'draft'}`);
+  P(0,''); P(0,'title:'); LOC.forEach(l=>P(2,`${l}: ${q(R.title&&R.title[l])}`));
+  if(R.why&&(R.why.en||R.why.ar)){ P(0,''); P(0,'why:'); LOC.forEach(l=>P(2,`${l}: ${q(R.why[l])}`)); }
+  P(0,''); P(0,'servings:');
+  P(2,`base: ${R.servings.base}`);
+  if(R.servings.presets) P(2,`presets: [${R.servings.presets.join(', ')}]`);
+  if(R.servings.max_scale) P(2,`max_scale: ${R.servings.max_scale}`);
+  P(0,'');
+  if(R.hands_on_minutes!=null) P(0,`hands_on_minutes: ${R.hands_on_minutes}`);
+  if(R.hero) P(0,`hero: ${R.hero}`);
+  if(R.price_source) P(0,`price_source: ${R.price_source}`);
+  const n=R.nutrition_per_serving||{};
+  if(Object.keys(n).length){ P(0,''); P(0,'nutrition_per_serving:');
+    Object.keys(n).forEach(k=>P(2,`${k}: ${n[k]}`)); }
+  const ints=R.intermediates||{};
+  if(Object.keys(ints).length){ P(0,''); P(0,'intermediates:');
+    Object.keys(ints).forEach(k=>{ P(2,`${k}:`);
+      if(ints[k].glyph)P(4,`glyph: ${ints[k].glyph}`);
+      if(ints[k].unit)P(4,`unit: ${ints[k].unit}`);
+      P(4,`name: { en: ${q(ints[k].name&&ints[k].name.en)}, ar: ${q(ints[k].name&&ints[k].name.ar)} }`); }); }
+  P(0,''); P(0,'steps:'); P(0,'');
+  (R.steps||[]).forEach(s=>{
+    P(2,`- station: ${s.station}`);
+    if(s.qualifier&&(s.qualifier.en||s.qualifier.ar))
+      P(4,`qualifier: { en: ${q(s.qualifier.en)}, ar: ${q(s.qualifier.ar)} }`);
+    P(4,`ordered: ${s.ordered?'true':'false'}`);
+    if(s.heat) P(4,`heat: ${s.heat}`);
+    P(4,'tiles:');
+    (s.tiles||[]).forEach(t=>{
+      const first = t.do ? `- do: ${t.do}` : `- verb: { en: ${q(t.verb&&t.verb.en)}, ar: ${q(t.verb&&t.verb.ar)} }`;
+      P(6,first);
+      if(!t.do&&t.glyph) P(8,`glyph: ${t.glyph}`);
+      if(t.qualifier&&(t.qualifier.en||t.qualifier.ar))
+        P(8,`qualifier: { en: ${q(t.qualifier.en)}, ar: ${q(t.qualifier.ar)} }`);
+      const its=(t.items||[]).filter(i=>i.id);
+      if(its.length===1&&!its[0].carried){
+        P(8,`item: ${q(its[0].id)}`); if(its[0].amt!=null) P(8,`amt: ${its[0].amt}`);
+      }else if(its.length===1){
+        P(8,`item: ${q(its[0].id)}`); if(its[0].amt!=null) P(8,`amt: ${its[0].amt}`); P(8,'carried: true');
+      }else if(its.length>1){
+        P(8,'items:');
+        its.forEach(i=>{
+          const bits=[`id: ${q(i.id)}`];
+          if(i.amt!=null) bits.push(`amt: ${i.amt}`);
+          if(i.carried) bits.push('carried: true');
+          P(10,`- { ${bits.join(', ')} }`);
+        });
+      }
+      if(t.short) P(8,`short: ${t.short}`);
+    });
+    if(s.timer&&s.timer.minutes){ P(4,'timer:'); P(6,`minutes: ${s.timer.minutes}`);
+      if(s.timer.label) P(6,`label: { en: ${q(s.timer.label.en)}, ar: ${q(s.timer.label.ar)} }`);
+      if(s.timer.mass_sensitive) P(6,'mass_sensitive: true'); }
+    if(s.makes) P(4,`makes: ${s.makes}`);
+    if(s.photo) P(4,`photo: ${s.photo}`);
+    if(s.doneness&&(s.doneness.en||s.doneness.ar)){ P(4,'doneness:');
+      LOC.forEach(l=>P(6,`${l}: ${q(s.doneness[l])}`)); }
+    if(s.note&&s.note.kind){ P(4,'note:'); P(6,`kind: ${s.note.kind}`); P(6,'text:');
+      LOC.forEach(l=>P(8,`${l}: ${q(s.note.text&&s.note.text[l])}`)); }
+    P(0,'');
+  });
+  const sh=R.shorts||{};
+  if(Object.keys(sh).length){ P(0,'shorts:');
+    Object.keys(sh).forEach(k=>{ P(2,`${k}:`);
+      if(sh[k].secs!=null)P(4,`secs: ${sh[k].secs}`);
+      if(sh[k].poster)P(4,`poster: ${sh[k].poster}`);
+      if(sh[k].clip)P(4,`clip: ${sh[k].clip}`);
+      P(4,`title: { en: ${q(sh[k].title&&sh[k].title.en)}, ar: ${q(sh[k].title&&sh[k].title.ar)} }`); }); }
+  return L.join('\n')+'\n';
+}
+
+/* ── file loading. Detects which file is which by shape. ──────────────── */
+document.getElementById('file').onchange=e=>{
+  const files=[...e.target.files]; if(!files.length)return;
+  let done=0;
+  files.forEach(f=>{
+    const r=new FileReader();
+    r.onload=()=>{
+      try{
+        const d=jsyaml.load(r.result);
+        if(d&&d.stations&&d.note_kinds) CHR=d;
+        else if(d&&d.steps) R=d;
+        else if(d&&Object.values(d)[0]&&Object.values(d)[0].verb) ACT=d;
+        else if(d&&Object.values(d)[0]&&Object.values(d)[0].cls) ING=d;
+        else console.warn('unrecognised file', f.name);
+      }catch(err){ alert(`${f.name} could not be read.\n\n${err.message}`); }
+      if(++done===files.length){ view={mode:'meta'}; paint(); }
+    };
+    r.readAsText(f);
+  });
+  e.target.value='';
+};
+document.getElementById('newBtn').onclick=()=>{ R=blank(); view={mode:'meta'}; paint(); };
+document.getElementById('metaBtn').onclick=()=>{ if(R){view={mode:'meta'};paint();} };
+document.getElementById('addStep').onclick=()=>{
+  R.steps=R.steps||[]; R.steps.push({station:'board',ordered:false,tiles:[{items:[{}]}]});
+  view={mode:'step',step:R.steps.length-1}; paint();
+};
+document.getElementById('upStep').onclick=()=>{
+  if(view.mode!=='step'||view.step===0)return;
+  const i=view.step; [R.steps[i-1],R.steps[i]]=[R.steps[i],R.steps[i-1]]; view.step=i-1; paint();
+};
+document.getElementById('downStep').onclick=()=>{
+  if(view.mode!=='step'||view.step>=R.steps.length-1)return;
+  const i=view.step; [R.steps[i+1],R.steps[i]]=[R.steps[i],R.steps[i+1]]; view.step=i+1; paint();
+};
+document.getElementById('saveBtn').onclick=()=>{
+  const blob=new Blob([toYaml()],{type:'text/yaml;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(blob); a.download=(R.id||'recipe')+'.yaml'; a.click();
+  URL.revokeObjectURL(a.href);
+};
+window.addEventListener('beforeunload',e=>{ if(R){e.preventDefault();e.returnValue='';} });
+if(typeof jsyaml==='undefined'){
+  document.getElementById('pane').innerHTML=
+    '<div class="empty"><p><strong>The YAML library did not load.</strong></p>'+
+    '<p>This tool reads it from a CDN, so it needs an internet connection the first time. '+
+    'Check your connection and reload.</p></div>';
+}
+</script>
+</body>
+</html>
