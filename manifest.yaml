@@ -1,0 +1,102 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# MATBAKH DESIGN — MANIFEST
+#
+# This is the ONLY file you edit when a screen is added, renamed or retired.
+# index.html is generated from it. Do not hand-edit index.html; build.py
+# overwrites it.
+#
+#   python3 build.py          check + regenerate index.html
+#   ./publish.sh "message"    check, regenerate, commit, push
+# ─────────────────────────────────────────────────────────────────────────────
+
+project:
+  name: Matbakh
+  name_ar: مطبخ
+  tagline: A kitchen instrument that contains recipes, not a recipe app used in
+           a kitchen. Everything here is arranged around the counter-top
+           posture — hands busy, attention divided, the screen propped an
+           arm's length away.
+  release: "2026.07.30"        # bump on every publish; shown in the header
+  public: false                # false → noindex banner stays on the site
+
+# The headline prototype. Exactly one.
+lead:
+  file: prototypes/app-iphone.html
+  title: Matbakh — iPhone, linked flow
+  blurb: Pre-commit recipe screen into cook mode. Servings, progress and
+         running timers survive the transition; the chevron returns you to the
+         recipe. Audible timer alarm, editable shopping list, full-screen on a
+         real phone.
+  tags: [IPHONE, 2 SCREENS, ALARM, SWIPE]
+
+# Deep links for sending a reviewer to one exact step.
+deep_links:
+  target: prototypes/app-iphone.html
+  note: Each link opens the prototype directly on that step. Opened on a phone
+        the mockup bezel drops away and the screen fills the device. Add
+        ?device=1 to force that on a laptop.
+  links:
+    - { hash: "#recipe",  label: "Before cooking — the recipe screen" }
+    - { hash: "#cook/1",  label: "1 · Board — onion, garlic, coriander, joint the bird" }
+    - { hash: "#cook/2",  label: "2 · Stove — stock, 40 min" }
+    - { hash: "#cook/3",  label: "3 · Bench — strip the meat, strain the stock" }
+    - { hash: "#cook/4",  label: "4 · Stove — takliya" }
+    - { hash: "#cook/5",  label: "5 · Stove — molokhia into the stock, 8 min" }
+    - { hash: "#cook/6",  label: "6 · Stove — pour the takliya, do not stir" }
+    - { hash: "#cook/7",  label: "7 · Grill — sear the pieces" }
+    - { hash: "#cook/8",  label: "8 · Serve" }
+
+sections:
+
+  - heading: Screens on their own
+    sub: Each one standalone, for reviewing a single surface.
+    items:
+      - file: prototypes/recipe-screen-iphone.html
+        title: Pre-commit recipe screen
+        blurb: Why this version, cost with its date and source, the whole arc
+               in thumbnails, shopping list, nutrition as a findable panel,
+               shorts to watch first.
+        tags: [IPHONE, HAND SCROLL]
+      - file: prototypes/cook-mode-tablet.html
+        title: Cook mode — tablet
+        blurb: The primary posture. Page per station, session-owned timer band
+               down the right edge, map on one screen.
+        tags: [TABLET, SWIPE]
+      - file: prototypes/cook-mode-iphone.html
+        title: Cook mode — iPhone
+        blurb: Same session logic, one-handed. Tiles stack full width, timers
+               move to a strip under the header.
+        tags: [IPHONE, SWIPE]
+
+  - heading: Colour experiment
+    sub: White base, terracotta chrome, vivid red for danger, vivid green for a
+         timer that is running — plus decorative trim.
+    items:
+      - file: prototypes/cook-mode-tablet-white.html
+        title: Cook mode — tablet, white
+        blurb: Paper texture removed; digits and photos carry the weight.
+               Green = the stove working, red = act now.
+        tags: [TABLET, VARIANT]
+      - file: prototypes/cook-mode-iphone-white.html
+        title: Cook mode — iPhone, white
+        blurb: The same palette on the phone, tricolour header trim and
+               timer-band edge.
+        tags: [IPHONE, VARIANT]
+
+reference:
+  - { file: design/philosophy.md, title: "Design philosophy — settled decisions and open questions", kind: MARKDOWN }
+  - { file: design/tokens.css,    title: "Design tokens — the canonical palette and type scale",       kind: CSS }
+  - { file: CHANGELOG.md,         title: "Changelog — what moved, when",                               kind: MARKDOWN }
+  - { file: ATTRIBUTIONS.md,      title: "Attributions — placeholder photography credits",             kind: MARKDOWN }
+
+# Shown in the site footer. Keep honest — reviewers calibrate on these.
+caveats:
+  - Placeholder photography and the technique clip come from Wikimedia Commons
+    (CC) and stand in for shot art direction.
+  - Icon glyphs are geometric placeholders for the activity set.
+  - Prices are illustrative, not sourced.
+
+next_up:
+  - Discovery (§12.1)
+  - The tablet pre-commit screen
+  - Meal planner (§12.3)

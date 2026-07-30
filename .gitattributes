@@ -1,0 +1,37 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# Line endings. This file is not cosmetic — it is load-bearing on Windows.
+#
+# Git for Windows defaults to core.autocrlf=true, which rewrites checked-out
+# text files with CRLF endings. A shell script with CRLF fails immediately:
+#
+#     ./publish.sh: /usr/bin/env: 'bash\r': No such file or directory
+#
+# and worse, a pre-commit hook with CRLF fails silently in some setups — the
+# guard appears installed and blocks nothing. Forcing LF removes the whole
+# class of problem.
+# ─────────────────────────────────────────────────────────────────────────────
+
+*               text=auto eol=lf
+*.sh            text eol=lf
+.githooks/*     text eol=lf
+*.py            text eol=lf
+*.yaml          text eol=lf
+*.yml           text eol=lf
+*.html          text eol=lf
+*.css           text eol=lf
+*.js            text eol=lf
+*.jsx           text eol=lf
+*.md            text eol=lf
+
+# Binary, never touched
+*.png    binary
+*.jpg    binary
+*.jpeg   binary
+*.webp   binary
+*.gif    binary
+*.webm   binary
+*.mp4    binary
+*.woff   binary
+*.woff2  binary
+*.ttf    binary
+*.pdf    binary

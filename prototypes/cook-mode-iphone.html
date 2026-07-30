@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<script src="../assets/media.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Naskh+Arabic:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#231E18;font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#A2542F;text-decoration:none}a:hover{color:#8A4526}
+@keyframes mb-pulse{0%,100%{opacity:1}50%{opacity:.45}}
+</style>
+</helmet>
+
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"><rect width="240" height="240" fill="#F4EFE6"></rect><rect x="82" y="58" width="76" height="124" rx="16" fill="#2F5A55"></rect><text x="120" y="139" text-anchor="middle" font-family="Georgia,serif" font-size="46" fill="#F4EFE6">M</text></svg></template>
+
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;gap:40px;padding:40px;background:radial-gradient(120% 90% at 50% 0%,#2E2820 0%,#1C1813 100%)">
+<div style="display:flex;flex-direction:column;align-items:center;gap:16px">
+
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" hint-size="402px,874px">
+<div style="position:relative;height:100%;box-sizing:border-box;padding:52px 0 30px;background:#F4EFE6;color:#221E1A;display:flex;flex-direction:column">
+
+<div style="flex:none;display:flex;align-items:center;gap:10px;padding:6px 16px 10px">
+<div style="display:flex;flex-direction:column;gap:1px;flex:none">
+<sc-if value="{{ showEn }}" hint-placeholder-val="{{ true }}"><div style="font-size:16px;font-weight:600;letter-spacing:-.01em;white-space:nowrap">{{ titleEn }}</div></sc-if>
+<sc-if value="{{ showAr }}" hint-placeholder-val="{{ true }}"><div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:12.5px;color:rgba(34,30,26,.6);white-space:nowrap">{{ titleAr }}</div></sc-if>
+</div>
+<div style="flex:1"></div>
+<div onClick="{{ openShorts }}" style="cursor:pointer;width:46px;height:46px;border-radius:12px;border:1.5px solid rgba(34,30,26,.16);background:#FBF8F2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px">
+<span style="width:0;height:0;border-left:10px solid {{ accent }};border-top:7px solid transparent;border-bottom:7px solid transparent;display:block"></span>
+<span style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:rgba(34,30,26,.55)">{{ shortCount }}</span>
+</div>
+<div onClick="{{ openMap }}" style="cursor:pointer;width:46px;height:46px;border-radius:12px;border:1.5px solid rgba(34,30,26,.16);background:#FBF8F2;display:flex;align-items:center;justify-content:center">
+<span style="display:grid;grid-template-columns:6px 6px;grid-template-rows:6px 6px 6px;gap:3px">
+<span style="background:currentColor;display:block"></span><span style="background:currentColor;display:block"></span>
+<span style="background:currentColor;display:block"></span><span style="background:currentColor;display:block"></span>
+<span style="background:currentColor;display:block"></span><span style="background:currentColor;display:block"></span>
+</span>
+</div>
+</div>
+
+<div style="flex:none;padding:0 16px 10px;display:flex;gap:8px;align-items:stretch">
+<sc-for list="{{ timers }}" as="t" hint-placeholder-count="1">
+<div onClick="{{ t.goto }}" style="cursor:pointer;flex:1;min-width:0;display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:12px;background:#FBF8F2;border:1.5px solid {{ t.border }}">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:24px;font-weight:500;letter-spacing:-.02em;line-height:1;color:{{ t.color }};animation:{{ t.anim }}">{{ t.clock }}</div>
+<div style="min-width:0;display:flex;flex-direction:column;gap:1px">
+<div style="font-size:12.5px;line-height:1.2;white-space:nowrap">{{ t.labelEn }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.06em;color:rgba(34,30,26,.55);white-space:nowrap">{{ t.origin }}</div>
+</div>
+<div style="flex:1"></div>
+<div onClick="{{ t.dismiss }}" style="cursor:pointer;width:30px;height:30px;flex:none;border-radius:50%;background:rgba(34,30,26,.05);border:1.5px solid rgba(34,30,26,.28);display:flex;align-items:center;justify-content:center;font-size:15px;line-height:1;color:rgba(34,30,26,.7)">×</div>
+</div>
+</sc-for>
+<sc-if value="{{ noTimers }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1;padding:10px 12px;border-radius:12px;border:1px dashed rgba(34,30,26,.2);font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;color:rgba(34,30,26,.5)">NOTHING ON THE STOVE · لا شيء على النار</div>
+</sc-if>
+</div>
+
+<div style="flex:none;display:flex;align-items:center;gap:9px;padding:0 16px 9px">
+<div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(34,30,26,.55);white-space:nowrap;flex:none">{{ page.stationEn }}</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:11.5px;color:rgba(34,30,26,.5);white-space:nowrap;flex:none">{{ page.stationAr }}</div>
+<div style="width:1px;height:16px;background:rgba(34,30,26,.16);flex:none"></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:rgba(34,30,26,.5);white-space:nowrap;flex:none">{{ page.orderLabel }}</div>
+<sc-if value="{{ page.hasHeat }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;align-items:flex-end;gap:2px;flex:none">
+<sc-for list="{{ page.heat }}" as="seg" hint-placeholder-count="3"><div style="width:9px;height:{{ seg.h }}px;border-radius:2px;background:{{ seg.bg }}"></div></sc-for>
+</div>
+</sc-if>
+<div style="flex:1"></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(34,30,26,.4);flex:none">{{ page.pageNo }}<span style="opacity:.5">/{{ page.total }}</span></div>
+</div>
+
+<div ref="{{ swipeRef }}" touch-action="pan-y" style="flex:1;min-height:0;display:flex;flex-direction:column;gap:9px;padding:0 16px">
+<sc-for list="{{ page.tiles }}" as="tile" hint-placeholder-count="4">
+<div onClick="{{ tile.toggle }}" style="cursor:pointer;flex:1 1 0;min-height:78px;display:flex;align-items:center;gap:13px;padding:12px 14px;border-radius:13px;border:1.5px solid {{ tile.border }};background:{{ tile.bg }};opacity:{{ tile.op }}">
+<div style="position:relative;width:40px;height:38px;flex:none;color:{{ tile.glyphColor }}">
+<sc-for list="{{ tile.glyph }}" as="s" hint-placeholder-count="2"><div style="{{ s }}"></div></sc-for>
+</div>
+<div style="min-width:0;flex:1;display:flex;flex-direction:column;gap:2px">
+<sc-if value="{{ showEn }}" hint-placeholder-val="{{ true }}"><div style="font-size:14.5px;font-weight:600;line-height:1.2">{{ tile.verbEn }}</div></sc-if>
+<sc-if value="{{ showAr }}" hint-placeholder-val="{{ true }}"><div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:13px;color:rgba(34,30,26,.6);line-height:1.3">{{ tile.verbAr }}</div></sc-if>
+<div style="display:flex;align-items:baseline;gap:7px;margin-top:2px">
+<sc-if value="{{ tile.hasQty }}" hint-placeholder-val="{{ true }}">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:22px;font-weight:500;letter-spacing:-.02em;line-height:1">{{ tile.digits }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:12px;color:rgba(34,30,26,.55)">{{ tile.unit }}</div>
+</sc-if>
+<div style="font-size:13.5px;color:rgba(34,30,26,.75)">{{ tile.nounEn }}</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:12.5px;color:rgba(34,30,26,.55)">{{ tile.nounAr }}</div>
+</div>
+</div>
+<div style="flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:8px">
+<sc-if value="{{ tile.done }}" hint-placeholder-val="{{ false }}">
+<div style="width:24px;height:24px;border-radius:50%;background:{{ accent }};display:flex;align-items:center;justify-content:center">
+<div style="width:9px;height:5px;border-left:2px solid #F7F3EB;border-bottom:2px solid #F7F3EB;transform:rotate(-45deg);margin-top:-2px"></div>
+</div>
+</sc-if>
+<sc-if value="{{ tile.hasShort }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ tile.openShort }}" style="cursor:pointer;display:flex;align-items:center;gap:5px;padding:7px 10px 7px 9px;border-radius:20px;background:rgba(34,30,26,.05);border:1px solid rgba(34,30,26,.14)">
+<span style="width:0;height:0;border-left:7px solid {{ accent }};border-top:5px solid transparent;border-bottom:5px solid transparent;display:block"></span>
+<span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(34,30,26,.6)">{{ tile.shortLabel }}</span>
+</div>
+</sc-if>
+</div>
+</div>
+</sc-for>
+</div>
+
+<div style="flex:none;display:flex;flex-direction:column;gap:8px;padding:10px 16px 0">
+<sc-if value="{{ page.hasDoneness }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;gap:11px;padding:9px;border-radius:12px;background:#EFE8DC;border:1px solid rgba(34,30,26,.1)">
+<div style="width:84px;height:64px;flex:none;border-radius:7px;overflow:hidden;border:1px solid rgba(34,30,26,.18);background:#E4DACA">
+<img alt="" ref="{{ page.photoRef }}" style="width:100%;height:100%;object-fit:cover;display:block"></img>
+</div>
+<div style="min-width:0;display:flex;flex-direction:column;justify-content:center;gap:3px">
+<div style="display:flex;align-items:center;gap:5px">
+<div style="width:5px;height:5px;border-radius:50%;background:{{ accent }};flex:none"></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.13em;color:rgba(34,30,26,.6);white-space:nowrap">DONE WHEN</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:10.5px;color:rgba(34,30,26,.45);white-space:nowrap">تستوي لما</div>
+</div>
+<sc-if value="{{ showEn }}" hint-placeholder-val="{{ true }}"><div style="font-size:12.5px;line-height:1.3">{{ page.donenessEn }}</div></sc-if>
+<sc-if value="{{ showAr }}" hint-placeholder-val="{{ true }}"><div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:12px;line-height:1.4;color:rgba(34,30,26,.62)">{{ page.donenessAr }}</div></sc-if>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ page.hasNote }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:12px;background:#F3EADA;border:1px solid rgba(34,30,26,.12)">
+<div style="width:24px;height:24px;flex:none;border-radius:50%;border:2px solid {{ accent }};display:flex;align-items:center;justify-content:center;color:{{ accent }};font-family:'IBM Plex Mono',monospace;font-size:14px;line-height:1">!</div>
+<div style="min-width:0;display:flex;flex-direction:column;gap:2px">
+<div style="display:flex;align-items:center;gap:6px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:.13em;color:rgba(34,30,26,.6);white-space:nowrap">{{ page.noteKindEn }}</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:10.5px;color:rgba(34,30,26,.45);white-space:nowrap">{{ page.noteKindAr }}</div>
+</div>
+<sc-if value="{{ showEn }}" hint-placeholder-val="{{ true }}"><div style="font-size:12.5px;line-height:1.3">{{ page.noteEn }}</div></sc-if>
+<sc-if value="{{ showAr }}" hint-placeholder-val="{{ true }}"><div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:12px;line-height:1.4;color:rgba(34,30,26,.62)">{{ page.noteAr }}</div></sc-if>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ page.hasTimer }}" hint-placeholder-val="{{ true }}">
+<div onClick="{{ page.startTimer }}" style="cursor:pointer;display:flex;align-items:center;gap:11px;padding:10px 14px;border-radius:12px;border:1.5px solid {{ page.timerBorder }};background:{{ page.timerBg }};color:{{ page.timerFg }}">
+<div style="position:relative;width:24px;height:24px;border:2.5px solid currentColor;border-radius:50%;flex:none">
+<div style="position:absolute;left:9px;top:3px;width:2.5px;height:9px;background:currentColor"></div>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:19px;line-height:1">{{ page.timerLabel }}</div>
+<div style="flex:1"></div>
+<div style="font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.75">{{ page.timerAction }}</div>
+</div>
+</sc-if>
+</div>
+
+<div style="flex:none;display:flex;gap:10px;padding:11px 16px 0">
+<div onClick="{{ prev }}" style="cursor:pointer;width:74px;height:58px;border-radius:13px;border:1.5px solid rgba(34,30,26,.16);background:#FBF8F2;display:flex;align-items:center;justify-content:center;opacity:{{ prevOp }}">
+<div style="width:12px;height:12px;border-left:2.5px solid currentColor;border-bottom:2.5px solid currentColor;transform:rotate(45deg);margin-left:4px"></div>
+</div>
+<div onClick="{{ next }}" style="cursor:pointer;flex:1;height:58px;border-radius:13px;background:{{ accent }};color:#FAF6EE;display:flex;align-items:center;justify-content:center;gap:14px">
+<div style="display:flex;flex-direction:column;align-items:center;line-height:1.1">
+<sc-if value="{{ showEn }}" hint-placeholder-val="{{ true }}"><div style="font-size:16px;font-weight:600">{{ nextEn }}</div></sc-if>
+<sc-if value="{{ showAr }}" hint-placeholder-val="{{ true }}"><div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:13px;opacity:.85">{{ nextAr }}</div></sc-if>
+</div>
+<div style="width:12px;height:12px;border-right:2.5px solid currentColor;border-top:2.5px solid currentColor;transform:rotate(45deg)"></div>
+</div>
+</div>
+
+<sc-if value="{{ mapOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;background:rgba(244,239,230,.98);box-sizing:border-box;padding:56px 16px 34px;display:flex;flex-direction:column;gap:11px">
+<div style="flex:none;display:flex;align-items:center;gap:10px">
+<div style="min-width:0;display:flex;flex-direction:column;gap:1px">
+<div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(34,30,26,.55)">The whole arc · no scroll</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:11.5px;color:rgba(34,30,26,.5)">الطبخة كاملة</div>
+</div>
+<div style="flex:1"></div>
+<div onClick="{{ closeMap }}" style="cursor:pointer;height:44px;display:flex;align-items:center;gap:8px;padding:0 14px;border-radius:11px;border:1.5px solid rgba(34,30,26,.2);background:#FBF8F2">
+<span style="font-size:12.5px;font-weight:500;white-space:nowrap">{{ mapCloseLabel }}</span>
+<span style="font-size:14px;color:rgba(34,30,26,.5)">×</span>
+</div>
+</div>
+<div style="flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,1fr);gap:10px">
+<sc-for list="{{ thumbs }}" as="th" hint-placeholder-count="8">
+<div onClick="{{ th.go }}" style="cursor:pointer;position:relative;border-radius:11px;border:1.5px solid {{ th.border }};background:{{ th.bg }};padding:8px 9px;display:flex;flex-direction:column;gap:3px;min-height:0">
+<div style="display:flex;align-items:center;gap:6px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(34,30,26,.45)">{{ th.no }}</div>
+<div style="font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:rgba(34,30,26,.6);white-space:nowrap">{{ th.stationEn }}</div>
+<div style="flex:1"></div>
+<sc-if value="{{ th.hasTimer }}" hint-placeholder-val="{{ false }}"><div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:{{ accent }}">{{ th.timerLabel }}</div></sc-if>
+</div>
+<div style="flex:1;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:6px;opacity:{{ th.clusterOp }};min-height:0">
+<sc-for list="{{ th.tiles }}" as="g" hint-placeholder-count="3">
+<div style="position:relative;width:40px;height:38px;transform:scale(.55);opacity:{{ g.op }};color:#221E1A">
+<sc-for list="{{ g.glyph }}" as="s" hint-placeholder-count="2"><div style="{{ s }}"></div></sc-for>
+</div>
+</sc-for>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;letter-spacing:.08em;color:{{ th.stateColor }}">{{ th.state }}</div>
+<sc-if value="{{ th.isCurrent }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:-1.5px;top:12px;bottom:12px;width:4px;border-radius:3px;background:{{ accent }}"></div></sc-if>
+</div>
+</sc-for>
+</div>
+<div style="flex:none;font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(34,30,26,.5);letter-spacing:.04em">{{ mapFootnote }}</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ shortsOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;background:rgba(244,239,230,.98);box-sizing:border-box;padding:56px 16px 34px;display:flex;flex-direction:column;gap:11px">
+<div style="flex:none;display:flex;align-items:center;gap:10px">
+<div style="min-width:0;display:flex;flex-direction:column;gap:1px">
+<div style="font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:rgba(34,30,26,.55)">Shorts · before you cook</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:11.5px;color:rgba(34,30,26,.5)">مقاطع قصيرة قبل الطبخ</div>
+</div>
+<div style="flex:1"></div>
+<div onClick="{{ closeShorts }}" style="cursor:pointer;height:44px;display:flex;align-items:center;gap:8px;padding:0 14px;border-radius:11px;border:1.5px solid rgba(34,30,26,.2);background:#FBF8F2">
+<span style="font-size:12.5px;font-weight:500;white-space:nowrap">{{ mapCloseLabel }}</span>
+<span style="font-size:14px;color:rgba(34,30,26,.5)">×</span>
+</div>
+</div>
+<div style="flex:1;min-height:0;display:grid;grid-template-columns:repeat(2,1fr);gap:11px">
+<sc-for list="{{ shorts }}" as="sh" hint-placeholder-count="4">
+<div onClick="{{ sh.play }}" style="cursor:pointer;display:flex;flex-direction:column;gap:7px;padding:8px;border-radius:12px;border:1.5px solid {{ sh.border }};background:#FCFAF5;min-height:0">
+<div style="flex:1;position:relative;border-radius:8px;overflow:hidden;border:1px solid rgba(34,30,26,.16);background:#E4DACA;min-height:0">
+<img alt="" ref="{{ sh.posterRef }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block"></img>
+<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(24,20,16,0) 45%,rgba(24,20,16,.6) 100%);display:flex;align-items:flex-end;justify-content:space-between;padding:7px">
+<span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(250,246,238,.85);white-space:nowrap">{{ sh.clipTag }}</span>
+<span style="font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 5px;border-radius:4px;background:rgba(24,20,16,.55);color:rgba(250,246,238,.9)">{{ sh.len }}</span>
+</div>
+<div style="position:absolute;left:50%;top:50%;margin:-16px 0 0 -16px;width:32px;height:32px;border-radius:50%;background:rgba(24,20,16,.5);display:flex;align-items:center;justify-content:center">
+<span style="width:0;height:0;border-left:10px solid rgba(250,246,238,.92);border-top:7px solid transparent;border-bottom:7px solid transparent;display:block;margin-left:3px"></span>
+</div>
+</div>
+<div style="flex:none;display:flex;flex-direction:column;gap:1px">
+<div style="font-size:12.5px;line-height:1.25">{{ sh.titleEn }}</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:11.5px;line-height:1.35;color:rgba(34,30,26,.6)">{{ sh.titleAr }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.06em;color:rgba(34,30,26,.55);margin-top:2px">{{ sh.origin }}</div>
+</div>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isPlaying }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;background:#12100D;display:flex;flex-direction:column">
+<div style="flex:1;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center">
+<sc-if value="{{ playHasClip }}" hint-placeholder-val="{{ false }}">
+<video ref="{{ playVideoRef }}" autoPlay="{{ true }}" loop="{{ true }}" muted="{{ true }}" playsInline="{{ true }}" style="width:100%;height:100%;object-fit:cover;display:block"></video>
+</sc-if>
+<sc-if value="{{ playNoClip }}" hint-placeholder-val="{{ true }}">
+<img alt="" ref="{{ playPosterRef }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;display:block"></img>
+</sc-if>
+<sc-if value="{{ playNoClip }}" hint-placeholder-val="{{ true }}">
+<div style="position:relative;display:flex;flex-direction:column;align-items:center;gap:10px">
+<div style="width:62px;height:62px;border-radius:50%;border:2px solid rgba(250,246,238,.5);display:flex;align-items:center;justify-content:center">
+<span style="width:0;height:0;border-left:18px solid rgba(250,246,238,.85);border-top:12px solid transparent;border-bottom:12px solid transparent;display:block;margin-left:5px"></span>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;color:rgba(250,246,238,.75)">CLIP TO BE SHOT</div>
+</div>
+</sc-if>
+</div>
+<div style="flex:none;box-sizing:border-box;padding:14px 18px 40px;display:flex;flex-direction:column;gap:5px;color:#FAF6EE">
+<div style="height:3px;border-radius:2px;background:rgba(250,246,238,.2);margin-bottom:8px"><div style="height:3px;width:34%;border-radius:2px;background:{{ accent }}"></div></div>
+<div style="font-size:15px;font-weight:600;line-height:1.25">{{ playTitleEn }}</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:13px;line-height:1.4;color:rgba(250,246,238,.7)">{{ playTitleAr }}</div>
+<div style="display:flex;align-items:center;gap:12px;margin-top:9px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(250,246,238,.5)">{{ playLen }} · TIMERS KEEP RUNNING</div>
+<div style="flex:1"></div>
+<div onClick="{{ closePlayer }}" style="cursor:pointer;height:44px;display:flex;align-items:center;padding:0 16px;border-radius:11px;background:#F7F3EB;color:#221E1A;font-size:13px;font-weight:600;white-space:nowrap">{{ mapCloseLabel }}</div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ resumeOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;inset:0;background:rgba(28,24,19,.5);display:flex;align-items:flex-end;box-sizing:border-box;padding:16px 14px 40px">
+<div style="width:100%;background:#F7F3EB;border-radius:18px;overflow:hidden;box-shadow:0 24px 50px rgba(0,0,0,.35)">
+<img alt="" ref="{{ heroRef }}" style="width:100%;height:132px;object-fit:cover;display:block"></img>
+<div style="padding:16px 16px 18px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;flex-direction:column;gap:3px">
+<div style="font-size:17px;font-weight:600">You left this one part-cooked.</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:14px;color:rgba(34,30,26,.6)">سيبتها في نصّها.</div>
+</div>
+<div style="display:flex;gap:9px">
+<div onClick="{{ doResume }}" style="cursor:pointer;flex:1;padding:13px 12px;border-radius:12px;background:{{ accent }};color:#FAF6EE;display:flex;flex-direction:column;gap:1px">
+<div style="font-size:14.5px;font-weight:600;white-space:nowrap">{{ resumeLabel }}</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:12.5px;opacity:.85">أكمل</div>
+</div>
+<div onClick="{{ doFresh }}" style="cursor:pointer;flex:none;padding:13px 16px;border-radius:12px;border:1.5px solid rgba(34,30,26,.2);background:#FBF8F2;display:flex;flex-direction:column;gap:1px">
+<div style="font-size:14.5px;font-weight:600;white-space:nowrap">Start fresh</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:12.5px;color:rgba(34,30,26,.6)">من الأول</div>
+</div>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;color:rgba(34,30,26,.5);line-height:1.5">PROGRESS NEVER EXPIRES. ASKED ONCE, ONE TAP.</div>
+</div>
+</div>
+</div>
+</sc-if>
+
+</div>
+</x-import>
+
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;color:rgba(247,243,235,.4);text-align:center;max-width:402px;line-height:1.6">{{ statusLine }}<br>iPHONE · TAP TILES TO TOGGLE · PLACEHOLDER PHOTOS + CLIP FROM WIKIMEDIA COMMONS (CC)</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:520,&quot;height&quot;:1010},&quot;language&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;both&quot;,&quot;en&quot;,&quot;ar&quot;],&quot;default&quot;:&quot;both&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},&quot;numerals&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;western&quot;,&quot;eastern&quot;],&quot;default&quot;:&quot;western&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},&quot;showDoneness&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Content&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#2F5A55&quot;,&quot;options&quot;:[&quot;#A2542F&quot;,&quot;#7A6A2F&quot;,&quot;#2F5A55&quot;,&quot;#6B4A7A&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Look&quot;}}">
+const SRC = (url) => (el) => { if (el && url && el.getAttribute('src') !== url) el.setAttribute('src', url); };
+const MEDIA = (p) => (p && window.MB_MEDIA && window.MB_MEDIA[p]) || (p ? '../' + p : p);
+const SH = (o) => Object.assign({ position: 'absolute', background: 'currentColor' }, o);
+const RING = (o) => Object.assign({ position: 'absolute', background: 'transparent', border: '2.5px solid currentColor' }, o);
+
+const GLYPHS = {
+  chop: [SH({ left: '5px', top: '13px', width: '30px', height: '3px', transform: 'rotate(-26deg)', borderRadius: '2px' }), SH({ left: '10px', top: '23px', width: '20px', height: '3px', transform: 'rotate(-26deg)', borderRadius: '2px' })],
+  crush: [SH({ left: '3px', top: '24px', width: '34px', height: '4px', borderRadius: '2px' }), SH({ left: '14px', top: '6px', width: '11px', height: '15px', borderRadius: '6px 6px 3px 3px' })],
+  joint: [SH({ left: '7px', top: '9px', width: '11px', height: '22px', borderRadius: '6px' }), SH({ left: '23px', top: '9px', width: '11px', height: '22px', borderRadius: '6px' })],
+  pot: [SH({ left: '7px', top: '11px', width: '26px', height: '19px', borderRadius: '3px 3px 9px 9px' }), SH({ left: '1px', top: '15px', width: '6px', height: '4px', borderRadius: '2px' }), SH({ left: '33px', top: '15px', width: '6px', height: '4px', borderRadius: '2px' })],
+  leaf: [SH({ left: '8px', top: '12px', width: '24px', height: '14px', borderRadius: '14px 3px 14px 3px' })],
+  strip: [SH({ left: '6px', top: '10px', width: '13px', height: '20px', borderRadius: '7px' }), SH({ left: '24px', top: '15px', width: '11px', height: '11px', borderRadius: '50%' })],
+  strain: [SH({ left: '6px', top: '9px', width: '28px', height: '13px', borderRadius: '0 0 16px 16px' }), SH({ left: '14px', top: '25px', width: '3px', height: '9px' }), SH({ left: '23px', top: '25px', width: '3px', height: '9px' })],
+  fry: [SH({ left: '2px', top: '12px', width: '24px', height: '14px', borderRadius: '2px 2px 11px 11px' }), SH({ left: '26px', top: '16px', width: '13px', height: '3px', borderRadius: '2px' })],
+  spice: [SH({ left: '10px', top: '10px', width: '5px', height: '5px', borderRadius: '50%' }), SH({ left: '21px', top: '14px', width: '5px', height: '5px', borderRadius: '50%' }), SH({ left: '14px', top: '22px', width: '5px', height: '5px', borderRadius: '50%' }), SH({ left: '25px', top: '25px', width: '4px', height: '4px', borderRadius: '50%' })],
+  add: [RING({ left: '7px', top: '6px', width: '26px', height: '26px', borderRadius: '50%' }), SH({ left: '18px', top: '13px', width: '3px', height: '13px' }), SH({ left: '13px', top: '18px', width: '13px', height: '3px' })],
+  pour: [SH({ left: '9px', top: '4px', width: '15px', height: '15px', transform: 'rotate(45deg)', borderRadius: '2px' }), SH({ left: '19px', top: '22px', width: '3px', height: '12px', borderRadius: '2px' })],
+  nostir: [RING({ left: '6px', top: '5px', width: '28px', height: '28px', borderRadius: '50%' }), SH({ left: '4px', top: '17px', width: '32px', height: '3px', transform: 'rotate(-45deg)' })],
+  sear: [SH({ left: '4px', top: '20px', width: '32px', height: '3px', borderRadius: '2px' }), SH({ left: '10px', top: '8px', width: '3px', height: '9px', borderRadius: '2px' }), SH({ left: '19px', top: '5px', width: '3px', height: '12px', borderRadius: '2px' }), SH({ left: '28px', top: '9px', width: '3px', height: '8px', borderRadius: '2px' })],
+  grain: [SH({ left: '9px', top: '13px', width: '4px', height: '9px', borderRadius: '3px', transform: 'rotate(18deg)' }), SH({ left: '18px', top: '10px', width: '4px', height: '9px', borderRadius: '3px', transform: 'rotate(-14deg)' }), SH({ left: '25px', top: '17px', width: '4px', height: '9px', borderRadius: '3px', transform: 'rotate(26deg)' })],
+  lemon: [SH({ left: '7px', top: '13px', width: '25px', height: '15px', borderRadius: '50%' }), SH({ left: '18px', top: '13px', width: '2px', height: '15px', background: '#FBF8F2' })],
+  salt: [SH({ left: '13px', top: '20px', width: '13px', height: '13px', borderRadius: '2px 2px 5px 5px' }), SH({ left: '16px', top: '8px', width: '3px', height: '3px', borderRadius: '50%' }), SH({ left: '23px', top: '11px', width: '3px', height: '3px', borderRadius: '50%' })]
+};
+
+const RECIPE = {
+  titleEn: 'Molokhia bil Farakh',
+  titleAr: 'ملوخية بالفراخ',
+  base: 4,
+  presets: [2, 4, 8],
+  maxScale: 1.5,
+  pages: [
+    { stationEn: 'Board', stationAr: 'الطبلية', ordered: false, photo: 'assets/onion-chopped.jpg', donenessEn: 'Onion in even dice — no piece thicker than a matchstick.', donenessAr: 'بصل مكعبات متساوية، مش أسمك من عود الكبريت.', tiles: [
+      { g: 'chop', verbEn: 'Chop fine', verbAr: 'افرم ناعم', nounEn: 'Onion', nounAr: 'بصل', amt: 2, unit: 'count', cls: 'discrete', div: true },
+      { g: 'crush', verbEn: 'Crush', verbAr: 'اهرس', nounEn: 'Garlic', nounAr: 'ثوم', amt: 8, unit: 'count', cls: 'discrete', div: false, short: { titleEn: 'Knife work — keeping the edge', titleAr: 'السكينة — الحفاظ على الحد', secs: 24, poster: 'assets/onion-chopped.jpg', src: 'assets/clip-knife.webm' } },
+      { g: 'chop', verbEn: 'Chop', verbAr: 'افرم', nounEn: 'Coriander', nounAr: 'كزبرة خضراء', amt: 2, unit: 'tbsp', cls: 'continuous' },
+      { g: 'joint', verbEn: 'Joint', verbAr: 'قطّع', nounEn: 'Chicken', nounAr: 'فراخ', amt: 1200, unit: 'g', cls: 'continuous' }
+    ] },
+    { stationEn: 'Stove · stock', stationAr: 'النار · المرق', ordered: true, heat: 2, tiles: [
+      { g: 'pot', verbEn: 'Cover and simmer', verbAr: 'غطّي وسوّي', nounEn: 'Chicken + water', nounAr: 'فراخ + ماء', amt: 1500, unit: 'ml', cls: 'continuous' },
+      { g: 'leaf', verbEn: 'Drop in', verbAr: 'أضف', nounEn: 'Bay leaf', nounAr: 'ورق لورا', amt: 2, unit: 'count', cls: 'discrete', div: false }
+    ], timer: { min: 40, labelEn: 'Stock', labelAr: 'المرق' }, photo: 'assets/broth.jpg', donenessEn: 'Meat lets go of the bone when you push it.', donenessAr: 'اللحم يسيب العضم بأول ضغطة.' },
+    { stationEn: 'Bench', stationAr: 'الترابيزة', ordered: false, tiles: [
+      { g: 'strip', verbEn: 'Strip the meat', verbAr: 'انزع اللحم', nounEn: 'Chicken', nounAr: 'الفراخ' },
+      { g: 'strain', verbEn: 'Strain', verbAr: 'صفّي', nounEn: 'Stock', nounAr: 'المرق', amt: 1200, unit: 'ml', cls: 'continuous' }
+    ], noteKindEn: 'COMING UP', noteKindAr: 'بعد قليل', noteEn: 'Keep the stock hot — it goes back on the heat in two pages.', noteAr: 'خلّي المرق سخن، هيرجع على النار بعد صفحتين.' },
+    { stationEn: 'Stove · takliya', stationAr: 'النار · التقلية', ordered: true, heat: 3, tiles: [
+      { g: 'fry', verbEn: 'Fry the garlic', verbAr: 'حمّر الثوم', nounEn: 'Ghee', nounAr: 'سمن', amt: 2, unit: 'tbsp', cls: 'continuous', short: { titleEn: 'Takliya — the colour to stop at', titleAr: 'التقلية — لون التوقّف', secs: 31, poster: 'assets/garlic-butter-pan.jpg' } },
+      { g: 'spice', verbEn: 'Then add', verbAr: 'ثم أضف', nounEn: 'Coriander', nounAr: 'كزبرة', amt: 1, unit: 'tsp', cls: 'seasoning' }
+    ], photo: 'assets/garlic-butter-pan.jpg', donenessEn: 'Straw-gold at the edges. One shade past this is bitter.', donenessAr: 'لون قشّي على الأطراف. درجة زيادة يبقى مرّ.', noteKindEn: 'STAY HERE', noteKindAr: 'لا تبتعد', noteEn: 'Seconds, not minutes. Stay at the pan.', noteAr: 'ثواني، مش دقائق. متسيبهاش.' },
+    { stationEn: 'Stove · pot', stationAr: 'النار · الحلة', ordered: true, heat: 1, tiles: [
+      { g: 'add', verbEn: 'Stir into the stock', verbAr: 'أضف للمرق', nounEn: 'Molokhia', nounAr: 'ملوخية', amt: 400, unit: 'g', cls: 'continuous' }
+    ], timer: { min: 8, labelEn: 'Molokhia', labelAr: 'الملوخية', massSensitive: true }, photo: 'assets/molokhia-dish.jpg', donenessEn: 'Thick enough to coat the spoon. No bubbles at the surface.', donenessAr: 'تغطّي المعلقة. ولا فقاقيع على السطح.', noteKindEn: 'NEVER', noteKindAr: 'ممنوع', noteEn: 'Never let it boil. A boil splits it.', noteAr: 'لا تدعها تغلي، الغليان يفصلها.' },
+    { stationEn: 'Stove · pot', stationAr: 'النار · الحلة', ordered: true, heat: 1, tiles: [
+      { g: 'pour', verbEn: 'Pour over, listen for the hiss', verbAr: 'اسكب واسمع الشهقة', nounEn: 'Takliya', nounAr: 'التقلية', short: { titleEn: 'The hiss — what it should sound like', titleAr: 'الشهقة — الصوت الصح', secs: 18, poster: 'assets/molokhia-dish.jpg' } },
+      { g: 'nostir', verbEn: 'Do not stir after', verbAr: 'لا تحرّك بعدها', nounEn: 'Leave it', nounAr: 'اتركها' }
+    ] },
+    { stationEn: 'Grill', stationAr: 'الشوّاية', ordered: false, heat: 3, tiles: [
+      { g: 'sear', verbEn: 'Sear skin-side', verbAr: 'حمّر من جهة الجلد', nounEn: 'Chicken pieces', nounAr: 'قطع الفراخ', amt: 1200, unit: 'g', cls: 'continuous', short: { titleEn: 'Getting skin to blister, not burn', titleAr: 'تنفيخ الجلد بدون احتراق', secs: 27, poster: 'assets/chicken-seared.jpg' } },
+      { g: 'salt', verbEn: 'Season', verbAr: 'ملّح', nounEn: 'Salt', nounAr: 'ملح', amt: 1, unit: 'tsp', cls: 'seasoning' }
+    ], timer: { min: 6, labelEn: 'Sear', labelAr: 'التحمير', massSensitive: true }, photo: 'assets/chicken-seared.jpg', donenessEn: 'Lacquered, blistered in places, dry to the touch.', donenessAr: 'قشرة لامعة ومنفّخة في أماكن.' },
+    { stationEn: 'Serve', stationAr: 'التقديم', ordered: false, photo: 'assets/lemons.jpg', donenessEn: 'Soup, rice and lemon on the table together — not one after the other.', donenessAr: 'الشوربة والأرز والليمون على السفرة مع بعض.', tiles: [
+      { g: 'grain', verbEn: 'Alongside', verbAr: 'بجانبها', nounEn: 'Rice', nounAr: 'أرز', amt: 300, unit: 'g', cls: 'continuous' },
+      { g: 'lemon', verbEn: 'Cut in wedges', verbAr: 'قطّع فلقات', nounEn: 'Lemon', nounAr: 'ليمون', amt: 1, unit: 'count', cls: 'discrete', div: true },
+      { g: 'salt', verbEn: 'To taste', verbAr: 'حسب الذوق', nounEn: 'Salt', nounAr: 'ملح' }
+    ] }
+  ]
+};
+
+const FRAC = { 0.25: '¼', 0.5: '½', 0.75: '¾' };
+const EAST = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+
+class Component extends DCLogic {
+  state = {
+    page: 3,
+    servings: 4,
+    done: { '0-0': 1, '0-1': 1, '0-2': 1, '0-3': 1, '1-0': 1, '1-1': 1, '2-1': 1 },
+    timers: [{ id: 1, page: 1, labelEn: 'Stock', labelAr: 'المرق', total: 2400, endsAt: Date.now() + 402000 }],
+    mapOpen: false,
+    shortsOpen: false,
+    playing: null,
+    resumeOpen: true,
+    tick: 0
+  };
+
+  componentDidMount() {
+    this._iv = setInterval(() => { if (this.state.timers.length) this.setState({ tick: Date.now() }); }, 400);
+    this._key = (e) => {
+      if (this.state.resumeOpen) return;
+      if (e.key === 'ArrowRight') this.turn(1);
+      if (e.key === 'ArrowLeft') this.turn(-1);
+      if (e.key === 'Escape') this.setState({ mapOpen: false, shortsOpen: false, playing: null });
+    };
+    window.addEventListener('keydown', this._key);
+  }
+  swipeRef = (el) => {
+    if (!el || el.__mbSwipe) return;
+    el.__mbSwipe = 1;
+    let x = 0, y = 0, t = 0, down = false;
+    el.addEventListener('pointerdown', (e) => { down = true; x = e.clientX; y = e.clientY; t = performance.now(); });
+    el.addEventListener('pointerup', (e) => {
+      if (!down) return;
+      down = false;
+      const dx = e.clientX - x, dy = e.clientY - y, dt = performance.now() - t;
+      if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy) * 1.6 && dt < 700 && !this.state.mapOpen && !this.state.shortsOpen && !this.state.playing && !this.state.resumeOpen) {
+        this.turn(dx < 0 ? 1 : -1);
+      }
+    });
+    el.addEventListener('pointercancel', () => { down = false; });
+  };
+
+  componentWillUnmount() { clearInterval(this._iv); window.removeEventListener('keydown', this._key); }
+
+  get factor() { return this.state.servings / RECIPE.base; }
+
+  turn(dir) {
+    const n = Math.min(RECIPE.pages.length - 1, Math.max(0, this.state.page + dir));
+    if (dir > 0 && n !== this.state.page) {
+      const done = Object.assign({}, this.state.done);
+      RECIPE.pages[this.state.page].tiles.forEach((_, i) => { done[this.state.page + '-' + i] = 1; });
+      this.setState({ done, page: n });
+    } else this.setState({ page: n });
+  }
+
+  toggle(p, i) {
+    const done = Object.assign({}, this.state.done);
+    const k = p + '-' + i;
+    if (done[k]) delete done[k]; else done[k] = 1;
+    this.setState({ done });
+  }
+
+  startTimer(pageIdx) {
+    const t = RECIPE.pages[pageIdx].timer;
+    if (!t) return;
+    if (this.state.timers.some((x) => x.page === pageIdx)) return;
+    const secs = t.min * 60;
+    this.setState({ timers: this.state.timers.concat([{ id: Date.now(), page: pageIdx, labelEn: t.labelEn, labelAr: t.labelAr, total: secs, endsAt: Date.now() + secs * 1000 }]) });
+  }
+
+  num(s) { return this.props.numerals === 'eastern' ? String(s).replace(/[0-9]/g, (d) => EAST[+d]) : String(s); }
+
+  qty(t) {
+    if (t.amt === undefined) return { hasQty: false, digits: '', unit: '' };
+    let f = this.factor;
+    if (t.cls === 'fixed') f = 1;
+    if (t.cls === 'seasoning') f = Math.pow(f, 0.75);
+    const exact = t.amt * f;
+    let v = exact, unit = t.unit, digits;
+    if (unit === 'g' || unit === 'ml') {
+      const step = v < 10 ? 1 : v < 100 ? 5 : v < 500 ? 10 : 25;
+      v = Math.round(v / step) * step;
+      if (v >= 1000) { digits = (Math.round(v / 100) / 10).toString(); unit = unit === 'g' ? 'kg' : 'L'; }
+      else digits = String(v);
+    } else if (unit === 'tsp' || unit === 'tbsp') {
+      const q = unit === 'tsp' ? 4 : 2;
+      v = Math.round(v * q) / q;
+      const whole = Math.floor(v), rem = +(v - whole).toFixed(2);
+      digits = (whole ? String(whole) : '') + (FRAC[rem] || '');
+      if (!digits) digits = '¼';
+    } else {
+      v = t.div ? Math.round(v * 2) / 2 : Math.max(1, Math.round(v));
+      const whole = Math.floor(v), rem = +(v - whole).toFixed(2);
+      digits = (whole ? String(whole) : '') + (FRAC[rem] || '');
+      unit = '';
+    }
+    const approx = exact > 0 && Math.abs(v - exact) / exact > 0.05 && unit !== '';
+    return { hasQty: true, digits: (approx ? '≈' : '') + this.num(digits), unit };
+  }
+
+  clock(secs) {
+    const m = Math.floor(secs / 60), s = secs % 60;
+    return this.num(m) + ':' + this.num(String(s).padStart(2, '0'));
+  }
+
+  pageState(i) {
+    const tiles = RECIPE.pages[i].tiles;
+    const n = tiles.filter((_, j) => this.state.done[i + '-' + j]).length;
+    return n === 0 ? 'untouched' : n === tiles.length ? 'done' : 'partial';
+  }
+
+  renderVals() {
+    const accent = this.props.accent || '#A2542F';
+    const lang = this.props.language || 'both';
+    const showEn = lang !== 'ar', showAr = lang !== 'en';
+    const showDoneness = this.props.showDoneness !== false;
+    const p = this.state.page;
+    const pg = RECIPE.pages[p];
+    const f = this.factor;
+
+    const tiles = pg.tiles.map((t, i) => {
+      const done = !!this.state.done[p + '-' + i];
+      const q = this.qty(t);
+      return Object.assign({}, q, {
+        glyph: GLYPHS[t.g] || GLYPHS.add,
+        glyphColor: done ? 'rgba(34,30,26,.45)' : accent,
+        verbEn: t.verbEn, verbAr: t.verbAr, nounEn: t.nounEn, nounAr: t.nounAr,
+        done, op: done ? 0.5 : 1,
+        hasShort: !!t.short,
+        shortLabel: t.short ? '0:' + String(t.short.secs).padStart(2, '0') : '',
+        openShort: (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.setState({ playing: { titleEn: t.short.titleEn, titleAr: t.short.titleAr, secs: t.short.secs, page: p, src: t.short.src || '', poster: t.short.poster || '' } }); },
+        bg: done ? '#F1EBE0' : '#FCFAF5',
+        border: done ? 'rgba(34,30,26,.1)' : 'rgba(34,30,26,.16)',
+        toggle: () => this.toggle(p, i)
+      });
+    });
+
+    const heat = [0, 1, 2].map((i) => ({ h: 12 + i * 6, bg: pg.heat && i < pg.heat ? accent : 'rgba(34,30,26,.15)' }));
+
+    const running = this.state.timers.find((t) => t.page === p);
+    const massAdvisory = pg.timer && pg.timer.massSensitive && Math.abs(f - 1) > 0.01;
+
+    const timers = this.state.timers.map((t) => {
+      const rem = Math.max(0, Math.round((t.endsAt - Date.now()) / 1000));
+      const ringing = rem === 0;
+      return {
+        clock: ringing ? this.clock(0) : this.clock(rem),
+        pct: Math.max(0, Math.min(100, (rem / t.total) * 100)),
+        color: ringing ? accent : '#4A6B47',
+        border: ringing ? accent : 'rgba(34,30,26,.14)',
+        anim: ringing ? 'mb-pulse 1s ease-in-out infinite' : 'none',
+        labelEn: t.labelEn, labelAr: t.labelAr,
+        origin: 'PAGE ' + this.num(t.page + 1) + (ringing ? ' · DONE' : ''),
+        goto: () => this.setState({ page: t.page, mapOpen: false }),
+        dismiss: () => this.setState({ timers: this.state.timers.filter((x) => x.id !== t.id) })
+      };
+    });
+
+    const thumbs = RECIPE.pages.map((sp, i) => {
+      const st = this.pageState(i);
+      return {
+        no: this.num(String(i + 1).padStart(2, '0')),
+        stationEn: (sp.stationEn.split('·').pop() || '').trim() || sp.stationEn,
+        state: st === 'untouched' ? 'NOT STARTED' : st === 'done' ? 'SPENT' : 'PART DONE',
+        stateColor: st === 'partial' ? accent : 'rgba(34,30,26,.35)',
+        clusterOp: st === 'done' ? 0.72 : 1,
+        border: i === p ? accent : 'rgba(34,30,26,.14)',
+        bg: st === 'untouched' ? '#FCFAF5' : '#EFE9DE',
+        isCurrent: i === p,
+        hasTimer: !!sp.timer,
+        timerLabel: sp.timer ? this.num(sp.timer.min) + '′' : '',
+        tiles: sp.tiles.map((t, j) => ({ glyph: GLYPHS[t.g] || GLYPHS.add, op: this.state.done[i + '-' + j] ? 0.45 : 1 })),
+        go: () => this.setState({ page: i, mapOpen: false })
+      };
+    });
+
+    const shorts = [];
+    RECIPE.pages.forEach((sp, i) => sp.tiles.forEach((t) => {
+      if (t.short) shorts.push({
+        titleEn: t.short.titleEn, titleAr: t.short.titleAr, poster: MEDIA(t.short.poster || ''), hasPoster: !!t.short.poster, posterRef: SRC(MEDIA(t.short.poster || '')), hasClip: !!t.short.src, clipTag: t.short.src ? 'CLIP READY' : 'TO BE SHOT',
+        len: '0:' + String(t.short.secs).padStart(2, '0'),
+        origin: 'PAGE ' + this.num(i + 1),
+        isHere: i === p,
+        border: i === p ? accent : 'rgba(34,30,26,.14)',
+        play: () => this.setState({ playing: { titleEn: t.short.titleEn, titleAr: t.short.titleAr, secs: t.short.secs, page: i, src: t.short.src || '', poster: t.short.poster || '' } })
+      });
+    }));
+    const playing = this.state.playing;
+
+    return {
+      accent, showEn, showAr,
+      heroPhoto: MEDIA('assets/molokhia-dish.jpg'),
+      heroRef: SRC(MEDIA('assets/molokhia-dish.jpg')),
+      shorts, shortCount: this.num(shorts.length),
+      shortsOpen: this.state.shortsOpen,
+      openShorts: () => this.setState({ shortsOpen: true }),
+      closeShorts: () => this.setState({ shortsOpen: false }),
+      isPlaying: !!playing,
+      playTitleEn: playing ? playing.titleEn : '',
+      playTitleAr: playing ? playing.titleAr : '',
+      playLen: playing ? '0:' + String(playing.secs).padStart(2, '0') : '',
+      playSrc: playing ? MEDIA(playing.src) : '',
+      playVideoRef: (el) => { if (!el || !playing || !playing.src) return; const u = MEDIA(playing.src); if (el.getAttribute('src') !== u) { el.setAttribute('poster', MEDIA(playing.poster)); el.setAttribute('src', u); el.play && el.play().catch(() => {}); } },
+      playPoster: playing ? MEDIA(playing.poster) : '',
+      playPosterRef: SRC(playing ? MEDIA(playing.poster) : ''),
+      playHasClip: !!(playing && playing.src),
+      playNoClip: !!(playing && !playing.src),
+      closePlayer: () => this.setState({ playing: null }),
+      titleEn: RECIPE.titleEn, titleAr: RECIPE.titleAr,
+      presets: RECIPE.presets.map((n) => ({
+        label: this.num(n), isBase: n === RECIPE.base,
+        bg: n === this.state.servings ? accent : '#FCFAF5',
+        fg: n === this.state.servings ? '#FAF6EE' : '#221E1A',
+        border: n === this.state.servings ? accent : 'rgba(34,30,26,.16)',
+        set: () => this.setState({ servings: n })
+      })),
+      factorBadge: '×' + this.num(f % 1 === 0 ? f : f.toFixed(1)),
+      batchWarn: f > RECIPE.maxScale,
+      openMap: () => this.setState({ mapOpen: true }),
+      closeMap: () => this.setState({ mapOpen: false }),
+      mapOpen: this.state.mapOpen,
+      mapCloseLabel: showEn ? 'Back to page ' + this.num(p + 1) : 'صفحة ' + this.num(p + 1),
+      mapFootnote: 'DISMISSING RETURNS YOU TO PAGE ' + this.num(p + 1) + ' — A GLANCE NEVER COSTS YOUR PLACE.',
+      thumbs, timers, noTimers: timers.length === 0,
+      page: {
+        stationEn: pg.stationEn, stationAr: pg.stationAr,
+        orderLabel: pg.ordered ? 'IN THIS ORDER' : 'ANY ORDER',
+        hasHeat: !!pg.heat, heat,
+        pageNo: this.num(String(p + 1).padStart(2, '0')), total: this.num(RECIPE.pages.length),
+        tiles,
+        hasDoneness: showDoneness && !!pg.donenessEn,
+        donenessPhoto: MEDIA(pg.photo || ''),
+        photoRef: SRC(MEDIA(pg.photo || '')),
+        hasPhoto: !!pg.photo,
+        donenessEn: massAdvisory && pg.donenessEn ? pg.donenessEn + ' At ×' + this.num(f) + ' trust this, not the clock.' : pg.donenessEn,
+        donenessAr: pg.donenessAr,
+        hasNote: !!pg.noteEn, noteEn: pg.noteEn, noteAr: pg.noteAr,
+        noteKindEn: pg.noteKindEn || 'GOOD TO KNOW', noteKindAr: pg.noteKindAr || 'ملاحظة',
+        hasTimer: !!pg.timer,
+        timerLabel: pg.timer ? (running ? this.clock(Math.max(0, Math.round((running.endsAt - Date.now()) / 1000))) : this.num(pg.timer.min) + ' min') : '',
+        timerAction: running ? (showEn ? 'running' : 'شغّال') : (showEn ? 'tap to start' : 'اضغط للبدء'),
+        timerBg: running ? '#E7EEE4' : '#FCFAF5',
+        timerFg: running ? '#3D5C3A' : '#221E1A',
+        timerBorder: running ? '#4A6B47' : 'rgba(34,30,26,.16)',
+        startTimer: () => this.startTimer(p)
+      },
+      swipeRef: this.swipeRef,
+      prev: () => this.turn(-1),
+      next: () => this.turn(1),
+      prevOp: p === 0 ? 0.35 : 1,
+      nextEn: p === RECIPE.pages.length - 1 ? 'Finish' : 'Next',
+      nextAr: p === RECIPE.pages.length - 1 ? 'خلصنا' : 'التالي',
+      resumeOpen: this.state.resumeOpen,
+      resumeLabel: 'Resume — page ' + this.num(p + 1),
+      doResume: () => this.setState({ resumeOpen: false }),
+      doFresh: () => this.setState({ resumeOpen: false, page: 0, done: {}, timers: [] }),
+      statusLine: 'PAGE ' + this.num(p + 1) + ' / ' + this.num(RECIPE.pages.length) + ' · ' + this.num(this.state.servings) + ' SERVINGS · ' + this.num(timers.length) + ' TIMER(S) RUNNING'
+    };
+  }
+}
+
+</script>
+</body>
+</html>

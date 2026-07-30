@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="robots" content="noindex,nofollow">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<script src="../assets/media.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Naskh+Arabic:wght@400;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#231E18;font-family:'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#A2542F;text-decoration:none}a:hover{color:#8A4526}
+</style>
+</helmet>
+
+<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240"><rect width="240" height="240" fill="#F4EFE6"></rect><rect x="82" y="58" width="76" height="124" rx="16" fill="#2F5A55"></rect><text x="120" y="139" text-anchor="middle" font-family="Georgia,serif" font-size="46" fill="#F4EFE6">M</text></svg></template>
+
+<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px;background:radial-gradient(120% 90% at 50% 0%,#2E2820 0%,#1C1813 100%)">
+<div style="display:flex;flex-direction:column;align-items:center;gap:16px">
+
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="402px,874px">
+<div style="position:relative;height:100%;background:#F4EFE6;color:#221E1A;display:flex;flex-direction:column;overflow:hidden">
+
+<div ref="{{ scrollRef }}" style="flex:1;min-height:0;overflow:hidden;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none">
+
+<div style="position:relative;height:318px;background:#E4DACA">
+<img alt="" ref="{{ heroRef }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block"></img>
+<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,17,13,.55) 0 84px,rgba(20,17,13,.05) 150px,rgba(20,17,13,.82) 100%)"></div>
+<div style="position:absolute;left:16px;top:62px;display:flex;align-items:center;gap:7px;padding:6px 11px;white-space:nowrap;border-radius:20px;background:rgba(250,246,238,.16);border:1px solid rgba(250,246,238,.3)">
+<div style="width:5px;height:5px;border-radius:50%;background:#FAF6EE"></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.12em;color:#FAF6EE;white-space:nowrap">ONE RECIPE PER DISH</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:11px;color:rgba(250,246,238,.8)">وصفة واحدة</div>
+</div>
+<div style="position:absolute;left:16px;right:16px;bottom:14px;display:flex;flex-direction:column;gap:5px;color:#FAF6EE">
+<div style="font-size:27px;font-weight:600;letter-spacing:-.02em;line-height:1.1">{{ titleEn }}</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:18px;color:rgba(250,246,238,.82)">{{ titleAr }}</div>
+<div style="display:flex;align-items:center;gap:9px;margin-top:5px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;color:rgba(250,246,238,.75);white-space:nowrap">
+<span>{{ arcPages }} PAGES</span><span style="opacity:.5">·</span><span>{{ handsOn }} MIN HANDS-ON</span><span style="opacity:.5">·</span><span>{{ waits }}</span>
+</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:11px;padding:14px 16px 18px">
+
+<div style="display:flex;flex-direction:column;gap:5px;padding:12px 14px;border-radius:13px;background:#F3EADA;border:1px solid rgba(34,30,26,.12)">
+<div style="display:flex;align-items:center;gap:6px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.13em;color:rgba(34,30,26,.6)">WHY THIS VERSION</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:11.5px;color:rgba(34,30,26,.55)">ليه النسخة دي</div>
+</div>
+<div style="font-size:13.5px;line-height:1.4">{{ whyEn }}</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:13px;line-height:1.5;color:rgba(34,30,26,.65)">{{ whyAr }}</div>
+</div>
+
+<div style="display:flex;align-items:center;gap:9px;padding:11px 12px;border-radius:13px;background:#FBF8F2;border:1.5px solid rgba(34,30,26,.13)">
+<div style="display:flex;flex-direction:column;gap:1px;flex:none">
+<div style="font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:rgba(34,30,26,.6)">Servings</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:11px;color:rgba(34,30,26,.45)">الأنفار</div>
+</div>
+<div style="flex:1"></div>
+<sc-for list="{{ presets }}" as="p" hint-placeholder-count="3">
+<div onClick="{{ p.set }}" style="cursor:pointer;flex:none;min-width:52px;height:46px;border-radius:11px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:'IBM Plex Mono',monospace;font-size:17px;border:1.5px solid {{ p.border }};background:{{ p.bg }};color:{{ p.fg }}">
+<div>{{ p.label }}</div>
+<sc-if value="{{ p.isBase }}" hint-placeholder-val="{{ false }}"><div style="font-size:7.5px;letter-spacing:.06em;opacity:.75">TESTED</div></sc-if>
+</div>
+</sc-for>
+</div>
+
+<sc-if value="{{ batchWarn }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:center;gap:10px;padding:10px 13px;border-radius:12px;background:#F3EADA;border:1px solid rgba(34,30,26,.12)">
+<span style="display:flex;gap:3px;flex:none">
+<span style="width:14px;height:12px;border:2px solid {{ accent }};border-radius:2px 2px 7px 7px;display:block"></span>
+<span style="width:14px;height:12px;border:2px solid {{ accent }};border-radius:2px 2px 7px 7px;display:block"></span>
+</span>
+<div style="min-width:0;display:flex;flex-direction:column;gap:1px">
+<div style="font-size:12.5px;line-height:1.3">Cook in two batches — one pan won't sear this much chicken.</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:12px;color:rgba(34,30,26,.62)">اطبخ على دفعتين — الطاسة مش هتشيل الكمية.</div>
+</div>
+</div>
+</sc-if>
+
+<div style="display:flex;flex-direction:column;gap:9px;padding:14px;border-radius:13px;background:#2A2620;color:#F7F3EB">
+<div style="display:flex;align-items:flex-end;gap:10px">
+<div style="display:flex;flex-direction:column;gap:2px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.14em;color:rgba(247,243,235,.7)">COST TO COOK · تكلفة الطبخة</div>
+<div style="display:flex;align-items:baseline;gap:7px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:15px;color:rgba(247,243,235,.6)">EGP</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:40px;font-weight:500;letter-spacing:-.03em;line-height:1">{{ costTotal }}</div>
+</div>
+</div>
+<div style="flex:1"></div>
+<div style="display:flex;flex-direction:column;align-items:flex-end;gap:2px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:20px;line-height:1">{{ costPer }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.1em;color:rgba(247,243,235,.7)">PER SERVING</div>
+</div>
+</div>
+<div style="height:1px;background:rgba(247,243,235,.14)"></div>
+<div style="display:flex;align-items:center;gap:7px">
+<div style="width:5px;height:5px;border-radius:50%;background:{{ accent }};flex:none"></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.04em;color:rgba(247,243,235,.8)">{{ costSource }}</div>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;line-height:1.55;color:rgba(247,243,235,.68)">COMPUTED FROM WHAT THE DISH CONSUMES, NOT FROM PACK SIZES.</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:9px;padding:13px 13px 12px;border-radius:13px;background:#FBF8F2;border:1.5px solid rgba(34,30,26,.13)">
+<div style="display:flex;align-items:center;gap:8px">
+<div style="font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:rgba(34,30,26,.6)">The whole arc</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:11px;color:rgba(34,30,26,.45)">الطبخة كاملة</div>
+<div style="flex:1"></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(34,30,26,.5)">{{ arcPages }}/{{ arcPages }}</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:7px">
+<sc-for list="{{ thumbs }}" as="th" hint-placeholder-count="8">
+<div style="position:relative;border-radius:9px;border:1px solid rgba(34,30,26,.14);background:#F4EFE6;padding:6px 5px 5px;display:flex;flex-direction:column;gap:3px;min-height:74px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(34,30,26,.45)">{{ th.no }}</div>
+<div style="flex:1;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:2px">
+<sc-for list="{{ th.tiles }}" as="g" hint-placeholder-count="2">
+<div style="position:relative;width:40px;height:38px;transform:scale(.42);color:#221E1A">
+<sc-for list="{{ g.glyph }}" as="s" hint-placeholder-count="2"><div style="{{ s }}"></div></sc-for>
+</div>
+</sc-for>
+</div>
+<sc-if value="{{ th.hasTimer }}" hint-placeholder-val="{{ false }}">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:8.5px;color:{{ accent }};text-align:center">{{ th.timerLabel }}</div>
+</sc-if>
+</div>
+</sc-for>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;line-height:1.6;color:rgba(34,30,26,.6)">{{ arcNote }}</div>
+</div>
+
+<div style="display:flex;flex-direction:column;padding:4px 0 0">
+<div style="display:flex;align-items:center;gap:8px;padding:0 2px 9px">
+<div style="font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:rgba(34,30,26,.6)">Shopping</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:11px;color:rgba(34,30,26,.45)">المشتريات</div>
+<div style="flex:1"></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(34,30,26,.5)">{{ itemCount }} ITEMS</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:1px;border-radius:13px;overflow:hidden;border:1.5px solid rgba(34,30,26,.13)">
+<sc-for list="{{ items }}" as="it" hint-placeholder-count="6">
+<div style="display:flex;align-items:center;gap:11px;padding:10px 13px;background:{{ it.bg }}">
+<div style="min-width:0;flex:1;display:flex;flex-direction:column;gap:1px">
+<div style="font-size:13.5px;line-height:1.2">{{ it.nameEn }}</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:12.5px;color:rgba(34,30,26,.6);line-height:1.3">{{ it.nameAr }}</div>
+</div>
+<div style="flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:1px">
+<div style="display:flex;align-items:baseline;gap:5px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:16px;font-weight:500;line-height:1">{{ it.digits }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:rgba(34,30,26,.55)">{{ it.unit }}</div>
+</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.04em;color:rgba(34,30,26,.58)">{{ it.buy }}</div>
+</div>
+<div style="flex:none;width:52px;text-align:right;font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:rgba(34,30,26,.75)">{{ it.cost }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+
+<div onClick="{{ toggleNutri }}" style="cursor:pointer;display:flex;flex-direction:column;gap:10px;padding:12px 13px;border-radius:13px;background:#FBF8F2;border:1.5px solid rgba(34,30,26,.13)">
+<div style="display:flex;align-items:center;gap:9px">
+<div style="display:flex;flex-direction:column;gap:1px;min-width:0">
+<div style="font-size:12.5px;font-weight:600">Nutrition per serving</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:12px;color:rgba(34,30,26,.6)">القيمة الغذائية للفرد</div>
+</div>
+<div style="flex:1"></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:13px;color:rgba(34,30,26,.6)">{{ nutriToggle }}</div>
+</div>
+<sc-if value="{{ nutriOpen }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:10px">
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px">
+<sc-for list="{{ nutrients }}" as="n" hint-placeholder-count="4">
+<div style="display:flex;flex-direction:column;gap:2px;padding:9px 8px;border-radius:10px;background:#F1EBE0">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:17px;font-weight:500;line-height:1">{{ n.value }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.08em;color:rgba(34,30,26,.6)">{{ n.unit }}</div>
+<div style="font-size:10.5px;color:rgba(34,30,26,.6)">{{ n.labelEn }}</div>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;flex-direction:column;gap:2px">
+<div style="font-size:12.5px;line-height:1.4;font-style:italic">A whole meal with the rice — you don't need anything beside it.</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:12px;line-height:1.5;color:rgba(34,30,26,.62)">أكلة كاملة مع الأرز — مش محتاجة حاجة جانبها.</div>
+</div>
+</div>
+</sc-if>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:9px">
+<div style="display:flex;align-items:center;gap:8px;padding:0 2px">
+<div style="font-size:10.5px;letter-spacing:.13em;text-transform:uppercase;color:rgba(34,30,26,.6)">Watch first</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:11px;color:rgba(34,30,26,.45)">اتفرّج الأول</div>
+<div style="flex:1"></div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;color:rgba(34,30,26,.58)">DRAG →</div>
+</div>
+<div ref="{{ stripRef }}" style="overflow:hidden;touch-action:none;cursor:grab;user-select:none;-webkit-user-select:none">
+<div style="display:flex;gap:10px;padding:0 0 2px">
+<sc-for list="{{ shorts }}" as="sh" hint-placeholder-count="4">
+<div onClick="{{ sh.play }}" style="cursor:pointer;flex:none;width:132px;display:flex;flex-direction:column;gap:6px">
+<div style="position:relative;height:176px;border-radius:11px;overflow:hidden;border:1px solid rgba(34,30,26,.16);background:#E4DACA">
+<img alt="" ref="{{ sh.posterRef }}" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block"></img>
+<div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(24,20,16,0) 50%,rgba(24,20,16,.62) 100%);display:flex;align-items:flex-end;justify-content:space-between;padding:7px">
+<span style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:rgba(250,246,238,.9)">{{ sh.clipTag }}</span>
+<span style="font-family:'IBM Plex Mono',monospace;font-size:9px;padding:2px 5px;border-radius:4px;background:rgba(24,20,16,.55);color:rgba(250,246,238,.9)">{{ sh.len }}</span>
+</div>
+<div style="position:absolute;left:50%;top:50%;margin:-15px 0 0 -15px;width:30px;height:30px;border-radius:50%;background:rgba(24,20,16,.5);display:flex;align-items:center;justify-content:center">
+<span style="width:0;height:0;border-left:9px solid rgba(250,246,238,.92);border-top:6.5px solid transparent;border-bottom:6.5px solid transparent;display:block;margin-left:3px"></span>
+</div>
+</div>
+<div style="font-size:12px;line-height:1.25">{{ sh.titleEn }}</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:11.5px;line-height:1.35;color:rgba(34,30,26,.6)">{{ sh.titleAr }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+
+<div style="display:flex;flex-direction:column;gap:3px;padding:6px 2px 2px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;line-height:1.65;color:rgba(34,30,26,.6)">EVERY NUMBER CARRIES A DATE AND A SOURCE. THE ×{{ factorPlain }} FIGURES ARE A CALCULATION — THE TESTED RECIPE IS {{ baseServings }} SERVINGS.</div>
+</div>
+
+</div>
+</div>
+
+<div style="position:absolute;right:5px;top:60px;bottom:110px;width:3px;border-radius:2px;background:rgba(34,30,26,.07)">
+<div ref="{{ barRef }}" style="width:3px;border-radius:2px;background:rgba(34,30,26,.3)"></div>
+</div>
+
+<div style="flex:none;box-sizing:border-box;padding:11px 16px 34px;background:#2A2620;border-top:1px solid rgba(247,243,235,.1);display:flex;gap:10px">
+<div onClick="{{ addList }}" style="cursor:pointer;flex:none;width:74px;height:58px;border-radius:13px;border:1.5px solid rgba(247,243,235,.28);background:rgba(247,243,235,.06);color:#F7F3EB;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:15px;line-height:1">{{ listGlyph }}</div>
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;letter-spacing:.06em;color:rgba(247,243,235,.75)">{{ listLabel }}</div>
+</div>
+<div onClick="{{ startCook }}" style="cursor:pointer;flex:1;height:58px;border-radius:13px;background:{{ accent }};color:#FAF6EE;display:flex;align-items:center;justify-content:center;gap:13px">
+<div style="display:flex;flex-direction:column;align-items:center;line-height:1.1">
+<div style="font-size:16px;font-weight:600">{{ ctaEn }}</div>
+<div dir="rtl" style="font-family:'Noto Naskh Arabic',serif;font-size:13px;opacity:.85">{{ ctaAr }}</div>
+</div>
+<div style="width:12px;height:12px;border-right:2.5px solid currentColor;border-top:2.5px solid currentColor;transform:rotate(45deg)"></div>
+</div>
+</div>
+
+</div>
+</x-import>
+
+<div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:.06em;color:rgba(247,243,235,.4);text-align:center;max-width:402px;line-height:1.6">{{ statusLine }}<br>DRAG ANYWHERE TO SCROLL · TOUCH, TRACKPAD OR MOUSE</div>
+</div>
+</div>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:520,&quot;height&quot;:1010},&quot;handScroll&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Interaction&quot;},&quot;momentum&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:1,&quot;min&quot;:0.4,&quot;max&quot;:2,&quot;step&quot;:0.1,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;Interaction&quot;},&quot;numerals&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;western&quot;,&quot;eastern&quot;],&quot;default&quot;:&quot;western&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Content&quot;},&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#6B4A7A&quot;,&quot;options&quot;:[&quot;#A2542F&quot;,&quot;#7A6A2F&quot;,&quot;#2F5A55&quot;,&quot;#6B4A7A&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Look&quot;}}">
+const SH = (o) => Object.assign({ position: 'absolute', background: 'currentColor' }, o);
+const RING = (o) => Object.assign({ position: 'absolute', background: 'transparent', border: '2.5px solid currentColor' }, o);
+const MEDIA = (p) => (p && window.MB_MEDIA && window.MB_MEDIA[p]) || (p ? '../' + p : p);
+const SRC = (url) => (el) => { if (el && url && el.getAttribute('src') !== url) el.setAttribute('src', url); };
+
+const GLYPHS = {
+  chop: [SH({ left: '5px', top: '13px', width: '30px', height: '3px', transform: 'rotate(-26deg)', borderRadius: '2px' }), SH({ left: '10px', top: '23px', width: '20px', height: '3px', transform: 'rotate(-26deg)', borderRadius: '2px' })],
+  crush: [SH({ left: '3px', top: '24px', width: '34px', height: '4px', borderRadius: '2px' }), SH({ left: '14px', top: '6px', width: '11px', height: '15px', borderRadius: '6px 6px 3px 3px' })],
+  joint: [SH({ left: '7px', top: '9px', width: '11px', height: '22px', borderRadius: '6px' }), SH({ left: '23px', top: '9px', width: '11px', height: '22px', borderRadius: '6px' })],
+  pot: [SH({ left: '7px', top: '11px', width: '26px', height: '19px', borderRadius: '3px 3px 9px 9px' }), SH({ left: '1px', top: '15px', width: '6px', height: '4px', borderRadius: '2px' }), SH({ left: '33px', top: '15px', width: '6px', height: '4px', borderRadius: '2px' })],
+  leaf: [SH({ left: '8px', top: '12px', width: '24px', height: '14px', borderRadius: '14px 3px 14px 3px' })],
+  strip: [SH({ left: '6px', top: '10px', width: '13px', height: '20px', borderRadius: '7px' }), SH({ left: '24px', top: '15px', width: '11px', height: '11px', borderRadius: '50%' })],
+  strain: [SH({ left: '6px', top: '9px', width: '28px', height: '13px', borderRadius: '0 0 16px 16px' }), SH({ left: '14px', top: '25px', width: '3px', height: '9px' }), SH({ left: '23px', top: '25px', width: '3px', height: '9px' })],
+  fry: [SH({ left: '2px', top: '12px', width: '24px', height: '14px', borderRadius: '2px 2px 11px 11px' }), SH({ left: '26px', top: '16px', width: '13px', height: '3px', borderRadius: '2px' })],
+  spice: [SH({ left: '10px', top: '10px', width: '5px', height: '5px', borderRadius: '50%' }), SH({ left: '21px', top: '14px', width: '5px', height: '5px', borderRadius: '50%' }), SH({ left: '14px', top: '22px', width: '5px', height: '5px', borderRadius: '50%' }), SH({ left: '25px', top: '25px', width: '4px', height: '4px', borderRadius: '50%' })],
+  add: [RING({ left: '7px', top: '6px', width: '26px', height: '26px', borderRadius: '50%' }), SH({ left: '18px', top: '13px', width: '3px', height: '13px' }), SH({ left: '13px', top: '18px', width: '13px', height: '3px' })],
+  pour: [SH({ left: '9px', top: '4px', width: '15px', height: '15px', transform: 'rotate(45deg)', borderRadius: '2px' }), SH({ left: '19px', top: '22px', width: '3px', height: '12px', borderRadius: '2px' })],
+  nostir: [RING({ left: '6px', top: '5px', width: '28px', height: '28px', borderRadius: '50%' }), SH({ left: '4px', top: '17px', width: '32px', height: '3px', transform: 'rotate(-45deg)' })],
+  sear: [SH({ left: '4px', top: '20px', width: '32px', height: '3px', borderRadius: '2px' }), SH({ left: '10px', top: '8px', width: '3px', height: '9px', borderRadius: '2px' }), SH({ left: '19px', top: '5px', width: '3px', height: '12px', borderRadius: '2px' }), SH({ left: '28px', top: '9px', width: '3px', height: '8px', borderRadius: '2px' })],
+  grain: [SH({ left: '9px', top: '13px', width: '4px', height: '9px', borderRadius: '3px', transform: 'rotate(18deg)' }), SH({ left: '18px', top: '10px', width: '4px', height: '9px', borderRadius: '3px', transform: 'rotate(-14deg)' }), SH({ left: '25px', top: '17px', width: '4px', height: '9px', borderRadius: '3px', transform: 'rotate(26deg)' })],
+  lemon: [SH({ left: '7px', top: '13px', width: '25px', height: '15px', borderRadius: '50%' })],
+  salt: [SH({ left: '13px', top: '20px', width: '13px', height: '13px', borderRadius: '2px 2px 5px 5px' }), SH({ left: '16px', top: '8px', width: '3px', height: '3px', borderRadius: '50%' }), SH({ left: '23px', top: '11px', width: '3px', height: '3px', borderRadius: '50%' })]
+};
+
+const ARC = [
+  { g: ['chop', 'crush', 'chop', 'joint'] },
+  { g: ['pot', 'leaf'], timer: 40 },
+  { g: ['strip', 'strain'] },
+  { g: ['fry', 'spice'] },
+  { g: ['add'], timer: 8 },
+  { g: ['pour', 'nostir'] },
+  { g: ['sear', 'salt'], timer: 6 },
+  { g: ['grain', 'lemon'] }
+];
+
+const ITEMS = [
+  { nameEn: 'Chicken, whole', nameAr: 'فرخة كاملة', amt: 1200, unit: 'g', cls: 'continuous', price: 108, buyEn: '1 bird' },
+  { nameEn: 'Molokhia, frozen', nameAr: 'ملوخية مجمدة', amt: 400, unit: 'g', cls: 'continuous', price: 35, pack: 400, buyEn: '400 g pack' },
+  { nameEn: 'Rice', nameAr: 'أرز', amt: 300, unit: 'g', cls: 'continuous', price: 12, pack: 1000, buyEn: 'from 1 kg' },
+  { nameEn: 'Ghee', nameAr: 'سمن', amt: 2, unit: 'tbsp', cls: 'continuous', price: 9, buyEn: 'from jar' },
+  { nameEn: 'Onion', nameAr: 'بصل', amt: 2, unit: 'count', cls: 'discrete', div: true, price: 6, buyEn: 'loose' },
+  { nameEn: 'Garlic', nameAr: 'ثوم', amt: 8, unit: 'count', cls: 'discrete', price: 5, buyEn: '1 head' },
+  { nameEn: 'Coriander, fresh', nameAr: 'كزبرة خضراء', amt: 2, unit: 'tbsp', cls: 'continuous', price: 4, buyEn: '1 bunch' },
+  { nameEn: 'Coriander, ground', nameAr: 'كزبرة ناشفة', amt: 1, unit: 'tsp', cls: 'seasoning', price: 2, buyEn: 'from jar' },
+  { nameEn: 'Lemon', nameAr: 'ليمون', amt: 1, unit: 'count', cls: 'discrete', div: true, price: 4, buyEn: 'loose' },
+  { nameEn: 'Bay leaf', nameAr: 'ورق لورا', amt: 2, unit: 'count', cls: 'discrete', price: 1, buyEn: 'from jar' },
+  { nameEn: 'Salt', nameAr: 'ملح', amt: 1, unit: 'tsp', cls: 'seasoning', price: 1, buyEn: 'have it' },
+  { nameEn: 'Water', nameAr: 'ماء', amt: 1500, unit: 'ml', cls: 'fixed', price: 0, buyEn: 'tap' }
+];
+
+const SHORTS = [
+  { titleEn: 'Knife work — keeping the edge', titleAr: 'السكينة — الحفاظ على الحد', secs: 24, poster: 'assets/onion-chopped.jpg', src: 'assets/clip-knife.webm' },
+  { titleEn: 'Takliya — the colour to stop at', titleAr: 'التقلية — لون التوقّف', secs: 31, poster: 'assets/garlic-butter-pan.jpg' },
+  { titleEn: 'The hiss — what it should sound like', titleAr: 'الشهقة — الصوت الصح', secs: 18, poster: 'assets/molokhia-dish.jpg' },
+  { titleEn: 'Skin that blisters, not burns', titleAr: 'جلد منفّخ مش محروق', secs: 27, poster: 'assets/chicken-seared.jpg' }
+];
+
+const FRAC = { 0.25: '¼', 0.5: '½', 0.75: '¾' };
+const EAST = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
+const BASE = 4, PRESETS = [2, 4, 8], MAXSCALE = 1.5;
+
+class Component extends DCLogic {
+  state = { servings: 4, nutriOpen: false, added: false, note: '' };
+
+  get hand() { return this.props.handScroll !== false; }
+  get momentum() { return this.props.momentum || 1; }
+  get factor() { return this.state.servings / BASE; }
+
+  // one pointer-driven scroller for touch, trackpad and mouse alike
+  attachDrag(el, axis) {
+    if (!el || el.__mbDrag) return;
+    el.__mbDrag = 1;
+    const self = this;
+    let down = false, start = 0, orig = 0, last = 0, lastT = 0, v = 0, moved = 0, raf = 0;
+    const pos = (e) => (axis === 'y' ? e.clientY : e.clientX);
+    const get = () => (axis === 'y' ? el.scrollTop : el.scrollLeft);
+    const set = (n) => { if (axis === 'y') el.scrollTop = n; else el.scrollLeft = n; };
+    el.addEventListener('pointerdown', (e) => {
+      if (!self.hand) return;
+      down = true; moved = 0; start = pos(e); orig = get(); last = start; lastT = performance.now(); v = 0;
+      cancelAnimationFrame(raf);
+      el.style.cursor = 'grabbing';
+      if (el.setPointerCapture) { try { el.setPointerCapture(e.pointerId); } catch (err) {} }
+    });
+    el.addEventListener('pointermove', (e) => {
+      if (!down) return;
+      const p = pos(e), d = p - start;
+      if (Math.abs(d) > moved) moved = Math.abs(d);
+      set(orig - d);
+      const t = performance.now();
+      if (t > lastT) { v = (p - last) / (t - lastT); last = p; lastT = t; }
+      self.syncBar();
+      if (moved > 4) e.preventDefault();
+    });
+    const up = () => {
+      if (!down) return;
+      down = false;
+      el.style.cursor = 'grab';
+      el.__mbMoved = moved;
+      if (Math.abs(v) > 0.08) {
+        let vel = v * 15 * self.momentum;
+        const step = () => { set(get() - vel); vel *= 0.93; self.syncBar(); if (Math.abs(vel) > 0.35) raf = requestAnimationFrame(step); };
+        raf = requestAnimationFrame(step);
+      }
+    };
+    el.addEventListener('pointerup', up);
+    el.addEventListener('pointercancel', up);
+    el.addEventListener('lostpointercapture', up);
+    el.addEventListener('click', (e) => { if (el.__mbMoved > 8) { e.stopPropagation(); e.preventDefault(); el.__mbMoved = 0; } }, true);
+    el.addEventListener('wheel', (e) => {
+      const d = axis === 'y' ? e.deltaY : (e.deltaX || e.deltaY);
+      set(get() + d); self.syncBar(); e.preventDefault();
+    }, { passive: false });
+  }
+
+  syncBar() {
+    const el = this._scroll, bar = this._bar;
+    if (!el || !bar) return;
+    const track = bar.parentElement.clientHeight;
+    const ratio = el.clientHeight / Math.max(1, el.scrollHeight);
+    const h = Math.max(28, Math.round(track * ratio));
+    const max = Math.max(1, el.scrollHeight - el.clientHeight);
+    bar.style.height = h + 'px';
+    bar.style.transform = 'translateY(' + Math.round((track - h) * (el.scrollTop / max)) + 'px)';
+  }
+
+  componentDidUpdate() { this.syncBar(); }
+
+  num(s) { return this.props.numerals === 'eastern' ? String(s).replace(/[0-9]/g, (d) => EAST[+d]) : String(s); }
+
+  eff(cls) {
+    let f = this.factor;
+    if (cls === 'fixed') return 1;
+    if (cls === 'seasoning') return Math.pow(f, 0.75);
+    return f;
+  }
+
+  qty(it) {
+    const f = this.eff(it.cls);
+    const exact = it.amt * f;
+    let v = exact, unit = it.unit, digits;
+    if (unit === 'g' || unit === 'ml') {
+      const step = v < 10 ? 1 : v < 100 ? 5 : v < 500 ? 10 : 25;
+      v = Math.round(v / step) * step;
+      if (v >= 1000) { digits = (Math.round(v / 100) / 10).toString(); unit = unit === 'g' ? 'kg' : 'L'; }
+      else digits = String(v);
+    } else if (unit === 'tsp' || unit === 'tbsp') {
+      const q = unit === 'tsp' ? 4 : 2;
+      v = Math.round(v * q) / q;
+      const w = Math.floor(v), r = +(v - w).toFixed(2);
+      digits = (w ? String(w) : '') + (FRAC[r] || '') || '¼';
+    } else {
+      v = it.div ? Math.round(v * 2) / 2 : Math.max(1, Math.round(v));
+      const w = Math.floor(v), r = +(v - w).toFixed(2);
+      digits = (w ? String(w) : '') + (FRAC[r] || '');
+      unit = it.unit === 'count' ? (it.amt > 1 ? '' : '') : unit;
+    }
+    const approx = exact > 0 && Math.abs(v - exact) / exact > 0.05 && unit !== '';
+    return { digits: (approx ? '≈' : '') + this.num(digits), unit };
+  }
+
+  renderVals() {
+    const accent = this.props.accent || '#2F5A55';
+    const f = this.factor;
+
+    const items = ITEMS.map((it, i) => {
+      const q = this.qty(it);
+      const cost = it.price * this.eff(it.cls);
+      return Object.assign({}, q, {
+        nameEn: it.nameEn, nameAr: it.nameAr,
+        buy: (it.buyEn || '').toUpperCase(),
+        cost: it.price === 0 ? '—' : this.num(Math.round(cost)),
+        bg: i % 2 ? '#F8F4EC' : '#FCFAF5'
+      });
+    });
+
+    const total = ITEMS.reduce((s, it) => s + it.price * this.eff(it.cls), 0);
+
+    return {
+      accent,
+      titleEn: 'Molokhia bil Farakh',
+      titleAr: 'ملوخية بالفراخ',
+      heroRef: SRC(MEDIA('assets/molokhia-dish.jpg')),
+      scrollRef: (el) => { this._scroll = el; this.attachDrag(el, 'y'); if (el) requestAnimationFrame(() => this.syncBar()); },
+      stripRef: (el) => this.attachDrag(el, 'x'),
+      barRef: (el) => { this._bar = el; },
+      whyEn: 'The Cairo version: stock from a whole bird, takliya poured at the table. No blender, no cornflour, no shortcuts that change the texture.',
+      whyAr: 'النسخة القاهرية: مرق من فرخة كاملة، والتقلية تُسكب على السفرة. بدون خلاط ولا نشا.',
+      arcPages: this.num(ARC.length),
+      handsOn: this.num(55),
+      waits: this.num(2) + ' WAITS',
+      arcNote: 'TWO WAITS — ' + this.num(40) + ' MIN STOCK, ' + this.num(8) + ' MIN MOLOKHIA. NOTHING TO WATCH IN BETWEEN.',
+      thumbs: ARC.map((p, i) => ({
+        no: this.num(String(i + 1).padStart(2, '0')),
+        hasTimer: !!p.timer,
+        timerLabel: p.timer ? this.num(p.timer) + '′' : '',
+        tiles: p.g.map((g) => ({ glyph: GLYPHS[g] || GLYPHS.add }))
+      })),
+      presets: PRESETS.map((n) => ({
+        label: this.num(n), isBase: n === BASE,
+        bg: n === this.state.servings ? accent : '#F4EFE6',
+        fg: n === this.state.servings ? '#FAF6EE' : '#221E1A',
+        border: n === this.state.servings ? accent : 'rgba(34,30,26,.16)',
+        set: () => this.setState({ servings: n })
+      })),
+      batchWarn: f > MAXSCALE,
+      factorPlain: this.num(f % 1 === 0 ? f : f.toFixed(1)),
+      baseServings: this.num(BASE),
+      costTotal: this.num(Math.round(total)),
+      costPer: this.num(Math.round(total / this.state.servings)),
+      costSource: 'EL-OBOUR WHOLESALE · UPDATED TUE ' + this.num(21) + ' JUL',
+      items, itemCount: this.num(ITEMS.length),
+      nutriOpen: this.state.nutriOpen,
+      nutriToggle: this.state.nutriOpen ? '−' : '+',
+      toggleNutri: () => this.setState({ nutriOpen: !this.state.nutriOpen }),
+      nutrients: [
+        { value: this.num(410), unit: 'KCAL', labelEn: 'Energy' },
+        { value: this.num(38), unit: 'G', labelEn: 'Protein' },
+        { value: this.num(12), unit: 'G', labelEn: 'Fat' },
+        { value: this.num(34), unit: 'G', labelEn: 'Carbs' }
+      ],
+      shorts: SHORTS.map((s) => ({
+        titleEn: s.titleEn, titleAr: s.titleAr,
+        len: '0:' + String(s.secs).padStart(2, '0'),
+        clipTag: s.src ? 'CLIP READY' : 'TO BE SHOT',
+        posterRef: SRC(MEDIA(s.poster)),
+        play: () => this.setState({ note: 'Short: ' + s.titleEn })
+      })),
+      addList: () => this.setState({ added: !this.state.added }),
+      listGlyph: this.state.added ? '✓' : '+',
+      listLabel: this.state.added ? 'ADDED' : 'LIST',
+      startCook: () => this.setState({ note: 'Cook mode — page 1' }),
+      ctaEn: 'Start cooking',
+      ctaAr: 'ابدأ الطبخ',
+      statusLine: (this.state.note || 'PRE-COMMIT SCREEN') + ' · ' + this.num(this.state.servings) + ' SERVINGS · EGP ' + this.num(Math.round(total))
+    };
+  }
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+# CHROME LEXICON
+# Stations, note kinds, units, scaling classes. All closed vocabulary.
+# Roughly 40 strings that cover every recipe in the catalogue.
+
+stations:
+  board:
+    glyph: board
+    name: { en: Board, ar: الطبلية }
+  stove:
+    glyph: flame
+    name: { en: Stove, ar: النار }
+  bench:
+    glyph: bench
+    name: { en: Bench, ar: الترابيزة }
+  grill:
+    glyph: grill
+    name: { en: Grill, ar: الشوّاية }
+  oven:
+    glyph: oven
+    name: { en: Oven, ar: الفرن }
+  serve:
+    glyph: plate
+    name: { en: Serve, ar: التقديم }
+
+# Note kinds are a closed, typed set on purpose. A cook learns to read
+# NEVER as absolute and STAY HERE as "do not walk away". Free-text note
+# headers would destroy that. severity drives the colour in the reader.
+note_kinds:
+  coming_up:
+    severity: info
+    label: { en: COMING UP, ar: بعد قليل }
+  stay_here:
+    severity: warn
+    label: { en: STAY HERE, ar: لا تبتعد }
+  never:
+    severity: danger
+    label: { en: NEVER, ar: ممنوع }
+  make_ahead:
+    severity: info
+    label: { en: MAKE AHEAD, ar: يُحضّر مقدّمًا }
+
+units:
+  g:     { symbol: { en: g,    ar: جم },  scales_to: kg, factor: 1000 }
+  kg:    { symbol: { en: kg,   ar: كجم } }
+  ml:    { symbol: { en: ml,   ar: مل },  scales_to: L,  factor: 1000 }
+  L:     { symbol: { en: L,    ar: لتر } }
+  tsp:   { symbol: { en: tsp,  ar: م.ص },  round_to: 0.25 }
+  tbsp:  { symbol: { en: tbsp, ar: م.ك },  round_to: 0.5 }
+  count: { symbol: { en: "",   ar: "" } }
+
+# SCALING CLASSES — the field most likely to be entered wrong.
+# This is why the validator refuses a recipe that omits it.
+scaling_classes:
+  continuous: Scales linearly with servings. Flour, meat, stock, rice.
+  discrete:   Scales but must land on a whole or half unit. Onions, eggs, lemons.
+  seasoning:  Scales sub-linearly — doubling servings does not double the salt.
+  fixed:      Does not scale at all. Water for boiling, oil for frying depth.
+
+# Locale configuration. One language runs at a time; direction and numerals
+# travel with the language, they are not per-recipe data.
+locales:
+  en: { dir: ltr, numerals: western, name: English }
+  ar: { dir: rtl, numerals: eastern, name: العربية }

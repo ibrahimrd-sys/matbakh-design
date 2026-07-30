@@ -1,0 +1,58 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   MATBAKH — DESIGN TOKENS
+   The canonical palette and type scale. build.py audits every prototype
+   against this file and reports any colour used that is not declared here.
+
+   The audit is deliberately a warning, not an error. It exists so drift is
+   visible: at the time of writing the prototypes carry two terracottas and
+   five near-identical off-whites, none of which was a decision. Retire the
+   duplicates one prototype at a time and watch the count fall.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* ── Paper theme — the primary surface ───────────────────────────────────── */
+  --paper:            #F4EFE6;   /* app background */
+  --card:             #FBF8F2;   /* raised tile */
+  --card-alt:         #F8F4EC;   /* zebra row */
+  --ink:              #221E1A;   /* body text, near-black warm */
+  --ink-60:           rgba(34, 30, 26, .60);
+  --ink-40:           rgba(34, 30, 26, .40);
+  --hairline:         rgba(34, 30, 26, .14);
+
+  /* ── White theme — the colour experiment ─────────────────────────────────── */
+  --white-base:       #FFFFFF;
+  --white-card:       #FCFAF5;
+
+  /* ── Brand ───────────────────────────────────────────────────────────────── */
+  --terracotta:       #A2542F;   /* CANONICAL accent */
+  --terracotta-deep:  #8A4526;   /* hover / pressed */
+  --teal:             #2F5A55;   /* secondary, from the strategy palette */
+
+  /* ── State. These carry meaning; do not reuse them decoratively. ─────────── */
+  --running:          #12894A;   /* a timer counting down, the stove working */
+  --danger:           #E01B22;   /* act now, or never do this */
+
+  /* ── Inverse surface — dark cards on the review site ─────────────────────── */
+  --inverse:          #2A2620;
+  --inverse-ink:      #F7F3EB;
+
+  /* ── DEPRECATED — present in the prototypes, being retired ───────────────── */
+  --_dep-terracotta:  #C0562F;   /* → use --terracotta */
+  --_dep-paper-2:     #FAF6EE;   /* → use --paper or --card */
+
+  /* ── Type ────────────────────────────────────────────────────────────────── */
+  --font-latin:  'IBM Plex Sans', system-ui, sans-serif;
+  --font-mono:   'IBM Plex Mono', ui-monospace, monospace;
+  --font-arabic: 'Noto Naskh Arabic', serif;
+
+  /* Cook mode is read at arm's length. Nothing functional below 15px. */
+  --step-digits:  44px;   /* timer and quantity numerals */
+  --step-verb:    22px;   /* the action */
+  --step-noun:    17px;
+  --body:         15px;
+  --meta:         11px;   /* mono labels, uppercase, tracked */
+
+  --radius-tile:  14px;
+  --radius-chip:   5px;
+  --touch-min:    48px;   /* nothing tappable smaller, wet hands */
+}

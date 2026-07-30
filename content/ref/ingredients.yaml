@@ -1,0 +1,100 @@
+# INGREDIENT REFERENCE
+# Extends your existing ingredients_ref.json. Names, pack sizes and buy hints
+# are ingredient-intrinsic — a bunch of coriander is always a bunch — so they
+# are translated ONCE here, not restated in every recipe that uses them.
+#
+# NO COST FIELD. Price comes from the market feed at render time, keyed on id.
+#
+# cls is the DEFAULT scaling class. A recipe may override it (water is usually
+# continuous, but water for boiling pasta is fixed) — the validator requires
+# the override to be explicit.
+
+chicken_whole:
+  glyph: chicken
+  name: { en: Chicken, whole, ar: فرخة كاملة }
+  unit: g
+  cls: continuous
+  buy: { en: 1 bird, ar: فرخة }
+
+molokhia_frozen:
+  glyph: leaf
+  name: { en: Molokhia, frozen, ar: ملوخية مجمدة }
+  unit: g
+  cls: continuous
+  pack: 400
+  buy: { en: 400 g pack, ar: كيس ٤٠٠ جم }
+
+rice:
+  glyph: grain
+  name: { en: Rice, ar: أرز }
+  unit: g
+  cls: continuous
+  pack: 1000
+  buy: { en: from 1 kg, ar: من كيس كيلو }
+
+ghee:
+  glyph: fat
+  name: { en: Ghee, ar: سمن }
+  unit: tbsp
+  cls: continuous
+  buy: { en: from jar, ar: من البرطمان }
+
+onion:
+  glyph: onion
+  name: { en: Onion, ar: بصل }
+  unit: count
+  cls: discrete
+  divisible: true
+  buy: { en: loose, ar: بالوزن }
+
+garlic:
+  glyph: garlic
+  name: { en: Garlic, ar: ثوم }
+  unit: count
+  cls: discrete
+  divisible: false
+  buy: { en: 1 head, ar: رأس }
+
+coriander_fresh:
+  glyph: herb
+  name: { en: Coriander, fresh, ar: كزبرة خضراء }
+  unit: tbsp
+  cls: continuous
+  buy: { en: 1 bunch, ar: ربطة }
+
+coriander_ground:
+  glyph: spice
+  name: { en: Coriander, ground, ar: كزبرة ناشفة }
+  unit: tsp
+  cls: seasoning
+  buy: { en: from jar, ar: من البرطمان }
+
+lemon:
+  glyph: lemon
+  name: { en: Lemon, ar: ليمون }
+  unit: count
+  cls: discrete
+  divisible: true
+  buy: { en: loose, ar: بالوزن }
+
+bay_leaf:
+  glyph: leaf
+  name: { en: Bay leaf, ar: ورق لورا }
+  unit: count
+  cls: discrete
+  divisible: false
+  buy: { en: from jar, ar: من البرطمان }
+
+salt:
+  glyph: salt
+  name: { en: Salt, ar: ملح }
+  unit: tsp
+  cls: seasoning
+  buy: { en: have it, ar: موجود }
+
+water:
+  glyph: water
+  name: { en: Water, ar: ماء }
+  unit: ml
+  cls: fixed
+  buy: { en: tap, ar: من الحنفية }

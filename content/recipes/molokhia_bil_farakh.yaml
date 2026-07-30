@@ -1,0 +1,219 @@
+id: molokhia_bil_farakh
+source_locale: en          # the language you authored in; others are translations of it
+status: draft              # draft | tested | published — only tested recipes can publish
+
+title:
+  en: Molokhia bil Farakh
+  ar: ملوخية بالفراخ
+
+# The pre-commit pitch. One of the few genuinely per-recipe prose fields.
+why:
+  en: The Cairo version — stock from a whole bird, takliya poured at the table.
+      No blender, no cornflour, no shortcuts that change the texture.
+  ar: النسخة القاهرية — مرق من فرخة كاملة، والتقلية تُسكب على السفرة.
+      بدون خلاط ولا نشا.
+
+servings:
+  base: 4
+  presets: [2, 4, 8]
+  max_scale: 1.5           # above this the reader warns that the method changes
+
+hands_on_minutes: 55
+hero: assets/molokhia-dish.jpg
+price_source: el_obour     # feed key — the date is supplied by the feed, not authored
+
+nutrition_per_serving:
+  energy_kcal: 410
+  protein_g: 38
+  fat_g: 12
+  carbs_g: 34
+
+# INTERMEDIATES — things the recipe makes and then uses. They carry a name and
+# a unit but never reach the shopping list. Referenced as @key in tiles.
+intermediates:
+  stock:
+    glyph: pot
+    unit: ml
+    name: { en: Stock, ar: المرق }
+  takliya:
+    glyph: fry
+    name: { en: Takliya, ar: التقلية }
+
+steps:
+
+  - station: board
+    ordered: false          # tiles may be done in any order
+    photo: assets/onion-chopped.jpg
+    doneness:
+      en: Onion in even dice — no piece thicker than a matchstick.
+      ar: بصل مكعبات متساوية، مش أسمك من عود الكبريت.
+    tiles:
+      - do: chop
+        item: onion
+        amt: 2
+        qualifier: { en: fine, ar: ناعم }
+      - do: crush
+        item: garlic
+        amt: 8
+        short: knife_edge
+      - do: chop
+        item: coriander_fresh
+        amt: 2
+      - do: joint
+        item: chicken_whole
+        amt: 1200
+
+  - station: stove
+    qualifier: { en: stock, ar: المرق }   # renders as "Stove · stock"
+    ordered: true
+    heat: 2
+    tiles:
+      - do: simmer_covered
+        items:
+          - { id: chicken_whole, carried: true }   # same bird, not a second purchase
+          - { id: water, amt: 1500 }
+      - do: drop_in
+        item: bay_leaf
+        amt: 2
+    timer:
+      minutes: 40
+      label: { en: Stock, ar: المرق }
+    makes: stock
+    photo: assets/broth.jpg
+    doneness:
+      en: Meat lets go of the bone when you push it.
+      ar: اللحم يسيب العضم بأول ضغطة.
+
+  - station: bench
+    ordered: false
+    tiles:
+      - do: strip
+        item: chicken_whole
+        carried: true
+      - do: strain
+        item: "@stock"
+        amt: 1200
+    note:
+      kind: coming_up
+      text:
+        en: Keep the stock hot — it goes back on the heat in two pages.
+        ar: خلّي المرق سخن، هيرجع على النار بعد صفحتين.
+
+  - station: stove
+    qualifier: { en: takliya, ar: التقلية }
+    ordered: true
+    heat: 3
+    tiles:
+      - do: fry
+        items:
+          - { id: garlic, carried: true }
+          - { id: ghee, amt: 2 }
+        short: takliya_colour
+      - verb: { en: Then add, ar: ثم أضف }    # bespoke phrasing, not in the lexicon
+        glyph: spice
+        item: coriander_ground
+        amt: 1
+    makes: takliya
+    photo: assets/garlic-butter-pan.jpg
+    doneness:
+      en: Straw-gold at the edges. One shade past this is bitter.
+      ar: لون قشّي على الأطراف. درجة زيادة يبقى مرّ.
+    note:
+      kind: stay_here
+      text:
+        en: Seconds, not minutes. Stay at the pan.
+        ar: ثواني، مش دقائق. متسيبهاش.
+
+  - station: stove
+    qualifier: { en: pot, ar: الحلة }
+    ordered: true
+    heat: 1
+    tiles:
+      - do: add_to
+        item: molokhia_frozen
+        amt: 400
+        into: "@stock"
+    timer:
+      minutes: 8
+      label: { en: Molokhia, ar: الملوخية }
+      mass_sensitive: true    # scales with the batch, unlike a fixed rest
+    photo: assets/molokhia-dish.jpg
+    doneness:
+      en: Thick enough to coat the spoon. No bubbles at the surface.
+      ar: تغطّي المعلقة. ولا فقاقيع على السطح.
+    note:
+      kind: never
+      text:
+        en: Never let it boil. A boil splits it.
+        ar: لا تدعها تغلي، الغليان يفصلها.
+
+  - station: stove
+    qualifier: { en: pot, ar: الحلة }
+    ordered: true
+    heat: 1
+    tiles:
+      - verb: { en: Pour over, listen for the hiss, ar: اسكب واسمع الشهقة }
+        glyph: pour
+        item: "@takliya"
+        short: the_hiss
+      - do: do_not_stir
+        qualifier: { en: after, ar: بعدها }
+
+  - station: grill
+    ordered: false
+    heat: 3
+    tiles:
+      - do: sear
+        item: chicken_whole
+        amt: 1200
+        carried: true
+        qualifier: { en: skin-side, ar: من جهة الجلد }
+        short: skin_blister
+      - do: season
+        item: salt
+        amt: 1
+    timer:
+      minutes: 6
+      label: { en: Sear, ar: التحمير }
+      mass_sensitive: true
+    photo: assets/chicken-seared.jpg
+    doneness:
+      en: Lacquered, blistered in places, dry to the touch.
+      ar: قشرة لامعة ومنفّخة في أماكن.
+
+  - station: serve
+    ordered: false
+    photo: assets/lemons.jpg
+    doneness:
+      en: Soup, rice and lemon on the table together — not one after the other.
+      ar: الشوربة والأرز والليمون على السفرة مع بعض.
+    tiles:
+      - do: alongside
+        item: rice
+        amt: 300
+      - do: cut_wedges
+        item: lemon
+        amt: 1
+      - do: to_taste
+        item: salt
+
+# TECHNIQUE SHORTS — referenced by key from the tiles above so a clip can be
+# attached to several steps without restating it. clip absent = TO BE SHOT.
+shorts:
+  knife_edge:
+    secs: 24
+    poster: assets/onion-chopped.jpg
+    clip: assets/clip-knife.webm
+    title: { en: Knife work — keeping the edge, ar: السكينة — الحفاظ على الحد }
+  takliya_colour:
+    secs: 31
+    poster: assets/garlic-butter-pan.jpg
+    title: { en: Takliya — the colour to stop at, ar: التقلية — لون التوقّف }
+  the_hiss:
+    secs: 18
+    poster: assets/molokhia-dish.jpg
+    title: { en: The hiss — what it should sound like, ar: الشهقة — الصوت الصح }
+  skin_blister:
+    secs: 27
+    poster: assets/chicken-seared.jpg
+    title: { en: Skin that blisters, not burns, ar: جلد منفّخ مش محروق }

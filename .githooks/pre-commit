@@ -1,0 +1,110 @@
+#!/usr/bin/env bash
+# ─────────────────────────────────────────────────────────────────────────────
+# Matbakh — pre-commit guard.
+#
+# This runs on EVERY commit, whatever made it: the terminal, GitHub Desktop,
+# VS Code, an IDE. That is the point. publish.sh has a similar check, but it
+# only fires if you use publish.sh — this one cannot be routed around by
+# committing a different way.
+#
+# Install with:  ./setup-guards.sh
+#
+# It inspects what is STAGED, not what is on disk, so an ignored file sitting
+# in the folder is fine; an ignored file that somehow got staged is not.
+# ─────────────────────────────────────────────────────────────────────────────
+set -uo pipefail
+
+RED="$(printf '\033[31m')"; YEL="$(printf '\033[33m')"; OFF="$(printf '\033[0m')"
+STAGED=$(git diff --cached --name-only --diff-filter=ACMR)
+[ -z "$STAGED" ] && exit 0
+
+FAIL=0
+block() { echo "${RED}  BLOCKED${OFF}  $1"; FAIL=1; }
+note()  { echo "${YEL}  note   ${OFF}  $1"; }
+
+# ── 1. The vault must never appear inside the repository ────────────────────
+# If a vault folder is copied in, its marker file comes with it and is caught
+# here even if the filename was changed.
+echo "$STAGED" | grep -Ei 'matbakh-private|DO-NOT-COMMIT' | while read -r f; do
+  block "$f — this belongs in matbakh-private/, outside the repository"
+done
+echo "$STAGED" | grep -Eqi 'matbakh-private|DO-NOT-COMMIT' && FAIL=1
+
+# ── 2. Business document formats ────────────────────────────────────────────
+BAD=$(echo "$STAGED" | grep -Ei '\.(xlsx|xlsm|xls|docx|doc|pptx|ppt|numbers|pages|key)$' || true)
+if [ -n "$BAD" ]; then
+  echo "$BAD" | while read -r f; do
+    block "$f — financial model / strategy documents stay in the vault"
+  done
+  FAIL=1
+fi
+
+# ── 3. Credentials, by filename ─────────────────────────────────────────────
+# 'token' alone is too broad — it matches design/tokens.css. Anchor it to the
+# compound forms that actually name credentials.
+BAD=$(echo "$STAGED" | grep -Ei '(^|/)\.env|secret|credential|password|passwd|api[-_]?key|(auth|access|refresh|bearer)[-_]?token|\.token$|\.pem$|\.p12$|\.pfx$|\.keystore$|id_rsa|\.ppk$' || true)
+if [ -n "$BAD" ]; then
+  echo "$BAD" | while read -r f; do block "$f — looks like a credential file"; done
+  FAIL=1
+fi
+
+# ── 4. Credentials, by content. Filenames get renamed; contents do not. ─────
+SECRET_RE='BEGIN (RSA |EC |OPENSSH |PGP )?PRIVATE KEY|sk-[A-Za-z0-9_-]{20,}|AKIA[0-9A-Z]{16}|(api[_-]?key|secret|password|passwd|bearer)["'"'"' ]*[:=]["'"'"' ]*[A-Za-z0-9_\-]{16,}'
+for f in $STAGED; do
+  case "$f" in
+    *.png|*.jpg|*.jpeg|*.webp|*.gif|*.webm|*.mp4|*.woff*|*.tar.gz|*.zip) continue ;;
+    .githooks/pre-commit|scan.sh|publish.sh|README.md) continue ;;  # they describe the patterns
+  esac
+  [ -f "$f" ] || continue
+  # Generated media bundles are one huge line of base64. Random substrings
+  # in a payload that large match a loose pattern by chance, so the payload
+  # is blanked before scanning. A real secret elsewhere is still caught.
+  HIT=$(git show ":$f" 2>/dev/null \
+        | sed -E 's#data:[a-z/+.-]+;base64,[A-Za-z0-9+/=_-]*#<base64-payload>#g' \
+        | grep -Ein "$SECRET_RE" | head -2 || true)
+  if [ -n "$HIT" ]; then
+    block "$f — contains something shaped like a secret:"
+    echo "$HIT" | sed 's/^/             line /' | cut -c1-110
+    FAIL=1
+  fi
+done
+
+# ── 5. The recipe catalogue ─────────────────────────────────────────────────
+# Only the template and the one demo recipe are meant to be tracked here.
+RECIPES=$(echo "$STAGED" | grep -E '^content/recipes/' | grep -vE '_template\.yaml$|molokhia_bil_farakh\.yaml$' || true)
+if [ -n "$RECIPES" ]; then
+  N=$(echo "$RECIPES" | wc -l | tr -d ' ')
+  block "$N recipe file(s) beyond the template and the demo"
+  echo "$RECIPES" | head -5 | sed 's/^/             /'
+  echo "             The catalogue is the product. It lives in the vault."
+  FAIL=1
+fi
+
+# ── 6. Large files, which are usually an accident ───────────────────────────
+for f in $STAGED; do
+  [ -f "$f" ] || continue
+  SZ=$(wc -c < "$f" | tr -d ' ')
+  if [ "$SZ" -gt 26214400 ]; then
+    note "$f is $((SZ/1048576)) MB — GitHub warns above 50 MB and refuses above 100 MB"
+  fi
+done
+
+if [ "$FAIL" -ne 0 ]; then
+  cat <<'EOF'
+
+  ─────────────────────────────────────────────────────────────────────
+  COMMIT STOPPED. Nothing has been committed.
+
+  Move the offending files to ../matbakh-private/ and stage again:
+
+      git restore --staged <file>
+
+  This hook can be skipped with --no-verify. Do not. Git history is
+  permanent — a secret pushed once must be treated as compromised and
+  rotated, even after the file is deleted.
+  ─────────────────────────────────────────────────────────────────────
+EOF
+  exit 1
+fi
+
+exit 0

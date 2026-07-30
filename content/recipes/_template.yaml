@@ -1,0 +1,126 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# MATBAKH RECIPE TEMPLATE
+# Copy to recipes/<id>.yaml, fill in, then:  python3 matbakh.py check
+#
+# You author IDS and NUMBERS, not names. Ingredient names, buy hints, cooking
+# verbs, station names and note labels all come from the lexicon — already
+# translated. Only the prose fields below need a translator, and adding a
+# fourth or fifth language never touches the vocabulary again.
+#
+# The validator refuses to pass a recipe missing a scaling class, referencing
+# an unknown activity, or using an intermediate before a step makes it.
+# ─────────────────────────────────────────────────────────────────────────────
+
+id:                        # snake_case, matches the filename
+source_locale: en          # the language you are authoring in
+status: draft              # draft → tested (after you cook it) → published
+
+title:
+  en:
+  ar:
+
+# The pre-commit pitch: why THIS version and not the one on YouTube.
+# One or two sentences. Concrete claims, not adjectives.
+why:
+  en:
+  ar:
+
+servings:
+  base: 4                  # the yield the amounts below are written for
+  presets: [2, 4, 8]
+  max_scale: 1.5           # above this the method itself changes; reader warns
+
+hands_on_minutes:
+hero: assets/
+price_source: el_obour
+
+nutrition_per_serving:
+  energy_kcal:
+  protein_g:
+  fat_g:
+  carbs_g:
+
+# Things the recipe makes and later uses. Never reach the shopping list.
+# Delete this block if the recipe has none.
+intermediates:
+  # stock:
+  #   glyph: pot
+  #   unit: ml
+  #   name: { en: Stock, ar: المرق }
+
+# ─── STEPS ───────────────────────────────────────────────────────────────────
+# One step = one page = one station. If the cook has to move, that is a new
+# step, even for a single action.
+#
+#   station:   board | stove | bench | grill | oven | serve
+#   qualifier: optional, renders as "Stove · takliya"
+#   ordered:   true only if doing the tiles out of sequence ruins the dish
+#   heat:      1 low · 2 medium · 3 high
+#   photo    + doneness travel together — the photo shows what the words say
+#   makes:    names the intermediate this step produces
+#
+# Tiles:
+#   do:        an activity key from lexicon/activities.yaml — verb comes free,
+#              already translated. Prefer this always.
+#   verb:      bespoke phrasing when the lexicon would flatten something worth
+#              keeping ("Pour over, listen for the hiss"). Needs a glyph.
+#   qualifier: appended to the lexicon verb — "Chop" + "fine"
+#   item:      ingredient id from ref/ingredients.yaml, or @intermediate
+#   items:     when one action touches two things; displayed amount comes
+#              from the first item that has one
+#   amt:       in the ingredient's own unit
+#   carried:   true when this is the SAME physical ingredient as an earlier
+#              step — stops the shopping list double-counting it
+#   short:     key from the shorts block below
+#
+# Note kinds: coming_up | stay_here | never | make_ahead
+# Timers: mass_sensitive: true when the time scales with the batch.
+#         A rest, a proof or a marinade does NOT scale — leave it out.
+
+steps:
+
+  - station:
+    ordered: false
+    photo: assets/
+    doneness:
+      en:
+      ar:
+    tiles:
+      - do:
+        item:
+        amt:
+      - do:
+        item:
+        amt:
+
+  - station:
+    ordered: true
+    heat:
+    tiles:
+      - do:
+        item:
+        amt:
+    timer:
+      minutes:
+      label: { en: , ar: }
+      mass_sensitive: false
+    photo: assets/
+    doneness:
+      en:
+      ar:
+    note:
+      kind:
+      text:
+        en:
+        ar:
+
+# ─── TECHNIQUE SHORTS ────────────────────────────────────────────────────────
+# Referenced by key from the tiles above. Omit `clip` for one you have not shot
+# yet — the reader shows TO BE SHOT and the validator reminds you.
+
+shorts:
+  # some_key:
+  #   secs: 25
+  #   poster: assets/
+  #   clip: assets/
+  #   title: { en: , ar: }

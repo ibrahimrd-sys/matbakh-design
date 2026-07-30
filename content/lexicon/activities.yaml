@@ -1,0 +1,95 @@
+# ACTIVITY LEXICON
+# The closed vocabulary of cooking verbs. Translated ONCE here, never per recipe.
+# Adding a language = adding one key to each entry below.
+#
+# glyph: Tabler icon key for the activity set
+# station_hint: typical station, used by the validator to flag odd placements
+#
+# This file is the authority the validator checks every recipe tile against.
+# A tile referencing an activity not listed here is an error, not a warning —
+# that is what stops the vocabulary drifting across 500 recipes.
+
+chop:
+  glyph: chop
+  station_hint: board
+  verb: { en: Chop, ar: افرم }
+
+crush:
+  glyph: crush
+  station_hint: board
+  verb: { en: Crush, ar: اهرس }
+
+joint:
+  glyph: joint
+  station_hint: board
+  verb: { en: Joint, ar: قطّع }
+
+cut_wedges:
+  glyph: lemon
+  station_hint: board
+  verb: { en: Cut in wedges, ar: قطّع فلقات }
+
+simmer_covered:
+  glyph: pot
+  station_hint: stove
+  verb: { en: Cover and simmer, ar: غطّي وسوّي }
+
+add:
+  glyph: add
+  station_hint: any
+  verb: { en: Add, ar: أضف }
+
+add_to:
+  glyph: add
+  station_hint: stove
+  verb: { en: Stir in, ar: أضف إلى }
+
+drop_in:
+  glyph: leaf
+  station_hint: stove
+  verb: { en: Drop in, ar: أضف }
+
+fry:
+  glyph: fry
+  station_hint: stove
+  verb: { en: Fry, ar: حمّر }
+
+sear:
+  glyph: sear
+  station_hint: grill
+  verb: { en: Sear, ar: حمّر }
+
+pour_over:
+  glyph: pour
+  station_hint: stove
+  verb: { en: Pour over, ar: اسكب فوقها }
+
+do_not_stir:
+  glyph: nostir
+  station_hint: stove
+  verb: { en: Do not stir, ar: لا تحرّك }
+
+strip:
+  glyph: strip
+  station_hint: bench
+  verb: { en: Strip the meat, ar: انزع اللحم }
+
+strain:
+  glyph: strain
+  station_hint: bench
+  verb: { en: Strain, ar: صفّي }
+
+season:
+  glyph: salt
+  station_hint: any
+  verb: { en: Season, ar: ملّح }
+
+to_taste:
+  glyph: salt
+  station_hint: serve
+  verb: { en: To taste, ar: حسب الذوق }
+
+alongside:
+  glyph: grain
+  station_hint: serve
+  verb: { en: Alongside, ar: بجانبها }

@@ -1,0 +1,70 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# This file is the SECOND line of defence, not the first.
+#
+# The first is that sensitive material lives in ../matbakh-private/, outside
+# this folder, where git cannot see it. The third is .githooks/pre-commit,
+# which blocks a commit whatever tool made it. Install it: ./setup-guards.sh
+#
+# Audit all three at any time: ./scan.sh
+# ─────────────────────────────────────────────────────────────────────────────
+
+# ── The vault, in case it is ever copied or symlinked in by mistake ──────────
+matbakh-private/
+**/matbakh-private/
+DO-NOT-COMMIT*
+
+# ── The recipe catalogue is the product. Template + one demo recipe only. ────
+content/recipes/*
+!content/recipes/_template.yaml
+!content/recipes/molokhia_bil_farakh.yaml
+!content/recipes/README.md
+
+# ── Business documents ──────────────────────────────────────────────────────
+*.xlsx
+*.xlsm
+*.xls
+*.docx
+*.doc
+*.pptx
+*.ppt
+*.numbers
+*.pages
+financials/
+strategy/
+research/
+partners/
+
+# ── Credentials ─────────────────────────────────────────────────────────────
+.env
+.env.*
+*.pem
+*.p12
+*.pfx
+*.keystore
+id_rsa*
+*.ppk
+secrets.*
+*.secret
+*credentials*
+*api_key*
+*apikey*
+
+# ── Local tooling, not part of the published site ───────────────────────────
+bridge_server.py
+matbakh_authoring.html
+__pycache__/
+*.pyc
+.venv/
+venv/
+node_modules/
+
+# ── OS and editor noise ─────────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+
+# ── Claude Design exports: self-contained email copies, not site files ──────
+*(offline).html
+.bundles/
