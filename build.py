@@ -302,7 +302,8 @@ def main():
         return
 
     # newline="\n" is required: Python's default text mode writes CRLF on
-    # Windows, which contradicts the eol=lf rule in .gitattributes.
+    # Windows, which contradicts the eol=lf rule in .gitattributes and makes
+    # git warn on every add.
     with open(ROOT / "index.html", "w", encoding="utf-8", newline="\n") as fh:
         fh.write(generate())
     n = sum(len(s["items"]) for s in MAN.get("sections", [])) + 1

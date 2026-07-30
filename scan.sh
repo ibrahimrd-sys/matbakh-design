@@ -32,6 +32,12 @@ HITS=$(find . -path ./.git -prune -o -type f -print 2>/dev/null | grep -Ei "$DOC
 HITS=$(find . -path ./.git -prune -o -type f -print 2>/dev/null | grep -Ei "$CRED_RE" || true)
 [ -n "$HITS" ] && echo "$HITS" | while read -r f; do bad "$f — credential-shaped filename"; done || good "no credential-shaped filenames"
 
+if [ -f content/ref/ingredients.yaml ]; then
+  bad "content/ref/ingredients.yaml present — the full reference belongs in the vault"
+else
+  good "full ingredient reference not in the repo (sample only)"
+fi
+
 N=$(find content/recipes -name '*.yaml' 2>/dev/null | grep -vE '_template|molokhia_bil_farakh' | wc -l | tr -d ' ')
 if [ "${N:-0}" -gt 0 ]; then bad "$N recipe file(s) beyond template + demo — catalogue belongs in the vault"
 else good "recipe catalogue not present (template + demo only)"; fi

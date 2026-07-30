@@ -25,9 +25,42 @@ def load(p):
         return yaml.safe_load(f)
 
 
+# ── VAULT RESOLUTION ────────────────────────────────────────────────────────
+# The ingredient reference and the recipe catalogue are work product and live
+# outside the repository. Resolution order, first hit wins:
+#
+#   1. --vault PATH on the command line
+#   2. MATBAKH_VAULT in the environment
+#   3. content/vault.path — a one-line file holding the path (gitignored)
+#   4. ../../matbakh-private/03-catalogue — the default sibling layout
+#
+# With no vault reachable, the tracked sample is used instead and the run says
+# so. That keeps the repo self-contained for anyone reviewing the schema.
+
+def _vault():
+    argv = sys.argv
+    if "--vault" in argv:
+        return pathlib.Path(argv[argv.index("--vault") + 1]).expanduser()
+    if os.environ.get("MATBAKH_VAULT"):
+        return pathlib.Path(os.environ["MATBAKH_VAULT"]).expanduser()
+    cfg = ROOT / "vault.path"
+    if cfg.exists():
+        line = cfg.read_text(encoding="utf-8").strip().splitlines()
+        if line and line[0].strip() and not line[0].startswith("#"):
+            return pathlib.Path(line[0].strip()).expanduser()
+    return ROOT / ".." / ".." / "matbakh-private" / "03-catalogue"
+
+
+VAULT = _vault()
+VAULT_OK = (VAULT / "ref" / "ingredients.yaml").exists()
+
 ACT = load("lexicon/activities.yaml")
 CHROME = load("lexicon/chrome.yaml")
-ING = load("ref/ingredients.yaml")
+if VAULT_OK:
+    with open(VAULT / "ref" / "ingredients.yaml", encoding="utf-8") as f:
+        ING = yaml.safe_load(f)
+else:
+    ING = load("ref/ingredients.sample.yaml")
 STATIONS, NOTES = CHROME["stations"], CHROME["note_kinds"]
 UNITS, CLASSES = CHROME["units"], CHROME["scaling_classes"]
 
@@ -375,19 +408,16 @@ def main():
     # The catalogue lives in the vault, outside the repository. Point at it with
     # --catalogue PATH or the MATBAKH_CATALOGUE environment variable; with
     # neither, only the demo recipe tracked in the repo is checked.
-    cat = None
-    if "--catalogue" in sys.argv:
-        cat = sys.argv[sys.argv.index("--catalogue") + 1]
-    cat = cat or os.environ.get("MATBAKH_CATALOGUE")
+    if VAULT_OK:
+        print(f"ingredients: {len(ING)} from the vault")
+    else:
+        print(f"ingredients: {len(ING)} from the tracked sample — vault not found")
+        print(f"             looked in {VAULT}")
 
     files = [f for f in sys.argv[2:] if f.endswith(".yaml")]
     if not files:
         files = sorted(glob.glob("recipes/*.yaml"))
-        if cat:
-            extra = sorted(glob.glob(os.path.join(cat, "*.yaml")))
-            if not extra:
-                print(f"note: no recipes found in {cat}")
-            files += extra
+        files += sorted(glob.glob(str(VAULT / "recipes" / "*.yaml")))
     files = [f for f in files if "_template" not in f]
 
     if cmd == "check":

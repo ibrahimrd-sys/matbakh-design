@@ -13,11 +13,17 @@ matbakh-private/
 **/matbakh-private/
 DO-NOT-COMMIT*
 
-# ── The recipe catalogue is the product. Template + one demo recipe only. ────
+# ── Content data is work product and lives in the vault. Only the template,
+#    one demo recipe and the 12-ingredient sample are tracked, so the schema
+#    stays reviewable without publishing the catalogue. ───────────────────────
 content/recipes/*
 !content/recipes/_template.yaml
 !content/recipes/molokhia_bil_farakh.yaml
 !content/recipes/README.md
+
+content/ref/ingredients.yaml
+!content/ref/ingredients.sample.yaml
+content/vault.path
 
 # ── Business documents ──────────────────────────────────────────────────────
 *.xlsx

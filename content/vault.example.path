@@ -1,0 +1,7 @@
+# Copy to content/vault.path (which is gitignored) if your vault is not at the
+# default location. One line, the path to 03-catalogue. Examples:
+#
+# C:/Users/ibrah/OneDrive/Matbakh-vault/03-catalogue
+# ~/Matbakh/matbakh-private/03-catalogue
+#
+# Default when this file is absent: ../../matbakh-private/03-catalogue

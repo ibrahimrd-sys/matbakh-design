@@ -5,6 +5,24 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-07-30c — content data moved to the vault
+
+- 179 ingredients imported from BirdRock: bilingual names, per-100g nutrition
+  on 156, pack sizes on 52. Scaling class derived from `type`, never from names
+  — "Bell pepper" and "Green pepper" would have been mis-classed as seasoning
+  by any name rule. Cost, supplier and pack price dropped; prices come from the
+  market feed.
+- The full reference now lives in the vault at `03-catalogue/ref/`. Only
+  `content/ref/ingredients.sample.yaml` (the 12 curated entries) is tracked, so
+  the schema stays reviewable and the demo recipe still validates on a fresh
+  clone with no vault present.
+- `matbakh.py` resolves the vault via `--vault`, `MATBAKH_VAULT`,
+  `content/vault.path`, then the default sibling path — and prints which source
+  it used on every run. Recipes are read from the vault and the repo together.
+- Guards extended: the hook and `scan.sh` both block the full reference, and
+  `.gitignore` covers it plus `vault.path`.
+- `content/README.md` added, documenting the split.
+
 ## 2026-07-30b — guards simplified, import path added
 
 - Pre-commit hook cut from 118 lines to 59. Content scanning removed: it caused

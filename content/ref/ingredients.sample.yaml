@@ -1,13 +1,11 @@
-# INGREDIENT REFERENCE
-# Extends your existing ingredients_ref.json. Names, pack sizes and buy hints
-# are ingredient-intrinsic — a bunch of coriander is always a bunch — so they
-# are translated ONCE here, not restated in every recipe that uses them.
+# INGREDIENT REFERENCE — SAMPLE
 #
-# NO COST FIELD. Price comes from the market feed at render time, keyed on id.
+# The twelve curated entries only. Enough for the demo recipe to validate and
+# for the schema to be reviewable, without publishing the catalogue.
 #
-# cls is the DEFAULT scaling class. A recipe may override it (water is usually
-# continuous, but water for boiling pasta is fixed) — the validator requires
-# the override to be explicit.
+# The full reference (179 ingredients, with nutrition) lives in the vault at
+#   matbakh-private/03-catalogue/ref/ingredients.yaml
+# and is picked up automatically. See content/README.md.
 
 chicken_whole:
   glyph: chicken

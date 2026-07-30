@@ -49,6 +49,12 @@ if [ -n "$HITS" ]; then
   echo "             The catalogue is the product. It lives in the vault."
 fi
 
+# ── 5. The full ingredient reference ────────────────────────────────────────
+# Only the 12-entry sample is tracked. The 179-entry file with nutrition and
+# Arabic names is work product and belongs in the vault.
+HITS=$(echo "$STAGED" | grep -E '^content/ref/ingredients\.yaml$' || true)
+[ -n "$HITS" ] && report "content/ref/ingredients.yaml — the full reference lives in the vault; only ingredients.sample.yaml is tracked"
+
 if [ "$FAIL" -ne 0 ]; then
   echo
   echo "  COMMIT STOPPED. Nothing has been committed."
