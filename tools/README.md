@@ -19,7 +19,40 @@ leave here in a state the validator would reject.
 Ingredients missing a scaling class are the ones to fix first; without it,
 servings cannot be computed at all.
 
-### USDA nutrition lookup
+### Measuring another way
+
+`convert` records **one** number per ingredient and derives the rest:
+
+- `cup_g` — what one cup weighs. A tablespoon is that over 16, a teaspoon over
+  48. Those are never stored, so there is one figure to keep right instead of
+  three that can drift apart.
+- `piece_g` — what one of them weighs, for things a cook counts.
+
+This is what turns "2 tbsp ghee" and "2 onions" into grams, and grams are what
+nutrition is computed from. Without it those ingredients contribute nothing to
+a recipe's per-serving figures, and `matbakh.py` warns when that is the case.
+
+**Fill common conversions** applies well-established weights to whatever it
+recognises by name and reports what it set, leaving anything already filled
+alone. They are a starting point: how finely something is ground, and whether
+it is packed or spooned, moves flour by 20% and brown sugar by more.
+
+### Nutrition lookup
+
+Two sources, tried in order.
+
+**Offline first.** Open `nutrition-db.json` through the same button as the
+YAML — a USDA export of 6,389 foods, each carrying kcal, protein, carbohydrate,
+fat, saturated fat, cholesterol, sodium and fibre per 100 g. No key, no network,
+no waiting. Keep it in the vault beside `ingredients.yaml`.
+
+**USDA online second**, for anything the export does not hold. That needs a key
+and a connection; see below.
+
+Search plainly either way. USDA indexes *Onions, raw* rather than *red onion*,
+and *Jute, potherb* rather than *molokhia*. A more general term finds more.
+
+### USDA nutrition lookup, online
 
 **Look up in USDA** searches FoodData Central for the ingredient in front of
 you and fills the five figures from whichever result you pick. **Fill every gap**

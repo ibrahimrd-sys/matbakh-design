@@ -133,9 +133,10 @@ main{flex:1;min-height:0;display:grid;grid-template-columns:296px 1fr 288px}
   <h1>Ingredients</h1>
   <div class="ar">المكونات</div>
   <div class="spacer"></div>
+  <div class="count" id="status"></div>
   <div class="count" id="count"></div>
-  <input type="file" id="file" accept=".yaml,.yml" class="hidden">
-  <button class="btn" onclick="document.getElementById('file').click()">Open a file</button>
+  <input type="file" id="file" accept=".yaml,.yml,.json" class="hidden">
+  <button class="btn" id="openBtn">Open a file</button>
   <button class="btn" id="addBtn" disabled>Add ingredient</button>
   <button class="btn solid" id="saveBtn" disabled>Download YAML</button>
 </header>
@@ -244,10 +245,13 @@ function paintRail(){
   const nut = Object.values(data).filter(v=>v.nutrition).length;
   document.getElementById('stats').innerHTML =
     `<b>${n}</b> ingredients<br><b>${ar}</b> with Arabic · <b>${n-ar}</b> without<br>` +
+    (NDB?`<b>${NDB.length.toLocaleString()}</b> foods offline<br>`:'nutrition-db.json not loaded<br>') +
     `<b>${nut}</b> with nutrition · <b>${n-nut}</b> without<br>` +
     `<b>${errs.length}</b> error · <b>${issues.length-errs.length}</b> warning`;
   document.getElementById('saveBtn').disabled = errs.length>0;
-  document.getElementById('saveBtn').textContent = errs.length ? 'Fix errors to download' : 'Download YAML';
+  document.getElementById('saveBtn').textContent =
+    errs.length ? `Fix ${errs.length} error${errs.length>1?'s':''} first`
+                : (handle ? 'Save to ' + handle.name : 'Download YAML');
 }
 
 const esc = s => String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
@@ -319,6 +323,27 @@ function paintForm(){
     </div>
 
     <div class="grp">
+      <span class="eyebrow">Measuring it another way</span>
+      ${v.unit==='count' ? `
+        <div class="f"><label>One of them weighs</label>
+          <input id="i_piece" class="num" type="number" step="1" value="${(v.convert&&v.convert.piece_g)??''}" placeholder="grams"></div>
+        <div class="f"><div></div><div class="hint">Lets nutrition be worked out for "2 onions", and lets a recipe ask for grams of something a cook counts.</div></div>`
+      : ['g','kg','tsp','tbsp','cup'].includes(v.unit) ? `
+        <div class="f"><label>One cup weighs</label>
+          <input id="i_cup" class="num" type="number" step="1" value="${(v.convert&&v.convert.cup_g)??''}" placeholder="grams"></div>
+        <div class="f"><div></div><div class="hint">Spoons are derived from this, never stored separately — one number to keep right instead of three that can disagree.</div></div>
+        <div class="f"><label>Which gives</label><div class="pair">
+          <input class="num" value="${v.convert&&v.convert.cup_g?(Math.round(v.convert.cup_g/16*10)/10)+' g per tbsp':''}" readonly style="background:var(--card-alt);color:var(--ink-60)">
+          <input class="num" value="${v.convert&&v.convert.cup_g?(Math.round(v.convert.cup_g/48*100)/100)+' g per tsp':''}" readonly style="background:var(--card-alt);color:var(--ink-60)">
+        </div></div>`
+      : `<div class="f"><div></div><div class="hint">Measured in ${v.unit}, so cups and spoons already convert by volume — a cup is 240 ml, a tbsp 15, a tsp 5. Nothing to record.</div></div>`}
+      <div class="f" style="margin-top:8px"><div></div><div>
+        <button class="btn sm" id="convBtn">Fill common conversions</button>
+        <div class="hint" style="grid-column:1;margin-top:7px" id="convNote">Applies well-established weights to whatever it recognises by name. Check anything it fills.</div>
+      </div></div>
+    </div>
+
+    <div class="grp">
       <span class="eyebrow">Nutrition, per 100 ${v.unit==='ml'?'ml':'g'}</span>
       <div class="nut">${NUT.map(n=>`<div><label>${n}</label>
         <input id="i_${n}" class="num" type="number" step="0.01" value="${nut[n]??''}"></div>`).join('')}</div>
@@ -363,6 +388,17 @@ function paintForm(){
     Object.keys(data).forEach(k => rebuilt[k===sel?nk:k] = data[k]);
     data = rebuilt; sel = nk; paintList(); paintForm(); paintRail();
   };
+  put('i_cup', e=>{ const n=parseFloat(e.target.value);
+    v.convert = v.convert||{};
+    if(isNaN(n)) delete v.convert.cup_g; else v.convert.cup_g = n;
+    if(!Object.keys(v.convert).length) delete v.convert;
+    paintForm(); });
+  put('i_piece', e=>{ const n=parseFloat(e.target.value);
+    v.convert = v.convert||{};
+    if(isNaN(n)) delete v.convert.piece_g; else v.convert.piece_g = n;
+    if(!Object.keys(v.convert).length) delete v.convert;
+    paintForm(); });
+  document.getElementById('convBtn').onclick = fillConversions;
   document.getElementById('lookupBtn').onclick = ()=>openDrawer((v.name&&v.name.en)||sel);
   document.getElementById('gapsBtn').onclick = fillGaps;
   document.getElementById('delBtn').onclick = ()=>{
@@ -395,6 +431,13 @@ function toYaml(){
     L.push('  cls: ' + v.cls);
     if(v.cls==='discrete') L.push('  divisible: ' + (v.divisible?'true':'false'));
     if(v.pack!=null) L.push('  pack: ' + v.pack);
+    if(v.convert && (v.convert.cup_g!=null || v.convert.piece_g!=null)){
+      const bits = [];
+      if(v.convert.cup_g!=null) bits.push('cup_g: ' + v.convert.cup_g);
+      if(v.convert.piece_g!=null) bits.push('piece_g: ' + v.convert.piece_g);
+      L.push('  # tbsp = cup_g/16, tsp = cup_g/48 — derived, never stored');
+      L.push('  convert: { ' + bits.join(', ') + ' }');
+    }
     if(v.buy) L.push(`  buy: { en: ${q(v.buy.en)}, ar: ${q(v.buy.ar)} }`);
     if(v.nutrition){
       L.push('  # per 100 ' + (v.unit==='ml'?'ml':'g'));
@@ -406,6 +449,109 @@ function toYaml(){
   return L.join('\n');
 }
 
+
+
+/* ── Volume to weight ─────────────────────────────────────────────────────
+   One cup, in grams. Spoons are derived — cup/16 for a tablespoon, cup/48 for
+   a teaspoon — so there is a single number per ingredient to get right rather
+   than three that can drift apart.
+
+   These are well-established figures for a 240 ml cup. They are a starting
+   point, not gospel: how finely something is ground, and whether it is packed
+   or spooned, moves flour by 20% and brown sugar by more. Check anything that
+   matters. */
+const CUP_G = {
+  water:240, milk:240, yoghurt:245, yogurt:245, cream:240, 'heavy cream':240,
+  flour:125, 'all-purpose flour':125, semolina:167, cornstarch:128, cornflour:128,
+  sugar:200, 'granulated sugar':200, 'brown sugar':220, 'icing sugar':120,
+  honey:340, molasses:340, treacle:340,
+  rice:185, bulgur:140, couscous:173, oats:90, breadcrumbs:108, vermicelli:100,
+  lentils:192, 'red lentils':192, chickpeas:200, 'white beans':200, 'fava beans':200,
+  butter:227, ghee:227, 'olive oil':218, oil:218, 'vegetable oil':218, tahini:240,
+  salt:292, 'table salt':292, sesame:144, 'sesame seeds':144,
+  'tomato paste':262, vinegar:239, 'soy sauce':255,
+  'cheese, grated':100, 'parmesan cheese':100, raisins:145, dates:147, walnuts:117, almonds:143
+};
+/* Weight of one whole item, for things a cook counts rather than weighs. */
+const PIECE_G = {
+  onion:110, 'red onion':110, garlic:3, lemon:58, lime:44, apple:182, egg:50, eggs:50,
+  tomato:123, potato:173, carrot:61, cucumber:301, 'bay leaf':0.2, 'bell pepper':119,
+  tortilla:49, baguette:250, 'burger bun':60
+};
+
+function fillConversions(){
+  const norm = t => String(t||'').toLowerCase().replace(/[^a-z ]/g,' ').replace(/\s+/g,' ').trim();
+  const pick = (name, table) => {
+    const n = norm(name);
+    if(table[n] != null) return table[n];
+    const keys = Object.keys(table).filter(k => n === k || n.startsWith(k+' ') || n.endsWith(' '+k)
+                 || n.split(' ').includes(k));
+    if(!keys.length) return null;
+    keys.sort((a,b)=>b.length-a.length);
+    return table[keys[0]];
+  };
+  let set = 0; const named = [];
+  Object.keys(data).forEach(k=>{
+    const v = data[k], nm = (v.name && v.name.en) || k;
+    if(v.unit === 'g'){
+      if(v.convert && v.convert.cup_g != null) return;
+      const g = pick(nm, CUP_G);
+      if(g != null){ v.convert = v.convert||{}; v.convert.cup_g = g; set++; named.push(`${nm} ${g} g/cup`); }
+    } else if(v.unit === 'count'){
+      if(v.convert && v.convert.piece_g != null) return;
+      const g = pick(nm, PIECE_G);
+      if(g != null){ v.convert = v.convert||{}; v.convert.piece_g = g; set++; named.push(`${nm} ${g} g each`); }
+    }
+  });
+  paintForm(); paintRail();
+  const note = document.getElementById('convNote');
+  if(note) note.innerHTML = set
+    ? `Filled <b>${set}</b>: ${esc(named.slice(0,6).join(', '))}${named.length>6?` and ${named.length-6} more`:''}. Nothing already set was touched.`
+    : 'Nothing recognised that was not already filled in.';
+}
+
+
+/* ── Offline nutrition database ───────────────────────────────────────────
+   nutrition-db.json is a USDA export: 6,389 foods, each a name and eight
+   numbers in the order
+       kcal, protein, carb, fat, satfat, cholesterol, sodium, fibre
+   verified against known values — olive oil reads 884/0/0/100, granulated
+   sugar 387/0/99.98/0.
+
+   Searching it needs no key, no network and no permission, so it is tried
+   first. The online API stays as the fallback for anything not in here. */
+let NDB = null;
+const NDB_IDX = { kcal:0, protein:1, carb:2, fat:3, fiber:7 };
+
+function loadNdb(text, name){
+  const arr = JSON.parse(text);
+  if(!Array.isArray(arr) || !arr[0] || !arr[0].name || !Array.isArray(arr[0].n))
+    throw new Error('not a nutrition database — expected a list of {name, n}');
+  NDB = arr;
+  flash(`Loaded ${arr.length.toLocaleString()} foods from ${name}`);
+  paintRail();
+}
+
+function ndbSearch(term){
+  if(!NDB) return null;
+  const t = term.toLowerCase().trim();
+  if(!t) return [];
+  const words = t.split(/\s+/);
+  const hits = [];
+  for(const e of NDB){
+    const n = e.name.toLowerCase();
+    if(!words.every(w => n.includes(w))) continue;
+    // a name that opens with the term is almost always the plainer entry
+    hits.push({ e, rank: (n.startsWith(t) ? 0 : 1) * 1000 + e.name.length });
+    if(hits.length > 400) break;
+  }
+  hits.sort((a,b)=>a.rank-b.rank);
+  return hits.slice(0,16).map(h=>{
+    const out = { __name:h.e.name };
+    Object.keys(NDB_IDX).forEach(k=>{ const v = h.e.n[NDB_IDX[k]]; if(v!=null) out[k]=v; });
+    return out;
+  });
+}
 
 /* ── USDA FoodData Central ────────────────────────────────────────────────
    The key is never written into this file. It lives in your browser's local
@@ -454,7 +600,27 @@ async function usdaSearch(){
   const term = document.getElementById('dQ').value.trim();
   const body = document.getElementById('dBody');
   if(!term){ body.innerHTML = '<div class="note">Type something to search for.</div>'; return; }
-  body.innerHTML = '<div class="note">Searching USDA…</div>';
+  const local = ndbSearch(term);
+  if(local && local.length){
+    body.innerHTML =
+      `<div class="note">${local.length} match${local.length>1?'es':''} in your offline
+       database. <b>Search USDA online</b> above if none of these fit.</div>` +
+      local.map((n,i)=>{
+        window['__fdc_'+i] = n;
+        return `<div class="hit" data-i="${i}">
+          <div class="d">${esc(n.__name)}</div>
+          <div class="m"><span class="badge fnd">offline · per 100 g</span>
+            ${n.kcal!=null?`<span><b>${n.kcal}</b> kcal</span>`:''}
+            ${n.protein!=null?`<span>${n.protein} protein</span>`:''}
+            ${n.carb!=null?`<span>${n.carb} carb</span>`:''}
+            ${n.fat!=null?`<span>${n.fat} fat</span>`:''}
+          </div></div>`;
+      }).join('');
+    [...body.querySelectorAll('.hit')].forEach(el=>el.onclick=()=>apply(window['__fdc_'+el.dataset.i]));
+    return;
+  }
+  if(NDB) body.innerHTML = '<div class="note">Nothing offline. Asking USDA…</div>';
+  else body.innerHTML = '<div class="note">Searching USDA…</div>';
   const url = 'https://api.nal.usda.gov/fdc/v1/foods/search'
     + '?query=' + encodeURIComponent(term)
     + '&pageSize=14&dataType=' + encodeURIComponent('Foundation,SR Legacy,Survey (FNDDS)')
@@ -543,23 +709,85 @@ document.getElementById('dKey').onchange = e=>{
 };
 
 /* ── wiring ───────────────────────────────────────────────────────────── */
+/* ── opening and saving ───────────────────────────────────────────────────
+   Chrome and Edge can hand a page a writable handle to the file you picked,
+   so Save writes straight back over the original in the vault — no download
+   folder, nothing to move afterwards. Firefox and Safari have no such API,
+   so there the same button falls back to a download.                     */
+let handle = null;
+
+function flash(msg, bad){
+  const el = document.getElementById('status');
+  el.textContent = msg;
+  el.style.color = bad ? 'var(--danger)' : 'var(--running)';
+  clearTimeout(flash._t);
+  flash._t = setTimeout(()=>{ el.textContent=''; }, 4000);
+}
+
+function ingest(text, name){
+  const parsed = jsyaml.load(text);
+  if(!parsed || typeof parsed !== 'object') throw new Error('not a mapping of ingredients');
+  data = parsed; sel = Object.keys(data)[0] || null;
+  document.getElementById('addBtn').disabled = false;
+  paintList(); paintForm(); paintRail();
+  flash('Opened ' + (name||'file'));
+}
+
+async function openFile(){
+  if(window.showOpenFilePicker){
+    try{
+      const [h] = await window.showOpenFilePicker({ multiple:false,
+        types:[{description:'Ingredient reference or nutrition database',
+                accept:{'application/yaml':['.yaml','.yml'],'application/json':['.json']}}] });
+      const text = await (await h.getFile()).text();
+      if(h.name.endsWith('.json')){ loadNdb(text, h.name); return; }
+      handle = h;
+      ingest(text, h.name);
+    }catch(err){
+      if(err.name !== 'AbortError')
+        alert('That file could not be opened.\n\n' + err.message);
+    }
+    return;
+  }
+  document.getElementById('file').click();
+}
+
 document.getElementById('file').onchange = e=>{
   const f = e.target.files[0]; if(!f) return;
   const r = new FileReader();
   r.onload = ()=>{
     try{
-      const parsed = jsyaml.load(r.result);
-      if(!parsed || typeof parsed !== 'object') throw new Error('not a mapping of ingredients');
-      data = parsed; sel = Object.keys(data)[0] || null;
-      document.getElementById('addBtn').disabled = false;
-      paintList(); paintForm(); paintRail();
-    }catch(err){
-      alert('That file could not be read as an ingredient reference.\n\n' + err.message);
-    }
+      if(f.name.endsWith('.json')) loadNdb(r.result, f.name);
+      else ingest(r.result, f.name);
+    }catch(err){ alert('That file could not be read.\n\n' + err.message); }
   };
   r.readAsText(f);
   e.target.value = '';
 };
+
+async function save(){
+  const text = toYaml();
+  if(handle){
+    try{
+      let perm = await handle.queryPermission({mode:'readwrite'});
+      if(perm !== 'granted') perm = await handle.requestPermission({mode:'readwrite'});
+      if(perm === 'granted'){
+        const w = await handle.createWritable();
+        await w.write(text); await w.close();
+        flash('Saved to ' + handle.name);
+        return;
+      }
+      flash('Permission refused — downloading instead', true);
+    }catch(err){
+      flash('Could not write to the file — downloading instead', true);
+    }
+  }
+  const blob = new Blob([text], {type:'text/yaml;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = 'ingredients.yaml'; a.click();
+  URL.revokeObjectURL(a.href);
+  flash('Downloaded — put it back in the vault yourself');
+}
 document.getElementById('q').oninput = paintList;
 document.getElementById('addBtn').onclick = ()=>{
   let k = 'new_ingredient', n = 2;
@@ -568,12 +796,8 @@ document.getElementById('addBtn').onclick = ()=>{
   sel = k; document.getElementById('q').value=''; paintList(); paintForm(); paintRail();
   const f = document.getElementById('i_en'); if(f) f.focus();
 };
-document.getElementById('saveBtn').onclick = ()=>{
-  const blob = new Blob([toYaml()], {type:'text/yaml;charset=utf-8'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob); a.download = 'ingredients.yaml'; a.click();
-  URL.revokeObjectURL(a.href);
-};
+document.getElementById('openBtn').onclick = openFile;
+document.getElementById('saveBtn').onclick = save;
 window.addEventListener('beforeunload', e=>{ if(data){ e.preventDefault(); e.returnValue=''; } });
 if(typeof jsyaml === 'undefined'){
   document.getElementById('form').innerHTML =

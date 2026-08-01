@@ -105,9 +105,10 @@ textarea{resize:vertical;min-height:52px;line-height:1.5}
   <h1>Recipe</h1>
   <div class="ar">وصفة</div>
   <div class="spacer"></div>
+  <div class="loaded" id="status"></div>
   <div class="loaded" id="loaded"></div>
   <input type="file" id="file" accept=".yaml,.yml" multiple class="hidden">
-  <button class="btn" onclick="document.getElementById('file').click()">Open files</button>
+  <button class="btn" id="openBtn">Open files</button>
   <button class="btn" id="newBtn" disabled>New recipe</button>
   <button class="btn solid" id="saveBtn" disabled>Download YAML</button>
 </header>
@@ -236,6 +237,22 @@ function check(){
   return o;
 }
 
+/* Grams for an amount in the ingredient's own unit. Spoons come from the cup
+   weight — cup/16 and cup/48 — so there is one recorded number, not three. */
+function grams(ref, amt){
+  if(amt==null) return null;
+  const u=ref.unit, c=ref.convert||{};
+  if(u==='g'||u==='ml') return amt;          // ml treated as g; density noted elsewhere
+  if(u==='kg') return amt*1000;
+  if(u==='L') return amt*1000;
+  if(u==='count') return c.piece_g!=null ? amt*c.piece_g : null;
+  if(c.cup_g==null) return null;
+  if(u==='cup')  return amt*c.cup_g;
+  if(u==='tbsp') return amt*c.cup_g/16;
+  if(u==='tsp')  return amt*c.cup_g/48;
+  return null;
+}
+
 /* ── nutrition, computed from the step data ───────────────────────────── */
 function computeNutrition(){
   if(!ING||!R) return null;
@@ -246,9 +263,16 @@ function computeNutrition(){
     if(!it.id||it.id.startsWith('@')||it.amt==null||it.carried) return;
     if(seen.has(it.id)) return; seen.add(it.id);
     const ref=ING[it.id]; if(!ref) return;
-    if(!ref.nutrition){ gaps.push(`${(ref.name&&ref.name.en)||it.id} has no nutrition`); return; }
-    if(ref.unit!=='g'&&ref.unit!=='ml'){ gaps.push(`${(ref.name&&ref.name.en)||it.id} is measured in ${ref.unit}, so grams are unknown`); return; }
-    NUT.forEach(n=>{ if(ref.nutrition[n]!=null) sum[n]+=ref.nutrition[n]*it.amt/100; });
+    const nm=(ref.name&&ref.name.en)||it.id;
+    if(!ref.nutrition){ gaps.push(`${nm} has no nutrition figures`); return; }
+    const g=grams(ref,it.amt);
+    if(g==null){
+      gaps.push(ref.unit==='count'
+        ? `${nm} is counted, and no weight per item is recorded`
+        : `${nm} is measured in ${ref.unit}, and no cup weight is recorded`);
+      return;
+    }
+    NUT.forEach(n=>{ if(ref.nutrition[n]!=null) sum[n]+=ref.nutrition[n]*g/100; });
   })));
   const base=(R.servings&&R.servings.base)||1, per={};
   NUT.forEach(n=>per[n]=Math.round(sum[n]/base*10)/10);
@@ -299,7 +323,9 @@ function paintRail(){
     const i=iss[+el.dataset.n]; if(i.go) el.onclick=i.go;
   });
   document.getElementById('saveBtn').disabled=!!errs.length;
-  document.getElementById('saveBtn').textContent=errs.length?`${errs.length} error${errs.length>1?'s':''} to fix`:'Download YAML';
+  document.getElementById('saveBtn').textContent = errs.length
+    ? `${errs.length} error${errs.length>1?'s':''} to fix`
+    : (typeof handle!=='undefined'&&handle ? 'Save to '+handle.name : 'Save recipe');
 }
 
 function proseField(label,obj,key,ph,multi){
@@ -658,11 +684,59 @@ document.getElementById('downStep').onclick=()=>{
   if(view.mode!=='step'||view.step>=R.steps.length-1)return;
   const i=view.step; [R.steps[i+1],R.steps[i]]=[R.steps[i],R.steps[i+1]]; view.step=i+1; paint();
 };
-document.getElementById('saveBtn').onclick=()=>{
-  const blob=new Blob([toYaml()],{type:'text/yaml;charset=utf-8'});
+/* ── saving ───────────────────────────────────────────────────────────────
+   Chrome and Edge can write straight back to a file you picked, or let you
+   choose where a new recipe lands — so a new one can be saved directly into
+   the vault's recipes folder. Elsewhere this falls back to a download.   */
+let handle=null;
+function flash(msg,bad){
+  const el=document.getElementById('status');
+  el.textContent=msg; el.style.color=bad?'var(--danger)':'var(--running)';
+  clearTimeout(flash._t); flash._t=setTimeout(()=>{el.textContent='';},4000);
+}
+document.getElementById('openBtn').onclick=async ()=>{
+  if(window.showOpenFilePicker){
+    try{
+      const hs=await window.showOpenFilePicker({multiple:true,
+        types:[{description:'YAML',accept:{'application/yaml':['.yaml','.yml']}}]});
+      for(const h of hs){
+        const d=jsyaml.load(await (await h.getFile()).text());
+        if(d&&d.stations&&d.note_kinds) CHR=d;
+        else if(d&&d.steps){ R=d; handle=h; }
+        else if(d&&Object.values(d)[0]&&Object.values(d)[0].verb) ACT=d;
+        else if(d&&Object.values(d)[0]&&Object.values(d)[0].cls) ING=d;
+      }
+      view={mode:'meta'}; paint();
+      flash('Opened ' + hs.length + ' file' + (hs.length>1?'s':''));
+    }catch(err){ if(err.name!=='AbortError') alert('Could not open.\n\n'+err.message); }
+    return;
+  }
+  document.getElementById('file').click();
+};
+document.getElementById('saveBtn').onclick=async ()=>{
+  const text=toYaml();
+  if(!handle && window.showSaveFilePicker){
+    try{
+      handle=await window.showSaveFilePicker({ suggestedName:(R.id||'recipe')+'.yaml',
+        types:[{description:'Recipe',accept:{'application/yaml':['.yaml']}}] });
+    }catch(err){ if(err.name==='AbortError') return; }
+  }
+  if(handle){
+    try{
+      let perm=await handle.queryPermission({mode:'readwrite'});
+      if(perm!=='granted') perm=await handle.requestPermission({mode:'readwrite'});
+      if(perm==='granted'){
+        const w=await handle.createWritable(); await w.write(text); await w.close();
+        flash('Saved to '+handle.name); paint(); return;
+      }
+      flash('Permission refused — downloading instead',true);
+    }catch(err){ flash('Could not write — downloading instead',true); }
+  }
+  const blob=new Blob([text],{type:'text/yaml;charset=utf-8'});
   const a=document.createElement('a');
   a.href=URL.createObjectURL(blob); a.download=(R.id||'recipe')+'.yaml'; a.click();
   URL.revokeObjectURL(a.href);
+  flash('Downloaded — put it in the vault yourself');
 };
 window.addEventListener('beforeunload',e=>{ if(R){e.preventDefault();e.returnValue='';} });
 if(typeof jsyaml==='undefined'){

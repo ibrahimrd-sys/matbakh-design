@@ -229,6 +229,18 @@ def check(path):
                 if cls != "discrete" and (it.get("divisible") or ING[iid].get("divisible")):
                     r.warn(f"{ta}: '{iid}' is divisible but not discrete — no effect")
 
+                # Conversions are what let a counted or spooned amount become
+                # grams, and grams are what nutrition is computed from.
+                conv = ING[iid].get("convert") or {}
+                if ING[iid].get("nutrition"):
+                    u = ING[iid].get("unit")
+                    if u == "count" and conv.get("piece_g") is None:
+                        r.warn(f"{ta}: '{iid}' is counted with no weight per item, "
+                               f"so it contributes nothing to computed nutrition")
+                    elif u in ("tsp", "tbsp", "cup") and conv.get("cup_g") is None:
+                        r.warn(f"{ta}: '{iid}' is measured in {u} with no cup weight, "
+                               f"so it contributes nothing to computed nutrition")
+
                 if "amt" in it and not it.get("carried"):
                     if iid in purchases:
                         r.warn(f"{ta}: '{iid}' already bought in {purchases[iid]} — "
