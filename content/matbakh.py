@@ -5,6 +5,7 @@ Matbakh content toolchain.
     python3 matbakh.py check                    # validate every recipe
     python3 matbakh.py check recipes/x.yaml     # validate one
     python3 matbakh.py build recipes/x.yaml ar  # resolve for a locale
+    python3 matbakh.py lexicon                  # audit the closed vocabulary
     python3 matbakh.py gaps                     # translation manifest
 
 Design contract: a recipe file holds STRUCTURE, IDS, NUMBERS and the small
@@ -17,6 +18,9 @@ import sys, os, glob, math, json, pathlib
 import yaml
 
 ROOT = pathlib.Path(__file__).parent
+# Locales a recipe must cover before it can be marked published. Dialects are
+# lexicon-only — per-recipe prose stays in `ar`, because dialectising 5,000
+# prose strings is a second content project the size of the first.
 SHIPPING_LOCALES = ["en", "ar"]
 
 
@@ -299,9 +303,19 @@ def snap(v, unit, divisible):
 
 
 def t(node, loc, fallback="en"):
+    """Resolve a per-locale string, walking `falls_back_to` from chrome.yaml.
+    ar_gulf → ar_eg → ar → en, so a missing dialect word shows a comprehensible
+    one rather than a blank."""
     if not isinstance(node, dict):
         return node or ""
-    return node.get(loc) or node.get(fallback) or ""
+    seen = set()
+    cur = loc
+    while cur and cur not in seen:
+        if node.get(cur):
+            return node[cur]
+        seen.add(cur)
+        cur = (CHROME.get("locales", {}).get(cur) or {}).get("falls_back_to")
+    return node.get(fallback) or ""
 
 
 def build(path, loc, servings=None):
@@ -413,6 +427,119 @@ def build(path, loc, servings=None):
                 for k, s in shorts.items()])
 
 
+
+# ─────────────────────────────────────────────────────────────────── lexicon
+
+def lexicon_audit():
+    """The lexicon only pays for itself while it stays small and consistent.
+    This surfaces the three ways it rots: two keys that mean the same thing,
+    entries nothing uses, and gaps that appear when a language is added."""
+    rows, errs, warns = [], [], []
+    locales = list(CHROME.get("locales", {}))
+
+    # what the catalogue actually uses
+    used_acts, used_stations, used_notes, bespoke = set(), set(), set(), 0
+    files = sorted(glob.glob("recipes/*.yaml")) + sorted(glob.glob(str(VAULT / "recipes" / "*.yaml")))
+    files = [f for f in files if "_template" not in f]
+    for f in files:
+        try:
+            rec = load(f) if not os.path.isabs(f) else yaml.safe_load(open(f, encoding="utf-8"))
+        except Exception:
+            continue
+        for step in rec.get("steps") or []:
+            used_stations.add(step.get("station"))
+            if step.get("note"):
+                used_notes.add(step["note"].get("kind"))
+            for tile in step.get("tiles") or []:
+                if tile.get("do"):
+                    used_acts.add(tile["do"])
+                elif tile.get("verb"):
+                    bespoke += 1
+
+    print(f"\n{len(ACT)} activities · {len(CHROME['stations'])} stations · "
+          f"{len(CHROME['note_kinds'])} note kinds · {len(CHROME['units'])} units")
+    print(f"locales: {', '.join(locales)}")
+    print(f"read from {len(files)} recipe(s)\n")
+
+    # 1. duplicate verbs — two keys a cook cannot tell apart
+    seen = {}
+    for k, v in ACT.items():
+        for loc in locales:
+            w = (v.get("verb") or {}).get(loc)
+            if not w:
+                warns.append(f"activity '{k}' has no {loc} verb")
+                continue
+            prev = seen.get((loc, w.strip().lower()))
+            if prev:
+                errs.append(f"'{k}' and '{prev}' both read \"{w}\" in {loc} — "
+                            f"a cook cannot tell them apart")
+            else:
+                seen[(loc, w.strip().lower())] = k
+        if not v.get("glyph"):
+            errs.append(f"activity '{k}' has no glyph, so it cannot be drawn")
+
+    # 2. entries nothing uses — a translation bill with no return
+    unused = [k for k in ACT if k not in used_acts]
+    if unused:
+        # With a handful of recipes loaded, "unused" means "not written yet" and
+        # naming 70 of them buries everything else. Past 40 recipes it starts to
+        # mean "probably does not need an icon", so the list appears then.
+        if len(files) >= 40:
+            for k in unused:
+                warns.append(f"activity '{k}' is defined but no recipe uses it")
+        else:
+            print(f"  {len(unused)} activities unused so far — expected with "
+                  f"{len(files)} recipe(s) loaded; listed once past 40")
+    # Same reasoning for stations and note kinds: with one recipe loaded, an
+    # unused oven means no recipe uses an oven yet, not that the station is wrong.
+    if len(files) >= 40:
+        for k in CHROME["stations"]:
+            if k not in used_stations:
+                warns.append(f"station '{k}' is defined but no recipe uses it")
+        for k in CHROME["note_kinds"]:
+            if k not in used_notes:
+                warns.append(f"note kind '{k}' is defined but no recipe uses it")
+
+    # 3. translation gaps, per locale
+    for loc in locales:
+        missing = [k for k, v in ACT.items() if not (v.get("verb") or {}).get(loc)]
+        missing += [f"station:{k}" for k, v in CHROME["stations"].items()
+                    if not (v.get("name") or {}).get(loc)]
+        missing += [f"note:{k}" for k, v in CHROME["note_kinds"].items()
+                    if not (v.get("label") or {}).get(loc)]
+        if missing:
+            verbs = [m for m in missing if not m.startswith(("station:", "note:"))]
+            chrome_gaps = [m for m in missing if m.startswith(("station:", "note:"))]
+            bits = []
+            if verbs:
+                bits.append(f"{len(verbs)} verb(s)")
+            if chrome_gaps:
+                # Stations and note labels appear on every screen of every
+                # recipe, so a gap here costs more than any single verb.
+                bits.append(f"{len(chrome_gaps)} station/note label(s) — "
+                            f"these show on every screen")
+            print(f"  {loc}: {' · '.join(bits)}")
+            if verbs:
+                print(f"       {', '.join(verbs[:8])}"
+                      + (" …" if len(verbs) > 8 else ""))
+        else:
+            print(f"  {loc}: complete")
+
+    print(f"\n  {len(used_acts)}/{len(ACT)} activities in use · "
+          f"{bespoke} bespoke verb(s) across {len(files)} recipe(s)")
+    # No ceiling warning. 81 is the reviewed count from the August 2026 merge —
+    # 294 candidate verbs sorted into 81 that get an icon and 124 rendered as an
+    # activity plus a qualifier. The check that matters is collisions, above:
+    # two verbs reading alike is a real defect, a large vocabulary is not.
+
+    for e in errs:
+        print(f"  error    {e}")
+    for w in warns:
+        print(f"  warning  {w}")
+    if not errs and not warns:
+        print("  clean")
+    return 1 if errs else 0
+
 # ----------------------------------------------------------------------- cli
 
 def main():
@@ -420,11 +547,13 @@ def main():
     # The catalogue lives in the vault, outside the repository. Point at it with
     # --catalogue PATH or the MATBAKH_CATALOGUE environment variable; with
     # neither, only the demo recipe tracked in the repo is checked.
+    # status goes to stderr so `build` can be piped as clean JSON
     if VAULT_OK:
-        print(f"ingredients: {len(ING)} from the vault")
+        print(f"ingredients: {len(ING)} from the vault", file=sys.stderr)
     else:
-        print(f"ingredients: {len(ING)} from the tracked sample — vault not found")
-        print(f"             looked in {VAULT}")
+        print(f"ingredients: {len(ING)} from the tracked sample — vault not found",
+              file=sys.stderr)
+        print(f"             looked in {VAULT}", file=sys.stderr)
 
     files = [f for f in sys.argv[2:] if f.endswith(".yaml")]
     if not files:
@@ -446,6 +575,9 @@ def main():
         n = next((int(a) for a in sys.argv[2:] if a.isdigit()), None)
         print(json.dumps(build(files[0], loc, n), ensure_ascii=False, indent=2))
         return
+
+    if cmd == "lexicon":
+        sys.exit(lexicon_audit())
 
     if cmd == "gaps":
         for f in files:

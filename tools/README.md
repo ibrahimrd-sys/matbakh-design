@@ -80,6 +80,26 @@ A free key from **api.data.gov** lifts that.
 storage on this machine only. That is deliberate: USDA deactivates any key it
 finds published in a code repository, and `tools/` is in a public one.
 
+## lexicon-editor.html
+
+Open `activities.yaml` and `chrome.yaml` together from `content/lexicon/` — Ctrl
+to select both. chrome.yaml supplies the stations and the locale list, so the
+editor needs it. Add a recipe file too and the list marks which activities that
+recipe actually uses.
+
+The check that earns its keep is **collision detection per dialect**. Two
+activities sharing a word put identical text on two different tiles, and a cook
+reading Arabic cannot tell the steps apart however different the English keys
+look. Eight of these were found during the CSV merge — toss/stir in Egyptian,
+zest/peel and grill/roast in Levantine and Gulf. The field turns red as you type,
+and the file cannot be saved while one stands.
+
+Each activity shows a **tile preview at 44px and an arc strip at 17px**, the two
+sizes an icon has to survive.
+
+Dialect fields left blank fall back — ar_gulf → ar_eg → ar — so partial coverage
+is fine, and the rail reports what is missing.
+
 ## recipe-editor.html
 
 Open three files at once — hold Ctrl while clicking:

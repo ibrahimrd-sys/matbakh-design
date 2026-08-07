@@ -1,95 +1,904 @@
 # ACTIVITY LEXICON
-# The closed vocabulary of cooking verbs. Translated ONCE here, never per recipe.
-# Adding a language = adding one key to each entry below.
+# The closed vocabulary of cooking verbs, translated ONCE here and never again
+# in a recipe. A recipe refers to `chop`; the word itself lives only in this file.
 #
-# glyph: Tabler icon key for the activity set
-# station_hint: typical station, used by the validator to flag odd placements
+# LOCALES
+#   en      English
+#   ar      Modern Standard — the fallback, and what a formal register would use
+#   ar_eg   Egyptian     — the launch dialect
+#   ar_lv   Levantine
+#   ar_gulf Gulf         — month 13
 #
-# This file is the authority the validator checks every recipe tile against.
-# A tile referencing an activity not listed here is an error, not a warning —
-# that is what stops the vocabulary drifting across 500 recipes.
+# The reader resolves ar_gulf → ar_eg → ar, so partial dialect coverage degrades
+# to a comprehensible word rather than a blank.
+#
+# EVERY VERB IS DISTINCT WITHIN EACH DIALECT. Two activities reading the same
+# word put the same text on two different tiles, and a cook cannot tell the
+# steps apart. `matbakh.py lexicon` enforces this — it is an error, not a
+# warning. Eight words were changed during the merge to clear collisions:
+# toss/stir in Egyptian, zest/peel and grill/roast in Levantine and Gulf,
+# cool/chill in Gulf and MSA, season/marinate in MSA.
+#
+# Generated from cooking-activities.xlsx after review, 1 August 2026.
+# 81 activities. Verbs demoted during review are expressed as an activity plus
+# a qualifier — see the note at the foot of this file.
 
-chop:
-  glyph: chop
-  station_hint: board
-  verb: { en: Chop, ar: افرم }
 
-crush:
-  glyph: crush
-  station_hint: board
-  verb: { en: Crush, ar: اهرس }
-
-joint:
-  glyph: joint
-  station_hint: board
-  verb: { en: Joint, ar: قطّع }
-
-cut_wedges:
-  glyph: lemon
-  station_hint: board
-  verb: { en: Cut in wedges, ar: قطّع فلقات }
-
-simmer_covered:
-  glyph: pot
-  station_hint: stove
-  verb: { en: Cover and simmer, ar: غطّي وسوّي }
+# ── any ───────────────────────────────────────────────────────
 
 add:
   glyph: add
   station_hint: any
-  verb: { en: Add, ar: أضف }
+  verb:
+    en: Add
+    ar: إضافة
+    ar_eg: أضف
+    ar_lv: أضف
+    ar_gulf: أضف
+  # Arabic drafted during the merge, not from the source list
 
-add_to:
-  glyph: add
-  station_hint: stove
-  verb: { en: Stir in, ar: أضف إلى }
-
-drop_in:
-  glyph: leaf
-  station_hint: stove
-  verb: { en: Drop in, ar: أضف }
-
-fry:
-  glyph: fry
-  station_hint: stove
-  verb: { en: Fry, ar: حمّر }
-
-sear:
-  glyph: sear
-  station_hint: grill
-  verb: { en: Sear, ar: حمّر }
-
-pour_over:
+pour:
   glyph: pour
-  station_hint: stove
-  verb: { en: Pour over, ar: اسكب فوقها }
-
-do_not_stir:
-  glyph: nostir
-  station_hint: stove
-  verb: { en: Do not stir, ar: لا تحرّك }
-
-strip:
-  glyph: strip
-  station_hint: bench
-  verb: { en: Strip the meat, ar: انزع اللحم }
-
-strain:
-  glyph: strain
-  station_hint: bench
-  verb: { en: Strain, ar: صفّي }
+  station_hint: any
+  verb:
+    en: Pour
+    ar: صب
+    ar_eg: اسكب
+    ar_lv: اسكب
+    ar_gulf: اسكب
+  # Arabic drafted during the merge, not from the source list
 
 season:
   glyph: salt
   station_hint: any
-  verb: { en: Season, ar: ملّح }
+  verb:
+    en: Season
+    ar: تبهير
+    ar_eg: ملّح
+    ar_lv: ملّح
+    ar_gulf: ملّح
+  # Arabic drafted during the merge, not from the source list
+
+# ── bench ─────────────────────────────────────────────────────
+
+blend:
+  glyph: blender
+  station_hint: bench
+  verb:
+    en: Blend
+    ar: مزج / خلط
+    ar_eg: ضرب في الخلاط
+    ar_lv: ضرب بالخلاط
+    ar_gulf: ضرب بالخلاط
+
+brine:
+  glyph: bowl-salt
+  station_hint: bench
+  verb:
+    en: Brine
+    ar: نقع في محلول ملحي
+    ar_eg: نقع في مية ملح
+    ar_lv: نقع بمي ملح
+    ar_gulf: نقع في ماء ملح
+
+brush:
+  glyph: brush
+  station_hint: bench
+  verb:
+    en: Brush
+    ar: دهن
+    ar_eg: ادهن
+    ar_lv: ادهن
+    ar_gulf: ادهن
+  # Arabic drafted during the merge, not from the source list
+
+chill:
+  glyph: snowflake
+  station_hint: bench
+  verb:
+    en: Chill
+    ar: تبريد
+    ar_eg: بَرّد في الثلاجة
+    ar_lv: بَرّد
+    ar_gulf: بَرّد
+  # also covers: Refrigerate
+
+coat:
+  glyph: coat
+  station_hint: bench
+  verb:
+    en: Coat
+    ar: تغطية
+    ar_eg: غطّي
+    ar_lv: غطّي
+    ar_gulf: غطّي
+  # also covers: Dredge
+
+cool:
+  glyph: temp-down
+  station_hint: bench
+  verb:
+    en: Cool
+    ar: تبريد تدريجي
+    ar_eg: بَرّد
+    ar_lv: سَيِّح
+    ar_gulf: خلّيه يبرد
+
+cure:
+  glyph: salt-cure
+  station_hint: bench
+  verb:
+    en: Cure
+    ar: "مكافحة / معالجة (للحوم)"
+    ar_eg: تمليح
+    ar_lv: مَلِّح
+    ar_gulf: مَلِّح
+
+drain:
+  glyph: strain
+  station_hint: bench
+  verb:
+    en: Drain
+    ar: تصفية / نزع الماء
+    ar_eg: صفّي
+    ar_lv: صفّي
+    ar_gulf: صفّي
+  # also covers: Strain
+
+dry:
+  glyph: sun
+  station_hint: bench
+  verb:
+    en: Dry
+    ar: تجفيف
+    ar_eg: نشف
+    ar_lv: جفف
+    ar_gulf: جفف
+  # also covers: Dehydrate
+
+ferment:
+  glyph: ferment
+  station_hint: bench
+  verb:
+    en: Ferment
+    ar: تخمير
+    ar_eg: خَمِّر
+    ar_lv: خَمِّر
+    ar_gulf: خَمِّر
+  # also covers: Proof, Leaven, Rise
+
+flatten:
+  glyph: flatten
+  station_hint: bench
+  verb:
+    en: Flatten
+    ar: تسطيح
+    ar_eg: سَطِّح
+    ar_lv: سَطِّح
+    ar_gulf: سَطِّح
+
+fold:
+  glyph: fold
+  station_hint: bench
+  verb:
+    en: Fold
+    ar: طي / دمج برفق
+    ar_eg: طوّي
+    ar_lv: طوّي
+    ar_gulf: طوّي
+
+freeze:
+  glyph: ice
+  station_hint: bench
+  verb:
+    en: Freeze
+    ar: تجميد
+    ar_eg: جَمِّد
+    ar_lv: جَمِّد
+    ar_gulf: جَمِّد
+
+grind:
+  glyph: mill
+  station_hint: bench
+  verb:
+    en: Grind
+    ar: طح
+    ar_eg: طحن
+    ar_lv: طح
+    ar_gulf: طح
+
+infuse:
+  glyph: infuse
+  station_hint: bench
+  verb:
+    en: Infuse
+    ar: نقع / استخلاص
+    ar_eg: نقع
+    ar_lv: نقع
+    ar_gulf: نقع
+
+inject:
+  glyph: syringe
+  station_hint: bench
+  verb:
+    en: Inject
+    ar: حقن
+    ar_eg: حقن
+    ar_lv: حقن
+    ar_gulf: حقن
+
+knead:
+  glyph: hand-grab
+  station_hint: bench
+  verb:
+    en: Knead
+    ar: عجن
+    ar_eg: اعجن
+    ar_lv: اعجن
+    ar_gulf: اعجن
+  # Arabic drafted during the merge, not from the source list
+
+layer:
+  glyph: layers
+  station_hint: bench
+  verb:
+    en: Layer
+    ar: طبقات
+    ar_eg: رص على طبقات
+    ar_lv: طبّق
+    ar_gulf: طبّق
+
+marinate:
+  glyph: bowl-spoon
+  station_hint: bench
+  verb:
+    en: Marinate
+    ar: تتبيل
+    ar_eg: تبّل
+    ar_lv: تبّل
+    ar_gulf: تبّل
+
+mash:
+  glyph: mash
+  station_hint: bench
+  verb:
+    en: Mash
+    ar: هرس
+    ar_eg: هرس
+    ar_lv: هرّس
+    ar_gulf: هرّس
+
+mix:
+  glyph: mix
+  station_hint: bench
+  verb:
+    en: Mix
+    ar: خلط
+    ar_eg: خلط
+    ar_lv: خَلِّط
+    ar_gulf: خَلِّط
+  # also covers: Combine
+
+rest:
+  glyph: clock-pause
+  station_hint: bench
+  verb:
+    en: Rest
+    ar: راحة
+    ar_eg: راحة
+    ar_lv: راحة
+    ar_gulf: راحة
+
+roll:
+  glyph: roll
+  station_hint: bench
+  verb:
+    en: Roll
+    ar: فرد / درفلة
+    ar_eg: فَرِّد
+    ar_lv: فَرِّد
+    ar_gulf: فَرِّد
+
+set:
+  glyph: set
+  station_hint: bench
+  verb:
+    en: Set
+    ar: تصلب / تماسك
+    ar_eg: تماسك
+    ar_lv: تماسك
+    ar_gulf: تماسك
+
+shape:
+  glyph: shape
+  station_hint: bench
+  verb:
+    en: Shape
+    ar: تشكيل
+    ar_eg: شَكِّل
+    ar_lv: شَكِّل
+    ar_gulf: شَكِّل
+  # also covers: Form
+
+sift:
+  glyph: sieve
+  station_hint: bench
+  verb:
+    en: Sift
+    ar: نخل
+    ar_eg: نخّل
+    ar_lv: نخّل
+    ar_gulf: نخّل
+  # also covers: Sieve
+  # Arabic drafted during the merge, not from the source list
+
+soak:
+  glyph: bowl
+  station_hint: bench
+  verb:
+    en: Soak
+    ar: نقع
+    ar_eg: انقع
+    ar_lv: انقع
+    ar_gulf: انقع
+  # also covers: Steep
+
+squeeze:
+  glyph: squeeze
+  station_hint: bench
+  verb:
+    en: Squeeze
+    ar: عصر
+    ar_eg: اعصر
+    ar_lv: اعصر
+    ar_gulf: اعصر
+  # also covers: Press
+  # Arabic drafted during the merge, not from the source list
+
+strip:
+  glyph: strip
+  station_hint: bench
+  verb:
+    en: Strip
+    ar: نزع اللحم
+    ar_eg: انزع اللحم
+    ar_lv: انزع اللحم
+    ar_gulf: انزع اللحم
+  # Arabic drafted during the merge, not from the source list
+
+stuff:
+  glyph: stuff
+  station_hint: bench
+  verb:
+    en: Stuff
+    ar: حشو
+    ar_eg: حشي
+    ar_lv: حشي
+    ar_gulf: حشي
+  # also covers: Fill
+
+toss:
+  glyph: toss
+  station_hint: bench
+  verb:
+    en: Toss
+    ar: رمي / تقليب
+    ar_eg: رجرج
+    ar_lv: قلّب
+    ar_gulf: قلّب
+
+wash:
+  glyph: droplet
+  station_hint: bench
+  verb:
+    en: Wash
+    ar: غسل
+    ar_eg: غسل
+    ar_lv: غسل
+    ar_gulf: غسل
+  # also covers: Rinse
+
+whisk:
+  glyph: whisk
+  station_hint: bench
+  verb:
+    en: Whisk
+    ar: خفق
+    ar_eg: خفق
+    ar_lv: خفق
+    ar_gulf: خفق
+  # also covers: Beat, Whip
+
+wrap:
+  glyph: wrap
+  station_hint: bench
+  verb:
+    en: Wrap
+    ar: لف / تغليف
+    ar_eg: لَفِّ
+    ar_lv: لَفِّ
+    ar_gulf: لَفِّ
+
+# ── board ─────────────────────────────────────────────────────
+
+chop:
+  glyph: chop
+  station_hint: board
+  verb:
+    en: Chop
+    ar: فرم / تقطيع خشن
+    ar_eg: فرم خشن
+    ar_lv: فرم
+    ar_gulf: فرم
+
+crush:
+  glyph: crush
+  station_hint: board
+  verb:
+    en: Crush
+    ar: سحق
+    ar_eg: دقّ
+    ar_lv: دقّ
+    ar_gulf: سحَق
+  # also covers: Pound
+
+cut_wedges:
+  glyph: lemon
+  station_hint: board
+  verb:
+    en: Cut
+    ar: قطع
+    ar_eg: ودجز
+    ar_lv: قص
+    ar_gulf: قطع
+
+dice:
+  glyph: grid-dots
+  station_hint: board
+  verb:
+    en: Dice
+    ar: تقطيع مكعبات
+    ar_eg: تقطيع مكعبات
+    ar_lv: مكعبات
+    ar_gulf: قطع مكعبات
+  # also covers: Cube
+
+grate:
+  glyph: grater
+  station_hint: board
+  verb:
+    en: Grate
+    ar: بشر
+    ar_eg: بشر
+    ar_lv: بشر
+    ar_gulf: بشر
+
+mince:
+  glyph: chop
+  station_hint: board
+  verb:
+    en: Mince
+    ar: فرم ناعم
+    ar_eg: فرم
+    ar_lv: فرم ناعم
+    ar_gulf: هرس
+
+peel:
+  glyph: peeler
+  station_hint: board
+  verb:
+    en: Peel
+    ar: تقشير
+    ar_eg: تقشير
+    ar_lv: قشر
+    ar_gulf: قشر
+  # also covers: Pare
+
+shred:
+  glyph: line-dashed
+  station_hint: board
+  verb:
+    en: Shred
+    ar: تمزيق / تقطيع رفيع
+    ar_eg: مزّق
+    ar_lv: شَرَّح رفيع
+    ar_gulf: قطع خفيف
+
+slice:
+  glyph: slice
+  station_hint: board
+  verb:
+    en: Slice
+    ar: تقطيع إلى شرائح
+    ar_eg: قطع شرائح
+    ar_lv: شرّح
+    ar_gulf: شرّح
+
+zest:
+  glyph: lemon
+  station_hint: board
+  verb:
+    en: Zest
+    ar: قشر الحمضيات
+    ar_eg: بَشُور
+    ar_lv: ابشر القشر
+    ar_gulf: ابشر القشر
+
+# ── grill ─────────────────────────────────────────────────────
+
+char:
+  glyph: flame
+  station_hint: grill
+  verb:
+    en: Char
+    ar: حرق / فحم
+    ar_eg: شوي يترك علامة
+    ar_lv: حرق
+    ar_gulf: حرق
+
+grill:
+  glyph: grill
+  station_hint: grill
+  verb:
+    en: Grill
+    ar: شوي على الشواية
+    ar_eg: شوي على الشواية
+    ar_lv: اشوي ع الشواية
+    ar_gulf: اشوي ع الشواية
+  # also covers: Griddle
+
+sear:
+  glyph: sear
+  station_hint: grill
+  verb:
+    en: Sear
+    ar: تحمير سريع
+    ar_eg: تحمير سريع
+    ar_lv: حمر
+    ar_gulf: حمر
+  # also covers: Brown
+
+skewer:
+  glyph: skewer
+  station_hint: grill
+  verb:
+    en: Skewer
+    ar: تسيخ
+    ar_eg: تسيخ
+    ar_lv: تسيخ
+    ar_gulf: تسيخ
+
+# ── oven ──────────────────────────────────────────────────────
+
+bake:
+  glyph: bread
+  station_hint: oven
+  verb:
+    en: Bake
+    ar: خبز
+    ar_eg: خبز
+    ar_lv: خبز
+    ar_gulf: خبز
+
+baste:
+  glyph: brush
+  station_hint: oven
+  verb:
+    en: Baste
+    ar: سقي
+    ar_eg: اسقي
+    ar_lv: اسقي
+    ar_gulf: اسقي
+  # Arabic drafted during the merge, not from the source list
+
+broil:
+  glyph: flame-top
+  station_hint: oven
+  verb:
+    en: Broil
+    ar: شوي بالأعلى
+    ar_eg: شوي من أعلى
+    ar_lv: شوي بالأعلى
+    ar_gulf: شوي بالأعلى
+
+roast:
+  glyph: oven
+  station_hint: oven
+  verb:
+    en: Roast
+    ar: شوي / تحمير
+    ar_eg: شوي فرن
+    ar_lv: شوي
+    ar_gulf: شوي
+
+toast:
+  glyph: toast
+  station_hint: oven
+  verb:
+    en: Toast
+    ar: تحميص
+    ar_eg: حمّص
+    ar_lv: حمّص
+    ar_gulf: حمّص
+
+# ── serve ─────────────────────────────────────────────────────
+
+drizzle:
+  glyph: drizzle
+  station_hint: serve
+  verb:
+    en: Drizzle
+    ar: رش / تسييل
+    ar_eg: رش سائل خفيف
+    ar_lv: نزّل
+    ar_gulf: نزّل
+
+dust:
+  glyph: dust
+  station_hint: serve
+  verb:
+    en: Dust
+    ar: رش خفيف
+    ar_eg: عفر
+    ar_lv: رش خفيف
+    ar_gulf: رش خفيف
+
+garnish:
+  glyph: leaf
+  station_hint: serve
+  verb:
+    en: Garnish
+    ar: تزيين
+    ar_eg: زَيِّن
+    ar_lv: زَيِّن
+    ar_gulf: زَيِّن
+
+serve:
+  glyph: plate
+  station_hint: serve
+  verb:
+    en: Serve
+    ar: تقديم
+    ar_eg: قَدِّم
+    ar_lv: قَدِّم
+    ar_gulf: قَدِّم
+
+sprinkle:
+  glyph: sprinkle
+  station_hint: serve
+  verb:
+    en: Sprinkle
+    ar: رش
+    ar_eg: رش
+    ar_lv: رش
+    ar_gulf: رش
+  # also covers: Scatter
 
 to_taste:
   glyph: salt
   station_hint: serve
-  verb: { en: To taste, ar: حسب الذوق }
+  verb:
+    en: To Taste
+    ar: حسب الذوق
+    ar_eg: حسب الذوق
+    ar_lv: حسب الذوق
+    ar_gulf: حسب الذوق
+  # Arabic drafted during the merge, not from the source list
 
-alongside:
-  glyph: grain
-  station_hint: serve
-  verb: { en: Alongside, ar: بجانبها }
+# ── stove ─────────────────────────────────────────────────────
+
+bain_marie:
+  glyph: bowl-over-pot
+  station_hint: stove
+  verb:
+    en: "Bain-marie"
+    ar: حمام مائي
+    ar_eg: حمام مائي
+    ar_lv: حمام مائي
+    ar_gulf: حمام مائي
+
+blanch:
+  glyph: bubbles-fast
+  station_hint: stove
+  verb:
+    en: Blanch
+    ar: سلق سريع
+    ar_eg: سلق سريع
+    ar_lv: سلق سريع
+    ar_gulf: سلق سريع
+  # also covers: Parboil
+
+boil:
+  glyph: bubbles
+  station_hint: stove
+  verb:
+    en: Boil
+    ar: غليان
+    ar_eg: غلي
+    ar_lv: غلي
+    ar_gulf: غلي
+
+braise:
+  glyph: pot-deep
+  station_hint: stove
+  verb:
+    en: Braise
+    ar: طبخ بقليل سائل
+    ar_eg: كمر
+    ar_lv: طبخ بمرق
+    ar_gulf: طبخ بمرق
+  # also covers: Stew
+
+deep_fry:
+  glyph: deep-fry
+  station_hint: stove
+  verb:
+    en: "Deep-fry"
+    ar: قلي عميق
+    ar_eg: قلي عميق
+    ar_lv: قلّي زيت كتير
+    ar_gulf: قلّي عميق
+
+deglaze:
+  glyph: deglaze
+  station_hint: stove
+  verb:
+    en: Deglaze
+    ar: إذابة التحمير
+    ar_eg: حلّي بالمية
+    ar_lv: حلّي بالمرق
+    ar_gulf: حلّي بالمرق
+
+do_not_stir:
+  glyph: nostir
+  station_hint: stove
+  verb:
+    en: Do Not Stir
+    ar: عدم التحريك
+    ar_eg: متقلبش
+    ar_lv: لا تحرّك
+    ar_gulf: لا تحرّك
+  # Arabic drafted during the merge, not from the source list
+
+flambe:
+  glyph: flame-pan
+  station_hint: stove
+  verb:
+    en: Flambé
+    ar: فلامبي
+    ar_eg: فلامبي
+    ar_lv: فلامبي
+    ar_gulf: فلامبي
+
+fry:
+  glyph: fry
+  station_hint: stove
+  verb:
+    en: Fry
+    ar: قلي
+    ar_eg: اقلي
+    ar_lv: اقلي
+    ar_gulf: اقلي
+  # also covers: Pan-Fry, Shallow-Fry, Sauté
+  # Arabic drafted during the merge, not from the source list
+
+ladle:
+  glyph: ladle
+  station_hint: stove
+  verb:
+    en: Ladle
+    ar: غرف
+    ar_eg: اغرف
+    ar_lv: اغرف
+    ar_gulf: اغرف
+  # Arabic drafted during the merge, not from the source list
+
+poach:
+  glyph: egg
+  station_hint: stove
+  verb:
+    en: Poach
+    ar: سلق برفق
+    ar_eg: سلق خفيف
+    ar_lv: سلق برفق
+    ar_gulf: سلق برفق
+
+pressure_cook:
+  glyph: pressure-cooker
+  station_hint: stove
+  verb:
+    en: "Pressure-cook"
+    ar: طبخ بالضغط
+    ar_eg: طبخ بالقدر الضغط
+    ar_lv: طبخ بالبرستيج
+    ar_gulf: طبخ بالقدر الضغط
+
+reduce:
+  glyph: arrow-down-right
+  station_hint: stove
+  verb:
+    en: Reduce
+    ar: تقليص / تكثيف
+    ar_eg: تسبيك
+    ar_lv: قلّص
+    ar_gulf: قلّص
+
+simmer:
+  glyph: pot
+  station_hint: stove
+  verb:
+    en: Simmer
+    ar: طبخ على نار هادئة
+    ar_eg: طبخ على نار هادئة
+    ar_lv: خلّي يغلي شوي
+    ar_gulf: خلّي يغلي شوي
+
+skim:
+  glyph: spoon
+  station_hint: stove
+  verb:
+    en: Skim
+    ar: إزالة الزبد
+    ar_eg: شيل الزبد
+    ar_lv: شيل الزبد
+    ar_gulf: شيل الزبد
+
+steam:
+  glyph: steam
+  station_hint: stove
+  verb:
+    en: Steam
+    ar: طبخ على البخار
+    ar_eg: طبخ على البخار
+    ar_lv: بُخَّر
+    ar_gulf: بُخَّر
+
+stir:
+  glyph: rotate
+  station_hint: stove
+  verb:
+    en: Stir
+    ar: تحريك
+    ar_eg: قلّب
+    ar_lv: حرّك
+    ar_gulf: حرّك
+
+stir_fry:
+  glyph: wok
+  station_hint: stove
+  verb:
+    en: "Stir-fry"
+    ar: قلي مع التحريك
+    ar_eg: قلي مع التحريك
+    ar_lv: قلّي وحرّك
+    ar_gulf: قلّي وحرّك
+
+sweat:
+  glyph: steam-low
+  station_hint: stove
+  verb:
+    en: Sweat
+    ar: تعريق
+    ar_eg: شوّح
+    ar_lv: شوّح
+    ar_gulf: شوّح
+  # Arabic drafted during the merge, not from the source list
+
+
+# ── DEMOTED DURING REVIEW ────────────────────────────────────────────────────
+# These were Tier 1 and are now expressed as an activity plus a qualifier. No
+# icon, no lexicon entry, no new word to translate. Recipes referring to the old
+# keys must be updated to the form on the right.
+#
+#   joint            → do: slice    qualifier: { en: into pieces, ar: قطّع لقطع }
+#   simmer_covered   → do: simmer   qualifier: { en: covered,     ar: مغطى }
+#   add_to           → do: add      qualifier: { en: into,        ar: في }
+#   pour_over        → do: pour     qualifier: { en: over it,     ar: فوقها }
+#   arrange          → do: serve    qualifier: { en: arranged,    ar: مرصوص }
+#   alongside        → do: serve    qualifier: { en: alongside,   ar: بجانبها }
+#   pickle           → do: ferment  qualifier: { en: pickled,     ar: مخلل }
+#
+# do_not_stir, to_taste and serve were demoted in review but kept: they have no
+# underlying activity to qualify. do_not_stir in particular inverts its verb —
+# rendered as `stir` with a qualifier it would read as "stir" on a 44px tile,
+# on the one step where stirring splits the dish.

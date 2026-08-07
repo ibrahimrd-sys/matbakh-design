@@ -58,6 +58,12 @@ scaling_classes:
 
 # Locale configuration. One language runs at a time; direction and numerals
 # travel with the language, they are not per-recipe data.
+# Direction and numerals travel with the language, not with a recipe.
+# `falls_back_to` is what the builder walks when a string is missing, so
+# partial dialect coverage degrades to a comprehensible word, never a blank.
 locales:
-  en: { dir: ltr, numerals: western, name: English }
-  ar: { dir: rtl, numerals: eastern, name: العربية }
+  en:      { dir: ltr, numerals: western, name: English }
+  ar:      { dir: rtl, numerals: eastern, name: العربية }
+  ar_eg:   { dir: rtl, numerals: western, name: مصري,  falls_back_to: ar }
+  ar_lv:   { dir: rtl, numerals: western, name: شامي,  falls_back_to: ar }
+  ar_gulf: { dir: rtl, numerals: western, name: خليجي, falls_back_to: ar_eg }

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Matbakh — lexicon editor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&family=Noto+Naskh+Arabic:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+<style>
+:root{
+  --paper:#F4EFE6; --card:#FBF8F2; --card-alt:#F8F4EC; --ink:#221E1A;
+  --ink-60:rgba(34,30,26,.60); --ink-40:rgba(34,30,26,.40);
+  --hairline:rgba(34,30,26,.14); --terracotta:#A2542F; --terracotta-deep:#8A4526;
+  --running:#12894A; --danger:#E01B22;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --sans:'IBM Plex Sans',system-ui,sans-serif;
+  --arabic:'Noto Naskh Arabic',serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:14px;
+  -webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+button{font:inherit;cursor:pointer}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-60)}
+header{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1.5px solid var(--hairline);
+  background:var(--card);flex:none}
+header h1{margin:0;font-size:17px;font-weight:600;letter-spacing:-.01em}
+header .ar{font-family:var(--arabic);font-size:15px;color:var(--ink-60)}
+.spacer{flex:1}
+.btn{padding:8px 13px;border-radius:9px;border:1.5px solid var(--hairline);background:#FFF;
+  color:var(--ink);font-size:13px;font-weight:500}
+.btn:hover{border-color:var(--terracotta);color:var(--terracotta)}
+.btn.solid{background:var(--terracotta);border-color:var(--terracotta);color:#FFF}
+.btn.solid:hover{background:var(--terracotta-deep);color:#FFF}
+.btn:disabled{opacity:.4;cursor:not-allowed;border-color:var(--hairline);color:var(--ink-40)}
+.btn.sm{padding:5px 9px;font-size:11.5px;border-radius:7px}
+.count{font-family:var(--mono);font-size:11px;color:var(--ink-60);white-space:nowrap}
+
+main{flex:1;min-height:0;display:grid;grid-template-columns:290px 1fr 300px}
+@media (max-width:1120px){main{grid-template-columns:240px 1fr}.rail{display:none}}
+@media (max-width:760px){main{grid-template-columns:1fr}.list{display:none}}
+
+.list{border-right:1.5px solid var(--hairline);display:flex;flex-direction:column;min-height:0;background:var(--card)}
+.search{padding:11px 12px;border-bottom:1px solid var(--hairline);display:flex;gap:8px}
+.search input,.search select{padding:8px 10px;border-radius:8px;border:1.5px solid var(--hairline);
+  background:#FFF;font:inherit;font-size:13px;color:var(--ink)}
+.search input{flex:1;min-width:0}
+.search input:focus,.search select:focus{outline:none;border-color:var(--terracotta)}
+.rows{flex:1;min-height:0;overflow-y:auto}
+.stationhd{padding:7px 12px;background:var(--card-alt);border-bottom:1px solid var(--hairline);
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-40)}
+.row{padding:9px 12px;border-bottom:1px solid var(--hairline);cursor:pointer;display:flex;gap:9px;align-items:baseline}
+.row:hover{background:var(--card-alt)}
+.row.on{background:var(--terracotta);color:#FFF}
+.row.on .k,.row.on .a{color:rgba(255,255,255,.82)}
+.row .n{flex:1;min-width:0;font-size:13.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .a{font-family:var(--arabic);font-size:13.5px;color:var(--ink-60);white-space:nowrap}
+.row .k{font-family:var(--mono);font-size:9px;color:var(--ink-40)}
+.row.bad{box-shadow:inset 3px 0 0 var(--danger)}
+.row.unused{opacity:.55}
+
+.form{overflow-y:auto;padding:20px 24px 60px;min-height:0}
+.grp{margin-bottom:24px}
+.grp>.eyebrow{display:block;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--hairline)}
+.f{display:grid;grid-template-columns:120px 1fr;gap:10px;align-items:center;margin-bottom:9px}
+.f>label{font-size:12.5px;color:var(--ink-60)}
+.f>label small{display:block;font-family:var(--mono);font-size:9px;color:var(--ink-40);letter-spacing:.08em}
+input,select{width:100%;padding:8px 10px;border-radius:8px;border:1.5px solid var(--hairline);
+  background:#FFF;font:inherit;font-size:13.5px;color:var(--ink)}
+input:focus,select:focus{outline:none;border-color:var(--terracotta)}
+input.ar{font-family:var(--arabic);font-size:16px;direction:rtl;text-align:right}
+input.num{font-family:var(--mono);font-size:12.5px}
+input.clash{border-color:var(--danger);background:#FFF6F6}
+.hint{grid-column:2;font-size:11.5px;color:var(--ink-40);margin-top:-4px;line-height:1.45}
+.hint.warn{color:var(--danger)}
+
+/* tile preview — the icon test, at the two sizes that actually matter */
+.preview{display:flex;gap:22px;align-items:flex-end;padding:16px;border-radius:12px;
+  background:var(--card);border:1.5px solid var(--hairline);margin-bottom:10px}
+.tile44{width:150px;padding:10px;border-radius:11px;background:#FFF;border:1.5px solid var(--hairline);
+  display:flex;flex-direction:column;align-items:center;gap:6px}
+.tile44 .g{width:44px;height:44px;border-radius:9px;background:var(--card-alt);
+  display:flex;align-items:center;justify-content:center;font-family:var(--mono);
+  font-size:8px;color:var(--ink-40);text-align:center;line-height:1.1;padding:2px;word-break:break-all}
+.tile44 .v{font-size:15px;font-weight:600;text-align:center}
+.tile44 .va{font-family:var(--arabic);font-size:16px;text-align:center;direction:rtl}
+.arc{display:flex;gap:3px;align-items:center}
+.arc .g{width:17px;height:17px;border-radius:4px;background:var(--card-alt);flex:none}
+.arc .g.me{background:var(--terracotta)}
+.pvnote{font-family:var(--mono);font-size:9.5px;color:var(--ink-40);letter-spacing:.08em}
+
+.rail{border-left:1.5px solid var(--hairline);background:var(--card);display:flex;flex-direction:column;min-height:0}
+.rail h2{margin:0;padding:13px 15px 11px;border-bottom:1px solid var(--hairline);font-family:var(--mono);
+  font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-60);font-weight:500;
+  display:flex;align-items:center;gap:8px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--running);flex:none}
+.dot.bad{background:var(--danger)}
+.issues{flex:1;min-height:0;overflow-y:auto}
+.issue{padding:9px 15px;border-bottom:1px solid var(--hairline);cursor:pointer;font-size:12.5px;line-height:1.45}
+.issue:hover{background:var(--card-alt)}
+.issue .w{font-family:var(--mono);font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--danger);display:block;margin-bottom:3px}
+.issue.warn .w{color:var(--terracotta)}
+.issue .ar{font-family:var(--arabic);font-size:14px}
+.ok{padding:16px 15px;font-size:12.5px;color:var(--ink-60);line-height:1.5}
+.stats{border-top:1.5px solid var(--hairline);padding:12px 15px;font-family:var(--mono);
+  font-size:10.5px;line-height:1.9;color:var(--ink-60)}
+.stats b{color:var(--ink);font-weight:600}
+.stats s{color:var(--danger);text-decoration:none;font-weight:600}
+.empty{padding:50px 24px;color:var(--ink-40);font-size:14px;line-height:1.7;max-width:46ch}
+.empty strong{color:var(--ink)}
+.empty code{font-family:var(--mono);font-size:12.5px;background:var(--card);padding:1px 5px;border-radius:4px}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Lexicon</h1>
+  <div class="ar">المفردات</div>
+  <div class="spacer"></div>
+  <div class="count" id="status"></div>
+  <div class="count" id="count"></div>
+  <input type="file" id="file" accept=".yaml,.yml" multiple class="hidden">
+  <button class="btn" id="openBtn">Open files</button>
+  <button class="btn" id="addBtn" disabled>Add activity</button>
+  <button class="btn solid" id="saveBtn" disabled>Save</button>
+</header>
+
+<main>
+  <section class="list">
+    <div class="search">
+      <input id="q" placeholder="Search any language…">
+      <select id="filter">
+        <option value="">all</option>
+        <option value="unused">unused</option>
+        <option value="clash">collisions</option>
+      </select>
+    </div>
+    <div class="rows" id="rows"></div>
+  </section>
+
+  <section class="form" id="form">
+    <div class="empty">
+      <p><strong>Open <code>activities.yaml</code> and <code>chrome.yaml</code> together.</strong></p>
+      <p>Both are in <code>content/lexicon/</code>. Hold Ctrl to select both — chrome.yaml
+         supplies the stations and the locale list, so the editor needs it.</p>
+      <p>Add a recipe file too and the editor will show which activities that recipe
+         actually uses. Nothing is uploaded; files are read in your browser.</p>
+    </div>
+  </section>
+
+  <aside class="rail">
+    <h2><span class="dot" id="dot"></span> Checks</h2>
+    <div class="issues" id="issues"></div>
+    <div class="stats" id="stats"></div>
+  </aside>
+</main>
+
+<script>
+let ACT=null, CHR=null, used=new Set(), sel=null, handle=null;
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const locales = () => CHR ? Object.keys(CHR.locales) : ['en','ar'];
+const stations = () => CHR ? Object.keys(CHR.stations) : [];
+
+function flash(msg,bad){
+  const el=document.getElementById('status');
+  el.textContent=msg; el.style.color=bad?'var(--danger)':'var(--running)';
+  clearTimeout(flash._t); flash._t=setTimeout(()=>{el.textContent='';},4000);
+}
+
+/* ── validation ───────────────────────────────────────────────────────────
+   The collision check is the one that earns its keep. Two activities sharing
+   a word in a dialect put identical text on two different tiles, and a cook
+   reading Arabic cannot tell the steps apart — however different the English
+   keys look. Eight of these were found and fixed during the CSV merge. */
+function collisions(){
+  const out={};
+  if(!ACT) return out;
+  locales().forEach(loc=>{
+    const seen={};
+    Object.keys(ACT).forEach(k=>{
+      const w=((ACT[k].verb||{})[loc]||'').trim();
+      if(!w) return;
+      (seen[w]=seen[w]||[]).push(k);
+    });
+    Object.keys(seen).forEach(w=>{
+      if(seen[w].length>1) (out[loc]=out[loc]||[]).push({word:w,keys:seen[w]});
+    });
+  });
+  return out;
+}
+
+function check(){
+  const o=[];
+  if(!ACT) return o;
+  const cl=collisions();
+  Object.keys(cl).forEach(loc=>cl[loc].forEach(c=>{
+    o.push({lvl:'error', key:c.keys[0],
+      msg:`<span class="ar">${esc(c.word)}</span> is used by ${c.keys.join(' and ')} in ${loc} — a cook cannot tell those tiles apart`});
+  }));
+  Object.keys(ACT).forEach(k=>{
+    const v=ACT[k]||{}, verb=v.verb||{};
+    if(!/^[a-z0-9_]+$/.test(k)) o.push({lvl:'error',key:k,msg:`${k} — key must be lowercase letters, digits and underscores`});
+    if(!verb.en) o.push({lvl:'error',key:k,msg:`${k} — no English verb`});
+    if(!v.glyph||v.glyph==='TODO') o.push({lvl:'error',key:k,msg:`${k} — no icon, so the tile cannot be drawn`});
+    if(v.station_hint && v.station_hint!=='any' && !stations().includes(v.station_hint))
+      o.push({lvl:'error',key:k,msg:`${k} — unknown station "${v.station_hint}"`});
+    locales().forEach(loc=>{
+      if(loc!=='en' && !verb[loc]){
+        const fb=(CHR&&CHR.locales[loc]||{}).falls_back_to;
+        o.push({lvl:'warn',key:k,msg:`${k} — no ${loc}${fb?`, falls back to ${fb}`:''}`});
+      }
+    });
+    if(used.size && !used.has(k)) o.push({lvl:'warn',key:k,msg:`${k} — defined but no loaded recipe uses it`});
+  });
+  if(Object.keys(ACT).length>90)
+    o.push({lvl:'warn',key:null,msg:`${Object.keys(ACT).length} activities — past the point where two probably share an icon`});
+  return o;
+}
+
+function paintRail(){
+  const iss=check(), errs=iss.filter(i=>i.lvl==='error');
+  document.getElementById('dot').className='dot'+(errs.length?' bad':'');
+  const box=document.getElementById('issues');
+  if(!ACT){box.innerHTML='';document.getElementById('stats').textContent='';return;}
+  box.innerHTML = iss.length
+    ? iss.map((i,n)=>`<div class="issue ${i.lvl==='warn'?'warn':''}" data-n="${n}">
+        <span class="w">${i.lvl}</span>${i.msg}</div>`).join('')
+    : '<div class="ok">Clean. Every verb is distinct in every dialect, and every activity has an icon.</div>';
+  [...box.querySelectorAll('.issue')].forEach(el=>{
+    const i=iss[+el.dataset.n];
+    if(i.key) el.onclick=()=>select(i.key);
+  });
+
+  const n=Object.keys(ACT).length;
+  const cl=collisions();
+  let s=`<b>${n}</b> activities<br>`;
+  locales().forEach(loc=>{
+    if(loc==='en') return;
+    const have=Object.values(ACT).filter(v=>(v.verb||{})[loc]).length;
+    const bad=(cl[loc]||[]).length;
+    s+=`${loc}: <b>${have}</b>/${n}${bad?` · <s>${bad} clash</s>`:''}<br>`;
+  });
+  if(used.size) s+=`<b>${[...used].filter(k=>ACT[k]).length}</b> used by loaded recipes<br>`;
+  document.getElementById('stats').innerHTML=s;
+  document.getElementById('saveBtn').disabled=!!errs.length;
+  document.getElementById('saveBtn').textContent = errs.length
+    ? `${errs.length} error${errs.length>1?'s':''} to fix`
+    : (handle?'Save to '+handle.name:'Download YAML');
+}
+
+function paintList(){
+  if(!ACT){document.getElementById('rows').innerHTML='';return;}
+  const q=document.getElementById('q').value.trim().toLowerCase();
+  const mode=document.getElementById('filter').value;
+  const cl=collisions();
+  const clashed=new Set();
+  Object.values(cl).forEach(a=>a.forEach(c=>c.keys.forEach(k=>clashed.add(k))));
+  const errs=new Set(check().filter(i=>i.lvl==='error'&&i.key).map(i=>i.key));
+
+  let keys=Object.keys(ACT).filter(k=>{
+    if(mode==='unused' && used.size && used.has(k)) return false;
+    if(mode==='clash' && !clashed.has(k)) return false;
+    if(!q) return true;
+    const v=ACT[k].verb||{};
+    return k.includes(q) || Object.values(v).some(w=>String(w).toLowerCase().includes(q));
+  });
+  keys.sort((a,b)=>{
+    const sa=ACT[a].station_hint||'zz', sb=ACT[b].station_hint||'zz';
+    return sa===sb ? a.localeCompare(b) : sa.localeCompare(sb);
+  });
+
+  let html='', station=null;
+  keys.forEach(k=>{
+    const v=ACT[k], st=v.station_hint||'unassigned';
+    if(st!==station){ html+=`<div class="stationhd">${esc(st)}</div>`; station=st; }
+    const verb=v.verb||{};
+    html+=`<div class="row ${k===sel?'on':''} ${errs.has(k)?'bad':''} ${used.size&&!used.has(k)?'unused':''}" data-k="${esc(k)}">
+      <span class="n">${esc(verb.en||k)}</span>
+      <span class="a">${esc(verb.ar_eg||verb.ar||'')}</span>
+      <span class="k">${esc(v.glyph||'—')}</span></div>`;
+  });
+  document.getElementById('rows').innerHTML=html;
+  [...document.querySelectorAll('.row')].forEach(el=>el.onclick=()=>select(el.dataset.k));
+  document.getElementById('count').textContent =
+    q||mode ? `${keys.length} of ${Object.keys(ACT).length}` : `${Object.keys(ACT).length} activities`;
+}
+
+function select(k){ sel=k; paintList(); paintForm(); }
+
+function paintForm(){
+  const el=document.getElementById('form');
+  if(!sel||!ACT[sel]){ el.innerHTML='<div class="empty"><p>Pick an activity, or add one.</p></div>'; return; }
+  const v=ACT[sel]; v.verb=v.verb||{};
+  const cl=collisions();
+  const clashLoc={};
+  Object.keys(cl).forEach(loc=>cl[loc].forEach(c=>{ if(c.keys.includes(sel)) clashLoc[loc]=c.keys.filter(x=>x!==sel).join(', '); }));
+
+  const LOCNAME={en:'English',ar:'Modern Standard',ar_eg:'Egyptian',ar_lv:'Levantine',ar_gulf:'Gulf'};
+  el.innerHTML=`
+    <div class="preview">
+      <div>
+        <div class="tile44">
+          <div class="g">${esc(v.glyph||'no icon')}</div>
+          <div class="v">${esc(v.verb.en||'—')}</div>
+          <div class="va">${esc(v.verb.ar_eg||v.verb.ar||'')}</div>
+        </div>
+        <div class="pvnote" style="margin-top:6px;text-align:center">TILE · 44px</div>
+      </div>
+      <div>
+        <div class="arc">${Array.from({length:8},(_,i)=>`<div class="g ${i===3?'me':''}"></div>`).join('')}</div>
+        <div class="pvnote" style="margin-top:6px">ARC · 17px — the binding constraint</div>
+      </div>
+    </div>
+
+    <div class="grp">
+      <span class="eyebrow">Identity</span>
+      <div class="f"><label>Key</label><input id="i_key" class="num" value="${esc(sel)}"></div>
+      <div class="f"><div></div><div class="hint">Recipes refer to this. Renaming breaks every recipe already using it — the validator will name them.</div></div>
+      <div class="f"><label>Icon</label><input id="i_glyph" class="num" value="${esc(v.glyph||'')}" placeholder="tabler icon name"></div>
+      <div class="f"><div></div><div class="hint">Must read at 17px in the arc. Three strokes or fewer, and a silhouette unlike its neighbours.</div></div>
+      <div class="f"><label>Station</label><select id="i_station">
+        <option value="any" ${(v.station_hint||'any')==='any'?'selected':''}>any</option>
+        ${stations().map(s=>`<option value="${s}" ${v.station_hint===s?'selected':''}>${s}</option>`).join('')}
+      </select></div>
+    </div>
+
+    <div class="grp">
+      <span class="eyebrow">The verb</span>
+      ${locales().map(loc=>{
+        const clash=clashLoc[loc];
+        return `<div class="f"><label>${LOCNAME[loc]||loc}<small>${loc}</small></label>
+          <input id="i_v_${loc}" class="${loc==='en'?'':'ar'} ${clash?'clash':''}" value="${esc(v.verb[loc]||'')}"></div>
+          ${clash?`<div class="f"><div></div><div class="hint warn">Same word as ${esc(clash)} — a cook reading ${loc} sees no difference between these tiles.</div></div>`:''}`;
+      }).join('')}
+      <div class="f"><div></div><div class="hint">Imperative, second person, no article. "Chop", not "Chopping". Leave a dialect blank and it falls back — ar_gulf → ar_eg → ar.</div></div>
+    </div>
+
+    <div class="grp">
+      <button class="btn sm" id="delBtn" style="border-color:var(--danger);color:var(--danger)">Delete this activity</button>
+      ${used.size&&!used.has(sel)?'<span class="hint" style="margin-left:10px">No loaded recipe uses it.</span>':''}
+    </div>`;
+
+  const on=(id,fn)=>{const e=document.getElementById(id); if(e) e.oninput=e.onchange=fn;};
+  on('i_glyph',e=>{ v.glyph=e.target.value.trim()||undefined; paintList(); paintForm(); paintRail(); });
+  on('i_station',e=>{ v.station_hint=e.target.value; paintList(); paintRail(); });
+  locales().forEach(loc=>on('i_v_'+loc,e=>{
+    const w=e.target.value;
+    if(w) v.verb[loc]=w; else delete v.verb[loc];
+    paintList(); paintRail();
+    // re-render only if a clash appeared or cleared, to avoid stealing focus
+    const cl2=collisions();
+    const nowClash=Object.keys(cl2).some(l=>cl2[l].some(c=>c.keys.includes(sel)));
+    const wasClash=!!Object.keys(clashLoc).length;
+    if(nowClash!==wasClash){ const p=e.target.selectionStart; paintForm();
+      const f=document.getElementById('i_v_'+loc); if(f){f.focus();f.setSelectionRange(p,p);} }
+  }));
+  document.getElementById('i_key').onchange=e=>{
+    const nk=e.target.value.trim();
+    if(!nk||nk===sel) return;
+    if(ACT[nk]){ alert(`"${nk}" already exists.`); e.target.value=sel; return; }
+    const rebuilt={};
+    Object.keys(ACT).forEach(k=>rebuilt[k===sel?nk:k]=ACT[k]);
+    ACT=rebuilt; sel=nk; paintList(); paintForm(); paintRail();
+  };
+  document.getElementById('delBtn').onclick=()=>{
+    if(!confirm(`Delete ${sel}? Any recipe using it will fail validation.`)) return;
+    delete ACT[sel]; sel=null; paintList(); paintForm(); paintRail();
+  };
+}
+
+/* ── YAML out ─────────────────────────────────────────────────────────── */
+function q(s){
+  s=String(s==null?'':s);
+  return /^[\w\u0600-\u06FF][\w \u0600-\u06FF\u064B-\u0652\/().,-]*$/.test(s)&&s===s.trim()
+    ? s : '"'+s.replace(/"/g,'\\"')+'"';
+}
+function toYaml(){
+  const L=['# ACTIVITY LEXICON',
+    '# The closed vocabulary of cooking verbs, translated ONCE here.',
+    '# Edited with tools/lexicon-editor.html',
+    '#',
+    '# Every verb is distinct within each dialect. Two activities sharing a word',
+    '# put identical text on two different tiles, and a cook cannot tell the steps',
+    '# apart. matbakh.py lexicon enforces this.',
+    '#',
+    '# Dialects fall back: ar_gulf → ar_eg → ar, so partial coverage degrades to a',
+    '# comprehensible word rather than a blank.',''];
+  const keys=Object.keys(ACT).sort((a,b)=>{
+    const sa=ACT[a].station_hint||'zz', sb=ACT[b].station_hint||'zz';
+    return sa===sb ? a.localeCompare(b) : sa.localeCompare(sb);
+  });
+  let station=null;
+  keys.forEach(k=>{
+    const v=ACT[k], st=v.station_hint||'any';
+    if(st!==station){ L.push(''); L.push('# ── '+st+' '+'─'.repeat(Math.max(2,58-st.length))); station=st; }
+    L.push('');
+    L.push(k+':');
+    L.push('  glyph: '+(v.glyph||'TODO'));
+    L.push('  station_hint: '+st);
+    L.push('  verb:');
+    locales().forEach(loc=>{ if(v.verb&&v.verb[loc]) L.push('    '+loc+': '+q(v.verb[loc])); });
+  });
+  return L.join('\n')+'\n';
+}
+
+/* ── files ────────────────────────────────────────────────────────────── */
+function ingest(text,name){
+  const d=jsyaml.load(text);
+  if(!d||typeof d!=='object') throw new Error('not YAML');
+  if(d.stations&&d.note_kinds){ CHR=d; return 'chrome'; }
+  if(d.steps){ // a recipe — record which activities it uses
+    (d.steps||[]).forEach(s=>(s.tiles||[]).forEach(t=>{ if(t.do) used.add(t.do); }));
+    return 'recipe';
+  }
+  const first=Object.values(d)[0];
+  if(first&&first.verb){ ACT=d; return 'activities'; }
+  throw new Error('unrecognised — expected activities.yaml, chrome.yaml or a recipe');
+}
+
+async function openFiles(){
+  if(window.showOpenFilePicker){
+    try{
+      const hs=await window.showOpenFilePicker({multiple:true,
+        types:[{description:'YAML',accept:{'application/yaml':['.yaml','.yml']}}]});
+      const got=[];
+      for(const h of hs){
+        const kind=ingest(await (await h.getFile()).text(), h.name);
+        if(kind==='activities') handle=h;
+        got.push(kind);
+      }
+      sel=ACT?Object.keys(ACT)[0]:null;
+      document.getElementById('addBtn').disabled=!ACT;
+      paintList(); paintForm(); paintRail();
+      flash('Loaded '+got.join(', '));
+    }catch(err){ if(err.name!=='AbortError') alert('Could not open.\n\n'+err.message); }
+    return;
+  }
+  document.getElementById('file').click();
+}
+
+document.getElementById('file').onchange=e=>{
+  const files=[...e.target.files]; if(!files.length) return;
+  let done=0;
+  files.forEach(f=>{
+    const r=new FileReader();
+    r.onload=()=>{
+      try{ ingest(r.result,f.name); }catch(err){ alert(`${f.name}: ${err.message}`); }
+      if(++done===files.length){
+        sel=ACT?Object.keys(ACT)[0]:null;
+        document.getElementById('addBtn').disabled=!ACT;
+        paintList(); paintForm(); paintRail();
+      }
+    };
+    r.readAsText(f);
+  });
+  e.target.value='';
+};
+
+async function save(){
+  const text=toYaml();
+  if(handle){
+    try{
+      let p=await handle.queryPermission({mode:'readwrite'});
+      if(p!=='granted') p=await handle.requestPermission({mode:'readwrite'});
+      if(p==='granted'){
+        const w=await handle.createWritable(); await w.write(text); await w.close();
+        flash('Saved to '+handle.name); return;
+      }
+      flash('Permission refused — downloading instead',true);
+    }catch(err){ flash('Could not write — downloading instead',true); }
+  }
+  const b=new Blob([text],{type:'text/yaml;charset=utf-8'});
+  const a=document.createElement('a');
+  a.href=URL.createObjectURL(b); a.download='activities.yaml'; a.click();
+  URL.revokeObjectURL(a.href);
+  flash('Downloaded — put it back in content/lexicon/');
+}
+
+document.getElementById('openBtn').onclick=openFiles;
+document.getElementById('saveBtn').onclick=save;
+document.getElementById('q').oninput=paintList;
+document.getElementById('filter').onchange=paintList;
+document.getElementById('addBtn').onclick=()=>{
+  let k='new_activity',n=2;
+  while(ACT[k]) k='new_activity_'+n++;
+  ACT[k]={glyph:'',station_hint:'any',verb:{en:'',ar:''}};
+  sel=k; document.getElementById('q').value=''; document.getElementById('filter').value='';
+  paintList(); paintForm(); paintRail();
+  const f=document.getElementById('i_v_en'); if(f) f.focus();
+};
+window.addEventListener('beforeunload',e=>{ if(ACT){e.preventDefault();e.returnValue='';} });
+if(typeof jsyaml==='undefined'){
+  document.getElementById('form').innerHTML=
+    '<div class="empty"><p><strong>The YAML library did not load.</strong></p>'+
+    '<p>It comes from a CDN, so the first load needs an internet connection.</p></div>';
+}
+</script>
+</body>
+</html>

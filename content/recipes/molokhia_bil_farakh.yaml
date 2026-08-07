@@ -59,7 +59,8 @@ steps:
       - do: chop
         item: coriander_fresh
         amt: 2
-      - do: joint
+      - do: slice
+        qualifier: { en: into pieces, ar: لقطع }
         item: chicken_whole
         amt: 1200
 
@@ -68,11 +69,12 @@ steps:
     ordered: true
     heat: 2
     tiles:
-      - do: simmer_covered
+      - do: simmer
+        qualifier: { en: covered, ar: مغطى }
         items:
           - { id: chicken_whole, carried: true }   # same bird, not a second purchase
           - { id: water, amt: 1500 }
-      - do: drop_in
+      - do: add
         item: bay_leaf
         amt: 2
     timer:
@@ -90,7 +92,7 @@ steps:
       - do: strip
         item: chicken_whole
         carried: true
-      - do: strain
+      - do: drain
         item: "@stock"
         amt: 1200
     note:
@@ -129,7 +131,8 @@ steps:
     ordered: true
     heat: 1
     tiles:
-      - do: add_to
+      - do: add
+        qualifier: { en: into the stock, ar: في المرق }
         item: molokhia_frozen
         amt: 400
         into: "@stock"
@@ -188,7 +191,8 @@ steps:
       en: Soup, rice and lemon on the table together — not one after the other.
       ar: الشوربة والأرز والليمون على السفرة مع بعض.
     tiles:
-      - do: alongside
+      - do: serve
+        qualifier: { en: alongside, ar: بجانبها }
         item: rice
         amt: 300
       - do: cut_wedges
