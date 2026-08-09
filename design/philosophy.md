@@ -290,28 +290,75 @@ Ramadan sponsorship asset, not a launch feature.
 
 ## 13. Open questions
 
-### 12.1 Discovery — NOT STARTED
+### 13.1 Discovery — NOT STARTED
 No philosophy established. 500 curated recipes with no duplicates means **browsing is the product** for the first ten minutes of anyone's relationship with Matbakh. This is where the curation promise reads either as confidence or as thinness.
 
 The governing question differs from the reader's. The reader asks *how do I not break your concentration.* Discovery asks *how do I help you decide fast without pretending I know you.* These do not share a design logic and should not be forced to.
 
-### 12.2 Pre-commit presentation of cost and nutrition — NOT STARTED
+### 13.2 Pre-commit presentation of cost and nutrition — NOT STARTED
 How cost and nutrition present themselves on a recipe *before* the cook commits.
 
-### 12.3 The meal planner — NOT STARTED
+### 13.3 The meal planner — NOT STARTED
 How it stays advisory without becoming nagging. Established constraint from prior work: non-rigid, non-mandatory, treats deviation as normal; hard rules apply only to dietary exclusions.
 
-### 12.4 The entertaining / hosting mode — NOT STARTED
-Proposed menus, budget, shopping list. A genuinely different mode with different physics. Likely deserves its own philosophy rather than an extension of the reader's. Should be designed after both the reader and discovery are stable.
+### 13.4 The entertaining / hosting mode — WORKED THROUGH, NOT BUILT
+Proposed menus, budget, shopping list. A genuinely different mode with different physics.
 
-### 12.5 Step granularity — PARTIALLY SETTLED
+Argued through 1 August 2026. The conclusion is that it is **two features, not one**, and the split matters more than anything else here: one is a document, the other is a change to the reader. They ship separately and in that order.
+
+**Worked example** (the brief this was argued against): twelve covers, Mexican, beef and chicken preferred over seafood, two vegetarians, not too spicy, a salad included, 1,500 LE — about 125 a head.
+
+#### A. The party plan — a pre-commit document
+
+Everything the host reads *before* they start cooking. It cannot drift, because nothing in it is live.
+
+1. **Menu suggestion, modifiable.** A constrained selection over tagged recipes — cuisine, protein, spice, course, dietary, cost. Small enough to solve exactly. Blocked on §13.7; see below.
+2. **One consolidated shopping list, editable.** Merge the `items` arrays across every chosen recipe, sum by ingredient key, apply scaling classes. `carried` already prevents double-counting within a recipe and does the same across them. Priced live from the market feed — which is what makes "125 a head" a claim no recipe app can make, and is arguably the acquisition hook rather than the schedule.
+3. **What can be made ahead.** `make_ahead` and the `makes` / `@intermediate` edges already express this. A sequence with no clock: what to do Thursday, what to do Saturday morning.
+4. **Batched preparation.** Group every tile across the whole menu by `(activity, ingredient, qualifier)` — *chop 14 onions once*, not four times across four recipes. This is the thing no recipe app does and every cook does by hand.
+
+   The August 2026 lexicon merge is what makes this work. With 294 separate verbs, `julienne` and `slice` would have grouped apart; consolidated into one activity with a qualifier, they group together. The grouping key is the qualifier precisely because that is what distinguishes *diced* from *sliced* onion when three recipes want one and the fourth wants the other.
+5. **An ordered task list, no clock times.** Sorted by passive duration descending — the four-hour marinade first, the ninety-minute proof next, the twenty-five-minute rice late. Relative to serve time, never absolute.
+
+**Why no clock, and no scheduler.** A schedule that says *7:12 — take the beef out* is a promise. The moment the cook is nine minutes behind, every line after it is wrong, and the instrument that is supposed to be trustworthy with wet hands is lying at exactly the moment the stakes are highest. Falling behind is not the exception in home cooking; it is the normal case.
+
+Constraint scheduling is technically straightforward here — forty tasks, six resources, solvable in milliseconds. That is not what makes it hard. What makes it hard is that durations are unreliable (a timer is honest; *chop two onions* is ninety seconds for one cook and five minutes for another), the cook is the scarce resource and is unmodellable, and the engine's real job would be re-planning silently every time reality diverges. The value is in the ordering, not the timing, and the ordering needs no engine.
+
+#### B. Multi-recipe sessions — an extension to the reader
+
+The requirement that cannot be dropped: **several recipes open at once, with free movement between them.** This is not orchestration. It is *presence* — each recipe holds its own place and its own running timers, and the cook chooses which one is on screen.
+
+This preserves §1 rather than breaking it. The cook's place stays sacred; there are simply several places now, and the cook decides which they are standing in. Nothing competes for the screen, because nothing pushes them anywhere they did not choose to go.
+
+**Settled 1 August 2026:**
+
+- **Switching.** Tablet gets a tab strip — it is the primary posture and has the room. Phone gets a single button opening the list of recipes in the session. The phone does not pretend to have space it lacks.
+- **Alarms.** When a timer fires in a recipe the cook is not looking at, the app takes them to it — the alarm exists to prevent a missed step, and making them navigate defeats it. **Return is one tap:** the banner that replaces the alarm names where they came from, and going back costs a single gesture. This keeps the one-mandatory-gesture principle intact and handles the case where the cook is mid-cut in another dish when the stock finishes.
+
+Session-owned timers already exist in the prototype and already survive the recipe-to-cook transition. What changes is that a session holds several recipes rather than one.
+
+#### Why this order
+
+The document ships first because it is a report over data that already exists, it cannot be wrong, and it produces the large basket the pre-build validation sprint exists to measure. Multi-recipe sessions ship second because they change the reader, and the reader is the test instrument.
+
+Full orchestration — a live plan tracking the cook's position across three dishes — stays out until someone has been watched using the document version. The working hypothesis is that a paper plan plus timers that refuse to let you forget covers most of it, and that the remainder is where the design becomes genuinely dangerous.
+
+#### What blocks it
+
+§13.7. Menu suggestion cannot be built without the tag vocabulary, and **tags are the expensive retrofit** — adding them at recipe 400 means revisiting 400 files. This is the same closed-vocabulary problem the lexicon solved in August 2026, and it should be settled before authoring reaches volume, not after.
+
+### 13.5 Step granularity — PARTIALLY SETTLED
 Working answer: granularity governed by **hands**, not grammar — a step ends when you next need to look at the screen. Section 4.1's order-independence rule operationalises this, but it has not yet been tested against real recipes at volume.
 
-### 12.6 Doneness photography — SCOPE UNDECIDED
+### 13.6 Doneness photography — SCOPE UNDECIDED
 Agreed as the right mechanism (§5.2). Not yet decided: how many recipes get them, how many per recipe, who shoots them, and what that adds to the per-recipe production cost currently modelled at ~$40.
 
-### 12.7 Filters and dietary attributes — NOT STARTED
+### 13.7 Filters and dietary attributes — NOT STARTED, NOW ON THE CRITICAL PATH
 Dietary requirements, personal preferences, heat, vegan/vegetarian, kids-suitable, weight-watching. The attributes are known; the interaction model is not.
+
+**Raised in priority 1 August 2026.** §13.4 established that menu suggestion is blocked on this, and that tags are the one thing genuinely expensive to retrofit — every recipe authored before the vocabulary is settled has to be revisited. The vocabulary should be closed and small for the same reason the activity lexicon is: it is translated once, and it is what a filter can promise.
+
+At minimum it needs cuisine, course, protein, spice level, dietary exclusion (*vegetarian as written*, not *could be made vegetarian*), effort, and whether a dish holds well — that last one only matters for entertaining, which is why it surfaced now.
 
 ---
 
@@ -340,3 +387,6 @@ Dietary requirements, personal preferences, heat, vegan/vegetarian, kids-suitabl
 | 24 Jul 2026 | Technique video removed from cook mode into a Techniques library | 7 |
 | 24 Jul 2026 | Feedback is telemetry, never published | 8 |
 | 30 Jul 2026 | No music-app integration; alarm must carry unaided | 12 |
+| 1 Aug 2026 | Party plan is a document; multi-recipe sessions are a reader change; no scheduler | 13.4 |
+| 1 Aug 2026 | Alarm jumps to the recipe, return costs one tap | 13.4 |
+| 1 Aug 2026 | Tab strip on tablet, single button on phone | 13.4 |
