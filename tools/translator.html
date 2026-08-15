@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Matbakh — translator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Noto+Naskh+Arabic:wght@400;500&family=Noto+Sans+Devanagari:wght@400;500&family=Noto+Sans+JP:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+<style>
+:root{
+  --paper:#F4EFE6; --card:#FBF8F2; --card-alt:#F8F4EC; --ink:#221E1A;
+  --ink-60:rgba(34,30,26,.60); --ink-40:rgba(34,30,26,.40);
+  --hairline:rgba(34,30,26,.14); --terracotta:#A2542F; --terracotta-deep:#8A4526;
+  --running:#12894A; --danger:#E01B22;
+  --mono:'IBM Plex Mono',ui-monospace,monospace;
+  --sans:'IBM Plex Sans',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:14px;
+  -webkit-font-smoothing:antialiased;display:flex;flex-direction:column}
+button{font:inherit;cursor:pointer}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-60)}
+header{display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1.5px solid var(--hairline);
+  background:var(--card);flex:none;flex-wrap:wrap}
+header h1{margin:0;font-size:17px;font-weight:600}
+.spacer{flex:1}
+.btn{padding:8px 13px;border-radius:9px;border:1.5px solid var(--hairline);background:#FFF;
+  color:var(--ink);font-size:13px;font-weight:500}
+.btn:hover{border-color:var(--terracotta);color:var(--terracotta)}
+.btn.solid{background:var(--terracotta);border-color:var(--terracotta);color:#FFF}
+.btn.solid:hover{background:var(--terracotta-deep)}
+.btn:disabled{opacity:.4;cursor:not-allowed;border-color:var(--hairline);color:var(--ink-40)}
+.btn.sm{padding:5px 10px;font-size:12px;border-radius:7px}
+select,input,textarea{padding:8px 10px;border-radius:8px;border:1.5px solid var(--hairline);
+  background:#FFF;font:inherit;font-size:14px;color:var(--ink);width:100%}
+select:focus,input:focus,textarea:focus{outline:none;border-color:var(--terracotta)}
+.stat{font-family:var(--mono);font-size:11px;color:var(--ink-60);white-space:nowrap}
+.stat b{color:var(--ink)} .stat s{color:var(--running);text-decoration:none}
+
+.bar{height:4px;background:var(--card-alt);flex:none}
+.bar>div{height:100%;background:var(--running);transition:width .3s}
+
+main{flex:1;min-height:0;display:grid;grid-template-columns:280px 1fr}
+@media (max-width:900px){main{grid-template-columns:1fr}.queue{display:none}}
+
+.queue{border-right:1.5px solid var(--hairline);background:var(--card);display:flex;flex-direction:column;min-height:0}
+.queue .hd{padding:11px 14px;border-bottom:1px solid var(--hairline)}
+.qlist{flex:1;min-height:0;overflow-y:auto}
+.qgrp{padding:7px 14px;background:var(--card-alt);border-bottom:1px solid var(--hairline);
+  font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-40);
+  display:flex;justify-content:space-between}
+.qi{padding:9px 14px;border-bottom:1px solid var(--hairline);cursor:pointer;font-size:12.5px;
+  display:flex;gap:8px;align-items:baseline}
+.qi:hover{background:var(--card-alt)}
+.qi.on{background:var(--terracotta);color:#FFF}
+.qi.done{color:var(--ink-40)}
+.qi.on.done{color:rgba(255,255,255,.7)}
+.qi .t{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.qi .k{font-family:var(--mono);font-size:9px;opacity:.6}
+
+.work{overflow-y:auto;padding:26px 30px 80px;min-height:0}
+.wrap{max-width:660px}
+.crumb{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink-40);margin-bottom:14px}
+.src{padding:16px 18px;border-radius:12px;background:var(--card);border:1.5px solid var(--hairline);margin-bottom:6px}
+.src .lbl{font-family:var(--mono);font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-40);margin-bottom:7px}
+.src .txt{font-size:17px;line-height:1.5}
+.ref{padding:11px 18px;border-radius:10px;background:var(--card-alt);margin-bottom:16px;font-size:14px;color:var(--ink-60)}
+.ref .lbl{font-family:var(--mono);font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--ink-40);margin-bottom:5px}
+.tgt{margin-bottom:8px}
+.tgt textarea{min-height:88px;font-size:17px;line-height:1.5;resize:vertical}
+.rtl{direction:rtl;text-align:right}
+.note{font-size:12.5px;color:var(--ink-40);line-height:1.5;margin-bottom:18px}
+.note b{color:var(--terracotta)}
+.photo{margin:16px 0;border-radius:12px;overflow:hidden;border:1.5px solid var(--hairline);background:var(--card)}
+.photo img{width:100%;display:block}
+.photo .cap{padding:9px 14px;font-family:var(--mono);font-size:10px;letter-spacing:.08em;color:var(--ink-40)}
+.mem{padding:12px 16px;border-radius:10px;background:rgba(18,137,74,.08);border:1.5px solid rgba(18,137,74,.3);
+  margin-bottom:16px;font-size:13px;line-height:1.5}
+.mem b{color:var(--running)}
+.mem .use{margin-top:8px}
+.nav{display:flex;gap:9px;align-items:center;margin-top:22px}
+.empty{padding:60px 30px;color:var(--ink-40);font-size:14px;line-height:1.7;max-width:50ch}
+.empty strong{color:var(--ink)} .empty code{font-family:var(--mono);font-size:12.5px;background:var(--card);padding:1px 5px;border-radius:4px}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Translate</h1>
+  <div class="stat" id="locName"></div>
+  <div class="spacer"></div>
+  <div class="stat" id="progress"></div>
+  <div class="stat" id="saved"></div>
+  <input type="file" id="file" accept=".yaml,.yml" multiple class="hidden">
+  <input type="file" id="imgs" accept="image/*" multiple class="hidden">
+  <button class="btn" id="openBtn">Open recipes</button>
+  <button class="btn" id="imgBtn" disabled>Add photos</button>
+  <select id="loc" style="width:auto;min-width:150px" disabled></select>
+  <button class="btn solid" id="saveBtn" disabled>Save all</button>
+</header>
+<div class="bar"><div id="barFill" style="width:0"></div></div>
+
+<main>
+  <section class="queue">
+    <div class="hd"><span class="eyebrow">Outstanding</span></div>
+    <div class="qlist" id="qlist"></div>
+  </section>
+
+  <section class="work" id="work">
+    <div class="empty">
+      <p><strong>Open the recipes you are translating.</strong></p>
+      <p>Select them together with <code>chrome.yaml</code> from <code>content/lexicon/</code> —
+         that file lists the languages, so the tool needs it to know what you can translate into.</p>
+      <p>Then <strong>Add photos</strong> if you have the <code>assets</code> folder. A doneness
+         cue describes a picture; translating it without seeing the picture is guesswork.</p>
+      <p>Nothing is uploaded. Files are read in your browser and written back to the same place.</p>
+    </div>
+  </section>
+</main>
+
+<script>
+/* ── The translator only ever sees prose ─────────────────────────────────────
+   Keys, activity references, ingredient ids, amounts, scaling classes and every
+   other structural field are unreachable from this tool. It walks the recipe
+   for objects that are per-locale string maps and edits nothing else, so a
+   translator cannot break a recipe — only leave it incomplete.             */
+const PROSE_PARENTS = ['title','why','doneness','text','label','name','qualifier','verb'];
+let RECIPES = [];          // {handle, path, name, data, dirty}
+let CHR = null, LOC = null, QUEUE = [], cur = 0;
+let PHOTOS = {};           // basename -> objectURL
+let MEMORY = {};           // source string -> translation, within this session
+
+const esc = s => String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const dirOf = l => ((CHR&&CHR.locales[l])||{}).dir || 'ltr';
+const nameOf = l => ((CHR&&CHR.locales[l])||{}).name || l;
+
+/* Walk a recipe for per-locale string maps, recording where each came from so
+   the translator can be shown its context rather than a bare string. */
+function collect(rec, recIdx){
+  const locales = Object.keys(CHR.locales);
+  const out = [];
+  function walk(node, path, ctx){
+    if (!node || typeof node !== 'object') return;
+    if (Array.isArray(node)) { node.forEach((v,i)=>walk(v, `${path}[${i}]`, ctx)); return; }
+    const keys = Object.keys(node);
+    const isProse = keys.length && keys.every(k=>locales.includes(k))
+                    && keys.every(k=>typeof node[k]==='string');
+    if (isProse) { out.push({recIdx, path, node, ctx:{...ctx}}); return; }
+    keys.forEach(k=>{
+      const c = {...ctx};
+      if (k==='steps') c.inSteps = true;
+      walk(node[k], path?`${path}.${k}`:k, c);
+    });
+  }
+  // carry step context down so a doneness cue knows its station and photo
+  walk({ id:rec.id, title:rec.title, why:rec.why, intermediates:rec.intermediates,
+         shorts:rec.shorts }, '', {kind:'recipe'});
+  (rec.steps||[]).forEach((s,i)=>{
+    const ctx = {kind:'step', stepNo:i+1, station:s.station, photo:s.photo,
+                 doneness:!!s.doneness};
+    walk({qualifier:s.qualifier, doneness:s.doneness, note:s.note, timer:s.timer},
+         `steps[${i}]`, ctx);
+    (s.tiles||[]).forEach((t,j)=>{
+      walk({qualifier:t.qualifier, verb:t.verb}, `steps[${i}].tiles[${j}]`,
+           {...ctx, kind:'tile', tileNo:j+1, activity:t.do});
+    });
+  });
+  return out;
+}
+
+function fieldOf(path){
+  const m = path.match(/([a-z_]+)(\[\d+\])?$/);
+  return m ? m[1] : path;
+}
+
+function buildQueue(){
+  QUEUE = [];
+  RECIPES.forEach((r,i)=>collect(r.data,i).forEach(u=>QUEUE.push(u)));
+  QUEUE.forEach(u=>{ u.field = fieldOf(u.path); });
+  paintQueue(); paintWork(); paintStats();
+}
+
+const isDone = u => !!(u.node[LOC] && u.node[LOC].trim());
+const sourceOf = u => {
+  const rec = RECIPES[u.recIdx].data;
+  const src = rec.source_locale || 'en';
+  return u.node[src] || u.node.en || Object.values(u.node)[0] || '';
+};
+
+function paintStats(){
+  if(!LOC){ return; }
+  const done = QUEUE.filter(isDone).length;
+  const pct = QUEUE.length ? Math.round(done/QUEUE.length*100) : 0;
+  document.getElementById('progress').innerHTML =
+    `<b>${done}</b> of <b>${QUEUE.length}</b> · ${pct}%`;
+  document.getElementById('barFill').style.width = pct+'%';
+  document.getElementById('locName').textContent = nameOf(LOC);
+  const dirty = RECIPES.filter(r=>r.dirty).length;
+  document.getElementById('saved').innerHTML =
+    dirty ? `<s>${dirty} file(s) unsaved</s>` : '';
+  document.getElementById('saveBtn').disabled = !dirty;
+}
+
+function paintQueue(){
+  const box = document.getElementById('qlist');
+  if(!LOC || !QUEUE.length){ box.innerHTML=''; return; }
+  let html='', last=null;
+  QUEUE.forEach((u,i)=>{
+    const rname = RECIPES[u.recIdx].data.id;
+    if(rname!==last){
+      const tot = QUEUE.filter(x=>x.recIdx===u.recIdx).length;
+      const dn  = QUEUE.filter(x=>x.recIdx===u.recIdx&&isDone(x)).length;
+      html += `<div class="qgrp"><span>${esc(rname)}</span><span>${dn}/${tot}</span></div>`;
+      last = rname;
+    }
+    html += `<div class="qi ${i===cur?'on':''} ${isDone(u)?'done':''}" data-i="${i}">
+      <span class="t">${esc(sourceOf(u).slice(0,44)||'—')}</span>
+      <span class="k">${esc(u.field)}</span></div>`;
+  });
+  box.innerHTML = html;
+  [...box.querySelectorAll('.qi')].forEach(el=>el.onclick=()=>{ cur=+el.dataset.i; paintQueue(); paintWork(); });
+  const on = box.querySelector('.qi.on'); if(on) on.scrollIntoView({block:'nearest'});
+}
+
+/* What each field is FOR — a translator needs the job, not the field name. */
+const GUIDE = {
+  title:   'The dish name. Names often cross languages unchanged — translate only if there is a real local name for this dish.',
+  why:     'Why this version and not another. The most important sentence on the browse card. Keep the concrete claims; do not soften them into marketing.',
+  doneness:'What the cook SEES or HEARS when the step is finished — not the clock. It describes the photograph below. Match the photograph, not the words.',
+  text:    'A warning shown on the step. Keep it short and direct; it is read at a glance with busy hands.',
+  label:   'A timer label, read at a glance on a small screen. Two or three words.',
+  name:    'The name of something the recipe makes and later uses — a stock, a sauce.',
+  qualifier:'A modifier on an action: "fine", "covered", "until deep gold". Keep it short — it sits beside a verb on a small tile.',
+  verb:    'Bespoke wording for one action, written because the standard verb would flatten something worth keeping. Preserve what makes it specific.'
+};
+
+function paintWork(){
+  const el = document.getElementById('work');
+  if(!LOC || !QUEUE.length){ return; }
+  const u = QUEUE[cur]; if(!u) return;
+  const rec = RECIPES[u.recIdx].data;
+  const src = sourceOf(u);
+  const srcLoc = rec.source_locale || 'en';
+  const eng = u.node.en;
+  const ctx = u.ctx;
+
+  const crumb = [rec.id,
+    ctx.kind==='step' ? `step ${ctx.stepNo} · ${ctx.station||''}` : '',
+    ctx.kind==='tile' ? `step ${ctx.stepNo} · action ${ctx.tileNo}${ctx.activity?' · '+ctx.activity:''}` : '',
+    u.field].filter(Boolean).join('  ›  ');
+
+  const photoName = ctx.photo ? ctx.photo.split('/').pop() : null;
+  const photoUrl = photoName ? PHOTOS[photoName] : null;
+
+  const memHit = MEMORY[src] && MEMORY[src] !== (u.node[LOC]||'') ? MEMORY[src] : null;
+  const repeats = QUEUE.filter(x=>x!==u && sourceOf(x)===src).length;
+
+  el.innerHTML = `<div class="wrap">
+    <div class="crumb">${esc(crumb)}</div>
+
+    <div class="src">
+      <div class="lbl">${esc(nameOf(srcLoc))} · source</div>
+      <div class="txt ${dirOf(srcLoc)==='rtl'?'rtl':''}">${esc(src)||'<em>empty</em>'}</div>
+    </div>
+    ${eng && srcLoc!=='en' ? `<div class="ref"><div class="lbl">English, for reference</div>${esc(eng)}</div>` : '<div style="height:10px"></div>'}
+
+    ${u.field==='doneness' && photoName ? (photoUrl
+      ? `<div class="photo"><img src="${photoUrl}"><div class="cap">${esc(photoName)} — the cue describes this</div></div>`
+      : `<div class="note">This describes <b>${esc(photoName)}</b>. Load the photos to see it — translating a doneness cue blind is guesswork.</div>`) : ''}
+
+    ${memHit ? `<div class="mem">You translated this exact phrase earlier as <b>${esc(memHit)}</b>.
+      ${repeats?`It appears ${repeats} more time${repeats>1?'s':''} in what is loaded.`:''}
+      <div class="use"><button class="btn sm" id="useMem">Use it</button></div></div>` : ''}
+
+    <div class="tgt">
+      <div class="lbl eyebrow" style="margin-bottom:7px">${esc(nameOf(LOC))}</div>
+      <textarea id="tgt" class="${dirOf(LOC)==='rtl'?'rtl':''}" placeholder="Translation">${esc(u.node[LOC]||'')}</textarea>
+    </div>
+    <div class="note">${GUIDE[u.field]||''}
+      ${repeats && !memHit ? `<br><b>This phrase appears ${repeats} more time${repeats>1?'s':''}</b> — your translation will be offered for those too.` : ''}
+    </div>
+
+    <div class="nav">
+      <button class="btn" id="prev">Previous</button>
+      <button class="btn solid" id="next">Save and next</button>
+      <button class="btn" id="skip">Skip</button>
+      <div class="spacer"></div>
+      <button class="btn sm" id="nextGap">Next untranslated</button>
+    </div>
+  </div>`;
+
+  const ta = document.getElementById('tgt');
+  ta.focus(); ta.setSelectionRange(ta.value.length, ta.value.length);
+  const commit = ()=>{
+    const v = ta.value.trim();
+    if(v){ u.node[LOC] = v; MEMORY[src] = v; }
+    else delete u.node[LOC];
+    RECIPES[u.recIdx].dirty = true;
+    paintStats(); paintQueue();
+  };
+  ta.onkeydown = e=>{
+    if(e.key==='Enter' && (e.metaKey||e.ctrlKey)){ e.preventDefault(); commit(); go(1); }
+  };
+  const go = d=>{ cur = Math.max(0, Math.min(QUEUE.length-1, cur+d)); paintQueue(); paintWork(); };
+  document.getElementById('prev').onclick = ()=>{ commit(); go(-1); };
+  document.getElementById('next').onclick = ()=>{ commit(); go(1); };
+  document.getElementById('skip').onclick = ()=>go(1);
+  document.getElementById('nextGap').onclick = ()=>{
+    commit();
+    const i = QUEUE.findIndex((x,n)=>n>cur && !isDone(x));
+    cur = i>=0 ? i : (QUEUE.findIndex(x=>!isDone(x))>=0 ? QUEUE.findIndex(x=>!isDone(x)) : cur);
+    paintQueue(); paintWork();
+  };
+  const um = document.getElementById('useMem');
+  if(um) um.onclick = ()=>{ ta.value = memHit; commit(); paintWork(); };
+}
+
+/* ── YAML out. Only the locale strings changed; structure is rewritten from the
+      parsed object, so field order is normalised but nothing is lost.      */
+function toYaml(rec){
+  return jsyaml.dump(rec, {lineWidth:88, noRefs:true, quotingType:'"', forceQuotes:false});
+}
+
+async function save(){
+  let ok=0, fell=0;
+  for(const r of RECIPES){
+    if(!r.dirty) continue;
+    const text = toYaml(r.data);
+    if(r.handle){
+      try{
+        let p = await r.handle.queryPermission({mode:'readwrite'});
+        if(p!=='granted') p = await r.handle.requestPermission({mode:'readwrite'});
+        if(p==='granted'){
+          const w = await r.handle.createWritable(); await w.write(text); await w.close();
+          r.dirty=false; ok++; continue;
+        }
+      }catch(e){}
+    }
+    const b=new Blob([text],{type:'text/yaml;charset=utf-8'});
+    const a=document.createElement('a');
+    a.href=URL.createObjectURL(b); a.download=(r.data.id||'recipe')+'.yaml'; a.click();
+    URL.revokeObjectURL(a.href); r.dirty=false; fell++;
+  }
+  paintStats();
+  alert(ok||fell ? `Saved ${ok} in place${fell?`, downloaded ${fell}`:''}.` : 'Nothing to save.');
+}
+
+function afterLoad(){
+  if(!CHR){ alert('chrome.yaml was not among the files. The tool needs it to know which languages exist.'); return; }
+  const sel = document.getElementById('loc');
+  sel.innerHTML = '<option value="">— choose a language —</option>' +
+    Object.keys(CHR.locales).map(l=>`<option value="${l}">${esc(nameOf(l))} · ${l}</option>`).join('');
+  sel.disabled = false;
+  document.getElementById('imgBtn').disabled = false;
+  if(!RECIPES.length){
+    document.getElementById('work').innerHTML =
+      '<div class="empty"><p><strong>No recipes loaded.</strong></p><p>Open the recipe files as well as chrome.yaml.</p></div>';
+  }
+}
+
+document.getElementById('openBtn').onclick = async ()=>{
+  if(window.showOpenFilePicker){
+    try{
+      const hs = await window.showOpenFilePicker({multiple:true,
+        types:[{description:'YAML',accept:{'application/yaml':['.yaml','.yml']}}]});
+      for(const h of hs){
+        const d = jsyaml.load(await (await h.getFile()).text());
+        if(d && d.locales && d.stations) CHR = d;
+        else if(d && d.steps) RECIPES.push({handle:h, name:h.name, data:d, dirty:false});
+      }
+      afterLoad();
+    }catch(e){ if(e.name!=='AbortError') alert('Could not open.\n\n'+e.message); }
+    return;
+  }
+  document.getElementById('file').click();
+};
+document.getElementById('file').onchange = e=>{
+  const fs=[...e.target.files]; let n=0;
+  fs.forEach(f=>{
+    const r=new FileReader();
+    r.onload=()=>{
+      try{
+        const d=jsyaml.load(r.result);
+        if(d && d.locales && d.stations) CHR=d;
+        else if(d && d.steps) RECIPES.push({handle:null, name:f.name, data:d, dirty:false});
+      }catch(err){ alert(`${f.name}: ${err.message}`); }
+      if(++n===fs.length) afterLoad();
+    };
+    r.readAsText(f);
+  });
+  e.target.value='';
+};
+document.getElementById('imgBtn').onclick = ()=>document.getElementById('imgs').click();
+document.getElementById('imgs').onchange = e=>{
+  [...e.target.files].forEach(f=>{ PHOTOS[f.name] = URL.createObjectURL(f); });
+  paintWork();
+  e.target.value='';
+};
+document.getElementById('loc').onchange = e=>{
+  LOC = e.target.value || null;
+  if(!LOC) return;
+  cur = 0; buildQueue();
+  const i = QUEUE.findIndex(u=>!isDone(u));
+  if(i>=0){ cur=i; paintQueue(); paintWork(); }
+};
+document.getElementById('saveBtn').onclick = save;
+window.addEventListener('beforeunload', e=>{
+  if(RECIPES.some(r=>r.dirty)){ e.preventDefault(); e.returnValue=''; }
+});
+if(typeof jsyaml==='undefined'){
+  document.getElementById('work').innerHTML =
+    '<div class="empty"><p><strong>The YAML library did not load.</strong></p>'+
+    '<p>It comes from a CDN, so the first load needs an internet connection.</p></div>';
+}
+</script>
+</body>
+</html>

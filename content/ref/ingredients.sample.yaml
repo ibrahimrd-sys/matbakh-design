@@ -8,6 +8,7 @@
 # and is picked up automatically. See content/README.md.
 
 chicken_whole:
+  diet: [meat, poultry]
   glyph: chicken
   name: { en: Chicken, whole, ar: فرخة كاملة }
   unit: g
@@ -15,6 +16,7 @@ chicken_whole:
   buy: { en: 1 bird, ar: فرخة }
 
 molokhia_frozen:
+  diet: []
   glyph: leaf
   name: { en: Molokhia, frozen, ar: ملوخية مجمدة }
   unit: g
@@ -23,6 +25,7 @@ molokhia_frozen:
   buy: { en: 400 g pack, ar: كيس ٤٠٠ جم }
 
 rice:
+  diet: []
   glyph: grain
   name: { en: Rice, ar: أرز }
   unit: g
@@ -31,6 +34,7 @@ rice:
   buy: { en: from 1 kg, ar: من كيس كيلو }
 
 ghee:
+  diet: [dairy]
   glyph: fat
   name: { en: Ghee, ar: سمن }
   unit: tbsp
@@ -38,6 +42,7 @@ ghee:
   buy: { en: from jar, ar: من البرطمان }
 
 onion:
+  diet: []
   glyph: onion
   name: { en: Onion, ar: بصل }
   unit: count
@@ -46,6 +51,7 @@ onion:
   buy: { en: loose, ar: بالوزن }
 
 garlic:
+  diet: []
   glyph: garlic
   name: { en: Garlic, ar: ثوم }
   unit: count
@@ -54,6 +60,7 @@ garlic:
   buy: { en: 1 head, ar: رأس }
 
 coriander_fresh:
+  diet: []
   glyph: herb
   name: { en: Coriander, fresh, ar: كزبرة خضراء }
   unit: tbsp
@@ -61,6 +68,7 @@ coriander_fresh:
   buy: { en: 1 bunch, ar: ربطة }
 
 coriander_ground:
+  diet: []
   glyph: spice
   name: { en: Coriander, ground, ar: كزبرة ناشفة }
   unit: tsp
@@ -68,6 +76,7 @@ coriander_ground:
   buy: { en: from jar, ar: من البرطمان }
 
 lemon:
+  diet: []
   glyph: lemon
   name: { en: Lemon, ar: ليمون }
   unit: count
@@ -76,6 +85,7 @@ lemon:
   buy: { en: loose, ar: بالوزن }
 
 bay_leaf:
+  diet: []
   glyph: leaf
   name: { en: Bay leaf, ar: ورق لورا }
   unit: count
@@ -84,6 +94,7 @@ bay_leaf:
   buy: { en: from jar, ar: من البرطمان }
 
 salt:
+  diet: []
   glyph: salt
   name: { en: Salt, ar: ملح }
   unit: tsp
@@ -91,6 +102,7 @@ salt:
   buy: { en: have it, ar: موجود }
 
 water:
+  diet: []
   glyph: water
   name: { en: Water, ar: ماء }
   unit: ml

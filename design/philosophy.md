@@ -2,7 +2,7 @@
 
 **Status:** Living document. Sections marked SETTLED are decided and should not be relitigated without a stated reason. Sections marked OPEN are unresolved.
 
-**Last updated:** 24 July 2026
+**Last updated:** 1 August 2026
 
 ---
 
@@ -231,30 +231,67 @@ Egypt → Gulf is not a translation problem. It is a wholesale-data-sourcing pro
 
 ---
 
-## 11. Schema fields to lock before authoring begins — SETTLED
+## 11. Schema fields — SETTLED, and now implemented
 
-Cheap now, very expensive to retrofit across 500 recipes.
+Cheap to decide now, very expensive to retrofit across 500 recipes.
 
-**On the ingredient:**
-- `scale_class` (continuous | discrete | seasoning | fixed)
-- `divisible` (bool)
-- `default_unit`
-- `pack_size`
+**Reconciled against the built schema, 1 August 2026.** The names below are the
+implemented ones. The July draft of this section used names that were all
+changed during implementation — `scale_class` became `cls`, `base_servings`
+became `servings.base`, `order_dependent` became `ordered` — so it described a
+schema that never existed. `content/recipes/_template.yaml` is the working
+reference; this section is the argument for why each field is there.
 
-**On the recipe line:**
-- `scale_class_override`
+**On the ingredient** — `content/ref/ingredients.yaml`
 
-**On the recipe:**
-- `base_servings`
-- `serving_presets[]`
-- `max_scale_factor`
+| Field | Why |
+|---|---|
+| `cls` | continuous · discrete · seasoning · fixed. Without it nothing can scale. |
+| `divisible` | Only meaningful on `discrete`. Half an onion is sensible, half a bay leaf is not. |
+| `unit` | g · ml · count · tsp · tbsp |
+| `pack` | Pack size, for the shopping list |
+| `buy` | What a shopper looks for on the shelf. Bilingual. |
+| `nutrition` | Per 100 g/ml. Lets per-serving figures be computed rather than typed 500 times. |
+| `convert` | `cup_g` and `piece_g`. Spoons derive at cup/16 and cup/48 — one recorded number, not three that can disagree. Without it, counted and spoon-measured ingredients contribute nothing to computed nutrition. |
+| `diet` | The allergen and dietary classes. **Unset ≠ empty:** empty means *contains none*, unset means unknown, and any recipe using an unset ingredient has its dietary tags withheld entirely. A vegetarian claim wrong once costs a guest their dinner. |
 
-**Implied additionally by decisions above (to confirm):**
-- step-level: `mass_sensitive_timing` (bool), `doneness_photo`, `heat_level` (ordinal)
-- page-level: `station`, `order_dependent` (bool)
+No cost field. Prices come from the market feed, keyed on the id.
 
----
+**On the tile** — one action
 
+`do` (lexicon activity) or `verb` (bespoke, needs `glyph`) · `qualifier` ·
+`item` or `items[]` · `amt` · `carried` · `short`
+
+`carried: true` marks the same physical ingredient reappearing at a later
+station, so the shopping list counts one bird rather than three.
+
+**On the step** — one page, one station
+
+`station` · `qualifier` · `ordered` · `heat` · `photo` · `doneness` ·
+`note {kind, text}` · `timer {minutes, label, mass_sensitive}` · `makes`
+
+`photo` and `doneness` travel together: the photograph shows what the words say.
+
+**On the recipe**
+
+`id` · `source_locale` · `status` · `title` · `why` ·
+`servings {base, presets, max_scale}` · `hands_on_minutes` · `hero` ·
+`price_source` · `nutrition_per_serving` · `intermediates` · `shorts` · `steps`
+
+**Added since the July draft**
+
+| Field | Section |
+|---|---|
+| `uses [{id, amt}]` and `yield {amount, unit}` | §14 |
+| `diet` on the ingredient | §16.7 |
+| `convert` on the ingredient | above |
+| `@intermediate` references | §14 |
+| `tags` — proposed in `design/tag-proposal.md`, **not yet settled** | §16.7 |
+
+**Derived, never authored:** `contains` · `vegetarian` · `vegan` ·
+`gluten_free` · `total_minutes` · `cost_per_serving` · `kcal_per_serving`. The
+test for which side a field belongs on: *could a careful person disagree?*
+Cuisine is judgement. "Contains dairy" is a fact about the ingredient list.
 
 ---
 
@@ -288,20 +325,7 @@ If music returns, the only shape worth considering is licensed instrumental
 audio Matbakh owns outright: offline, duckable, no third party. That is a
 Ramadan sponsorship asset, not a launch feature.
 
-## 13. Open questions
-
-### 13.1 Discovery — NOT STARTED
-No philosophy established. 500 curated recipes with no duplicates means **browsing is the product** for the first ten minutes of anyone's relationship with Matbakh. This is where the curation promise reads either as confidence or as thinness.
-
-The governing question differs from the reader's. The reader asks *how do I not break your concentration.* Discovery asks *how do I help you decide fast without pretending I know you.* These do not share a design logic and should not be forced to.
-
-### 13.2 Pre-commit presentation of cost and nutrition — NOT STARTED
-How cost and nutrition present themselves on a recipe *before* the cook commits.
-
-### 13.3 The meal planner — NOT STARTED
-How it stays advisory without becoming nagging. Established constraint from prior work: non-rigid, non-mandatory, treats deviation as normal; hard rules apply only to dietary exclusions.
-
-### 13.4 The entertaining / hosting mode — WORKED THROUGH, NOT BUILT
+## 13. Entertaining — WORKED THROUGH, NOT BUILT
 Proposed menus, budget, shopping list. A genuinely different mode with different physics.
 
 Argued through 1 August 2026. The conclusion is that it is **two features, not one**, and the split matters more than anything else here: one is a document, the other is a change to the reader. They ship separately and in that order.
@@ -312,7 +336,7 @@ Argued through 1 August 2026. The conclusion is that it is **two features, not o
 
 Everything the host reads *before* they start cooking. It cannot drift, because nothing in it is live.
 
-1. **Menu suggestion, modifiable.** A constrained selection over tagged recipes — cuisine, protein, spice, course, dietary, cost. Small enough to solve exactly. Blocked on §13.7; see below.
+1. **Menu suggestion, modifiable.** A constrained selection over tagged recipes — cuisine, protein, spice, course, dietary, cost. Small enough to solve exactly. Blocked on §16.7; see below.
 2. **One consolidated shopping list, editable.** Merge the `items` arrays across every chosen recipe, sum by ingredient key, apply scaling classes. `carried` already prevents double-counting within a recipe and does the same across them. Priced live from the market feed — which is what makes "125 a head" a claim no recipe app can make, and is arguably the acquisition hook rather than the schedule.
 3. **What can be made ahead.** `make_ahead` and the `makes` / `@intermediate` edges already express this. A sequence with no clock: what to do Thursday, what to do Saturday morning.
 4. **Batched preparation.** Group every tile across the whole menu by `(activity, ingredient, qualifier)` — *chop 14 onions once*, not four times across four recipes. This is the thing no recipe app does and every cook does by hand.
@@ -345,18 +369,131 @@ Full orchestration — a live plan tracking the cook's position across three dis
 
 #### What blocks it
 
-§13.7. Menu suggestion cannot be built without the tag vocabulary, and **tags are the expensive retrofit** — adding them at recipe 400 means revisiting 400 files. This is the same closed-vocabulary problem the lexicon solved in August 2026, and it should be settled before authoring reaches volume, not after.
+§16.7. Menu suggestion cannot be built without the tag vocabulary, and **tags are the expensive retrofit** — adding them at recipe 400 means revisiting 400 files. This is the same closed-vocabulary problem the lexicon solved in August 2026, and it should be settled before authoring reaches volume, not after.
 
-### 13.5 Step granularity — PARTIALLY SETTLED
+---
+
+## 14. Sub-recipes — SETTLED
+
+A recipe may consume another: a tahini sauce, a dressing, a spice mix, a dough.
+
+**The sub-recipe is a first-class recipe.** Its own file, its own steps, its own
+yield, authored and test-cooked once. Never duplicated into the parent, so
+fixing it fixes every dish that uses it.
+
+**Referenced, with a quantity.** The parent declares `uses: [{id, amt}]` and the
+sub-recipe declares `yield: {amount, unit}`. Everything scales by
+`amt ÷ yield` — 150 ml taken from a 400 ml sauce buys 150 ml worth of its
+ingredients, not a whole batch.
+
+**Its ingredients roll into the parent's shopping list**, summed with the
+parent's own by ingredient id. One consequence found in testing: `fixed`
+ingredients scale on a roll-up share even though they do not scale with
+servings. Water for boiling stays constant whether you cook for two or eight —
+but 37.5% of a sauce genuinely contains 37.5% of its water. These are different
+kinds of scaling and the builder now distinguishes them.
+
+**Its allergens roll up too.** A tahini sauce cannot hide its sesame from a
+parent's dietary tags. Derivation recurses, with cycle protection.
+
+**In the reader it is a link.** A tile that opens the sub-recipe as a second
+recipe in the session, with one-tap return — the same mechanism as §13's
+multi-recipe sessions. Its steps are never spliced into the parent's flow: that
+would defeat authoring it once, and would drop the cook somewhere they did not
+choose to go, against §1.
+
+The mid-flow case is rarer than it looks. A sub-recipe is usually made *before*
+the parent is started, which means the cook meets it in the prep-ahead list
+rather than mid-page.
+
+---
+
+## 15. The activity lexicon — SETTLED
+
+The closed vocabulary of cooking verbs. A recipe refers to `chop` by key; the
+word "chop" and its Arabic exist only in `content/lexicon/activities.yaml`.
+
+**Why this shape.** It is the same argument as §5. Adding a language costs one
+pass over the lexicon plus the handful of prose fields in each recipe — not five
+hundred recipes' worth of vocabulary. It only holds if the vocabulary stays
+small, because every entry is a word translated into every language ever shipped.
+
+**When a verb earns an entry: the icon decides.** If you would draw the same
+picture, it is one activity plus a qualifier, not two.
+
+- *Chop fine* and *chop roughly* — one activity, `chop`, plus a qualifier.
+- *Fry* and *sear* — two. Different pan, different heat, different picture, and
+  a cook who confuses them ruins the dish.
+- *"Pour over, listen for the hiss"* — neither. The phrasing is the teaching and
+  it belongs to one recipe. A bespoke `verb:` on that tile.
+
+Three routes, in order of preference: `do:` from the lexicon · `do:` plus
+`qualifier:` · bespoke `verb:`. The validator counts bespoke verbs so drift stays
+visible.
+
+**The merge, 1 August 2026.** A 294-verb candidate list was reviewed and sorted:
+
+- **81 activities** get an icon and a lexicon entry
+- **124 verbs** render as an activity plus a qualifier — *julienne* is `slice`
+  plus *matchsticks*
+- **84 rows** were out of scope: beverages (no station in a reader with six),
+  cleaning (a cook never sees it), testing (already handled as per-step doneness
+  cues), and duplicate rows
+
+The evidence for consolidating: 70 of the 185 distinct Egyptian entries were
+multi-word phrases rather than verbs — `نزع القشرة` for *hull*, `شيل القلب` for
+*core*. Dictionary glosses, not what a cook says at a stove, and they do not fit
+a 44px tile. That is the clearest signal of which rows were reference material
+rather than lexicon material.
+
+**Dialects.** `ar` (Modern Standard), `ar_eg`, `ar_lv`, `ar_gulf`, resolved
+`ar_gulf → ar_eg → ar`, so partial coverage degrades to a comprehensible word
+rather than a blank. **Dialects are lexicon-only** — per-recipe prose stays in
+`ar`, because dialectising ~5,000 prose strings is a second content project the
+size of the first. Mixed register (dialect imperatives over standard descriptive
+prose) is how Arabic cooking media already reads.
+
+**Every verb must be distinct within each dialect.** Two activities sharing a
+word put identical text on two different tiles, and a cook reading Arabic cannot
+tell the steps apart however different the English keys look. This is an error,
+not a warning. Eight were found and fixed during the merge — `toss`/`stir` in
+Egyptian, `zest`/`peel` and `grill`/`roast` in Levantine and Gulf, `cool`/`chill`
+in Gulf and MSA, `season`/`marinate` in MSA.
+
+**What it unlocks.** Batched preparation across a menu (§13) groups tiles by
+`(activity, ingredient, qualifier)`. With 294 separate verbs, *julienne* and
+*slice* would group apart and produce fragmented prep instructions. Consolidated,
+they group together — and the qualifier is exactly what distinguishes diced from
+sliced onion when three recipes want one and the fourth wants the other.
+
+**Ceiling.** 81 was settled deliberately. Past roughly 95, two entries probably
+share an icon and should be merged.
+
+---
+
+## 16. Open questions
+
+### 16.1 Discovery — NOT STARTED
+No philosophy established. 500 curated recipes with no duplicates means **browsing is the product** for the first ten minutes of anyone's relationship with Matbakh. This is where the curation promise reads either as confidence or as thinness.
+
+The governing question differs from the reader's. The reader asks *how do I not break your concentration.* Discovery asks *how do I help you decide fast without pretending I know you.* These do not share a design logic and should not be forced to.
+
+### 16.2 Pre-commit presentation of cost and nutrition — NOT STARTED
+How cost and nutrition present themselves on a recipe *before* the cook commits.
+
+### 16.3 The meal planner — NOT STARTED
+How it stays advisory without becoming nagging. Established constraint from prior work: non-rigid, non-mandatory, treats deviation as normal; hard rules apply only to dietary exclusions.
+
+### 16.5 Step granularity — PARTIALLY SETTLED
 Working answer: granularity governed by **hands**, not grammar — a step ends when you next need to look at the screen. Section 4.1's order-independence rule operationalises this, but it has not yet been tested against real recipes at volume.
 
-### 13.6 Doneness photography — SCOPE UNDECIDED
+### 16.6 Doneness photography — SCOPE UNDECIDED
 Agreed as the right mechanism (§5.2). Not yet decided: how many recipes get them, how many per recipe, who shoots them, and what that adds to the per-recipe production cost currently modelled at ~$40.
 
-### 13.7 Filters and dietary attributes — NOT STARTED, NOW ON THE CRITICAL PATH
+### 16.7 Filters and dietary attributes — NOT STARTED, NOW ON THE CRITICAL PATH
 Dietary requirements, personal preferences, heat, vegan/vegetarian, kids-suitable, weight-watching. The attributes are known; the interaction model is not.
 
-**Raised in priority 1 August 2026.** §13.4 established that menu suggestion is blocked on this, and that tags are the one thing genuinely expensive to retrofit — every recipe authored before the vocabulary is settled has to be revisited. The vocabulary should be closed and small for the same reason the activity lexicon is: it is translated once, and it is what a filter can promise.
+**Raised in priority 1 August 2026.** §13 established that menu suggestion is blocked on this, and that tags are the one thing genuinely expensive to retrofit — every recipe authored before the vocabulary is settled has to be revisited. The vocabulary should be closed and small for the same reason the activity lexicon is: it is translated once, and it is what a filter can promise.
 
 At minimum it needs cuisine, course, protein, spice level, dietary exclusion (*vegetarian as written*, not *could be made vegetarian*), effort, and whether a dish holds well — that last one only matters for entertaining, which is why it surfaced now.
 
@@ -387,6 +524,10 @@ At minimum it needs cuisine, course, protein, spice level, dietary exclusion (*v
 | 24 Jul 2026 | Technique video removed from cook mode into a Techniques library | 7 |
 | 24 Jul 2026 | Feedback is telemetry, never published | 8 |
 | 30 Jul 2026 | No music-app integration; alarm must carry unaided | 12 |
-| 1 Aug 2026 | Party plan is a document; multi-recipe sessions are a reader change; no scheduler | 13.4 |
-| 1 Aug 2026 | Alarm jumps to the recipe, return costs one tap | 13.4 |
-| 1 Aug 2026 | Tab strip on tablet, single button on phone | 13.4 |
+| 1 Aug 2026 | Party plan is a document; multi-recipe sessions are a reader change; no scheduler | 13 |
+| 1 Aug 2026 | Alarm jumps to the recipe, return costs one tap | 13 |
+| 1 Aug 2026 | Tab strip on tablet, single button on phone | 13 |
+| 1 Aug 2026 | Sub-recipes: referenced not embedded, scaled by yield, shown as a link | 14 |
+| 1 Aug 2026 | Lexicon: 294 verbs → 81 activities, 124 qualifiers, 84 out of scope | 15 |
+| 1 Aug 2026 | Three Arabic dialects, lexicon-only, prose stays in ar | 15 |
+| 1 Aug 2026 | §11 reconciled against the built schema; July field names never existed | 11 |

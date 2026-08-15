@@ -124,6 +124,11 @@ main{flex:1;min-height:0;display:grid;grid-template-columns:296px 1fr 288px}
 .keyrow input{flex:1;font-family:var(--mono);font-size:11.5px}
 .queue{font-family:var(--mono);font-size:10.5px;color:var(--ink-60);white-space:nowrap}
 /* last, and !important: this must beat any display set above it. */
+.chips{display:flex;flex-wrap:wrap;gap:5px}
+.chip{padding:5px 9px;border-radius:7px;border:1.5px solid var(--hairline);background:#FFF;
+  font-size:11.5px;font-family:var(--mono);letter-spacing:.04em;color:var(--ink-60)}
+.chip:hover{border-color:var(--terracotta)}
+.chip.on{background:var(--terracotta);border-color:var(--terracotta);color:#FFF}
 .hidden{display:none!important}
 </style>
 </head>
@@ -221,6 +226,8 @@ function check(){
       out.push({k,lvl:'warn',msg:`${nm} — no Arabic name. Egypt launches Arabic-first.`});
     if(!v.nutrition)
       out.push({k,lvl:'warn',msg:`${nm} — no nutrition, so recipes using it cannot compute per-serving figures`});
+    if(v.diet === undefined)
+      out.push({k,lvl:'warn',msg:`${nm} — diet not set, so any recipe using it gets no dietary tags at all`});
     if(v.cost !== undefined || v.price !== undefined)
       out.push({k,lvl:'error',msg:`${nm} — remove cost. Prices come from the market feed.`});
   });
@@ -247,6 +254,8 @@ function paintRail(){
     `<b>${n}</b> ingredients<br><b>${ar}</b> with Arabic · <b>${n-ar}</b> without<br>` +
     (NDB?`<b>${NDB.length.toLocaleString()}</b> foods offline<br>`:'nutrition-db.json not loaded<br>') +
     `<b>${nut}</b> with nutrition · <b>${n-nut}</b> without<br>` +
+    (()=>{const d=Object.values(data).filter(v=>v.diet!==undefined).length;
+      return `<b>${d}</b> with diet set${d<n?` · <s>${n-d}</s> unset`:''}<br>`;})() +
     `<b>${errs.length}</b> error · <b>${issues.length-errs.length}</b> warning`;
   document.getElementById('saveBtn').disabled = errs.length>0;
   document.getElementById('saveBtn').textContent =
@@ -296,6 +305,23 @@ function paintForm(){
       <div class="f"><label>Name, English</label><input id="i_en" value="${esc(v.name.en||'')}"></div>
       <div class="f"><label>الاسم بالعربية</label><input id="i_ar" class="ar" value="${esc(v.name.ar||'')}"></div>
       <div class="f"><label>Icon</label><input id="i_glyph" class="num" value="${esc(v.glyph||'')}"></div>
+    </div>
+
+    <div class="grp">
+      <span class="eyebrow">What it contains</span>
+      <div class="f"><label>Diet classes</label><div id="dietBox" class="chips">
+        ${DIET.map(d=>`<button class="chip ${(v.diet||[]).includes(d)?'on':''}" data-d="${d}">${d}</button>`).join('')}
+      </div></div>
+      <div class="f"><div></div><div class="hint" id="dietHint">${
+        v.diet===undefined
+          ? '<b style="color:var(--danger)">Not set.</b> Recipes using this ingredient cannot have their dietary tags derived — the whole recipe is skipped, not just this line.'
+          : (v.diet.length ? 'Every recipe using this will report these.' :
+             'Contains none of them — suitable for every diet. This is a real answer, not a blank.')
+      }</div></div>
+      <div class="f"><div></div><div>
+        <button class="btn sm" id="dietNone">Contains nothing</button>
+        <button class="btn sm" id="dietAll" style="margin-left:6px">Propose for all 179</button>
+      </div></div>
     </div>
 
     <div class="grp">
@@ -388,6 +414,15 @@ function paintForm(){
     Object.keys(data).forEach(k => rebuilt[k===sel?nk:k] = data[k]);
     data = rebuilt; sel = nk; paintList(); paintForm(); paintRail();
   };
+  document.querySelectorAll('#dietBox .chip').forEach(el=>el.onclick=()=>{
+    const d=el.dataset.d;
+    v.diet = v.diet || [];
+    const i=v.diet.indexOf(d);
+    if(i<0) v.diet.push(d); else v.diet.splice(i,1);
+    paintForm(); paintList(); paintRail();
+  });
+  document.getElementById('dietNone').onclick=()=>{ v.diet=[]; paintForm(); paintList(); paintRail(); };
+  document.getElementById('dietAll').onclick=bulkPropose;
   put('i_cup', e=>{ const n=parseFloat(e.target.value);
     v.convert = v.convert||{};
     if(isNaN(n)) delete v.convert.cup_g; else v.convert.cup_g = n;
@@ -427,6 +462,8 @@ function toYaml(){
     L.push(k + ':');
     if(v.glyph) L.push('  glyph: ' + v.glyph);
     L.push(`  name: { en: ${q(v.name&&v.name.en)}, ar: ${q(v.name&&v.name.ar)} }`);
+    if(v.diet !== undefined)
+      L.push('  diet: [' + v.diet.join(', ') + ']');
     L.push('  unit: ' + v.unit);
     L.push('  cls: ' + v.cls);
     if(v.cls==='discrete') L.push('  divisible: ' + (v.divisible?'true':'false'));
@@ -450,6 +487,92 @@ function toYaml(){
 }
 
 
+
+
+/* ── DIET ─────────────────────────────────────────────────────────────────
+   The prerequisite for derived recipe tags. vegetarian, vegan, gluten_free and
+   the full allergen list are computed from these, so they are never typed per
+   recipe and cannot drift out of step with an ingredient list that changed.
+
+   An UNSET diet is not the same as an empty one. Empty means "contains none of
+   these" — a real answer. Unset means unknown, and any recipe using an unset
+   ingredient has its dietary tags withheld entirely, because a vegetarian flag
+   that is wrong once costs more than one that is absent. */
+const DIET = ['meat','poultry','fish','shellfish','dairy','egg','gluten',
+              'nuts','peanut','sesame','soy','honey','alcohol','pork'];
+
+/* Substring rules, not word-boundary — plurals and compounds defeat \b, which
+   is how `walnuts` and `plain_yogurt` slipped through the first pass. */
+const DIET_RULES = [
+  [['beef','lamb','veal','mutton','liver','kofta','sausage','hot dog','pastrami',
+    'pancetta','bacon','ham ','fat tailed','meat'], ['meat']],
+  [['pork','bacon','pancetta','ham '], ['meat','pork']],
+  [['chicken','duck','turkey','quail','pigeon','poultry'], ['meat','poultry']],
+  [['fish','tuna','anchov','sardine','salmon','tilapia','mackerel','herring',
+    'worcestershire'], ['fish']],
+  [['shrimp','prawn','crab','lobster','clam','mussel','oyster','squid','calamari'], ['shellfish']],
+  [['milk','cheese','cream','butter','yog','labneh','ghee','mozzarella','pecorino',
+    'parmesan','romano','feta','cheddar','halloumi','ricotta','mascarpone',
+    'kashkaval','margarine','bechamel','ranch'], ['dairy']],
+  [['egg','mayonnaise','meringue'], ['egg']],
+  [['flour','bread','toast','pasta','vermicelli','semolina','couscous','bulgur',
+    'bulghur','phyllo','filo','crumb','bun','tortilla','baguette','biscuit',
+    'cracker','noodle','fusili','penne','spaghetti','macaroni','orzo','pastry',
+    'croissant','wheat','barley','rye','freekeh','granola','oat'], ['gluten']],
+  [['almond','walnut','pistachio','hazelnut','cashew','pecan','macadamia','pine nut'], ['nuts']],
+  [['peanut'], ['peanut']],
+  [['sesame','tahini','halva','halawa'], ['sesame']],
+  [['soy','tofu','edamame','miso'], ['soy']],
+  [['honey'], ['honey']],
+  [['wine','beer',' rum','brandy','vodka','liqueur','whisk'], ['alcohol']],
+];
+/* Glyphs where an empty diet is safe to assume. */
+const DIET_CLEAR = ['vegetable','spice','leaf','onion','lemon','herb','water','garlic','salt'];
+/* Things the rules cannot see from a name. */
+const DIET_KNOWN = {
+  chocolate_chips:['dairy'], baking_chocolate_unsweetened:[], chocolate_syrup:[],
+  cocoa_powder:[], vanilla_extract:['alcohol'], yeast:[], baking_powder:[],
+  baking_soda:[], sodium_bicarbonate:[], cornstarch:[], granulated_sugar:[],
+  brown_sugar:[], sugar_icing:[], maple_syrup:[], jam:[], dried_grapes:[],
+  chia_seed:[], rice:[], vegetable_oil:[], olive_oil:[], mixed_vegetables:[],
+  chickpea:[], fava_beans:[], beans_fava_in_pod_raw:[], lentils_raw:[],
+  lentils_black:[], red_kidney_beans:[], white_beans_boiled:[], white_beans_pods:[],
+  sweet_corn:[], crushed_tomatoes:[], tomato_paste:[], tomato_sauce:[], catsup:[],
+  pickles:[], kalamata_olive:[], pomegranate_molasse:[], vinegar_white:[],
+  vinegar_cider:[], rice_vinegar:[], mustard:[], dijon_mustard:[],
+  vegetable_bouillon:[], pine_nuts:['nuts'], white_toast:['gluten'],
+  bechamel_sauce:['dairy','gluten'], ranch_sauce:['dairy','egg'],
+  worcestershire_sauce:['fish'],
+};
+
+function proposeDiet(key, v){
+  if(DIET_KNOWN[key]) return DIET_KNOWN[key].slice();
+  const n = (key + ' ' + ((v.name&&v.name.en)||'')).toLowerCase().replace(/_/g,' ');
+  const out = [];
+  DIET_RULES.forEach(([words,labels])=>{
+    if(words.some(w=>n.includes(w))) labels.forEach(l=>{ if(!out.includes(l)) out.push(l); });
+  });
+  if(out.length) return out;
+  if(DIET_CLEAR.includes(v.glyph)) return [];
+  return null;                       // genuinely unknown — leave unset
+}
+
+function bulkPropose(){
+  let set=0, already=0, left=[];
+  Object.keys(data).forEach(k=>{
+    const v=data[k];
+    if(v.diet!==undefined){ already++; return; }
+    const d=proposeDiet(k,v);
+    if(d===null){ left.push(k); return; }
+    v.diet=d; set++;
+  });
+  paintForm(); paintList(); paintRail();
+  const h=document.getElementById('dietHint');
+  if(h) h.innerHTML = `Proposed <b>${set}</b>, left <b>${already}</b> already set, and ` +
+    `<b>${left.length}</b> unresolved: ${esc(left.slice(0,10).join(', '))}` +
+    `${left.length>10?` and ${left.length-10} more`:''}. ` +
+    `<b>Check what it proposed</b> — these are name rules, not knowledge of your shelf.`;
+}
 
 /* ── Volume to weight ─────────────────────────────────────────────────────
    One cup, in grams. Spoons are derived — cup/16 for a tablespoon, cup/48 for

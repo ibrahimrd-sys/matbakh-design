@@ -40,7 +40,35 @@ nutrition_per_serving:
   fat_g:
   carbs_g:
 
-# Things the recipe makes and later uses. Never reach the shopping list.
+# ─── SUB-RECIPES ─────────────────────────────────────────────────────────────
+# A recipe this one consumes — a sauce, a dressing, a spice mix, a dough.
+#
+# The sub-recipe is a first-class recipe with its own file, authored and
+# test-cooked ONCE. Fix it there and every dish using it is fixed. It needs a
+# `yield` block; this recipe states how much of that yield it takes.
+#
+# Its ingredients roll into this recipe's shopping list, scaled by
+# (amt ÷ its yield), so taking 150 ml of a 400 ml sauce buys 150 ml worth — not
+# a whole batch. Its allergens roll up too, so a tahini sauce cannot hide its
+# sesame from a parent's dietary tags.
+#
+# In the reader it appears as a LINK: a tile that opens the sub-recipe as a
+# second recipe in the session, one tap back. Its steps are never spliced into
+# this one — that would defeat authoring it once.
+#
+# Delete this block if the recipe uses none.
+uses:
+  # - id: tahini_sauce
+  #   amt: 150            # in the sub-recipe's yield unit
+
+# If THIS recipe is meant to be used by others, give it a yield and tag it
+# course: component (or sauce, or dip). Delete if it is a dish in its own right.
+yield:
+  # amount: 400
+  # unit: ml
+
+# Things the recipe makes and uses WITHIN ITSELF — a stock, a takliya. Unlike a
+# sub-recipe these have no file of their own and never reach the shopping list.
 # Delete this block if the recipe has none.
 intermediates:
   # stock:

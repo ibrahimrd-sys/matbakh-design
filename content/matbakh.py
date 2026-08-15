@@ -74,6 +74,7 @@ UNITS, CLASSES = CHROME["units"], CHROME["scaling_classes"]
 class Report:
     def __init__(self, name):
         self.name, self.errors, self.warnings = name, [], []
+        self.note = None
 
     def err(self, m):
         self.errors.append(m)
@@ -92,8 +93,28 @@ class Report:
             print(f"  error    {e}")
         for w in self.warnings:
             print(f"  warning  {w}")
+        if self.note:
+            print(f"  {self.note}")
         if self.ok and not self.warnings:
             print("  clean")
+
+
+def all_recipes():
+    """Every recipe reachable, keyed by id — the repo's tracked ones plus the
+    vault catalogue. A parent needs this to resolve `uses:` references."""
+    out = {}
+    paths = sorted(glob.glob("recipes/*.yaml")) + sorted(glob.glob(str(VAULT / "recipes" / "*.yaml")))
+    for f in paths:
+        if "_template" in f:
+            continue
+        try:
+            with open(f, encoding="utf-8") as fh:
+                rec = yaml.safe_load(fh)
+            if rec and rec.get("id"):
+                out[rec["id"]] = rec
+        except Exception:
+            continue
+    return out
 
 
 def tiles_of(step):
@@ -150,9 +171,43 @@ def check(path):
     if "why" in rec:
         prose(rec["why"], "why")
 
+    # SUB-RECIPES.
+    # A recipe may consume another. The sub-recipe is a first-class recipe,
+    # authored and tested once; the parent references it by id and states how
+    # much it takes. Its ingredients roll up into the parent's shopping list,
+    # scaled by (amount taken / sub-recipe yield), so a parent needing 150 ml of
+    # a 400 ml sauce buys 150 ml worth — not a whole batch.
+    catalogue = all_recipes()
+    for u in rec.get("uses") or []:
+        sid = u.get("id")
+        if not sid:
+            r.err("uses: entry with no id")
+            continue
+        sub = catalogue.get(sid)
+        if not sub:
+            r.err(f"uses '{sid}' — no recipe with that id is reachable")
+            continue
+        if sid == rec.get("id"):
+            r.err(f"uses '{sid}' — a recipe cannot use itself")
+        if not (sub.get("yield") or {}).get("amount"):
+            r.err(f"uses '{sid}' — that recipe has no yield, so the amount taken "
+                  f"cannot be scaled. Add a yield to {sid}.")
+        if u.get("amt") is None:
+            r.err(f"uses '{sid}' — no amount. State how much of it this recipe takes.")
+        if (sub.get("tags") or {}).get("course") not in ("component", "sauce", "dip", None):
+            r.warn(f"uses '{sid}' — that recipe is a "
+                   f"{(sub.get('tags') or {}).get('course')}, not a component. "
+                   f"Check it is meant to be consumed by another recipe.")
+
     sv = rec.get("servings") or {}
     if "base" not in sv:
         r.err("servings.base is required — nothing can scale without it")
+    y = rec.get("yield") or {}
+    if y and not y.get("amount"):
+        r.err("yield needs an amount")
+    if y and not y.get("unit"):
+        r.err("yield needs a unit")
+
     if "max_scale" not in sv:
         r.warn("no servings.max_scale — the reader cannot warn on batch size")
     if sv.get("presets") and sv.get("base") not in (sv.get("presets") or []):
@@ -274,6 +329,15 @@ def check(path):
         if k not in used_shorts:
             r.warn(f"short '{k}' is defined but no tile references it")
 
+    contains, flags, unknown = derive_diet(rec)
+    if unknown:
+        r.warn(f"no dietary tags: {len(unknown)} ingredient(s) have no diet field — "
+               f"{', '.join(unknown[:5])}{' …' if len(unknown) > 5 else ''}")
+    elif flags:
+        claims = [k for k, v in flags.items() if v]
+        r.note = (f"contains {', '.join(contains) or 'nothing flagged'}"
+                  + (f" · {', '.join(claims)}" if claims else ""))
+
     if rec.get("status") == "published":
         gaps = [w for w in r.warnings if "translation yet" in w]
         if gaps:
@@ -281,7 +345,100 @@ def check(path):
     return r
 
 
+
+# ──────────────────────────────────────────────────────────── derived tags
+
+def derive_diet(rec, _seen=None):
+    """Dietary status computed from the ingredient list, never authored.
+
+    Returns (contains, flags, unknown). If ANY ingredient lacks a `diet` field
+    the flags are withheld entirely — a vegetarian claim that is wrong once
+    costs a guest their dinner and the filter its credibility, so silence is the
+    correct failure. `unknown` names what to fix.
+    """
+    contains, unknown = set(), []
+
+    # Sub-recipes must contribute. A tahini sauce that hides its sesame would
+    # make the parent's allergen list a lie, which is the one failure this
+    # whole derivation exists to prevent.
+    _seen = _seen or set()
+    _seen.add(rec.get("id"))
+    catalogue = all_recipes()
+    for u in rec.get("uses") or []:
+        sub = catalogue.get(u.get("id"))
+        if not sub or sub.get("id") in _seen:
+            continue
+        sc, _, su = derive_diet(sub, _seen)
+        contains.update(sc)
+        unknown += su
+
+    for step in rec.get("steps") or []:
+        for tile in tiles_of(step):
+            for it in items_of(tile):
+                iid = it.get("id", "")
+                if not iid or iid.startswith("@"):
+                    continue
+                ref = ING.get(iid)
+                if not ref:
+                    continue
+                d = ref.get("diet")
+                if d is None:
+                    unknown.append(iid)
+                else:
+                    contains.update(d)
+
+    for extra in rec.get("contains_override") or []:
+        contains.add(extra)
+
+    if unknown:
+        return sorted(contains), None, sorted(set(unknown))
+
+    flags = {
+        "vegetarian": not (contains & {"meat", "poultry", "fish", "shellfish", "pork"}),
+        "vegan": not (contains & {"meat", "poultry", "fish", "shellfish", "pork",
+                                  "dairy", "egg", "honey"}),
+        "gluten_free": "gluten" not in contains,
+    }
+    return sorted(contains), flags, []
+
 # ------------------------------------------------------------------- builder
+
+def build_items(rec, factor=1.0, scale_fixed=False):
+    """Purchasable ingredients from a recipe's steps, at a given scale.
+
+    Shared by `build` and by sub-recipe roll-up, so a parent's list is assembled
+    the same way as a standalone one. Returns raw amounts; snapping to sensible
+    quantities happens once, after everything is summed — snapping twice would
+    round a half-batch up and then up again.
+    """
+    seen, out = {}, []
+    for step in rec.get("steps") or []:
+        for tile in tiles_of(step):
+            for it in items_of(tile):
+                iid = it.get("id", "")
+                if not iid or iid.startswith("@") or it.get("carried") or "amt" not in it:
+                    continue
+                if iid in seen:
+                    continue
+                ref = ING.get(iid)
+                if not ref:
+                    continue
+                seen[iid] = True
+                cls = it.get("cls") or tile.get("cls") or ref.get("cls") or "continuous"
+                # `fixed` means "does not scale with servings" — water for
+                # boiling stays the same for two people or eight. But taking a
+                # share of a sub-recipe is not a servings change: 37.5% of a
+                # sauce genuinely contains 37.5% of its water. So a roll-up
+                # share applies to everything, including fixed.
+                amount = it["amt"] * (factor if scale_fixed else eff(cls, factor))
+                out.append(dict(id=iid, item=dict(
+                    id=iid, name=ref.get("name", {}), glyph=ref.get("glyph"),
+                    unit=ref.get("unit"), cls=cls,
+                    divisible=bool(ref.get("divisible")),
+                    buy=ref.get("buy", {}), pack=ref.get("pack")),
+                    raw=amount))
+    return out
+
 
 def eff(cls, factor):
     if cls == "fixed":
@@ -401,6 +558,25 @@ def build(path, loc, servings=None):
         arc.append(dict(glyphs=[x["glyph"] for x in tiles],
                         timer=page.get("timer", {}).get("minutes")))
 
+    # Roll sub-recipe ingredients into this list, scaled by how much of it this
+    # recipe actually takes. 150 ml drawn from a 400 ml sauce buys 150 ml worth.
+    catalogue = all_recipes()
+    for u in rec.get("uses") or []:
+        sub = catalogue.get(u.get("id"))
+        if not sub:
+            continue
+        y = (sub.get("yield") or {}).get("amount")
+        if not y or u.get("amt") is None:
+            continue
+        share = (u["amt"] / y) * factor
+        sub_built = build_items(sub, share, scale_fixed=True)
+        for si in sub_built:
+            prev = purchases.get(si["id"])
+            if prev:
+                prev["amt"] += si["raw"]
+            else:
+                purchases[si["id"]] = dict(item=si["item"], amt=si["raw"], via=sub["id"])
+
     items = []
     for iid, p in purchases.items():
         i0 = p["item"]
@@ -410,8 +586,10 @@ def build(path, loc, servings=None):
                           unit=i0["unit"], cls=i0["cls"], buy=i0["buy"],
                           pack=i0.get("pack")))
 
+    contains, flags, _ = derive_diet(rec)
     cfg = CHROME["locales"][loc]
     return dict(
+        contains=contains, **(flags or {}),
         id=rec["id"], locale=loc, dir=cfg["dir"], numerals=cfg["numerals"],
         title=t(rec["title"], loc), why=t(rec.get("why"), loc),
         servings=servings, base=base, presets=rec["servings"].get("presets"),
