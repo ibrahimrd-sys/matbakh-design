@@ -155,7 +155,7 @@ steps:
     ordered: true
     heat: 1
     tiles:
-      - verb: { en: Pour over, listen for the hiss, ar: اسكب واسمع الشهقة }
+      - verb: { en: "Pour over, listen for the hiss", ar: اسكب واسمع الشهقة }
         glyph: pour
         item: "@takliya"
         short: the_hiss
@@ -220,4 +220,4 @@ shorts:
   skin_blister:
     secs: 27
     poster: assets/chicken-seared.jpg
-    title: { en: Skin that blisters, not burns, ar: جلد منفّخ مش محروق }
+    title: { en: "Skin that blisters, not burns", ar: جلد منفّخ مش محروق }

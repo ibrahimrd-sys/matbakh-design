@@ -5,6 +5,31 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-08-19 — bolognese, and the tile question made visible
+
+- `prototypes/bolognese-iphone.html` added and promoted to lead. **Temporary** —
+  it exists to settle how a step should be shown, and comes out once that is
+  decided. The molokhia linked flow drops one level into *Screens on their own*.
+- It is the first prototype driven end to end by real recipe data:
+  `03-catalogue/recipes/bolognese.yaml` through `matbakh.py build`, at 2 / 4 / 8
+  servings. Nothing on screen is hand-typed. The Accademia Italiana della Cucina
+  recipe as registered in Bologna, 2023 revision.
+- **One act per card.** A photograph of the doing — a frame lifted from the cook
+  video — then the ingredients that act takes, each with its weight and the cut
+  it wants. Three "Mince" tiles became one act with three items.
+- **The cut is a picture, per ingredient.** `cut: brunoise` with `cut_mm: 2`
+  replaces `qualifier: fine`. Eight glyphs in `design/icons/cuts/`, a closed set
+  on the same terms as the activity lexicon. `cut_mm` carries the one thing a
+  glyph cannot: brunoise and dice are the same shape at different sizes.
+- `into:` is carried in the data but never printed. The frame is chosen to show
+  where the food goes, so a caption would only repeat the picture.
+- `matbakh.py build` now emits per-item detail — name, glyph, own scaled amount,
+  carried flag, cut — because a tile with four ingredients could previously show
+  only one quantity.
+- The page is real HTML; JavaScript only upgrades it to cook mode. It renders
+  with scripts disabled, which the earlier build did not.
+- Deep links retargeted, `#cook/1`–`#cook/9`, and the hash follows the cook.
+
 ## 2026-08-01b — lexicon editor
 
 - `tools/lexicon-editor.html` added, same pattern as the ingredient editor:

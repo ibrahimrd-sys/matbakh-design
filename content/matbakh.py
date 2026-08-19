@@ -75,6 +75,7 @@ class Report:
     def __init__(self, name):
         self.name, self.errors, self.warnings = name, [], []
         self.note = None
+        self.stub = False
 
     def err(self, m):
         self.errors.append(m)
@@ -87,7 +88,7 @@ class Report:
         return not self.errors
 
     def show(self):
-        mark = "PASS" if self.ok else "FAIL"
+        mark = "FAIL" if self.errors else ("STUB" if self.stub else "PASS")
         print(f"\n{mark}  {self.name}")
         for e in self.errors:
             print(f"  error    {e}")
@@ -147,6 +148,15 @@ def check(path):
         if f not in rec:
             r.err(f"missing required field: {f}")
     if not rec.get("steps"):
+        # `steps: []` satisfies "the key is present", so the required-field loop
+        # above does not catch a scaffolded stub — it would report PASS, clean.
+        # A run over the fifteen pilot stubs would then announce
+        # "15 recipe(s) - 0 failing", which reads as a finished catalogue.
+        # A stub is not an error (it must not block publish.sh while the pilot
+        # runs) but it is not a pass either, so it gets its own state.
+        if "steps" in rec:
+            r.stub = True
+            r.warn("steps is empty — scaffolded stub, not an authored recipe")
         return r
 
     src = rec.get("source_locale", "en")
@@ -515,7 +525,13 @@ def build(path, loc, servings=None):
                 verb, glyph = t(tile["verb"], loc), tile["glyph"]
             if "qualifier" in tile:
                 verb += " " + t(tile["qualifier"], loc)
-            glyph = tile.get("glyph") or (its[0]["glyph"] if its else glyph) or glyph
+            # Icons carry ACTIONS (philosophy §5.1) — the activity glyph wins.
+            # An explicit tile glyph still overrides it, because a bespoke `verb:`
+            # has no activity to draw from. The ingredient glyph is only a last
+            # resort: ingredient glyphs are coarse categories (45 ingredients
+            # share `jar`, 38 share `vegetable`), so drawing one in place of the
+            # action loses the action and barely identifies the object.
+            glyph = tile.get("glyph") or glyph or (its[0]["glyph"] if its else None)
 
             shown = next((k for k, i in enumerate(raw) if "amt" in i), None)
             amount = None
@@ -525,9 +541,29 @@ def build(path, loc, servings=None):
                 amount = dict(value=snap(v, i0["unit"], i0.get("divisible")),
                               unit=i0["unit"], cls=i0["cls"])
 
+            # Per-item detail. The tile's headline `amount` stays as it was; this
+            # adds every item with its own scaled quantity and its own glyph, which
+            # a reader needs when one action takes several ingredients at once.
+            detail = []
+            for k, i0 in enumerate(its):
+                r0 = raw[k]
+                d = dict(name=i0["name"], glyph=i0.get("glyph"),
+                         carried=bool(r0.get("carried")), amount=None,
+                         # The cut is a picture, not a word: `chop` says the act,
+                         # the cut glyph says what this particular item should end
+                         # up looking like. `cut_mm` carries the one thing a glyph
+                         # cannot show — absolute size.
+                         cut=r0.get("cut"), cut_mm=r0.get("cut_mm"))
+                if "amt" in r0:
+                    v = r0["amt"] * eff(i0["cls"], factor)
+                    d["amount"] = dict(value=snap(v, i0["unit"], i0.get("divisible")),
+                                       unit=i0["unit"], cls=i0["cls"])
+                detail.append(d)
+
             tiles.append(dict(glyph=glyph, verb=verb,
                               noun=" + ".join(i["name"] for i in its) or None,
-                              amount=amount,
+                              amount=amount, items=detail,
+                              into=tile.get("into"),
                               short=shorts.get(tile.get("short")) and dict(
                                   title=t(shorts[tile["short"]]["title"], loc),
                                   secs=shorts[tile["short"]]["secs"],
@@ -744,8 +780,14 @@ def main():
         for r in reps:
             r.show()
         bad = sum(1 for r in reps if not r.ok)
+        stubs = sum(1 for r in reps if r.stub and r.ok)
+        authored = len(reps) - bad - stubs
         warn = sum(len(r.warnings) for r in reps)
-        print(f"\n{len(reps)} recipe(s) · {bad} failing · {warn} warning(s)")
+        parts = [f"{len(reps)} recipe(s)", f"{authored} authored"]
+        if stubs:
+            parts.append(f"{stubs} stub(s)")
+        parts += [f"{bad} failing", f"{warn} warning(s)"]
+        print("\n" + " · ".join(parts))
         sys.exit(1 if bad else 0)
 
     if cmd == "build":

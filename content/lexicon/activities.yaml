@@ -443,14 +443,14 @@ crush:
   # also covers: Pound
 
 cut_wedges:
-  glyph: lemon
+  glyph: wedges
   station_hint: board
   verb:
-    en: Cut
-    ar: قطع
-    ar_eg: ودجز
-    ar_lv: قص
-    ar_gulf: قطع
+    en: Cut in wedges
+    ar: قطّع فلقات
+    ar_eg: قطّع فلقات
+    ar_lv: قطّع فلقات
+    ar_gulf: قطّع فلقات
 
 dice:
   glyph: grid-dots

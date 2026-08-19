@@ -5,7 +5,7 @@
 stations:
   board:
     glyph: board
-    name: { en: Board, ar: الطبلية }
+    name: { en: Board, ar: البلانشة }
   stove:
     glyph: flame
     name: { en: Stove, ar: النار }

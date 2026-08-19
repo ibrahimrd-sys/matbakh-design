@@ -16,41 +16,45 @@ project:
            a kitchen. Everything here is arranged around the counter-top
            posture — hands busy, attention divided, the screen propped an
            arm's length away.
-  release: "2026.08.01"        # bump on every publish; shown in the header
+  release: "2026.08.19"        # bump on every publish; shown in the header
   public: false                # false → noindex banner stays on the site
 
 # The headline prototype. Exactly one.
 lead:
-  file: prototypes/app-iphone.html
-  title: Matbakh — iPhone, linked flow
-  blurb: Pre-commit recipe screen into cook mode. Servings, progress and
-         running timers survive the transition; the chevron returns you to the
-         recipe. Audible timer alarm, editable shopping list, full-screen on a
-         real phone.
-  tags: [IPHONE, 2 SCREENS, ALARM, SWIPE]
+  file: prototypes/bolognese-iphone.html
+  title: Tagliatelle al Ragù — iPhone, cook mode
+  blurb: The reader driven end to end by real recipe data. One act per card — a
+         frame lifted from the cook video, the ingredients it acts on with their
+         weights, and the cut each one wants. Session-owned timers, the map, and
+         live serving scaling at 2 / 4 / 8.
+  tags: [IPHONE, 9 PAGES, FRAMES, CUTS, TEMPORARY]
 
 # Deep links for sending a reviewer to one exact step.
 deep_links:
-  target: prototypes/app-iphone.html
-  note: Each link opens the prototype directly on that step. Opened on a phone
-        the mockup bezel drops away and the screen fills the device. Add
-        ?device=1 to force that on a laptop.
+  target: prototypes/bolognese-iphone.html
+  note: Each link opens the prototype on that page. The hash follows the cook, so
+        a reviewer can send back the exact page they are looking at.
   links:
-    - { hash: "#recipe",  label: "Before cooking — the recipe screen" }
-    - { hash: "#cook/1",  label: "1 · Board — onion, garlic, coriander, joint the bird" }
-    - { hash: "#cook/2",  label: "2 · Stove — stock, 40 min" }
-    - { hash: "#cook/3",  label: "3 · Bench — strip the meat, strain the stock" }
-    - { hash: "#cook/4",  label: "4 · Stove — takliya" }
-    - { hash: "#cook/5",  label: "5 · Stove — molokhia into the stock, 8 min" }
-    - { hash: "#cook/6",  label: "6 · Stove — pour the takliya, do not stir" }
-    - { hash: "#cook/7",  label: "7 · Grill — sear the pieces" }
-    - { hash: "#cook/8",  label: "8 · Serve" }
+    - { hash: "#cook/1", label: "1 · Board — mince the soffritto, 2 mm" }
+    - { hash: "#cook/2", label: "2 · Stove — sweat, no colour, 12 min" }
+    - { hash: "#cook/3", label: "3 · Stove — render the pancetta, brown the beef" }
+    - { hash: "#cook/4", label: "4 · Stove — soffritto in, deglaze with wine" }
+    - { hash: "#cook/5", label: "5 · Stove — tomato, and not a drop more" }
+    - { hash: "#cook/6", label: "6 · Stove — first simmer, covered, 90 min" }
+    - { hash: "#cook/7", label: "7 · Stove — milk, uncovered, 90 min" }
+    - { hash: "#cook/8", label: "8 · Stove — the tagliatelle" }
+    - { hash: "#cook/9", label: "9 · Serve — tossed through, never on top" }
 
 sections:
 
   - heading: Screens on their own
     sub: Each one standalone, for reviewing a single surface.
     items:
+      - file: prototypes/app-iphone.html
+        title: Molokhia — iPhone, linked flow
+        blurb: The earlier example, hand-built. Pre-commit recipe screen into cook
+               mode, with state carried between the two.
+        tags: [IPHONE, 2 SCREENS, ALARM, SWIPE]
       - file: prototypes/recipe-screen-iphone.html
         title: Pre-commit recipe screen
         blurb: Why this version, cost with its date and source, the whole arc
@@ -97,6 +101,7 @@ caveats:
   - Prices are illustrative, not sourced.
 
 next_up:
-  - Discovery (§12.1)
+  - Decide the tile treatment (frames vs glyphs)
+  - Discovery (§16.1)
   - The tablet pre-commit screen
-  - Meal planner (§12.3)
+  - Meal planner (§16.3)

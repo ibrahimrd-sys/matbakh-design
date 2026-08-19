@@ -156,7 +156,35 @@ function blank(){
     title:{en:'',ar:''}, why:{en:'',ar:''},
     servings:{base:4,presets:[2,4,8],max_scale:1.5},
     hands_on_minutes:null, hero:'assets/', price_source:'el_obour',
-    nutrition_per_serving:{}, intermediates:{}, steps:[], shorts:{} };
+    nutrition_per_serving:{}, intermediates:{}, steps:[], shorts:{}, uses:[] };
+}
+
+/* A tile may be authored in the short form — `item:` / `amt:` / `carried:` — or
+   the long form `items: [...]`. This editor works in the long form only, so a
+   file in the short form used to arrive with no items at all: the "On what" row
+   never rendered, ingredient checks were skipped, and saving wrote the tile back
+   with its ingredient silently deleted. Normalise on the way in; toYaml() emits
+   the short form again whenever a tile has a single bought item, so a
+   round-trip through the editor leaves the file's shape unchanged. */
+function normalise(d){
+  d.steps = d.steps || [];
+  d.steps.forEach(s=>{
+    s.tiles = s.tiles || [];
+    s.tiles.forEach(t=>{
+      if(!Array.isArray(t.items)){
+        t.items = t.item ? [{id:t.item}] : [];
+        if(t.items.length){
+          if(t.amt!=null) t.items[0].amt = t.amt;
+          if(t.carried)   t.items[0].carried = true;
+        }
+      }
+      delete t.item; delete t.amt; delete t.carried;
+    });
+  });
+  d.intermediates = d.intermediates || {};
+  d.shorts        = d.shorts || {};
+  d.uses          = Array.isArray(d.uses) ? d.uses : [];
+  return d;
 }
 
 /* ── validation, mirroring matbakh.py so nothing surprises you later ───── */
@@ -198,6 +226,14 @@ function check(){
       else o.push({lvl:'error',msg:`${tg} — needs an activity or a bespoke verb`,...j});
       if(t.qualifier) prose(t.qualifier,`${tg} qualifier`,j);
       if(t.short && !(R.shorts||{})[t.short]) o.push({lvl:'error',msg:`${tg} — short "${t.short}" is not defined`,...j});
+      if(t.into){
+        if(!String(t.into).startsWith('@')) o.push({lvl:'error',msg:`${tg} — into must name an intermediate, like @stock`,...j});
+        else{
+          const ik=String(t.into).slice(1);
+          if(!(R.intermediates||{})[ik]) o.push({lvl:'error',msg:`${tg} — into "${t.into}" is not declared`,...j});
+          else if(!made.has(ik)) o.push({lvl:'error',msg:`${tg} — goes into "${t.into}" before a step makes it`,...j});
+        }
+      }
       (t.items||[]).forEach(it=>{
         if(!it.id){o.push({lvl:'error',msg:`${tg} — an item with no ingredient`,...j});return;}
         if(it.id.startsWith('@')){
@@ -227,6 +263,17 @@ function check(){
     if(!made.has(k)) o.push({lvl:'error',msg:`intermediate "${k}" is declared but no step makes it`,...meta});
     prose(R.intermediates[k].name,`intermediate "${k}" name`,meta);
   });
+  (R.uses||[]).forEach((u,i)=>{
+    const label=`sub-recipe ${i+1}`;
+    if(!u.id) o.push({lvl:'error',msg:`${label} — no recipe id`,...meta});
+    else if(u.id===R.id) o.push({lvl:'error',msg:`${label} — a recipe cannot use itself`,...meta});
+    if(u.amt==null) o.push({lvl:'error',msg:`${label} — no amount taken, so it cannot be scaled against the sub-recipe's yield`,...meta});
+  });
+  if((R.uses||[]).length)
+    o.push({lvl:'warn',msg:'sub-recipe ids resolve against the whole catalogue, which this page cannot see — run matbakh.py check before publishing',...meta});
+  if(R.yield && (R.yield.amount==null || !R.yield.unit))
+    o.push({lvl:'error',msg:'yield needs both an amount and a unit, or another recipe cannot take a share of it',...meta});
+
   const used=new Set();
   (R.steps||[]).forEach(s=>(s.tiles||[]).forEach(t=>t.short&&used.add(t.short)));
   Object.keys(R.shorts||{}).forEach(k=>{
@@ -394,6 +441,24 @@ function metaHtml(){
     <button class="btn sm" id="addInt">Add an intermediate</button>
   </div>
 
+  <div class="grp"><span class="eyebrow">Sub-recipes</span>
+    <div class="hint" style="grid-column:1;margin-bottom:9px">Another recipe this one consumes — a sauce, a dough, a spice mix. It stays its own file, authored and cooked once; you state how much you take, and its ingredients and allergens roll up into this recipe.</div>
+    ${(R.uses||[]).map((u,i)=>`
+      <div class="tile"><div class="th"><span class="eyebrow">uses ${i+1}</span>
+        <button class="btn sm" data-deluse="${i}">Remove</button></div>
+        <div class="trio" style="grid-template-columns:1fr 100px 1fr">
+          <input data-use="${i}.id" value="${esc(u.id)}" placeholder="tahini_sauce">
+          <input class="num" type="number" step="0.1" data-use="${i}.amt" value="${u.amt??''}" placeholder="amt">
+          <div class="hint" style="align-self:center">taken from its yield</div>
+        </div></div>`).join('')}
+    <button class="btn sm" id="addUse">Add a sub-recipe</button>
+    <div class="f" style="margin-top:12px"><label>This yields</label><div class="trio" style="grid-template-columns:100px 100px 1fr">
+      <input class="num" type="number" step="0.1" data-v="yield.amount" value="${(R.yield&&R.yield.amount)??''}" placeholder="400">
+      <input class="num" data-v="yield.unit" value="${esc(R.yield&&R.yield.unit)}" placeholder="ml">
+      <div class="hint" style="align-self:center">Only if another recipe consumes this one.</div>
+    </div></div>
+  </div>
+
   <div class="grp"><span class="eyebrow">Technique shorts</span>
     ${Object.keys(R.shorts||{}).map(k=>`
       <div class="tile"><div class="th"><span class="eyebrow">${esc(k)}</span>
@@ -419,9 +484,10 @@ function stepHtml(i){
       <option value="">— choose —</option>
       ${stations().map(k=>`<option value="${k}" ${s.station===k?'selected':''}>${st[k].name.en} · ${st[k].name.ar}</option>`).join('')}
     </select></div>
-    <div class="f"><label>Qualifier</label><div class="pair">
+    <div class="f"><label>Which one</label><div class="pair">
       <input data-s="qualifier.en" value="${esc(s.qualifier&&s.qualifier.en)}" placeholder="stock">
       <input class="ar" data-s="qualifier.ar" value="${esc(s.qualifier&&s.qualifier.ar)}" placeholder="المرق"></div></div>
+    <div class="f"><div></div><div class="hint">Only to tell pages at the same station apart — renders as "Stove · takliya". Nothing to do with an action's qualifier below.</div></div>
     <div class="f"><div></div><div class="hint">Renders as "Stove · stock". Leave blank if the station name alone is clear.</div></div>
     <div class="f"><label>Order matters</label><select data-s="ordered">
       <option value="false" ${!s.ordered?'selected':''}>No — any order is fine</option>
@@ -470,6 +536,32 @@ function stepHtml(i){
   <div class="grp"><button class="btn sm" id="delStep" style="border-color:var(--danger);color:var(--danger)">Delete step ${i+1}</button></div>`;
 }
 
+/* The lexicon is stored grouped by station and unsorted, which put `chop` about
+   38th of 81 in a flat dropdown — findable only by scrolling. Group the options
+   by station hint, float this step's own station to the top, and sort
+   alphabetically inside each group. */
+function actOptions(sel, station){
+  if(!ACT) return '';
+  const groups={};
+  Object.keys(ACT).forEach(k=>{
+    const g=ACT[k].station_hint||'any';
+    (groups[g]=groups[g]||[]).push(k);
+  });
+  const order=Object.keys(groups).sort((a,b)=>{
+    if(a===station) return -1; if(b===station) return 1;
+    if(a==='any') return -1;    if(b==='any') return 1;
+    return a.localeCompare(b);
+  });
+  return order.map(g=>{
+    const opts=groups[g]
+      .sort((x,y)=>ACT[x].verb.en.localeCompare(ACT[y].verb.en))
+      .map(k=>`<option value="${k}" ${sel===k?'selected':''}>${esc(ACT[k].verb.en)} · ${esc(ACT[k].verb.ar)}</option>`)
+      .join('');
+    const label = g===station ? `${g} — this station` : g;
+    return `<optgroup label="${esc(label)}">${opts}</optgroup>`;
+  }).join('');
+}
+
 function tileHtml(t,si,ti){
   const items=t.items||[];
   return `<div class="tile"><div class="th">
@@ -477,15 +569,16 @@ function tileHtml(t,si,ti){
     <button class="btn sm" data-deltile="${ti}">Remove</button></div>
     <div class="f"><label>Does what</label><select data-t="${ti}.do">
       <option value="">— bespoke wording —</option>
-      ${acts().map(k=>`<option value="${k}" ${t.do===k?'selected':''}>${ACT[k].verb.en} · ${ACT[k].verb.ar}</option>`).join('')}
+      ${actOptions(t.do, (R.steps[si]||{}).station)}
     </select></div>
-    ${t.do?`<div class="f"><label>Qualifier</label><div class="pair">
-        <input data-t="${ti}.qualifier.en" value="${esc(t.qualifier&&t.qualifier.en)}" placeholder="fine">
-        <input class="ar" data-t="${ti}.qualifier.ar" value="${esc(t.qualifier&&t.qualifier.ar)}" placeholder="ناعم"></div></div>`
-      :`<div class="f"><label>Verb</label><div class="pair">
+    ${t.do?'':`<div class="f"><label>Verb</label><div class="pair">
         <input data-t="${ti}.verb.en" value="${esc(t.verb&&t.verb.en)}" placeholder="Pour over, listen for the hiss">
         <input class="ar" data-t="${ti}.verb.ar" value="${esc(t.verb&&t.verb.ar)}"></div></div>
        <div class="f"><label>Icon</label><input class="num" data-t="${ti}.glyph" value="${esc(t.glyph)}" placeholder="pour"></div>`}
+    <div class="f"><label>Qualifier</label><div class="pair">
+      <input data-t="${ti}.qualifier.en" value="${esc(t.qualifier&&t.qualifier.en)}" placeholder="fine">
+      <input class="ar" data-t="${ti}.qualifier.ar" value="${esc(t.qualifier&&t.qualifier.ar)}" placeholder="ناعم"></div></div>
+    <div class="f"><div></div><div class="hint">Appended to the verb — "Chop" + "fine". It is how the vocabulary stays small: if you would draw the same icon, it is one activity plus a qualifier, not a new activity.</div></div>
     ${items.map((it,k)=>`
       <div class="f"><label>${k?'and':'On what'}</label><div class="trio" style="grid-template-columns:1fr 90px 108px">
         <select data-t="${ti}.items.${k}.id">
@@ -498,6 +591,11 @@ function tileHtml(t,si,ti){
           <option value="false" ${!it.carried?'selected':''}>buy it</option>
           <option value="true" ${it.carried?'selected':''}>carried over</option></select>
       </div></div>`).join('')}
+    ${Object.keys(R.intermediates||{}).length?`
+    <div class="f"><label>Into</label><select data-t="${ti}.into">
+      <option value="">— its own pan —</option>
+      ${Object.keys(R.intermediates).map(x=>`<option value="@${x}" ${t.into==='@'+x?'selected':''}>@${x}</option>`).join('')}
+    </select></div>`:''}
     <div class="f"><div></div><div>
       <button class="btn sm" data-additem="${ti}">Add another ingredient</button>
       <select data-t="${ti}.short" style="width:auto;display:inline-block;margin-left:6px">
@@ -544,11 +642,19 @@ function wire(root){
   root.querySelectorAll('[data-sh]').forEach(el=>el.onchange=()=>{
     setPath(R.shorts,el.dataset.sh,coerce(el)); paintRail();
   });
+  root.querySelectorAll('[data-use]').forEach(el=>el.onchange=()=>{
+    const [i,k]=el.dataset.use.split('.');
+    R.uses=R.uses||[]; R.uses[+i]=R.uses[+i]||{};
+    const v=coerce(el);
+    if(v===''||v==null) delete R.uses[+i][k]; else R.uses[+i][k]=v;
+    paintRail();
+  });
   const on=(id,fn)=>{const e=document.getElementById(id); if(e)e.onclick=fn;};
   on('addTile',()=>{R.steps[view.step].tiles=R.steps[view.step].tiles||[];R.steps[view.step].tiles.push({items:[{}]});paint();});
   on('delStep',()=>{ if(confirm(`Delete step ${view.step+1}?`)){R.steps.splice(view.step,1);view={mode:'meta'};paint();} });
   on('addInt',()=>{ const k=prompt('Key for the intermediate, eg stock'); if(!k)return;
     R.intermediates=R.intermediates||{}; R.intermediates[k]={glyph:'pot',name:{en:'',ar:''}}; paint(); });
+  on('addUse',()=>{ R.uses=R.uses||[]; R.uses.push({id:'',amt:null}); paint(); });
   on('addShort',()=>{ const k=prompt('Key for the short, eg takliya_colour'); if(!k)return;
     R.shorts=R.shorts||{}; R.shorts[k]={secs:20,poster:'assets/',title:{en:'',ar:''}}; paint(); });
   on('calcBtn',()=>{
@@ -566,6 +672,8 @@ function wire(root){
     const t=R.steps[view.step].tiles[+el.dataset.additem]; t.items=t.items||[]; t.items.push({}); paint(); });
   root.querySelectorAll('[data-delint]').forEach(el=>el.onclick=()=>{
     delete R.intermediates[el.dataset.delint]; paint(); });
+  root.querySelectorAll('[data-deluse]').forEach(el=>el.onclick=()=>{
+    R.uses.splice(+el.dataset.deluse,1); paint(); });
   root.querySelectorAll('[data-delshort]').forEach(el=>el.onclick=()=>{
     delete R.shorts[el.dataset.delshort]; paint(); });
 }
@@ -573,7 +681,12 @@ function wire(root){
 /* ── YAML out ─────────────────────────────────────────────────────────── */
 function q(s){
   s=String(s==null?'':s);
-  return /^[A-Za-z\u0600-\u06FF][\w \u0600-\u06FF().,\-\/…'’]*$/.test(s)&&s===s.trim()
+  /* A comma must NOT be in the safe set. Several of these strings are emitted
+     inside a flow mapping — { en: …, ar: … } — where a comma is the separator,
+     so an unquoted "Pour over, listen for the hiss" silently parses as
+     en: "Pour over" plus a junk key. That is how two strings in the demo recipe
+     lost half their text. Quoting is always valid, so when in doubt, quote. */
+  return /^[A-Za-z\u0600-\u06FF][\w \u0600-\u06FF().\-\/…'’]*$/.test(s)&&s===s.trim()
     ? s : '"'+s.replace(/"/g,'\\"')+'"';
 }
 function toYaml(){
@@ -592,6 +705,11 @@ function toYaml(){
   const n=R.nutrition_per_serving||{};
   if(Object.keys(n).length){ P(0,''); P(0,'nutrition_per_serving:');
     Object.keys(n).forEach(k=>P(2,`${k}: ${n[k]}`)); }
+  if(R.yield&&R.yield.amount!=null&&R.yield.unit){
+    P(0,''); P(0,`yield: { amount: ${R.yield.amount}, unit: ${R.yield.unit} }`); }
+  const us=(R.uses||[]).filter(u=>u.id);
+  if(us.length){ P(0,''); P(0,'uses:');
+    us.forEach(u=>P(2,`- { id: ${q(u.id)}${u.amt!=null?`, amt: ${u.amt}`:''} }`)); }
   const ints=R.intermediates||{};
   if(Object.keys(ints).length){ P(0,''); P(0,'intermediates:');
     Object.keys(ints).forEach(k=>{ P(2,`${k}:`);
@@ -626,6 +744,7 @@ function toYaml(){
           P(10,`- { ${bits.join(', ')} }`);
         });
       }
+      if(t.into)  P(8,`into: ${q(t.into)}`);
       if(t.short) P(8,`short: ${t.short}`);
     });
     if(s.timer&&s.timer.minutes){ P(4,'timer:'); P(6,`minutes: ${s.timer.minutes}`);
@@ -659,7 +778,7 @@ document.getElementById('file').onchange=e=>{
       try{
         const d=jsyaml.load(r.result);
         if(d&&d.stations&&d.note_kinds) CHR=d;
-        else if(d&&d.steps) R=d;
+        else if(d&&d.steps) R=normalise(d);
         else if(d&&Object.values(d)[0]&&Object.values(d)[0].verb) ACT=d;
         else if(d&&Object.values(d)[0]&&Object.values(d)[0].cls) ING=d;
         else console.warn('unrecognised file', f.name);
