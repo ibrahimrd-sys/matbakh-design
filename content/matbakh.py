@@ -524,7 +524,15 @@ def build(path, loc, servings=None):
             else:
                 verb, glyph = t(tile["verb"], loc), tile["glyph"]
             if "qualifier" in tile:
-                verb += " " + t(tile["qualifier"], loc)
+                # Separated the same way as the station qualifier above. A bare
+                # space ran the two together — "Drain keep a cup of the water"
+                # reads as one clause, which is the opposite of what a qualifier
+                # is for. Eventually this wants to be its own field so the
+                # renderer can set it lighter; the separator is the cheap half.
+                act, qual = verb, t(tile["qualifier"], loc)
+                verb += " · " + qual
+            else:
+                act, qual = verb, None
             # Icons carry ACTIONS (philosophy §5.1) — the activity glyph wins.
             # An explicit tile glyph still overrides it, because a bespoke `verb:`
             # has no activity to draw from. The ingredient glyph is only a last
@@ -560,7 +568,7 @@ def build(path, loc, servings=None):
                                        unit=i0["unit"], cls=i0["cls"])
                 detail.append(d)
 
-            tiles.append(dict(glyph=glyph, verb=verb,
+            tiles.append(dict(glyph=glyph, verb=verb, act=act, qual=qual,
                               noun=" + ".join(i["name"] for i in its) or None,
                               amount=amount, items=detail,
                               into=tile.get("into"),

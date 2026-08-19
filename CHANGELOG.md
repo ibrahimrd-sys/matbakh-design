@@ -41,10 +41,33 @@ Format: `## YYYY-MM-DD — release`
   and the earlier build broke it — cook pages ran past the viewport. Every screen
   now sizes itself to the phone: cook pages give the acts five parts and the
   doneness band three, and both shrink together. Verified at 375×667, 393×852 and
-  430×932 — zero overflow on all nine cook pages and all four pre-commit panes.
-- The pre-commit screen is four panes behind a segmented control — Overview, The
-  arc, Basket, Health — because it carries more than one screenful. Note this
-  departs from `recipe-screen-iphone.html`, which the manifest tags HAND SCROLL.
+  430×932 — zero overflow on all nine cook pages and all three pre-commit panes.
+- The pre-commit screen is three panes behind a segmented control — Overview, The
+  arc, Basket — because it carries more than one screenful. Note this departs
+  from `recipe-screen-iphone.html`, which the manifest tags HAND SCROLL.
+- **Nutrition moved onto Overview, under the cost.** The Health pane is retired.
+  Energy, protein, fat and carbs are four digits on one strip, and the dietary
+  line sits with them — the same class of fact as cost, read in the same glance,
+  before committing. A pane of its own made a findable panel out of four numbers.
+- **The arc and the basket stay two panes, not one.** Nine thumbnails and fifteen
+  basket rows do not fit one phone screen together at any size tested, and *the
+  page is the unit, not the scroll* now outranks *fewer taps*. The molokhia
+  pre-commit screen fits them together only because it scrolls.
+- **Prose is on request.** The doneness paragraph moved behind an ⓘ on the
+  doneness photograph — the picture is the primary carrier of state (§5.2), and
+  the words are the fallback for a cook who wants them. What stays on the page
+  unasked is the NEVER note, which is the one place scarce prose earns its room.
+- **The tile qualifier is separated from its act.** `matbakh.py build` joined them
+  with a bare space, so page 8 read *"Drain keep a cup of the water"* — one clause
+  where there are two. It now emits `act` and `qual` as their own fields (and
+  `verb` still joined, with the same ` · ` the station qualifier already used), and
+  the renderer sets the qualifier lighter and smaller behind the act.
+- **Arabic fixes found by reading the RTL build rather than trusting it.** The page
+  counter was bidi-mirrored — *8 / 9* rendered as *9 / 8*, which tells the cook the
+  wrong thing — now isolated LTR. Back / Next / Map / Settings, the nutrition
+  labels, the dietary flags, the doneness cue, the NEVER note and the running
+  timer's label were all still English in the `ar` build; all now switch with the
+  language. The `contains` line stays English — those are tag keys, and PM-07.
 - **Basket quantities are editable.** Type over one and it stops following the
   serving presets, marked in terracotta, because a cook who already has 300 g of
   beef does not want the app overwriting them.

@@ -24,10 +24,12 @@ lead:
   file: prototypes/bolognese-iphone.html
   title: Tagliatelle al Ragù — iPhone, cook mode
   blurb: The whole flow, driven end to end by real recipe data. Pre-commit screen
-         — why this version, cost, the arc, the basket, nutrition — into cook
-         mode, one act per card with a frame from the cook video, the ingredients
-         it takes and the cut each one wants. Timers, map, scaling at 2 / 4 / 8.
-         Every screen fits the phone — nothing scrolls, per philosophy §3.
+         in three panes — Overview (why this version, cost, nutrition), the arc,
+         the basket — into cook mode, one act per card with a frame from the cook
+         video, the ingredients it takes and the cut each one wants. Prose is on
+         request behind an ⓘ; only the NEVER note speaks unasked. Timers, map,
+         scaling at 2 / 4 / 8. Every screen fits the phone — nothing scrolls,
+         per philosophy §3.
   tags: [IPHONE, NO SCROLL, EN/AR, 9 PAGES, FRAMES, CUTS, TEMPORARY]
 
 # Deep links for sending a reviewer to one exact step.
