@@ -37,6 +37,21 @@ Format: `## YYYY-MM-DD — release`
 - The cost row shows its own absence — `—` with *no price feed connected* — rather
   than an invented number. §3 says every number carries a date and a source; there
   is no source yet, so there is no number. It also makes P-01 visible on screen.
+- **Nothing scrolls.** Core principle 1 says the page is the unit, not the scroll,
+  and the earlier build broke it — cook pages ran past the viewport. Every screen
+  now sizes itself to the phone: cook pages give the acts five parts and the
+  doneness band three, and both shrink together. Verified at 375×667, 393×852 and
+  430×932 — zero overflow on all nine cook pages and all four pre-commit panes.
+- The pre-commit screen is four panes behind a segmented control — Overview, The
+  arc, Basket, Health — because it carries more than one screenful. Note this
+  departs from `recipe-screen-iphone.html`, which the manifest tags HAND SCROLL.
+- **Basket quantities are editable.** Type over one and it stops following the
+  serving presets, marked in terracotta, because a cook who already has 300 g of
+  beef does not want the app overwriting them.
+- **Settings added** — language, numerals, keep-screen-awake — and the language
+  switch is real: EN/AR flips every string and sets RTL, driven by the `ar` build
+  of the same recipe. Nothing is translated in the page; both locales come out of
+  `matbakh.py build`.
 - Deep links retargeted, `#recipe` and `#cook/1`–`#cook/9`, and the hash follows
   the cook.
 
