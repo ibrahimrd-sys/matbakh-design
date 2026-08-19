@@ -23,11 +23,11 @@ project:
 lead:
   file: prototypes/bolognese-iphone.html
   title: Tagliatelle al Ragù — iPhone, cook mode
-  blurb: The reader driven end to end by real recipe data. One act per card — a
-         frame lifted from the cook video, the ingredients it acts on with their
-         weights, and the cut each one wants. Session-owned timers, the map, and
-         live serving scaling at 2 / 4 / 8.
-  tags: [IPHONE, 9 PAGES, FRAMES, CUTS, TEMPORARY]
+  blurb: The whole flow, driven end to end by real recipe data. Pre-commit screen
+         — why this version, cost, the arc, the basket, nutrition — into cook
+         mode, one act per card with a frame from the cook video, the ingredients
+         it takes and the cut each one wants. Timers, map, scaling at 2 / 4 / 8.
+  tags: [IPHONE, 2 SCREENS, 9 PAGES, FRAMES, CUTS, TEMPORARY]
 
 # Deep links for sending a reviewer to one exact step.
 deep_links:
@@ -35,6 +35,7 @@ deep_links:
   note: Each link opens the prototype on that page. The hash follows the cook, so
         a reviewer can send back the exact page they are looking at.
   links:
+    - { hash: "#recipe", label: "Before cooking — the pre-commit screen" }
     - { hash: "#cook/1", label: "1 · Board — mince the soffritto, 2 mm" }
     - { hash: "#cook/2", label: "2 · Stove — sweat, no colour, 12 min" }
     - { hash: "#cook/3", label: "3 · Stove — render the pancetta, brown the beef" }

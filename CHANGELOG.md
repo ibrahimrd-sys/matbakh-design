@@ -28,7 +28,17 @@ Format: `## YYYY-MM-DD — release`
   only one quantity.
 - The page is real HTML; JavaScript only upgrades it to cook mode. It renders
   with scripts disabled, which the earlier build did not.
-- Deep links retargeted, `#cook/1`–`#cook/9`, and the hash follows the cook.
+- **Pre-commit screen added**, so the prototype is the whole flow rather than
+  cook mode alone: hero, why-this-version, hands-on against unattended time, the
+  cost row, the arc as tappable thumbnails with their timers, the shopping list
+  with buy hints and tick-off, technique shorts, per-serving nutrition, and the
+  derived dietary line. Every figure comes from `matbakh.py build`; the basket
+  rescales with the serving presets alongside the step quantities.
+- The cost row shows its own absence — `—` with *no price feed connected* — rather
+  than an invented number. §3 says every number carries a date and a source; there
+  is no source yet, so there is no number. It also makes P-01 visible on screen.
+- Deep links retargeted, `#recipe` and `#cook/1`–`#cook/9`, and the hash follows
+  the cook.
 
 ## 2026-08-01b — lexicon editor
 
