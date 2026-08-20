@@ -5,6 +5,32 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-08-20 — the log now says when it has gone stale
+
+- **`content/matbakh.py status`** emits the measurable half of the PM log as a
+  fenced markdown block — catalogue counts, lexicon reach, shared glyphs, the
+  state of the ingredient reference. `status --write <file>` splices it into the
+  log in place and leaves every other line alone; re-running replaces the block
+  rather than adding a second one.
+- The reason it exists: the ingredient count has been quoted as 177, 178 and 179
+  inside one week, and `tag-proposal.md` sized a backfill on the wrong one. A
+  number that is generated cannot drift. Statuses, decisions and risks are
+  deliberately **not** generated — a script that guessed at those would make a
+  stale log look maintained, which is worse than one that is obviously old.
+- **The vault catalogue and the repo fixture are now counted separately.** They
+  were not, so `check` reported *3 authored* where the catalogue holds two — the
+  third is `content/recipes/molokhia_bil_farakh.yaml`, a schema demo that exists
+  so a bare clone has something to validate.
+- **`content/matbakh.py vault`** prints the resolved vault path, so `build.py` can
+  ask where the vault is rather than keep a second copy of the four-step
+  resolution order.
+- **Preflight now warns when the PM log falls behind the repo** — comparing both
+  the log's own `Last updated:` date and the generated block's measured date
+  against the newest changelog entry and prototype. Warnings, not errors: it
+  should nag, not block. Silent when no vault is reachable, because a fresh clone
+  or CI has none by design. This is the check that did not exist between 30 July
+  and 13 August, when the tracker fell three weeks behind and nothing said a word.
+
 ## 2026-08-19 — bolognese, and the tile question made visible
 
 - `prototypes/bolognese-iphone.html` added and promoted to lead. **Temporary** —

@@ -7,6 +7,9 @@ Matbakh content toolchain.
     python3 matbakh.py build recipes/x.yaml ar  # resolve for a locale
     python3 matbakh.py lexicon                  # audit the closed vocabulary
     python3 matbakh.py gaps                     # translation manifest
+    python3 matbakh.py status                   # the measurable half of the PM log
+    python3 matbakh.py status --write LOG.md    # splice it into the log in place
+    python3 matbakh.py vault                    # print the resolved vault path
 
 Design contract: a recipe file holds STRUCTURE, IDS, NUMBERS and the small
 amount of prose that is genuinely unique to it. Repeated vocabulary lives in
@@ -650,6 +653,141 @@ def build(path, loc, servings=None):
 
 
 
+
+# ─────────────────────────────────────────────────────────────────── status
+# The half of a project tracker that can be measured instead of asserted.
+#
+# Every number below has been wrong in at least one Matbakh document. The
+# ingredient count alone has been quoted as 177, 178 and 179 inside one week,
+# and a tag-sizing estimate was built on the wrong one. A generated block
+# cannot drift, so nothing here is ever typed by hand — `status --write PATH`
+# replaces the fenced block in a file and leaves every other line alone.
+#
+# What is deliberately NOT here: statuses, decisions, risks, dependencies.
+# Those are judgement, and a script that guessed at them would make a stale
+# log look maintained — which is worse than a log that is obviously old.
+
+MARK_OPEN = "<!-- GENERATED: matbakh.py status -->"
+MARK_CLOSE = "<!-- /GENERATED -->"
+
+
+def _status_facts():
+    # The repo tracks a schema fixture (`content/recipes/`) so a bare clone has
+    # something to validate. It is NOT catalogue, and counting it alongside the
+    # vault turns two authored recipes into three — which is exactly the kind of
+    # number that ends up in a strategy document. They are reported separately.
+    repo_files = [f for f in sorted(glob.glob("recipes/*.yaml")) if "_template" not in f]
+    vault_files = [f for f in sorted(glob.glob(str(VAULT / "recipes" / "*.yaml")))
+                   if "_template" not in f]
+    files = repo_files + vault_files
+    reps = [check(f) for f in files]
+    vreps = [check(f) for f in vault_files]
+    failing = [r for r in reps if not r.ok]
+    stubs = [r for r in vreps if r.stub and r.ok]
+    authored = [r for r in vreps if r.ok and not r.stub]
+
+    # what the catalogue actually reaches for
+    used, bespoke = set(), 0
+    for f in files:
+        try:
+            rec = load(f) if not os.path.isabs(f) else yaml.safe_load(open(f, encoding="utf-8"))
+        except Exception:
+            continue
+        for step in rec.get("steps") or []:
+            for tile in step.get("tiles") or []:
+                if tile.get("do"):
+                    used.add(tile["do"])
+                elif tile.get("verb"):
+                    bespoke += 1
+
+    # a glyph shared by two activities is only safe while they never co-occur
+    by_glyph = {}
+    for k, v in ACT.items():
+        if v.get("glyph"):
+            by_glyph.setdefault(v["glyph"], []).append(k)
+    shared = {g: ks for g, ks in by_glyph.items() if len(ks) > 1}
+
+    # the silent gap: an ingredient measured in anything but g or ml, with no
+    # conversion, contributes nothing to a per-serving figure — and the
+    # validator says nothing, because it only warns the other way round.
+    no_nut = [k for k, v in ING.items() if not v.get("nutrition")]
+    no_conv = [k for k, v in ING.items()
+               if v.get("unit") not in ("g", "ml") and not v.get("convert")]
+
+    return dict(
+        files=files, repo_files=repo_files, vault_files=vault_files,
+        reps=reps, failing=failing, stubs=stubs, authored=authored,
+        warnings=sum(len(r.warnings) for r in reps),
+        used=used, bespoke=bespoke, shared=shared,
+        no_nut=no_nut, no_conv=no_conv)
+
+
+def status_block():
+    import datetime
+    f = _status_facts()
+    src = "the vault" if VAULT_OK else "the tracked sample (no vault reachable)"
+    unused = len(ACT) - len(f["used"])
+    shared_txt = ("none" if not f["shared"] else
+                  " · ".join(g + ": " + "/".join(sorted(ks))
+                             for g, ks in sorted(f["shared"].items())))
+    cat = ("no vault reachable — nothing below is catalogue" if not VAULT_OK else
+           f"{len(f['vault_files'])} recipe file(s) · **{len(f['authored'])} authored** · "
+           f"{len(f['stubs'])} stub(s)")
+    rows = [
+        ("Catalogue (vault)", cat),
+        ("Repo fixtures",
+         f"{len(f['repo_files'])} tracked recipe(s) in `content/recipes/` — schema "
+         f"demo so a bare clone validates, not catalogue"),
+        ("Validation",
+         f"{len(f['files'])} file(s) checked · {len(f['failing'])} failing · "
+         f"{f['warnings']} warning(s)"),
+        ("Lexicon reach",
+         f"{len(f['used'])} of {len(ACT)} activities exercised · {unused} untouched · "
+         f"{f['bespoke']} bespoke verb(s) in the catalogue"),
+        ("Shared glyphs", shared_txt),
+        ("Ingredient reference",
+         f"{len(ING)} entries from {src} · {len(f['no_nut'])} without nutrition · "
+         f"{len(f['no_conv'])} measured in something other than g/ml with no conversion"),
+        ("Locales", ", ".join(CHROME.get("locales", {}))),
+    ]
+    out = [MARK_OPEN,
+           "*Measured " + datetime.date.today().isoformat() + " by "
+           "`python3 content/matbakh.py status`. Do not hand-edit between these "
+           "markers — the next run overwrites them. Everything outside them is yours.*",
+           "", "| | |", "|---|---|"]
+    out += [f"| **{a}** | {b} |" for a, b in rows]
+    if f["failing"]:
+        out += ["", "**Failing:** " + ", ".join(pathlib.Path(r.name).name
+                                                for r in f["failing"])]
+    out += ["", MARK_CLOSE]
+    return "\n".join(out)
+
+
+def status_write(path):
+    """Splice the block into a file, or insert it under the title on first run."""
+    p = pathlib.Path(path).expanduser()
+    if not p.exists():
+        print(f"no such file: {p}", file=sys.stderr)
+        return 1
+    txt = p.read_text(encoding="utf-8")
+    block = status_block()
+    if MARK_OPEN in txt and MARK_CLOSE in txt:
+        head, rest = txt.split(MARK_OPEN, 1)
+        _, tail = rest.split(MARK_CLOSE, 1)
+        new, where = head + block + tail, "replaced"
+    else:
+        lines = txt.splitlines(keepends=True)
+        cut = 1 if lines and lines[0].startswith("# ") else 0
+        new = "".join(lines[:cut]) + "\n" + block + "\n" + "".join(lines[cut:])
+        where = "inserted"
+    # newline="" keeps the file's own line endings. This file is edited on
+    # Windows; a wholesale CRLF flip would read as a total rewrite in git.
+    with open(p, "w", encoding="utf-8", newline="") as fh:
+        fh.write(new)
+    print(f"{where} the generated block in {p}")
+    return 0
+
+
 # ─────────────────────────────────────────────────────────────────── lexicon
 
 def lexicon_audit():
@@ -806,6 +944,18 @@ def main():
 
     if cmd == "lexicon":
         sys.exit(lexicon_audit())
+
+    if cmd == "status":
+        if "--write" in sys.argv:
+            sys.exit(status_write(sys.argv[sys.argv.index("--write") + 1]))
+        print(status_block())
+        return
+
+    # Where is the vault? build.py asks this rather than re-implementing the
+    # four-step resolution order, so there stays exactly one copy of it.
+    if cmd == "vault":
+        print(str(VAULT.resolve()) if VAULT_OK else "MISSING")
+        return
 
     if cmd == "gaps":
         for f in files:

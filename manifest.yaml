@@ -16,7 +16,7 @@ project:
            a kitchen. Everything here is arranged around the counter-top
            posture — hands busy, attention divided, the screen propped an
            arm's length away.
-  release: "2026.08.19"        # bump on every publish; shown in the header
+  release: "2026.08.20"        # bump on every publish; shown in the header
   public: false                # false → noindex banner stays on the site
 
 # The headline prototype. Exactly one.

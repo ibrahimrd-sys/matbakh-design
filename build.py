@@ -126,6 +126,105 @@ def check_changelog():
         pass
 
 
+
+# The PM log is the canonical tracker and it lives in the vault, outside this
+# repository — so nothing here has ever been able to tell you it had gone
+# stale. Between 30 July and 13 August it fell three weeks behind and no tool
+# said a word. This is the same trick check_changelog() already plays on the
+# prototypes, pointed at the log.
+#
+# It is silent when the vault is not reachable. A fresh clone, or CI, has no
+# vault by design, and a warning nobody can act on is noise.
+
+MONTHS = {m: i + 1 for i, m in enumerate(
+    ["january", "february", "march", "april", "may", "june", "july",
+     "august", "september", "october", "november", "december"])}
+
+
+def _newest_change_date():
+    """The latest date this repo admits to having changed on."""
+    dates = []
+    cl = ROOT / "CHANGELOG.md"
+    if cl.exists():
+        dates += re.findall(r"##\s*(\d{4}-\d{2}-\d{2})", cl.read_text(encoding="utf-8"))
+    protos = list((ROOT / "prototypes").glob("*.html"))
+    if protos:
+        dates.append(datetime.date.fromtimestamp(
+            max(p.stat().st_mtime for p in protos)).isoformat())
+    return max(dates) if dates else None
+
+
+def _vault_path():
+    """Ask matbakh.py rather than re-implement its four-step resolution order.
+    One copy of that logic is the whole point."""
+    v = ROOT / "content" / "matbakh.py"
+    if not v.exists():
+        return None
+    try:
+        r = subprocess.run([sys.executable, "matbakh.py", "vault"],
+                           cwd=ROOT / "content", capture_output=True, text=True,
+                           timeout=60)
+    except Exception:
+        return None
+    out = r.stdout.strip().splitlines()
+    out = [l for l in out if l.strip()]
+    if not out or out[-1].strip() == "MISSING":
+        return None
+    return pathlib.Path(out[-1].strip())
+
+
+def check_pm_log():
+    newest = _newest_change_date()
+    if not newest:
+        return
+    vault = _vault_path()
+    if not vault:
+        return                      # no vault reachable — nothing to check
+    log = vault.parent / "02-strategy" / "matbakh_pm_log.md"
+    if not log.exists():
+        hits = list(vault.parent.glob("*/matbakh_pm_log.md"))
+        if not hits:
+            return
+        log = hits[0]
+    txt = log.read_text(encoding="utf-8", errors="replace")
+
+    # 1. the hand-maintained half: is the log's own date behind the repo?
+    iso = re.search(r"Last updated:\**\s*(\d{4}-\d{2}-\d{2})", txt)
+    if iso:
+        stamped = iso.group(1)
+    else:
+        long = re.search(r"Last updated:\**\s*(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})", txt)
+        if not long:
+            warn("the PM log has no readable 'Last updated:' date — add one as "
+                 "YYYY-MM-DD so this check can do its job")
+            return
+        d, mon, y = long.groups()
+        m = MONTHS.get(mon.lower())
+        if not m:
+            warn(f"the PM log's 'Last updated: {long.group(0)}' is not a date "
+                 "this can read — use YYYY-MM-DD")
+            return
+        stamped = f"{y}-{m:02d}-{int(d):02d}"
+        warn("the PM log's 'Last updated' is in long form — switch it to "
+             "YYYY-MM-DD, which is what this check reads")
+    if stamped < newest:
+        warn(f"the PM log was last updated {stamped} but this repo changed on "
+             f"{newest} — the canonical tracker is behind. It is in the vault: "
+             f"{log}")
+
+    # 2. the generated half: is the measured block behind the repo?
+    gen = re.search(r"GENERATED: matbakh\.py status.*?Measured\s+(\d{4}-\d{2}-\d{2})",
+                    txt, re.S)
+    if not gen:
+        warn("the PM log has no generated status block — run: "
+             "cd content && python3 matbakh.py status --write <log>")
+    elif gen.group(1) < newest:
+        warn(f"the PM log's measured figures are from {gen.group(1)} and the "
+             f"repo changed on {newest} — re-run: cd content && "
+             f"python3 matbakh.py status --write <log>")
+
+
+
 def check_content_guard():
     gi = ROOT / ".gitignore"
     if not gi.exists():
@@ -283,7 +382,7 @@ def main():
     print("preflight")
     for fn in (check_files_exist, check_no_orphans, check_filenames, check_asset_refs,
                check_noindex, check_colour_drift, check_changelog,
-               check_content_guard, check_content):
+               check_pm_log, check_content_guard, check_content):
         fn()
 
     for e in ERR:
