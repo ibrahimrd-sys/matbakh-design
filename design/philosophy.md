@@ -484,6 +484,9 @@ How cost and nutrition present themselves on a recipe *before* the cook commits.
 ### 16.3 The meal planner — NOT STARTED
 How it stays advisory without becoming nagging. Established constraint from prior work: non-rigid, non-mandatory, treats deviation as normal; hard rules apply only to dietary exclusions.
 
+### 16.4 — retired, not missing
+Entertaining and hosting was §13.4 here until 13 August 2026, when it was promoted to its own top-level **§13**. The number is left vacant deliberately: renumbering 16.5–16.7 would silently invalidate every cross-reference written since. If you arrived here looking for 16.4, you want **§13**.
+
 ### 16.5 Step granularity — PARTIALLY SETTLED
 Working answer: granularity governed by **hands**, not grammar — a step ends when you next need to look at the screen. Section 4.1's order-independence rule operationalises this, but it has not yet been tested against real recipes at volume.
 

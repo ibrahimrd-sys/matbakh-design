@@ -1,0 +1,611 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Storyboard Bench Sheet</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;600&display=swap">
+<style>
+:root{
+  --paper:#F4EFE6; --card:#FBF8F2; --card-alt:#F8F4EC;
+  --ink:#221E1A; --ink-60:rgba(34,30,26,.60); --ink-40:rgba(34,30,26,.40);
+  --hairline:rgba(34,30,26,.14); --hairline-firm:rgba(34,30,26,.28);
+  --terracotta:#A2542F; --teal:#2F5A55;
+  --running:#12894A; --danger:#E01B22;
+  --m-bg:rgba(162,84,47,.10); --s-bg:rgba(47,90,85,.10);
+  --font-latin:'IBM Plex Sans',system-ui,-apple-system,sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,'SF Mono',monospace;
+  --font-arabic:'Noto Naskh Arabic',serif;
+  --rule:1px solid var(--hairline);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#1B1815; --card:#252017; --card-alt:#2A2620;
+    --ink:#F7F3EB; --ink-60:rgba(247,243,235,.62); --ink-40:rgba(247,243,235,.40);
+    --hairline:rgba(247,243,235,.16); --hairline-firm:rgba(247,243,235,.32);
+    --terracotta:#CE7A4E; --teal:#7FB3AA;
+    --running:#3FBB77; --danger:#FF6B6B;
+    --m-bg:rgba(206,122,78,.14); --s-bg:rgba(127,179,170,.13);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1B1815; --card:#252017; --card-alt:#2A2620;
+  --ink:#F7F3EB; --ink-60:rgba(247,243,235,.62); --ink-40:rgba(247,243,235,.40);
+  --hairline:rgba(247,243,235,.16); --hairline-firm:rgba(247,243,235,.32);
+  --terracotta:#CE7A4E; --teal:#7FB3AA;
+  --running:#3FBB77; --danger:#FF6B6B;
+  --m-bg:rgba(206,122,78,.14); --s-bg:rgba(127,179,170,.13);
+}
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth;}
+html{overflow-x:hidden;}
+body{margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--font-latin); font-size:15px; line-height:1.55; overflow-x:hidden;}
+.wrap{max-width:60rem; margin:0 auto; padding:0 1.25rem 5rem;}
+
+h1,h2,h3,h4{margin:0; font-weight:600; text-wrap:balance; letter-spacing:-.015em;}
+h1{font-size:clamp(1.7rem,5.5vw,2.5rem); line-height:1.08; letter-spacing:-.03em;}
+h2{font-size:clamp(1.1rem,3.2vw,1.42rem); line-height:1.2;}
+h3{font-size:1rem;}
+h4{font-size:.85rem; font-family:var(--font-mono); font-weight:500;
+   text-transform:uppercase; letter-spacing:.11em; color:var(--ink-40);}
+p{margin:0; max-width:64ch;}
+em{font-style:normal; color:var(--terracotta); font-weight:500;}
+code{font-family:var(--font-mono); font-size:.86em; background:var(--card-alt);
+     padding:.08em .32em; border-radius:4px; border:var(--rule);
+     overflow-wrap:break-word; word-break:break-word;}
+.label{font-family:var(--font-mono); font-size:11px; font-weight:500;
+  text-transform:uppercase; letter-spacing:.13em; color:var(--ink-40);}
+
+header.top{padding:3.25rem 0 1.75rem; border-bottom:2px solid var(--ink);}
+header.top .label{color:var(--terracotta); display:block; margin-bottom:.9rem;}
+.lede{font-size:1.03rem; color:var(--ink-60); max-width:54ch; margin-top:.9rem;}
+
+nav.toc{position:sticky; top:0; z-index:10; background:var(--paper);
+  border-bottom:var(--rule); padding:.7rem 0; margin-bottom:0;
+  display:flex; gap:.3rem; overflow-x:auto; scrollbar-width:none;}
+nav.toc::-webkit-scrollbar{display:none;}
+nav.toc a{flex:0 0 auto; font-family:var(--font-mono); font-size:11px;
+  text-transform:uppercase; letter-spacing:.09em; color:var(--ink-60);
+  text-decoration:none; padding:.32rem .6rem; border-radius:5px; border:1px solid transparent;}
+nav.toc a:hover,nav.toc a:focus{color:var(--terracotta); border-color:var(--hairline-firm); outline:none;}
+
+section{padding:2.75rem 0; border-bottom:var(--rule); scroll-margin-top:3.2rem;}
+section:last-of-type{border-bottom:none;}
+.shead{display:flex; flex-direction:column; gap:.55rem; margin-bottom:1.6rem;}
+.shead .label{color:var(--terracotta);}
+
+.note{border-left:3px solid var(--terracotta); padding:.8rem 0 .8rem 1rem;
+  background:var(--card-alt); font-size:.92rem; color:var(--ink-60);
+  border-radius:0 5px 5px 0; margin-top:1.5rem;}
+.note.warn{border-left-color:var(--danger);}
+.note strong{color:var(--ink);}
+
+/* checklist */
+ul.check{list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:.55rem;}
+ul.check li{display:flex; gap:.7rem; align-items:flex-start; font-size:.94rem;}
+ul.check li::before{content:"□"; font-family:var(--font-mono); color:var(--terracotta);
+  font-size:1.05rem; line-height:1.35; flex:0 0 auto;}
+ul.check strong{font-weight:600;}
+
+/* true-size gauge */
+.gauge{display:flex; flex-wrap:wrap; gap:1.5rem; align-items:flex-end;
+  background:var(--card); border:var(--rule); border-radius:12px; padding:1.4rem;}
+.gu{display:flex; flex-direction:column; align-items:center; gap:.45rem;}
+.gu .box{border:1.5px dashed var(--terracotta); border-radius:3px;}
+.gu .solid{border-style:solid; border-color:var(--hairline-firm);}
+.gu .cap{font-family:var(--font-mono); font-size:10px; color:var(--ink-40);
+  letter-spacing:.06em; font-variant-numeric:tabular-nums; text-align:center;}
+
+/* verb grid */
+.stationblock{margin-bottom:1.5rem;}
+.stationblock h3{display:flex; align-items:baseline; gap:.6rem; margin-bottom:.6rem;}
+.stationblock h3 .count{font-family:var(--font-mono); font-size:11px; color:var(--ink-40);
+  letter-spacing:.08em; font-weight:400;}
+.vgrid{display:grid; gap:5px; grid-template-columns:repeat(auto-fill,minmax(min(100%,9.2rem),1fr));}
+.v{font-family:var(--font-mono); font-size:11.5px; padding:.38rem .5rem;
+  border-radius:5px; border:var(--rule); display:flex; align-items:center;
+  justify-content:space-between; gap:.35rem; line-height:1.3;}
+.v.m{background:var(--m-bg); border-color:rgba(162,84,47,.28);}
+.v.s{background:var(--s-bg); border-color:rgba(47,90,85,.26);}
+.v .cls{font-size:9.5px; font-weight:600; letter-spacing:.06em; flex:0 0 auto;}
+.v.m .cls{color:var(--terracotta);} .v.s .cls{color:var(--teal);}
+.v.clash{border-width:1.5px; border-color:var(--danger);}
+.v.clash::after{content:"⚠"; color:var(--danger); font-size:10px;}
+.key{display:flex; flex-wrap:wrap; gap:1rem; margin-bottom:1.4rem; font-size:.86rem; color:var(--ink-60);}
+.key span{display:flex; align-items:center; gap:.4rem;}
+.sw{width:14px; height:14px; border-radius:4px; border:var(--rule); flex:0 0 auto;}
+.sw.m{background:var(--m-bg); border-color:rgba(162,84,47,.4);}
+.sw.s{background:var(--s-bg); border-color:rgba(47,90,85,.4);}
+.sw.c{background:transparent; border:1.5px solid var(--danger);}
+
+/* tables */
+.tscroll{overflow-x:auto; -webkit-overflow-scrolling:touch; margin:0 -1.25rem; padding:0 1.25rem;}
+table{border-collapse:collapse; width:100%; min-width:32rem; font-size:.88rem;}
+th,td{text-align:left; padding:.55rem .75rem .55rem 0; border-bottom:var(--rule); vertical-align:top;}
+th{font-family:var(--font-mono); font-size:10px; font-weight:500; text-transform:uppercase;
+   letter-spacing:.1em; color:var(--ink-40); border-bottom:1px solid var(--hairline-firm); white-space:nowrap;}
+td.num,td.mono{font-family:var(--font-mono); font-variant-numeric:tabular-nums;}
+td.ctr{text-align:center;}
+
+/* storyboard page strips */
+.strip{display:grid; gap:.6rem; grid-template-columns:repeat(auto-fill,minmax(min(100%,10.5rem),1fr)); margin-top:1rem;}
+.pg{background:var(--card); border:var(--rule); border-radius:10px; padding:.7rem;
+  display:flex; flex-direction:column; gap:.4rem; font-size:.78rem; line-height:1.45;}
+.pg .n{font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; color:var(--terracotta); font-weight:600;}
+.pg .st{font-weight:600; font-size:.84rem;}
+.pg .tl{color:var(--ink-60); font-family:var(--font-mono); font-size:10.5px; line-height:1.55;}
+.pg .meta{display:flex; flex-wrap:wrap; gap:.28rem; margin-top:.15rem;}
+.chip{font-family:var(--font-mono); font-size:9px; letter-spacing:.06em; text-transform:uppercase;
+  padding:.14em .38em; border-radius:4px; border:1px solid var(--hairline-firm); color:var(--ink-40);}
+.chip.t{border-color:var(--running); color:var(--running);}
+.chip.d{border-color:var(--terracotta); color:var(--terracotta);}
+.chip.n{border-color:var(--danger); color:var(--danger);}
+.chip.o{border-color:var(--teal); color:var(--teal);}
+
+.cols{display:grid; gap:1rem; grid-template-columns:repeat(auto-fit,minmax(min(100%,16rem),1fr));}
+.card{background:var(--card); border:var(--rule); border-radius:12px; padding:1.1rem;
+  display:flex; flex-direction:column; gap:.6rem;}
+.card.acc{border-top:3px solid var(--terracotta);}
+.card p{font-size:.88rem; color:var(--ink-60);}
+ul.tight{margin:0; padding-left:1.05rem; display:flex; flex-direction:column; gap:.4rem; font-size:.88rem;}
+ul.tight li{max-width:62ch;}
+footer{padding:2.5rem 0 0; color:var(--ink-60); font-size:.86rem;}
+hr.thick{border:none; border-top:2px solid var(--ink); margin:0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <span class="label">Matbakh · bench reference · 21 August 2026</span>
+  <h1>Storyboard bench sheet</h1>
+  <p class="lede">Everything the project knows that bears on drawing a recipe by
+  hand — the page rules, the true frame sizes, all 81 verbs, and the two recipes
+  that already exist to draw against.</p>
+</header>
+
+<nav class="toc">
+  <a href="#deciding">Deciding</a>
+  <a href="#rules">Page rules</a>
+  <a href="#gauge">True sizes</a>
+  <a href="#anatomy">Anatomy</a>
+  <a href="#verbs">81 verbs</a>
+  <a href="#demotions">Demotions</a>
+  <a href="#worked">Worked</a>
+  <a href="#which">Which recipes</a>
+  <a href="#record">What to record</a>
+  <a href="#traps">Traps</a>
+</nav>
+
+<!-- ─────────────────────────────────────────────────────────────── -->
+<section id="deciding">
+  <div class="shead"><span class="label">The frame</span>
+  <h2>One slot is open. Three are closed.</h2></div>
+  <div class="tscroll"><table>
+    <thead><tr><th>The cook asks</th><th>Where</th><th>Carrier</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Where am I?</td><td class="mono">arc · 17 px</td><td>glyph</td><td><strong>closed</strong> — nothing else survives 17 px</td></tr>
+      <tr><td><strong>What do my hands do?</strong></td><td class="mono">tile · 44 px</td><td><em>open</em></td><td><em>this is the decision</em></td></tr>
+      <tr><td>Is it ready?</td><td class="mono">doneness band</td><td>photograph of the state</td><td><strong>closed</strong> — §5.2</td></tr>
+      <tr><td>Why? What did I miss?</td><td class="mono">prose, on request</td><td>generated from the object</td><td><strong>closed</strong> — §3</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><strong>What a storyboard can settle:</strong> whether the page
+  grammar survives real recipes at volume · how many tiles actually land on a page ·
+  which actions you could not draw · <strong>whether the ingredient changes the
+  gesture</strong> — the one finding that can kill the reusable-library
+  recommendation. <strong>What it cannot settle:</strong> whether motion helps. You
+  cannot draw motion. Keep the tile comparison open beside the paper for that.</div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────── -->
+<section id="rules">
+  <div class="shead"><span class="label">Check every frame</span>
+  <h2>The rules a page must obey</h2></div>
+  <div class="cols">
+    <div class="card acc">
+      <h4>Structure</h4>
+      <ul class="check">
+        <li><strong>One step = one page = one station.</strong> If the cook has to move, that is a new page — even for a single action.</li>
+        <li><strong>Several actions on a page only if order-independent and one station.</strong> All the knife prep is one page. <em>Sear</em> and <em>deglaze</em> are two — in cooking the sequence is the information.</li>
+        <li><strong>Waiting is never a page.</strong> A timer attached to the preceding action.</li>
+        <li><strong>6–10 pages typical, 14 hard ceiling.</strong> Over it is an editorial signal, not a formatting problem.</li>
+        <li><strong>Nothing scrolls.</strong></li>
+      </ul>
+    </div>
+    <div class="card acc">
+      <h4>The two tests while drawing</h4>
+      <ul class="check">
+        <li><strong>Granularity:</strong> a step ends when you next need to look at the screen. Hands, not grammar.</li>
+        <li><strong>The metric is pages you must re-read</strong>, not page count. Turning a page is nearly free; reconstructing which half you had done is not.</li>
+      </ul>
+      <h4 style="margin-top:.6rem">Three carriers</h4>
+      <ul class="tight">
+        <li><strong>Icons</strong> — actions</li>
+        <li><strong>Digits + units</strong> — quantity</li>
+        <li><strong>Words</strong> — only the name of the thing, and irreducible judgement</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────── -->
+<section id="gauge">
+  <div class="shead"><span class="label">Draw to these</span>
+  <h2>True sizes, at true size</h2>
+  <p style="color:var(--ink-60)">Rendered at 100% zoom these boxes are the actual
+  pixel sizes the reader draws. Hold your paper frame against them.</p></div>
+  <div class="gauge">
+    <div class="gu"><div class="box" style="width:17px;height:17px"></div><span class="cap">17 px<br>arc</span></div>
+    <div class="gu"><div class="box" style="width:44px;height:44px"></div><span class="cap">44 px<br>tile</span></div>
+    <div class="gu"><div class="box solid" style="width:48px;height:48px"></div><span class="cap">48 px<br>touch min</span></div>
+    <div class="gu"><div class="box" style="width:62px;height:62px"></div><span class="cap">62 px<br>tablet</span></div>
+    <div class="gu"><div class="box solid" style="width:160px;height:78px"></div><span class="cap">2.05:1<br>step photo</span></div>
+    <div class="gu"><div class="box solid" style="width:130px;height:104px"></div><span class="cap">5:4<br>hero</span></div>
+  </div>
+  <div class="tscroll" style="margin-top:1.5rem"><table>
+    <thead><tr><th>Element</th><th>Rendered</th><th>Shoot / draw at</th></tr></thead>
+    <tbody>
+      <tr><td>Arc thumbnail glyph</td><td class="num">~17 px</td><td><strong>the binding constraint</strong> — legible here means legible everywhere</td></tr>
+      <tr><td>Cook-mode tile glyph</td><td class="num">44 × 44</td><td>primary size, also the minimum touch target</td></tr>
+      <tr><td>Tablet tile glyph</td><td class="num">62 × 62</td><td>largest use — a 3.6× range overall</td></tr>
+      <tr><td>Step / doneness photo</td><td class="num">361 × 176</td><td>4:3 or 3:2, subject in the middle <strong>65% vertically</strong></td></tr>
+      <tr><td>Hero photo</td><td class="num">393 × 318</td><td><strong>5:4 landscape</strong> — fills the band to within 2 px</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><strong>Drawing rules for a glyph:</strong> three strokes or
+  fewer · no detail below 2 px on the 24 grid · <strong>silhouette must differ
+  from every neighbour</strong> — squint at the arc strip; if two steps look alike,
+  the cook loses their place · no lettering, no numerals · draw the <strong>action,
+  not the ingredient</strong>.</div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────── -->
+<section id="anatomy">
+  <div class="shead"><span class="label">What a frame accounts for</span>
+  <h2>Anatomy of one page</h2></div>
+  <div class="cols">
+    <div class="card">
+      <h4>The step — one page</h4>
+      <ul class="tight">
+        <li><code>station</code> — closed list of six: <code>board</code> <code>stove</code> <code>bench</code> <code>grill</code> <code>oven</code> <code>serve</code></li>
+        <li><code>qualifier</code> — renders “Stove · takliya”. How four stove pages stay distinct</li>
+        <li><code>ordered</code> — <strong>only if out-of-sequence ruins the dish.</strong> Default false; meaningless on a single tile</li>
+        <li><code>heat</code> — 1 low · 2 medium · 3 high</li>
+        <li><code>timer {minutes, label, mass_sensitive}</code> — belongs to the <strong>session</strong>, not the page</li>
+        <li><code>makes</code> — names an intermediate</li>
+        <li><code>photo</code> + <code>doneness</code> — <strong>travel together, always</strong></li>
+        <li><code>note {kind, text}</code> — four kinds only</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h4>The tile — one action</h4>
+      <ul class="tight">
+        <li><code>do</code> (lexicon key — the verb comes free in 5 locales) <strong>or</strong> <code>verb</code> + <code>glyph</code> (bespoke, the escape hatch)</li>
+        <li><code>qualifier</code> · <code>item</code> / <code>items[]</code> · <code>amt</code></li>
+        <li><code>carried: true</code> — same physical ingredient reappearing later, so the basket counts one bird not three</li>
+        <li><code>cut</code> + <code>cut_mm</code> — the cut is a <em>result</em>; <code>cut_mm</code> carries what a glyph cannot</li>
+        <li><code>into</code> — <strong>data, never a caption.</strong> It briefs the picture; it does not print</li>
+        <li><code>short</code> — attaches a technique clip</li>
+      </ul>
+    </div>
+  </div>
+  <div class="note"><strong>Glyph resolution:</strong> <code>tile.glyph</code> →
+  <code>activity.glyph</code> → <code>ingredient.glyph</code>. <strong>The activity
+  glyph wins over the ingredient glyph</strong> — the builder had this inverted
+  until 19 August. Ingredient glyphs are coarse categories: 45 ingredients share
+  <code>jar</code>, 38 share <code>vegetable</code>, so a page of four spices drew
+  four identical pictures.</div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────── -->
+<section id="verbs">
+  <div class="shead"><span class="label">The closed vocabulary</span>
+  <h2>All 81 verbs, by station</h2>
+  <p style="color:var(--ink-60)">Counted from <code>activities.yaml</code> — 81
+  activities, 78 distinct glyphs. <strong>The M / S classification is judgement,
+  not measurement.</strong> Correct it as you draw.</p></div>
+
+  <div class="key">
+    <span><i class="sw m"></i> <strong>M — motion-defined (47).</strong> A single frame cannot separate it from a neighbour</span>
+    <span><i class="sw s"></i> <strong>S — state-defined (34).</strong> A placement or elapsed condition; a still captures it</span>
+    <span><i class="sw c"></i> shares a glyph with another verb</span>
+  </div>
+
+  <div class="stationblock">
+    <h3>board <span class="count">10 · all motion</span></h3>
+    <div class="vgrid">
+      <div class="v m clash">chop<span class="cls">M</span></div><div class="v m">crush<span class="cls">M</span></div>
+      <div class="v m">cut_wedges<span class="cls">M</span></div><div class="v m">dice<span class="cls">M</span></div>
+      <div class="v m">grate<span class="cls">M</span></div><div class="v m clash">mince<span class="cls">M</span></div>
+      <div class="v m">peel<span class="cls">M</span></div><div class="v m">shred<span class="cls">M</span></div>
+      <div class="v m">slice<span class="cls">M</span></div><div class="v m">zest<span class="cls">M</span></div>
+    </div>
+  </div>
+
+  <div class="stationblock">
+    <h3>stove <span class="count">19 · 15 M / 4 S</span></h3>
+    <div class="vgrid">
+      <div class="v s">bain_marie<span class="cls">S</span></div><div class="v m">blanch<span class="cls">M</span></div>
+      <div class="v m">boil<span class="cls">M</span></div><div class="v s">braise<span class="cls">S</span></div>
+      <div class="v m">deep_fry<span class="cls">M</span></div><div class="v m">deglaze<span class="cls">M</span></div>
+      <div class="v s">do_not_stir<span class="cls">S</span></div><div class="v m">flambe<span class="cls">M</span></div>
+      <div class="v m">fry<span class="cls">M</span></div><div class="v m">ladle<span class="cls">M</span></div>
+      <div class="v m">poach<span class="cls">M</span></div><div class="v s">pressure_cook<span class="cls">S</span></div>
+      <div class="v m">reduce<span class="cls">M</span></div><div class="v m">simmer<span class="cls">M</span></div>
+      <div class="v m">skim<span class="cls">M</span></div><div class="v m">steam<span class="cls">M</span></div>
+      <div class="v m">stir<span class="cls">M</span></div><div class="v m">stir_fry<span class="cls">M</span></div>
+      <div class="v m">sweat<span class="cls">M</span></div>
+    </div>
+  </div>
+
+  <div class="stationblock">
+    <h3>bench <span class="count">34 · 14 M / 20 S</span></h3>
+    <div class="vgrid">
+      <div class="v m">blend<span class="cls">M</span></div><div class="v s">brine<span class="cls">S</span></div>
+      <div class="v m clash">brush<span class="cls">M</span></div><div class="v s">chill<span class="cls">S</span></div>
+      <div class="v s">coat<span class="cls">S</span></div><div class="v s">cool<span class="cls">S</span></div>
+      <div class="v s">cure<span class="cls">S</span></div><div class="v s">drain<span class="cls">S</span></div>
+      <div class="v s">dry<span class="cls">S</span></div><div class="v s">ferment<span class="cls">S</span></div>
+      <div class="v m">flatten<span class="cls">M</span></div><div class="v m">fold<span class="cls">M</span></div>
+      <div class="v s">freeze<span class="cls">S</span></div><div class="v m">grind<span class="cls">M</span></div>
+      <div class="v s">infuse<span class="cls">S</span></div><div class="v s">inject<span class="cls">S</span></div>
+      <div class="v m">knead<span class="cls">M</span></div><div class="v s">layer<span class="cls">S</span></div>
+      <div class="v s">marinate<span class="cls">S</span></div><div class="v m">mash<span class="cls">M</span></div>
+      <div class="v m">mix<span class="cls">M</span></div><div class="v s">rest<span class="cls">S</span></div>
+      <div class="v m">roll<span class="cls">M</span></div><div class="v s">set<span class="cls">S</span></div>
+      <div class="v s">shape<span class="cls">S</span></div><div class="v m">sift<span class="cls">M</span></div>
+      <div class="v s">soak<span class="cls">S</span></div><div class="v m">squeeze<span class="cls">M</span></div>
+      <div class="v m">strip<span class="cls">M</span></div><div class="v s">stuff<span class="cls">S</span></div>
+      <div class="v m">toss<span class="cls">M</span></div><div class="v s">wash<span class="cls">S</span></div>
+      <div class="v m">whisk<span class="cls">M</span></div><div class="v s">wrap<span class="cls">S</span></div>
+    </div>
+  </div>
+
+  <div class="cols">
+    <div class="stationblock">
+      <h3>grill <span class="count">4</span></h3>
+      <div class="vgrid">
+        <div class="v m">char<span class="cls">M</span></div><div class="v s">grill<span class="cls">S</span></div>
+        <div class="v m">sear<span class="cls">M</span></div><div class="v m">skewer<span class="cls">M</span></div>
+      </div>
+    </div>
+    <div class="stationblock">
+      <h3>oven <span class="count">5</span></h3>
+      <div class="vgrid">
+        <div class="v s">bake<span class="cls">S</span></div><div class="v m clash">baste<span class="cls">M</span></div>
+        <div class="v s">broil<span class="cls">S</span></div><div class="v s">roast<span class="cls">S</span></div>
+        <div class="v s">toast<span class="cls">S</span></div>
+      </div>
+    </div>
+    <div class="stationblock">
+      <h3>serve <span class="count">6</span></h3>
+      <div class="vgrid">
+        <div class="v m">drizzle<span class="cls">M</span></div><div class="v m">dust<span class="cls">M</span></div>
+        <div class="v s">garnish<span class="cls">S</span></div><div class="v s">serve<span class="cls">S</span></div>
+        <div class="v m">sprinkle<span class="cls">M</span></div><div class="v s clash">to_taste<span class="cls">S</span></div>
+      </div>
+    </div>
+    <div class="stationblock">
+      <h3>any <span class="count">3</span></h3>
+      <div class="vgrid">
+        <div class="v s">add<span class="cls">S</span></div><div class="v m">pour<span class="cls">M</span></div>
+        <div class="v s clash">season<span class="cls">S</span></div>
+      </div>
+    </div>
+  </div>
+
+  <h4 style="margin-top:1.5rem">The three glyph collisions</h4>
+  <div class="tscroll"><table>
+    <thead><tr><th>Pair</th><th>Shared file</th><th>Class</th><th>Does motion fix it?</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">chop / mince</td><td class="mono">chop.svg</td><td class="ctr mono">M / M</td><td><strong>Yes</strong> — different motions</td></tr>
+      <tr><td class="mono">brush / baste</td><td class="mono">brush.svg</td><td class="ctr mono">M / M</td><td><strong>Yes</strong> — different motions</td></tr>
+      <tr><td class="mono">season / to_taste</td><td class="mono">salt.svg</td><td class="ctr mono">S / S</td><td><strong>No.</strong> Same act; what differs is <em>intent</em></td></tr>
+    </tbody>
+  </table></div>
+  <div class="note warn"><strong>Both members of the third pair appear in
+  molokhia.</strong> No photograph, frame or loop can show intent — that collision
+  survives every imagery option on the table. Storyboard it deliberately and see
+  whether the <em>page</em> can separate them.<br><br>
+  <strong>A correction:</strong> older notes list <code>cut_wedges</code>/<code>zest</code>
+  as a fourth pair. On disk they carry distinct glyphs — <code>wedges</code> and
+  <code>lemon</code>. Three pairs share a file, not four.</div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────── -->
+<section id="demotions">
+  <div class="shead"><span class="label">No icon, no new word</span>
+  <h2>The seven demotions</h2>
+  <p style="color:var(--ink-60)">Expressed as an activity plus a qualifier. If one
+  reads awkwardly in <strong>≥2</strong> recipes, it gets promoted back.</p></div>
+  <div class="tscroll"><table>
+    <thead><tr><th>Old key</th><th>Becomes</th><th>Qualifier</th><th>Arabic</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">joint</td><td class="mono">slice</td><td>into pieces</td><td class="mono" style="font-family:var(--font-arabic)">قطّع لقطع</td></tr>
+      <tr><td class="mono">simmer_covered</td><td class="mono">simmer</td><td>covered</td><td style="font-family:var(--font-arabic)">مغطى</td></tr>
+      <tr><td class="mono">add_to</td><td class="mono">add</td><td>into</td><td style="font-family:var(--font-arabic)">في</td></tr>
+      <tr><td class="mono">pour_over</td><td class="mono">pour</td><td>over it</td><td style="font-family:var(--font-arabic)">فوقها</td></tr>
+      <tr><td class="mono">arrange</td><td class="mono">serve</td><td>arranged</td><td style="font-family:var(--font-arabic)">مرصوص</td></tr>
+      <tr><td class="mono">alongside</td><td class="mono">serve</td><td>alongside</td><td style="font-family:var(--font-arabic)">بجانبها</td></tr>
+      <tr><td class="mono">pickle</td><td class="mono">ferment</td><td>pickled</td><td style="font-family:var(--font-arabic)">مخلل</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note"><code>do_not_stir</code>, <code>to_taste</code> and
+  <code>serve</code> were demoted in review but <strong>kept</strong> — they have no
+  underlying activity to qualify. <code>do_not_stir</code> in particular
+  <em>inverts</em> its verb: rendered as <code>stir</code> plus a qualifier it would
+  read as <strong>“stir”</strong> on a 44 px tile, on the one step where stirring
+  splits the dish.</div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────── -->
+<section id="worked">
+  <div class="shead"><span class="label">Draw against these</span>
+  <h2>The two recipes that exist</h2></div>
+
+  <h3 style="margin-bottom:.2rem">Molokhia bil farakh <span class="label" style="color:var(--ink-40)">· 8 pages · 14 activities · 4 demotions · 2 bespoke</span></h3>
+  <div class="strip">
+    <div class="pg"><span class="n">1</span><span class="st">board</span><span class="tl">chop onion ·2 <em>fine</em><br>crush garlic ·8<br>chop coriander<br>slice chicken <em>into pieces</em></span><div class="meta"><span class="chip d">doneness</span><span class="chip">demotion</span></div></div>
+    <div class="pg"><span class="n">2</span><span class="st">stove · stock</span><span class="tl">simmer <em>covered</em><br>(chicken carried, water)<br>add bay leaf</span><div class="meta"><span class="chip t">40 min</span><span class="chip d">doneness</span><span class="chip o">makes</span></div></div>
+    <div class="pg"><span class="n">3</span><span class="st">bench</span><span class="tl">strip chicken carried<br>drain @stock 1200</span><div class="meta"><span class="chip">coming up</span></div></div>
+    <div class="pg"><span class="n">4</span><span class="st">stove · takliya</span><span class="tl">fry (garlic, ghee)<br><em>“Then add”</em> ← bespoke</span><div class="meta"><span class="chip d">doneness</span><span class="chip n">stay here</span></div></div>
+    <div class="pg"><span class="n">5</span><span class="st">stove · pot</span><span class="tl">add molokhia<br><em>into the stock</em></span><div class="meta"><span class="chip t">8 min ·mass</span><span class="chip d">doneness</span><span class="chip n">never</span></div></div>
+    <div class="pg"><span class="n">6</span><span class="st">stove · pot</span><span class="tl"><em>“Pour over, listen<br>for the hiss”</em> ← bespoke<br>do_not_stir <em>after</em></span><div class="meta"><span class="chip">no photo</span></div></div>
+    <div class="pg"><span class="n">7</span><span class="st">grill</span><span class="tl">sear chicken carried<br><em>skin-side</em><br>season salt</span><div class="meta"><span class="chip t">6 min ·mass</span><span class="chip d">doneness</span></div></div>
+    <div class="pg"><span class="n">8</span><span class="st">serve</span><span class="tl">serve rice <em>alongside</em><br>cut_wedges lemon<br>to_taste salt</span><div class="meta"><span class="chip d">doneness</span><span class="chip">demotion</span></div></div>
+  </div>
+
+  <h3 style="margin:1.8rem 0 .2rem">Tagliatelle al ragù <span class="label" style="color:var(--ink-40)">· 9 pages · six at one station · 180 passive minutes, zero pages</span></h3>
+  <div class="strip">
+    <div class="pg"><span class="n">1</span><span class="st">board</span><span class="tl">mince → @soffritto<br>onion 1 · carrot 60 g<br>celery 60 g<br>all brunoise, cut_mm 2</span><div class="meta"><span class="chip d">doneness</span><span class="chip o">into</span></div></div>
+    <div class="pg"><span class="n">2</span><span class="st">stove · soffritto</span><span class="tl">sweat <em>no colour</em><br>3 carried + olive oil</span><div class="meta"><span class="chip t">12 min ·mass</span><span class="chip d">doneness</span><span class="chip o">makes</span></div></div>
+    <div class="pg"><span class="n">3</span><span class="st">stove · meat</span><span class="tl">fry pancetta<br><em>until the fat runs</em><br>→ sear beef</span><div class="meta"><span class="chip o">ordered</span><span class="chip d">doneness</span><span class="chip n">never</span></div></div>
+    <div class="pg"><span class="n">4</span><span class="st">stove · pot</span><span class="tl">add @soffritto<br>deglaze wine</span><div class="meta"><span class="chip o">ordered</span><span class="chip t">6 min ·mass</span><span class="chip d">doneness</span></div></div>
+    <div class="pg"><span class="n">5</span><span class="st">stove · pot</span><span class="tl">add tomatoes + paste<br>season salt</span><div class="meta"><span class="chip d">doneness</span><span class="chip o">makes</span></div></div>
+    <div class="pg"><span class="n">6</span><span class="st">stove · covered</span><span class="tl">simmer @ragu <em>covered</em><br>add stock <em>a ladle<br>when it tightens</em></span><div class="meta"><span class="chip t">90 min</span><span class="chip d">doneness</span><span class="chip n">stay here</span></div></div>
+    <div class="pg"><span class="n">7</span><span class="st">stove · uncovered</span><span class="tl">add milk → @ragu</span><div class="meta"><span class="chip t">90 min</span><span class="chip d">doneness</span></div></div>
+    <div class="pg"><span class="n">8</span><span class="st">stove · pasta</span><span class="tl">boil (water, salt)<br>add tagliatelle<br>drain <em>keep a cup</em></span><div class="meta"><span class="chip o">ordered</span><span class="chip t">3 min ·mass</span><span class="chip d">doneness</span></div></div>
+    <div class="pg"><span class="n">9</span><span class="st">serve</span><span class="tl">toss <em>in the pan,<br>off the heat</em><br>grate parmesan <em>over</em></span><div class="meta"><span class="chip o">ordered</span><span class="chip d">doneness</span></div></div>
+  </div>
+
+  <div class="note"><strong>Both land at 8–9 pages, inside the 6–10 target.</strong>
+  That is a sample of two, and whether it holds is exactly what the storyboard
+  tests. Note what recipe 1 already told us: every demotion read naturally as
+  activity + qualifier, and only two bespoke verbs appeared — one the escape hatch
+  working as designed, one that should simply be <code>add</code>.</div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────── -->
+<section id="which">
+  <div class="shead"><span class="label">Coverage, not convenience</span>
+  <h2>The smallest set that stresses imagery</h2>
+  <p style="color:var(--ink-60)">The pilot's fifteen were chosen for coverage.
+  Storyboarding is far cheaper than cooking, so do more if you can — but if you
+  want the minimum that pressures <em>this</em> decision, it is six, of which two
+  already exist.</p></div>
+  <div class="tscroll"><table>
+    <thead><tr><th>#</th><th>Dish</th><th>Why, for imagery</th></tr></thead>
+    <tbody>
+      <tr><td class="num">1</td><td><strong>Molokhia</strong></td><td>Authored — the control. Carries <code>season</code>/<code>to_taste</code>, the collision no imagery fixes</td></tr>
+      <tr><td class="num">—</td><td><strong>Bolognese</strong></td><td>Authored — the stove arc, <code>boil</code>/<code>simmer</code> as motion, multi-item tiles</td></tr>
+      <tr><td class="num">4</td><td><strong>Sole meunière</strong></td><td><code>baste</code>↔<code>brush</code> collision <em>and</em> the lemon pair, in one dish</td></tr>
+      <tr><td class="num">6</td><td><strong>Lamb kofta</strong></td><td><code>mince</code>↔<code>chop</code>, plus the <strong>only carrier of the grill station</strong></td></tr>
+      <tr><td class="num">13</td><td><strong>Baladi bread</strong></td><td>The Class S extreme — <code>ferment</code>, <code>rest</code>, <code>set</code>. Where motion shows nothing</td></tr>
+      <tr><td class="num">2</td><td><strong>Koshari</strong></td><td>Assembly and layering, the <code>arrange</code>→<code>serve</code>+qualifier demotion</td></tr>
+    </tbody>
+  </table></div>
+  <div class="note">A seventh, if you want it: <strong>mahshi</strong> adds a
+  sub-recipe (<code>uses</code> / <code>yield</code>), which changes page shape in a
+  way nothing else on the list does.<br><br>
+  <strong>Two waves, not one.</strong> Storyboard a first batch, log everything,
+  <strong>change nothing</strong>, then do the rest and re-audit. Deciding after the
+  first batch over-fits to it — the same discipline the pilot already applies.</div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────── -->
+<section id="record">
+  <div class="shead"><span class="label">Make it a dataset</span>
+  <h2>What to record while drawing</h2>
+  <p style="color:var(--ink-60)">A storyboard that produces an impression settles
+  nothing. Per tile:</p></div>
+  <div class="tscroll"><table>
+    <thead><tr><th>Column</th><th>Values</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Carrier verdict</strong></td><td class="mono">glyph / motion / this dish</td><td>~150 judgements across 15 recipes — the only dataset on this that will ever exist</td></tr>
+      <tr><td><strong>Ingredient changed the gesture?</strong></td><td class="mono">y / n</td><td><strong>The falsifiable one.</strong> ≥3 recipes and the reusable library fails</td></tr>
+      <tr><td>Drawable in ≤3 strokes?</td><td class="mono">y / n</td><td>The asset-spec rule, tested by hand</td></tr>
+      <tr><td>Silhouette clash on this page</td><td class="mono">which pair</td><td>Squint at the arc — alike means the cook loses their place</td></tr>
+      <tr><td>Reached outside the lexicon</td><td class="mono">the wording</td><td>≥3 recipes earns a place in the closed set</td></tr>
+      <tr><td>Demotion felt forced</td><td class="mono">y / n</td><td>≥2 recipes promotes it back</td></tr>
+      <tr><td>Arabic felt wrong</td><td class="mono">the word</td><td>One real context is enough to fix a cell</td></tr>
+    </tbody>
+  </table></div>
+  <p style="margin-top:1.2rem; color:var(--ink-60)"><strong>Per page:</strong>
+  station · tile count · ordered · timer · has doneness · <em>would you re-read
+  this page</em>. &nbsp;<strong>Per recipe:</strong> page count against 6–10/14 ·
+  activities used · bespoke count · demotions · sub-recipes · minutes to draw it.</p>
+
+  <div class="cols" style="margin-top:1.5rem">
+    <div class="card acc">
+      <h4>Thresholds — after the batch, never during</h4>
+      <ul class="tight">
+        <li><strong>Add a verb</strong> only if reached for in <strong>≥3</strong> recipes</li>
+        <li><strong>Promote a demotion back</strong> if it read awkwardly in <strong>≥2</strong></li>
+        <li><strong>Split an icon</strong> if a glyph failed at 17 px anywhere, or two actions collided in practice</li>
+        <li><strong>Fix an Arabic cell</strong> if a drafted verb felt wrong in even <strong>one</strong> context</li>
+        <li>An unexercised activity means <strong>examine</strong>, not delete</li>
+      </ul>
+    </div>
+    <div class="card acc">
+      <h4>Exit criteria — all four must hold</h4>
+      <ul class="tight">
+        <li><strong>≥90%</strong> of actions mapped to an activity or a clean activity + qualifier</li>
+        <li>No new verb recurred <strong>≥3×</strong> without being addressed</li>
+        <li>Every icon read at <strong>both 44 px and 17 px</strong>, no unresolved collision</li>
+        <li>Every drafted-Arabic verb that appeared was confirmed or corrected</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ─────────────────────────────────────────────────────────────── -->
+<section id="traps">
+  <div class="shead"><span class="label">Learned the hard way</span>
+  <h2>Traps</h2></div>
+  <ul class="tight" style="gap:.6rem">
+    <li><strong>The 20 SVGs in <code>design/icons/</code> are geometric
+    placeholders</strong>, not the production Tabler set, and several of the 81
+    glyph names are invented. The prototypes render them at full fidelity, so they
+    read as finished. They are not — C-05 is open.</li>
+    <li><strong>Six activities currently draw the ingredient, not the action</strong>
+    — <code>cut_wedges</code>, <code>zest</code>, <code>garnish</code>,
+    <code>season</code>, <code>to_taste</code>, <code>simmer</code>. That violates
+    asset-spec's own rule. If your storyboard reproduces it, that is the placeholder
+    misleading you.</li>
+    <li><strong>A missing <code>carried: true</code> is the most common warning.</strong>
+    Mark carried items distinctly on paper or the basket triples the chicken.</li>
+    <li><strong><code>ordered: true</code> on a single-tile page is meaningless</strong>
+    — the one real nit found in recipe 1.</li>
+    <li><strong>Digits are a live layer over static grammar.</strong> Never draw a
+    quantity into the picture — scaling, unit toggles and live pricing all change it.</li>
+    <li><strong><code>into:</code> is data, not a caption.</strong> Settled 19 August:
+    the frame shows where the food goes, so a caption only repeats the picture.</li>
+    <li><strong>Waiting is never a page.</strong> Bolognese has 180 passive minutes
+    and zero pages for them.</li>
+    <li><strong>Never hand-type a measurable number.</strong> The ingredient count has
+    been quoted as 177, 178 and 179 inside one week. <code>matbakh.py status</code>
+    generates them; read the block at the top of the PM log, not any prose.</li>
+    <li><strong><code>check</code> counts the repo fixture as a recipe</strong> — a
+    raw run reads <em>3 authored</em> where two are real. <code>status</code> splits
+    the two sources.</li>
+    <li><strong>Clear the stale Excel lock file</strong>
+    <code>~$matbakh-lexicon-review-annotated.xlsx</code> in <code>03-catalogue/ref/</code>
+    before any verdict lands in that workbook.</li>
+  </ul>
+</section>
+
+<hr class="thick">
+<footer>
+  <p><strong>Sources.</strong> <code>philosophy.md</code> §3, §4.1–4.7, §5.1–5.4,
+  §11, §16.5 · <code>asset-spec.md</code> · <code>authoring-standard.md</code> §4,
+  §5, Appendix B · <code>content/lexicon/activities.yaml</code> (81 activities, 78
+  glyphs, 3 shared pairs — counted from the file) ·
+  <code>recipe-pilot-scheme.md</code> §1, §4, §5, §6 ·
+  <code>recipes/molokhia.yaml</code> and <code>recipes/bolognese.yaml</code> ·
+  <code>step-imagery-research.md</code> (18 Aug) and
+  <code>step-imagery-decision.md</code> (21 Aug).</p>
+  <p style="margin-top:.9rem"><strong>The one thing here that is judgement rather
+  than measurement</strong> is the Class M / Class S split. Everything else is read
+  from a file. Where this sheet and an older note disagree, re-run
+  <code>matbakh.py status</code> and <code>matbakh.py lexicon</code> — they are the
+  authority.</p>
+</footer>
+
+</div>
+</body>
+</html>

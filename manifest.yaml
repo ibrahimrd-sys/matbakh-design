@@ -7,6 +7,8 @@
 #
 #   python3 build.py          check + regenerate index.html
 #   ./publish.sh "message"    check, regenerate, commit, push
+#
+# What every file in this repository is, and whether to trust it: DIRECTORY.md
 # ─────────────────────────────────────────────────────────────────────────────
 
 project:
@@ -16,7 +18,7 @@ project:
            a kitchen. Everything here is arranged around the counter-top
            posture — hands busy, attention divided, the screen propped an
            arm's length away.
-  release: "2026.08.20"        # bump on every publish; shown in the header
+  release: "2026.08.26"        # bump on every publish; shown in the header
   public: false                # false → noindex banner stays on the site
 
 # The headline prototype. Exactly one.
@@ -57,7 +59,8 @@ sections:
       - file: prototypes/app-iphone.html
         title: Molokhia — iPhone, linked flow
         blurb: The earlier example, hand-built. Pre-commit recipe screen into cook
-               mode, with state carried between the two.
+               mode, with state carried between the two. Still the only prototype
+               carrying the Resume button.
         tags: [IPHONE, 2 SCREENS, ALARM, SWIPE]
       - file: prototypes/recipe-screen-iphone.html
         title: Pre-commit recipe screen
@@ -91,21 +94,41 @@ sections:
                timer-band edge.
         tags: [IPHONE, VARIANT]
 
+  - heading: Working sheets
+    sub: Made to settle one question each, not to be lived with. Listed so
+         preflight stops calling them orphans and so a reviewer can find the
+         argument behind a decision. They come out when the question is closed.
+    items:
+      - file: prototypes/tile-comparison.html
+        title: What goes in the tile
+        blurb: The sheet that argued option C — icons plus a frame from the cook
+               video, never photographs instead of icons. The binding constraint
+               is the 17px arc thumbnail.
+        tags: [WORKING, TEMPORARY]
+      - file: prototypes/storyboard-bench-sheet.html
+        title: Storyboard bench sheet
+        blurb: The bench sheet behind design/storyboard-companion.md.
+        tags: [WORKING, TEMPORARY]
+
 reference:
-  - { file: design/philosophy.md, title: "Design philosophy — settled decisions and open questions", kind: MARKDOWN }
-  - { file: design/tokens.css,    title: "Design tokens — the canonical palette and type scale",       kind: CSS }
-  - { file: CHANGELOG.md,         title: "Changelog — what moved, when",                               kind: MARKDOWN }
-  - { file: ATTRIBUTIONS.md,      title: "Attributions — placeholder photography credits",             kind: MARKDOWN }
+  - { file: DIRECTORY.md,              title: "Directory — what every file here is, and whether to trust it", kind: MARKDOWN }
+  - { file: design/philosophy.md,      title: "Design philosophy — settled decisions and open questions",     kind: MARKDOWN }
+  - { file: design/authoring-standard.md, title: "Authoring standard — how to enter a recipe",                kind: MARKDOWN }
+  - { file: design/tokens.css,         title: "Design tokens — the canonical palette and type scale",         kind: CSS }
+  - { file: CHANGELOG.md,              title: "Changelog — what moved, when",                                 kind: MARKDOWN }
+  - { file: ATTRIBUTIONS.md,           title: "Attributions — placeholder photography credits",               kind: MARKDOWN }
 
 # Shown in the site footer. Keep honest — reviewers calibrate on these.
 caveats:
   - Placeholder photography and the technique clip come from Wikimedia Commons
-    (CC) and stand in for shot art direction.
+    (CC) and stand in for shot art direction. No cook video has been shot, so
+    every FRAME TO PULL and TO BE SHOT placeholder is the honest state.
   - Icon glyphs are geometric placeholders for the activity set.
   - Prices are illustrative, not sourced.
 
 next_up:
-  - Decide the tile treatment (frames vs glyphs)
+  - Decide the bolognese prototype — option C, yes or no (§16.6)
+  - Run the recipe pilot, waves 1–8 then 9–15
+  - Settle the tag vocabulary (PM-07, §16.7)
   - Discovery (§16.1)
-  - The tablet pre-commit screen
-  - Meal planner (§16.3)
+  - Meal planner screen (§16.3)

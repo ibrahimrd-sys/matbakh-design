@@ -5,6 +5,64 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-08-26 — a directory you can rely on
+
+- **`DIRECTORY.md` added**, and it is the point of this release. Every file in
+  the repository is now marked **CANON · GENERATED · FIXTURE · DRAFT · WORKING ·
+  PLACEHOLDER · GUARD**, so the question *can I cite this?* has an answer that
+  does not depend on remembering. The vault has its own, beside it and never
+  committed.
+- **Three overlapping READMEs in `tools/` folded into one.** `README.md`,
+  `tools-README.md` and `translator.md` were each a strict superset of the last;
+  the merged file is built from the fullest of the three and now covers all
+  **four** tools rather than claiming there are two. `translator.md`'s name was
+  an accident — it is what `Translator README.md` became when `publish.sh`
+  refused a filename containing a space.
+- **READMEs now carry something indicative in the name**, a convention set
+  today. `tools/README.md` becomes **`ToolsReadme.md`**, the vault's becomes
+  **`VaultReadme.md`**, and the archive gets **`ArchiveReadme.md`**; each opens
+  with a distinctive H1 and a written date, so the content identifies itself
+  even when the filename is stripped by a paste or an export. A bare
+  `README.md` does no work in a tab bar when there are fourteen of them. **Two
+  permanent exceptions**, recorded in `DIRECTORY.md §11`: the repo root, because
+  GitHub renders only `README.md` as the landing page, and
+  `content/recipes/README.md`, because it is whitelisted *by name* in all four
+  vault guards and a safety net should not be edited to suit a naming
+  preference. Pre-existing stub READMEs keep their names until rewritten. The
+  cost, taken knowingly: `tools/` no longer gets an auto-rendered description
+  when browsed on GitHub.
+- **`design/philosophy_old.md` retired.** A placeholder header plus the music
+  decision, which lives in `philosophy.md §12` in full. Nothing referenced it.
+- **`content/ref/ingredients.yaml` retired.** A stale local copy of the vault's
+  reference, dated 31 July. Gitignored, so never published — and read by
+  nothing: `matbakh.py` resolves either the vault's copy or
+  `ingredients.sample.yaml` and never looks at that path. It existed only to be
+  mistaken for the real reference.
+- **`philosophy.md §16.4` is now explicitly vacant rather than silently
+  missing.** Entertaining was promoted out to §13 on 13 August and the number
+  was left as a hole. Renumbering 16.5–16.7 would invalidate every
+  cross-reference written since, so the gap is annotated instead.
+- **The molokhia schema fixture says what it is, in the file.** It is a
+  near-copy of the vault's authored pilot recipe — same dish, differing only in
+  `id` and one `ordered:` flag — which is why a raw `check` reads *3 authored*
+  where the catalogue holds two. Retiring it needs a pilot stub to stand in and
+  four guard files edited, so it is documented rather than moved.
+- **`storyboard-bench-sheet.html` and `tile-comparison.html` listed in the
+  manifest** under a new *Working sheets* section. They were orphans — on disk,
+  in no manifest, so preflight warned on every run and no reviewer could reach
+  the argument behind option C. Tagged `WORKING, TEMPORARY`; they come out when
+  the question closes.
+- **`README.md` refreshed.** The structure tree had no `planner/`, no `tools/`,
+  and called `app-iphone.html` the lead; the pre-launch checklist still asked for
+  a real `philosophy.md` and an empty `assets/`, both of which landed weeks ago.
+  The first-time-publish walkthrough is now a fresh-clone section, since the repo
+  is published.
+- `planner/__pycache__/` removed from disk. Already gitignored; it was never
+  committed.
+
+*Nothing moved folders. `manifest.yaml`, `build.py`, `publish.sh` and the three
+vault guards all still see the layout they expect.*
+
 ## 2026-08-20 — the log now says when it has gone stale
 
 - **`content/matbakh.py status`** emits the measurable half of the PM log as a

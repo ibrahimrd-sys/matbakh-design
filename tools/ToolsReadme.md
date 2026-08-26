@@ -1,11 +1,24 @@
-# tools
+# Tools — the four authoring editors
 
-Two authoring tools. Both are single HTML files: open them in a browser, no
+*Written 26 August 2026. One file per tool question; there is no second copy of
+this document.*
+
+**Four** authoring tools. Each is a single HTML file: open it in a browser, no
 install, no server, no Python.
+
+| File | Opens | For |
+|---|---|---|
+| `ingredient-editor.html` | the vault's `ref/ingredients.yaml` | the ingredient reference — units, conversions, nutrition, diet |
+| `lexicon-editor.html` | `content/lexicon/activities.yaml` + `chrome.yaml` | the activity vocabulary and its Arabic |
+| `recipe-editor.html` | a recipe + the lexicon + the reference | authoring and editing recipes |
+| `translator.html` | recipe files + `chrome.yaml` | handing prose to a collaborator without exposing structure |
 
 **Nothing is uploaded.** Files are read in the browser and stay on your machine.
 That is also why they cannot save in place — a web page may not write to disk.
 You download the edited file and put it back in the vault yourself.
+
+Author against `design/authoring-standard.md`, not against memory — it documents
+every error and warning these tools enforce, and what to do about each one.
 
 ## ingredient-editor.html
 
@@ -32,11 +45,12 @@ is a real answer. Unset means unknown, and any recipe using an unset ingredient
 has its dietary tags withheld entirely — a vegetarian claim that is wrong once
 costs a guest their dinner and the filter its credibility.
 
-**Propose for all 179** fills what it can from name rules plus a table of the
-cases a name cannot reveal — worcestershire is fish, bechamel is dairy and
-gluten, pine nuts are nuts. Tested against the current reference it resolves 177
-of 179; the two it cannot are the junk rows that came across from BirdRock and
-should be deleted.
+**Propose for all** fills what it can from name rules plus a table of the cases a
+name cannot reveal — worcestershire is fish, bechamel is dairy and gluten, pine
+nuts are nuts. On the reference as it stood when this was written it resolved all
+but two, those two being junk rows that came across from BirdRock and should be
+deleted. The button label carries a live count; for the current reference totals
+run `matbakh.py status` rather than trusting a number typed into a document.
 
 Check what it proposed. These are name rules, not knowledge of your shelf.
 
@@ -171,7 +185,20 @@ Ctrl+Enter saves and advances. **Next untranslated** skips to the first gap.
 
 ## What these do not do
 
-Comments in the original file are not preserved; the YAML is regenerated.
+Comments in the original file are not preserved; the YAML is regenerated. Keep
+that in mind for `_template.yaml` and the schema fixture, which are mostly
+comment.
 
-Both tools warn before you close the tab, but there is no autosave. Download
+Each tool warns before you close the tab, but **there is no autosave**. Download
 before you walk away.
+
+---
+
+*One README covers all four tools. Until 26 August 2026 there were three
+overlapping copies of this file in this folder — `README.md`, `tools-README.md`
+and `translator.md`, each a superset of the last. This is the merge of all three;
+the other two are gone.*
+
+*The name is the project convention: a README carries something indicative, so
+it can be told apart from the other thirteen in these two trees. See
+`DIRECTORY.md §11`.*

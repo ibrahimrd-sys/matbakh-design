@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>What Goes In The Tile</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Noto+Naskh+Arabic:wght@400;600&display=swap">
+<style>
+/* ═══════════════════════════════════════════════════════════════════════════
+   Palette is design/tokens.css, unaltered. Dark theme derived from
+   --inverse / --inverse-ink, which tokens.css already declares.
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root{
+  --paper:#F4EFE6; --card:#FBF8F2; --card-alt:#F8F4EC;
+  --ink:#221E1A; --ink-60:rgba(34,30,26,.60); --ink-40:rgba(34,30,26,.40);
+  --hairline:rgba(34,30,26,.14); --hairline-firm:rgba(34,30,26,.26);
+  --terracotta:#A2542F; --terracotta-deep:#8A4526; --teal:#2F5A55;
+  --running:#12894A; --danger:#E01B22;
+  --pan:#7A5233; --pan-2:#5C3B22;
+  --font-latin:'IBM Plex Sans',system-ui,-apple-system,sans-serif;
+  --font-mono:'IBM Plex Mono',ui-monospace,'SF Mono',monospace;
+  --font-arabic:'Noto Naskh Arabic',serif;
+  --meta:11px; --body:15px;
+  --radius-tile:14px; --radius-chip:5px;
+  --rule:1px solid var(--hairline);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#1B1815; --card:#252017; --card-alt:#2A2620;
+    --ink:#F7F3EB; --ink-60:rgba(247,243,235,.62); --ink-40:rgba(247,243,235,.40);
+    --hairline:rgba(247,243,235,.16); --hairline-firm:rgba(247,243,235,.30);
+    --terracotta:#CE7A4E; --terracotta-deep:#E08E60;
+    --teal:#7FB3AA; --running:#3FBB77; --danger:#FF6B6B;
+    --pan:#8A6040; --pan-2:#6B4628;
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#1B1815; --card:#252017; --card-alt:#2A2620;
+  --ink:#F7F3EB; --ink-60:rgba(247,243,235,.62); --ink-40:rgba(247,243,235,.40);
+  --hairline:rgba(247,243,235,.16); --hairline-firm:rgba(247,243,235,.30);
+  --terracotta:#CE7A4E; --terracotta-deep:#E08E60;
+  --teal:#7FB3AA; --running:#3FBB77; --danger:#FF6B6B;
+  --pan:#8A6040; --pan-2:#6B4628;
+}
+
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:var(--font-latin); font-size:var(--body); line-height:1.55;
+  overflow-x:hidden;
+}
+.wrap{max-width:56rem; margin:0 auto; padding:0 1.25rem 5rem;}
+
+/* ── type ───────────────────────────────────────────────────────────────── */
+h1,h2,h3{text-wrap:balance; margin:0; font-weight:600; letter-spacing:-.015em;}
+h1{font-size:clamp(1.75rem,5.5vw,2.6rem); line-height:1.1; letter-spacing:-.03em;}
+h2{font-size:clamp(1.15rem,3.4vw,1.5rem); line-height:1.2;}
+h3{font-size:1rem; line-height:1.3;}
+p{margin:0; max-width:62ch;}
+strong{font-weight:600;}
+em{font-style:normal; color:var(--terracotta); font-weight:500;}
+code,.mono{font-family:var(--font-mono);}
+code{font-size:.87em; background:var(--card-alt); padding:.1em .34em;
+     border-radius:var(--radius-chip); border:var(--rule);}
+.label{
+  font-family:var(--font-mono); font-size:var(--meta); font-weight:500;
+  text-transform:uppercase; letter-spacing:.13em; color:var(--ink-40);
+}
+.lede{font-size:1.05rem; color:var(--ink-60); max-width:52ch;}
+
+/* ── shell ──────────────────────────────────────────────────────────────── */
+header.top{padding:3.5rem 0 2rem; border-bottom:2px solid var(--ink); margin-bottom:0;}
+header.top .label{color:var(--terracotta); margin-bottom:1rem; display:block;}
+header.top h1{margin-bottom:1rem;}
+.byline{
+  display:flex; flex-wrap:wrap; gap:.4rem 1.25rem; margin-top:1.75rem;
+  font-family:var(--font-mono); font-size:var(--meta); color:var(--ink-40);
+  text-transform:uppercase; letter-spacing:.1em;
+}
+
+section{padding:3rem 0; border-bottom:var(--rule);}
+section:last-of-type{border-bottom:none;}
+.shead{display:flex; flex-direction:column; gap:.65rem; margin-bottom:2rem;}
+.shead .label{color:var(--terracotta);}
+
+.note{
+  border-left:3px solid var(--terracotta); padding:.85rem 0 .85rem 1rem;
+  background:var(--card-alt); font-size:.94rem; color:var(--ink-60);
+  border-radius:0 var(--radius-chip) var(--radius-chip) 0;
+}
+.note strong{color:var(--ink);}
+
+/* ── the specimen grid ──────────────────────────────────────────────────── */
+.specimens{
+  display:grid; gap:1rem;
+  grid-template-columns:repeat(auto-fit,minmax(min(100%,11.5rem),1fr));
+}
+.spec{
+  background:var(--card); border:var(--rule); border-radius:var(--radius-tile);
+  padding:1.1rem; display:flex; flex-direction:column; gap:.9rem;
+}
+.spec.is-real{border-color:var(--terracotta); border-width:1.5px;}
+.spec-head{display:flex; align-items:baseline; justify-content:space-between; gap:.5rem;}
+.spec-head h3{letter-spacing:-.01em;}
+.tag{
+  font-family:var(--font-mono); font-size:10px; font-weight:500;
+  text-transform:uppercase; letter-spacing:.1em; padding:.18em .45em;
+  border-radius:var(--radius-chip); white-space:nowrap;
+}
+.tag-real{background:var(--terracotta); color:var(--paper);}
+.tag-stand{background:transparent; color:var(--ink-40); border:1px solid var(--hairline-firm);}
+
+.sizes{display:flex; align-items:flex-end; gap:1.35rem;}
+.size{display:flex; flex-direction:column; align-items:center; gap:.45rem;}
+.size .cap{
+  font-family:var(--font-mono); font-size:10px; color:var(--ink-40);
+  letter-spacing:.08em; font-variant-numeric:tabular-nums;
+}
+.spec p{font-size:.88rem; color:var(--ink-60); line-height:1.5;}
+
+/* the glyph boxes, at TRUE rendered size — never scaled up */
+.g44{width:44px; height:44px;}
+.g17{width:17px; height:17px;}
+.g62{width:62px; height:62px;}
+.g44 svg,.g17 svg,.g62 svg{width:100%; height:100%; display:block;}
+
+/* photo / video stand-in: literally the "indistinguishable brown pan" */
+.pan-stand{
+  border-radius:4px;
+  background:
+    radial-gradient(58% 52% at 42% 38%, #A87A4E 0%, var(--pan) 46%, var(--pan-2) 100%);
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.18);
+}
+.pan-stand.v2{background:radial-gradient(55% 55% at 56% 44%, #9E7047 0%, var(--pan) 50%, var(--pan-2) 100%);}
+.pan-stand.v3{background:radial-gradient(62% 48% at 38% 52%, #B08252 0%, var(--pan) 44%, var(--pan-2) 100%);}
+
+/* ── animation, all CSS, no JS ──────────────────────────────────────────── */
+.blade{transform-box:view-box; transform-origin:7px 16px;}
+.anim-chop .blade{animation:chop 1.5s cubic-bezier(.4,0,.25,1) infinite;}
+.anim-mince .blade{animation:mince .34s cubic-bezier(.45,0,.55,1) infinite;}
+@keyframes chop{
+  0%,8%   {transform:rotate(-26deg) translateY(-1px);}
+  22%,30% {transform:rotate(0deg)   translateY(0);}
+  44%     {transform:rotate(-26deg) translate(1.4px,-1px);}
+  58%,64% {transform:rotate(0deg)   translateX(1.4px);}
+  78%     {transform:rotate(-26deg) translate(2.8px,-1px);}
+  92%,100%{transform:rotate(0deg)   translateX(0);}
+}
+@keyframes mince{
+  0%,100%{transform:rotate(-11deg);}
+  50%    {transform:rotate(0deg);}
+}
+.heat path:nth-child(2){animation:heat 1.9s ease-in-out infinite;}
+@keyframes heat{
+  0%,100%{opacity:.25; transform:translateY(2px);}
+  50%    {opacity:1;   transform:translateY(-1.5px);}
+}
+.heat path:nth-child(2){transform-box:view-box; transform-origin:center;}
+.drip path:nth-child(2){animation:drip 1.1s linear infinite; transform-box:view-box;}
+@keyframes drip{
+  0%  {opacity:0; transform:translateY(-2.5px);}
+  25% {opacity:1;}
+  100%{opacity:0; transform:translateY(3px);}
+}
+.bubble path:nth-child(3){animation:bub 1.6s ease-in-out infinite; transform-box:view-box;}
+@keyframes bub{
+  0%,100%{opacity:.3; transform:translateY(1.5px) scaleY(.7);}
+  50%    {opacity:1;  transform:translateY(-1.5px) scaleY(1.15);}
+}
+.still-demo{animation:none !important;}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms !important; animation-iteration-count:1 !important;}
+  .rm-notice{display:block !important;}
+}
+.rm-notice{display:none; margin-top:1rem;}
+
+/* ── the arc strip ──────────────────────────────────────────────────────── */
+.arc-block{display:flex; flex-direction:column; gap:1.4rem;}
+.arc-row{display:flex; flex-direction:column; gap:.55rem;}
+.arc-row .label{color:var(--ink-60);}
+.arc{
+  display:flex; gap:6px; align-items:center; padding:10px 12px;
+  background:var(--card); border:var(--rule); border-radius:10px;
+  overflow-x:auto; scrollbar-width:none;
+}
+.arc::-webkit-scrollbar{display:none;}
+.arc > *{flex:0 0 auto;}
+.arc .g17{opacity:.42;}
+.arc .g17.done{opacity:1; color:var(--terracotta);}
+.arc .g17.here{opacity:1;}
+.arc .pan-stand{width:17px; height:17px;}
+
+/* ── state colours ──────────────────────────────────────────────────────── */
+.states{display:flex; flex-wrap:wrap; gap:1.6rem;}
+.state{display:flex; flex-direction:column; align-items:center; gap:.4rem;}
+.state .cap{font-family:var(--font-mono); font-size:10px; letter-spacing:.06em;}
+.s-ink{color:var(--ink);} .s-acc{color:var(--terracotta);}
+.s-run{color:var(--running);} .s-dan{color:var(--danger);}
+
+/* ── tables ─────────────────────────────────────────────────────────────── */
+.tscroll{overflow-x:auto; -webkit-overflow-scrolling:touch; margin:0 -1.25rem; padding:0 1.25rem;}
+table{border-collapse:collapse; width:100%; min-width:34rem; font-size:.9rem;}
+th,td{text-align:left; padding:.6rem .8rem .6rem 0; border-bottom:var(--rule); vertical-align:top;}
+th{
+  font-family:var(--font-mono); font-size:10px; font-weight:500;
+  text-transform:uppercase; letter-spacing:.1em; color:var(--ink-40);
+  border-bottom:1px solid var(--hairline-firm); white-space:nowrap;
+}
+td.num{font-family:var(--font-mono); font-variant-numeric:tabular-nums; white-space:nowrap;}
+tr.pick td{background:var(--card); font-weight:500;}
+tr.pick td:first-child{box-shadow:inset 3px 0 0 var(--terracotta); padding-left:.8rem;}
+.dead{color:var(--ink-40); text-decoration:line-through;}
+
+/* ── class M / S ────────────────────────────────────────────────────────── */
+.classes{display:grid; gap:1rem; grid-template-columns:repeat(auto-fit,minmax(min(100%,17rem),1fr));}
+.class-card{
+  border:var(--rule); border-radius:var(--radius-tile); padding:1.25rem;
+  display:flex; flex-direction:column; gap:.85rem; background:var(--card);
+}
+.class-card.m{border-top:3px solid var(--terracotta);}
+.class-card.s{border-top:3px solid var(--teal);}
+.big{font-family:var(--font-mono); font-size:2.4rem; line-height:1; font-weight:600;
+     font-variant-numeric:tabular-nums; letter-spacing:-.03em;}
+.class-card.m .big{color:var(--terracotta);}
+.class-card.s .big{color:var(--teal);}
+.verbs{font-family:var(--font-mono); font-size:11px; line-height:1.75; color:var(--ink-60); word-spacing:.1em;}
+
+/* ── the tile, as the reader actually draws it ──────────────────────────── */
+.tile-demo{display:flex; flex-wrap:wrap; gap:.85rem;}
+.tile{
+  width:172px; background:var(--card); border:var(--rule);
+  border-radius:var(--radius-tile); padding:.85rem; display:flex;
+  flex-direction:column; gap:.55rem;
+}
+.tile-top{display:flex; align-items:center; gap:.6rem;}
+.tile .verb{font-size:17px; font-weight:600; letter-spacing:-.01em;}
+.tile .noun{font-size:13px; color:var(--ink-60);}
+.tile .qty{font-family:var(--font-mono); font-size:13px; font-variant-numeric:tabular-nums; color:var(--ink);}
+.tile .ar{font-family:var(--font-arabic); font-size:16px;}
+
+footer{padding:3rem 0 0; color:var(--ink-60); font-size:.9rem;}
+footer ul{padding-left:1.1rem; margin:.75rem 0 0; display:flex; flex-direction:column; gap:.45rem;}
+footer li{max-width:60ch;}
+hr.thick{border:none; border-top:2px solid var(--ink); margin:0;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header class="top">
+  <span class="label">Matbakh · step imagery · 21 August 2026</span>
+  <h1>What goes in the tile?</h1>
+  <p class="lede">Everything on this page is rendered at the size the reader
+  actually draws it. Nothing is enlarged for convenience, because the whole
+  decision turns on what survives at&nbsp;17&nbsp;pixels.</p>
+  <div class="byline">
+    <span>Judge this on a phone</span>
+    <span>No JavaScript</span>
+    <span>Palette: design/tokens.css</span>
+  </div>
+</header>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="shead">
+    <span class="label">The frame</span>
+    <h2>Three of the four questions are already answered</h2>
+  </div>
+  <p style="margin-bottom:1.5rem">A cook asks four things. Each is answered in a
+  different place, at a different size — and each has a different natural carrier.
+  Only one row is still open.</p>
+  <div class="tscroll">
+  <table>
+    <thead><tr><th>The question</th><th>Where</th><th>Size</th><th>Carrier</th><th>Scales with</th></tr></thead>
+    <tbody>
+      <tr><td>Where am I?</td><td>the arc</td><td class="num">17 px</td><td>glyph — nothing else survives</td><td>the vocabulary</td></tr>
+      <tr class="pick"><td>What do my hands do?</td><td>the tile</td><td class="num">44 px</td><td><em>open</em></td><td><em>this is the decision</em></td></tr>
+      <tr><td>Is it ready?</td><td>doneness band</td><td class="num">361×176</td><td>photograph of the state</td><td>the catalogue</td></tr>
+      <tr><td>Why? What did I miss?</td><td>prose, on request</td><td>—</td><td>generated text</td><td>nothing, if generated</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note" style="margin-top:1.5rem">
+    <strong>Both of the “replace the icons” options replace nothing.</strong>
+    A video frame at 17&nbsp;px is a photograph at 17&nbsp;px, and
+    <code>philosophy §4.4</code> settled that: <em>eight indistinguishable brown
+    pans</em>. The glyph set gets built under every option on this page. C-05 is
+    owed regardless.
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="shead">
+    <span class="label">The comparison</span>
+    <h2>Four carriers, one action</h2>
+    <p style="color:var(--ink-60)">All four showing <code>chop</code>, at the two
+    sizes that matter. The first two are the real <code>design/icons/chop.svg</code>
+    from the repo.</p>
+  </div>
+
+  <div class="specimens">
+
+    <div class="spec is-real">
+      <div class="spec-head"><h3>Static glyph</h3><span class="tag tag-real">real</span></div>
+      <div class="sizes">
+        <div class="size">
+          <div class="g44"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M7 16 17 4"/><path d="m13.5 8.5 3.5 3.5"/></svg></div>
+          <span class="cap">44 px</span>
+        </div>
+        <div class="size">
+          <div class="g17"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M7 16 17 4"/><path d="m13.5 8.5 3.5 3.5"/></svg></div>
+          <span class="cap">17 px</span>
+        </div>
+      </div>
+      <p>Free, already drawn, survives the arc, recolours by state. Cannot tell
+      <code>chop</code> from <code>mince</code> — they share this file.</p>
+    </div>
+
+    <div class="spec is-real">
+      <div class="spec-head"><h3>Animated glyph</h3><span class="tag tag-real">real</span></div>
+      <div class="sizes">
+        <div class="size">
+          <div class="g44 anim-chop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><g class="blade"><path d="M7 16 17 4"/><path d="m13.5 8.5 3.5 3.5"/></g></svg></div>
+          <span class="cap">44 px</span>
+        </div>
+        <div class="size">
+          <div class="g17 anim-chop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><g class="blade"><path d="M7 16 17 4"/><path d="m13.5 8.5 3.5 3.5"/></g></svg></div>
+          <span class="cap">17 px</span>
+        </div>
+      </div>
+      <p>Same file, ~150 bytes of CSS. The only moving carrier that works at
+      17&nbsp;px and still recolours by state. No shoot.</p>
+    </div>
+
+    <div class="spec">
+      <div class="spec-head"><h3>Video loop</h3><span class="tag tag-stand">stand-in</span></div>
+      <div class="sizes">
+        <div class="size"><div class="g44 pan-stand"></div><span class="cap">44 px</span></div>
+        <div class="size"><div class="g17 pan-stand"></div><span class="cap">17 px</span></div>
+      </div>
+      <p>Shot once per verb, reused across all 500 recipes. Unambiguous at
+      44&nbsp;px. Dead at 17&nbsp;px, and cannot be tinted for a running timer.</p>
+    </div>
+
+    <div class="spec">
+      <div class="spec-head"><h3>Recipe frame</h3><span class="tag tag-stand">stand-in</span></div>
+      <div class="sizes">
+        <div class="size"><div class="g44 pan-stand v2"></div><span class="cap">44 px</span></div>
+        <div class="size"><div class="g17 pan-stand v2"></div><span class="cap">17 px</span></div>
+      </div>
+      <p>Pulled from a video of this dish. Identical on screen to the column
+      beside it — and roughly thirty times the cost.</p>
+    </div>
+
+  </div>
+
+  <div class="note" style="margin-top:1.75rem">
+    <strong>The two right-hand columns are brown rectangles on purpose.</strong>
+    No bolognese has been shot, so anything else here would be a lie about the
+    state of the work. At 17&nbsp;px the rectangle is an honest likeness — that
+    is the argument, not a limitation of the mock-up.
+  </div>
+  <div class="note rm-notice">
+    <strong>Reduced motion is on in your system settings.</strong> The animated
+    glyphs are frozen. Turn it off to judge them.
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="shead">
+    <span class="label">The demonstration</span>
+    <h2>Two of the three glyph collisions are motion, and motion dissolves them</h2>
+    <p style="color:var(--ink-60)"><code>chop</code> and <code>mince</code> share
+    one file — <code>chop.svg</code> — because two three-stroke drawings of a
+    blade over a board are the same drawing. Watch them move.</p>
+  </div>
+
+  <div class="specimens">
+    <div class="spec is-real">
+      <div class="spec-head"><h3><code>chop</code></h3><span class="tag tag-real">real</span></div>
+      <div class="sizes">
+        <div class="size">
+          <div class="g62 anim-chop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><g class="blade"><path d="M7 16 17 4"/><path d="m13.5 8.5 3.5 3.5"/></g></svg></div>
+          <span class="cap">62 px · tablet</span>
+        </div>
+        <div class="size">
+          <div class="g44 anim-chop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><g class="blade"><path d="M7 16 17 4"/><path d="m13.5 8.5 3.5 3.5"/></g></svg></div>
+          <span class="cap">44 px</span>
+        </div>
+        <div class="size">
+          <div class="g17 anim-chop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><g class="blade"><path d="M7 16 17 4"/><path d="m13.5 8.5 3.5 3.5"/></g></svg></div>
+          <span class="cap">17 px</span>
+        </div>
+      </div>
+      <p>Deliberate strokes, advancing along the board between each.</p>
+    </div>
+
+    <div class="spec is-real">
+      <div class="spec-head"><h3><code>mince</code></h3><span class="tag tag-real">real</span></div>
+      <div class="sizes">
+        <div class="size">
+          <div class="g62 anim-mince"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><g class="blade"><path d="M7 16 17 4"/><path d="m13.5 8.5 3.5 3.5"/></g></svg></div>
+          <span class="cap">62 px · tablet</span>
+        </div>
+        <div class="size">
+          <div class="g44 anim-mince"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><g class="blade"><path d="M7 16 17 4"/><path d="m13.5 8.5 3.5 3.5"/></g></svg></div>
+          <span class="cap">44 px</span>
+        </div>
+        <div class="size">
+          <div class="g17 anim-mince"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><g class="blade"><path d="M7 16 17 4"/><path d="m13.5 8.5 3.5 3.5"/></g></svg></div>
+          <span class="cap">17 px</span>
+        </div>
+      </div>
+      <p>Tip stays down, rapid rocking, no advance. Same three paths.</p>
+    </div>
+  </div>
+
+  <div class="note" style="margin-top:1.75rem">
+    <strong>The third collision does not dissolve, and nothing will fix it.</strong>
+    <code>season</code> and <code>to_taste</code> both draw <code>salt.svg</code>,
+    and both appear in molokhia. They are the <em>same physical act</em> —
+    what separates them is intent: <em>add salt now, measured</em> versus
+    <em>adjust at the end, by taste</em>. No photograph, frame or loop can show
+    intent. That one is a lexicon problem, and it survives every option here.
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="shead">
+    <span class="label">The binding constraint</span>
+    <h2>The arc, at 17 px, three ways</h2>
+    <p style="color:var(--ink-60)">Nine steps of a recipe. Terracotta is done,
+    full-strength is where you are, dimmed is ahead. This strip is the reason the
+    glyph set is not optional.</p>
+  </div>
+
+  <div class="arc-block">
+    <div class="arc-row">
+      <span class="label">Static glyphs</span>
+      <div class="arc">
+        <div class="g17 done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M7 16 17 4"/><path d="m13.5 8.5 3.5 3.5"/></svg></div>
+        <div class="g17 done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14h16v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3Z"/><path d="M8 9V6M12 10V5M16 9V6"/></svg></div>
+        <div class="g17 done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3h4v5l3 5v6a2 2 0 0 1-2 2h-6"/><path d="M9 21H4a1 1 0 0 1-1-1v-3h8"/><path d="M11 8 8 14"/></svg></div>
+        <div class="g17 here"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h14v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V9Z"/><path d="M3 9h18"/><path d="M9 6h6"/></svg></div>
+        <div class="g17"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 8h6l1 11a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2L9 8Z"/><path d="M10.5 4.5 12 3l1.5 1.5"/><path d="M11 12h2"/></svg></div>
+        <div class="g17"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h13a0 0 0 0 1 0 0v2a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5v-2Z"/><path d="M16 12h5"/><path d="M7 7v1M11 5v2"/></svg></div>
+        <div class="g17"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h18a9 9 0 0 1-9 8 9 9 0 0 1-9-8Z"/><path d="M9 19v2M12 20v2M15 19v2"/></svg></div>
+        <div class="g17"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13h11v2a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-2Z"/><path d="M14 13h7"/><path d="M5 10c1-5 8-6 9-1"/></svg></div>
+        <div class="g17"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h14v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V9Z"/><path d="M3 9h18"/><path d="M9 6h6"/></svg></div>
+      </div>
+    </div>
+
+    <div class="arc-row">
+      <span class="label">Animated glyphs — position and motion at once</span>
+      <div class="arc">
+        <div class="g17 done anim-chop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><g class="blade"><path d="M7 16 17 4"/><path d="m13.5 8.5 3.5 3.5"/></g></svg></div>
+        <div class="g17 done heat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14h16v3a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-3Z"/><path d="M8 9V6M12 10V5M16 9V6"/></svg></div>
+        <div class="g17 done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3h4v5l3 5v6a2 2 0 0 1-2 2h-6"/><path d="M9 21H4a1 1 0 0 1-1-1v-3h8"/><path d="M11 8 8 14"/></svg></div>
+        <div class="g17 here"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h14v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V9Z"/><path d="M3 9h18"/><path d="M9 6h6"/></svg></div>
+        <div class="g17"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 8h6l1 11a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2L9 8Z"/><path d="M10.5 4.5 12 3l1.5 1.5"/><path d="M11 12h2"/></svg></div>
+        <div class="g17 bubble"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11h13a0 0 0 0 1 0 0v2a5 5 0 0 1-5 5H8a5 5 0 0 1-5-5v-2Z"/><path d="M16 12h5"/><path d="M7 7v1M11 5v2"/></svg></div>
+        <div class="g17 drip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h18a9 9 0 0 1-9 8 9 9 0 0 1-9-8Z"/><path d="M9 19v2M12 20v2M15 19v2"/></svg></div>
+        <div class="g17"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13h11v2a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4v-2Z"/><path d="M14 13h7"/><path d="M5 10c1-5 8-6 9-1"/></svg></div>
+        <div class="g17"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 9h14v9a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V9Z"/><path d="M3 9h18"/><path d="M9 6h6"/></svg></div>
+      </div>
+    </div>
+
+    <div class="arc-row">
+      <span class="label">Photographs or video frames — §4.4, drawn out</span>
+      <div class="arc">
+        <div class="pan-stand"></div><div class="pan-stand v2"></div>
+        <div class="pan-stand v3"></div><div class="pan-stand"></div>
+        <div class="pan-stand v2"></div><div class="pan-stand v3"></div>
+        <div class="pan-stand"></div><div class="pan-stand v2"></div>
+        <div class="pan-stand v3"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="shead">
+    <span class="label">The functional loss</span>
+    <h2>A video cannot be recoloured by state</h2>
+    <p style="color:var(--ink-60)"><code>asset-spec.md</code> requires
+    <code>stroke="currentColor"</code> precisely so the reader can tint a glyph
+    by what is happening. This is one file, four meanings.</p>
+  </div>
+  <div class="states">
+    <div class="state s-ink"><div class="g44 anim-chop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><g class="blade"><path d="M7 16 17 4"/><path d="m13.5 8.5 3.5 3.5"/></g></svg></div><span class="cap">normal</span></div>
+    <div class="state s-acc"><div class="g44 anim-chop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><g class="blade"><path d="M7 16 17 4"/><path d="m13.5 8.5 3.5 3.5"/></g></svg></div><span class="cap">done</span></div>
+    <div class="state s-run"><div class="g44 anim-chop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><g class="blade"><path d="M7 16 17 4"/><path d="m13.5 8.5 3.5 3.5"/></g></svg></div><span class="cap">timer running</span></div>
+    <div class="state s-dan"><div class="g44 anim-chop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><g class="blade"><path d="M7 16 17 4"/><path d="m13.5 8.5 3.5 3.5"/></g></svg></div><span class="cap">never</span></div>
+  </div>
+  <p style="margin-top:1.5rem; color:var(--ink-60)">Four states, one 235-byte file.
+  A clip would need four encodes, or a colour overlay that fights the photograph
+  underneath. This is the strongest argument for glyphs staying in the tile even
+  after a clip library exists.</p>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="shead">
+    <span class="label">The vocabulary</span>
+    <h2>58% of the lexicon is motion. The rest should stay still.</h2>
+    <p style="color:var(--ink-60)">Counted from
+    <code>content/lexicon/activities.yaml</code> — 81 activities, 78 distinct
+    glyphs. The <em>classification</em> is judgement, not measurement; contest it
+    during the pilot.</p>
+  </div>
+
+  <div class="classes">
+    <div class="class-card m">
+      <span class="label">Class M · motion-defined</span>
+      <span class="big">47</span>
+      <p style="font-size:.9rem; color:var(--ink-60)">A single frame cannot
+      separate it from at least one neighbour. The board is 10 for 10; the stove
+      is 15 of 19, because <code>boil</code>, <code>simmer</code> and
+      <code>poach</code> are defined by how the liquid moves.</p>
+      <div class="verbs">blanch blend boil brush baste char chop crush cut_wedges
+      deep_fry deglaze dice drizzle dust flambe flatten fold fry grate grind knead
+      ladle mash mince mix peel poach pour reduce roll sear shred sift simmer
+      skewer skim slice sprinkle squeeze steam stir stir_fry strip sweat toss
+      whisk zest</div>
+    </div>
+    <div class="class-card s">
+      <span class="label">Class S · state-defined</span>
+      <span class="big">34</span>
+      <p style="font-size:.9rem; color:var(--ink-60)">A placement, a
+      configuration, or an elapsed condition. A glyph is not a compromise here —
+      it is correct. A four-second loop of <code>rest</code> is four seconds of
+      nothing happening, at a cost.</p>
+      <div class="verbs">add bain_marie bake braise brine broil chill coat cool
+      cure do_not_stir drain dry ferment freeze garnish grill infuse inject layer
+      marinate pressure_cook rest roast season serve set shape soak stuff to_taste
+      toast wash wrap</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="shead">
+    <span class="label">In place</span>
+    <h2>The tile, as the reader draws it</h2>
+    <p style="color:var(--ink-60)">One page of bolognese, board station. Same
+    layout, three carriers.</p>
+  </div>
+  <div class="tile-demo">
+    <div class="tile">
+      <div class="tile-top">
+        <div class="g44"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M7 16 17 4"/><path d="m13.5 8.5 3.5 3.5"/></svg></div>
+        <div><div class="verb">Chop</div><div class="noun">onion · brunoise 2 mm</div></div>
+      </div>
+      <div class="qty">1 · 150 g</div>
+      <span class="label">static glyph</span>
+    </div>
+    <div class="tile">
+      <div class="tile-top">
+        <div class="g44 anim-chop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><g class="blade"><path d="M7 16 17 4"/><path d="m13.5 8.5 3.5 3.5"/></g></svg></div>
+        <div><div class="verb">Chop</div><div class="noun">onion · brunoise 2 mm</div></div>
+      </div>
+      <div class="qty">1 · 150 g</div>
+      <span class="label">animated glyph</span>
+    </div>
+    <div class="tile" dir="rtl">
+      <div class="tile-top">
+        <div class="g44 anim-chop"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><g class="blade"><path d="M7 16 17 4"/><path d="m13.5 8.5 3.5 3.5"/></g></svg></div>
+        <div><div class="verb ar">قطّع</div><div class="noun ar">بصل · برونواز ٢ مم</div></div>
+      </div>
+      <div class="qty" dir="ltr" style="text-align:right">1 · 150 g</div>
+      <span class="label" dir="ltr" style="display:block; text-align:right">animated glyph · ar_eg</span>
+    </div>
+  </div>
+  <div class="note" style="margin-top:1.75rem">
+    <strong>The proposal for motion in cook mode:</strong> loop once on page turn,
+    then hold the final frame; tap to replay. The cook gets the motion at the
+    moment they arrive, the page then goes still, and the held frame is a legible
+    picture. Four tiles looping forever is four competing motions in the periphery
+    of someone holding a knife — <code>philosophy §3</code> principle 5, the cook's
+    place is sacred. <em>On this page everything loops continuously, so you can
+    judge the motion itself.</em>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<section>
+  <div class="shead">
+    <span class="label">The bill</span>
+    <h2>What each costs, at 500 recipes</h2>
+  </div>
+  <div class="tscroll">
+  <table>
+    <thead><tr><th>Option</th><th>Tile shows</th><th>One-time</th><th>Per recipe</th><th>At 500</th></tr></thead>
+    <tbody>
+      <tr><td>A · icons only</td><td>static glyph</td><td class="num">C-05</td><td class="num">0</td><td class="num">0</td></tr>
+      <tr><td>A+ · icons, animated</td><td>animated glyph</td><td class="num">C-05 + ~60–100 h</td><td class="num">0</td><td class="num">~60–100 h once</td></tr>
+      <tr><td class="dead">B · photos replace icons</td><td colspan="4" class="dead">Not viable — breaks the 17 px arc</td></tr>
+      <tr><td>C · icon + doneness photo</td><td>static glyph</td><td class="num">C-05</td><td class="num">4–6 photos</td><td class="num">~250–400 h</td></tr>
+      <tr><td><strong>1</strong> · video per recipe</td><td>recipe frame</td><td class="num">rig</td><td class="num">1.5–4 h</td><td class="num">750–2,000 h</td></tr>
+      <tr><td><strong>2</strong> · activity clip library</td><td>action loop</td><td class="num">~6–7 days</td><td class="num">0</td><td class="num">~50–60 h once</td></tr>
+      <tr class="pick"><td><strong>E</strong> · loop (M) + glyph (S) + doneness</td><td>loop or glyph</td><td class="num">~6–7 days + C-05</td><td class="num">4–6 photos</td><td class="num">~300–450 h</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <div class="note" style="margin-top:1.75rem">
+    <strong>The headline number is not the argument.</strong> At recipe 500,
+    option&nbsp;1 still costs 1.5–4 hours. Option&nbsp;2 costs nothing, and has
+    cost nothing since recipe&nbsp;1. One taxes every recipe you will ever write;
+    the other is paid once.
+  </div>
+</section>
+
+<hr class="thick">
+<footer>
+  <span class="label" style="color:var(--terracotta)">Standing caveats</span>
+  <ul>
+    <li>The static and animated glyphs are the <strong>real
+    <code>design/icons/chop.svg</code></strong> and its neighbours, unmodified —
+    which are themselves <strong>geometric placeholders</strong>, not the
+    production Tabler set. C-05 is open.</li>
+    <li>The video and photograph columns are <strong>coloured rectangles</strong>.
+    No bolognese has been shot. Nothing here is art direction.</li>
+    <li>The 47 / 34 split is counted from <code>activities.yaml</code>; the
+    <strong>classification is judgement</strong> and the pilot should correct it.</li>
+    <li>The costs come from <code>design/step-imagery-decision.md</code>, where
+    every derived figure is marked as derived.</li>
+    <li>Sizes are true only at 100% browser zoom. Pinch-zooming this page to
+    inspect the 17 px glyphs defeats the point of them.</li>
+  </ul>
+</footer>
+
+</div>
+</body>
+</html>

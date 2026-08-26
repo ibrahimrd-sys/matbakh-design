@@ -1,3 +1,20 @@
+# ─────────────────────────────────────────────────────────────────────────────
+# SCHEMA FIXTURE — NOT CATALOGUE.
+#
+# This file exists so a bare clone of this repository has something for
+# `matbakh.py check` to validate. It is a near-copy of the authored pilot
+# recipe, which lives in the vault at 03-catalogue/recipes/molokhia.yaml and
+# is the only molokhia that counts as catalogue.
+#
+# Do not author against this file and do not cite its numbers. `matbakh.py
+# status` reports repo fixtures and vault catalogue separately for exactly
+# this reason; a raw `check` still counts it, which is why a bare count of
+# authored recipes reads one too high.
+#
+# Retiring it (see HANDOVER §8, item 10b) means putting a real pilot stub in
+# its place first — and updating .gitignore, publish.sh, scan.sh and
+# .githooks/pre-commit, all four of which name this filename.
+# ─────────────────────────────────────────────────────────────────────────────
 id: molokhia_bil_farakh
 source_locale: en          # the language you authored in; others are translations of it
 status: draft              # draft | tested | published — only tested recipes can publish
