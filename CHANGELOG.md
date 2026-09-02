@@ -17,6 +17,7 @@ Format: `## YYYY-MM-DD — release`
 - **Decision log reconciled.** Rows backfilled for the 13 August renumber and the 15 August §11 status change, sub-recipe and lexicon decisions.
 - **preflight:** the release-vs-changelog check was an unfinished `pass` and never warned. It now does.
 - `discovery-draft.md`: ingredient search is no longer deferred; cost now has three card states, and unpriced-locale must be visually distinct from unpaid.
+- **Handover revised** — `02-strategy/handover-2026-08-20.md` updated for the 28–29 August and 1–2 September sessions: provenance note, §0 settled-since-20-August, §7 the `market-study.md` / MON-01 contradiction, §8 items 1 and 11 rewritten plus PM-10, El-Obour and trademark clearance added, §9 four new traps. Header now reads *Revised 15, 19, 20 August and 2 September 2026.*
 
 Source: nine-app competitor study, `02-strategy/ideas-from-cooking-apps.md`.
 
