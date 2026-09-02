@@ -5,7 +5,12 @@ doneness-photography scope (`philosophy §16.6`).
 **Written:** 21 August 2026, in answer to three considerations put by Ibrahim —
 (1) shoot a full video per recipe and extract step frames, (2) shoot the 81
 activities to replace the icons, (3) offer the recipe in prose on request.
-**Status:** Research, options and a recommendation. No decision taken.
+**Status:** Research, options and a recommendation. **No decision taken** — the
+decision is PM-09 and is still open. `DIRECTORY.md` marks this file CANON, which
+means it is the canonical statement of *the options and the recommendation*, not
+that the recommendation has been adopted. Those two readings drifted apart once
+already: PM-09 was left phrased as "sign off option C" — the 18 August
+recommendation this document supersedes — for eleven days.
 
 **Relationship to `step-imagery-research.md` (18 Aug):** that document asked
 whether the *tile* should become a photograph and concluded C — icon for the
@@ -603,11 +608,24 @@ camera is bought.
 | **A** Icons only *(as designed)* | static glyph | C-05 only | 0 | **0** |
 | **A+** Icons, animated | animated glyph | C-05 + ~1–2 h × 47 | 0 | **~60–100 h once** |
 | **B** Photographs replace icons | — | — | — | **Not viable** — breaks the 17 px arc |
-| **C** Icon + doneness photo *(18 Aug recommendation)* | static glyph | C-05 | ~4–6 photos | **~250–400 h** |
+| **C** Icon + doneness photo *(18 Aug recommendation)* | static glyph | C-05 | ~8–14 photos — one per page † | **~250–400 h** ‡ |
 | **D** C + process photo where it earns it | glyph + occasional photo | C-05 | +10–20% | ~300–500 h |
 | **1** Video per recipe, frames pulled | recipe-specific frame | rig | **1.5–4 h** | **750–2,000 h** |
 | **2** Activity clip library | reusable action loop | **~6–7 days** | 0 | **~50–60 h once** |
-| **E** ← **the recommendation** | loop (M) / glyph (S) | ~6–7 days + C-05 | ~4–6 doneness photos | **~300–450 h** |
+| **E** ← **the recommendation** | loop (M) / glyph (S) | ~6–7 days + C-05 | ~4–6 doneness photos ‡ | **~300–450 h** ‡ |
+
+† **Corrected 2 September 2026.** This cell read *~4–6 photos*, which contradicted
+§10's own "4–6, **not 8–14**" two paragraphs below, and the note directly under this
+table. Option C keeps a doneness photograph on every page; `step-imagery-research.md`
+sets Matbakh at **6–10 pages with a 14 ceiling**, so C is 8–14 per recipe. The 4–6
+figure belongs to option E alone. This is the multiplier on the largest cost line
+after the build, and it was wrong in the summary table while right everywhere else.
+
+‡ **The hours column is a rough envelope and is not derived from the per-recipe
+counts.** If C is 8–14 photos per recipe and E is 4–6 plus a one-time shoot, C should
+exceed E — the column has it the other way round. Do not carry these hours into
+C-04. The counts above are sound; the hours need redoing against a measured
+per-photo time, which is a thing the pilot can supply and nothing else can.
 
 Option E's per-recipe number is *lower* than option C's, because the tile stops
 needing a photograph at all and the doneness count drops from "one per page" to

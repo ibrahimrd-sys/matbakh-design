@@ -130,6 +130,29 @@ A settings toggle for Eastern Arabic numerals may be offered, but Western is the
 
 **Digits are the only element on the page that changes** — via serving scaling, unit toggles and live pricing. They must therefore be a **live text layer over a static visual grammar**, never baked into an icon or composite step graphic. Easy to violate accidentally once someone starts producing composite artwork.
 
+### 5.5 Four surfaces, and what each one's cost scales with — SETTLED 2 September 2026
+
+A cook in front of the reader asks four questions. Each is answered on a different surface, at a different size, and — the part that decides the economics — each scales with something different.
+
+| The question | Surface | Size | Cost scales with |
+|---|---|---|---|
+| **Where am I?** | the arc / map | **17 px** | the vocabulary |
+| **What do my hands do?** | the tile | **44 px** | **open — see §16.6** |
+| **Is it ready?** | the doneness photograph | 361 × 176 | the catalogue |
+| **Why, and what did I miss?** | prose, on request | — | free, generated at build |
+
+Three of the four are settled, and they are settled because each has exactly one carrier that survives its size.
+
+- **The arc is glyphs, and cannot be anything else.** A photograph at 17 px is eight indistinguishable brown pans (§4.4), and a video frame at 17 px is a photograph. Whatever the tile becomes, the glyph set is owed — it is not a concession to any option.
+- **The doneness photograph is irreducibly recipe-specific**, and it carries the trust claim. That was never the tile's job.
+- **Prose is generated at build time**, not authored per recipe.
+
+**The tile is the open question, and it is the only one.** What a 44 px square should carry — a static glyph, an animated glyph, or a short silent loop — is §16.6.
+
+**Why this framing matters more than the answer.** The settled rows do not scale alike. The arc scales with the *vocabulary*: 81 activities, fixed, however large the catalogue grows. The doneness photograph scales with the *catalogue*: 500 recipes and rising. Anything moved from the second column to the first stops being a per-recipe cost and becomes a one-time one. That is the entire economic question in a sentence, and it is why the tile's carrier is worth measuring rather than assuming.
+
+---
+
 ---
 
 ## 6. Serving scaling — SETTLED
@@ -586,8 +609,22 @@ Entertaining and hosting was §13.4 here until 13 August 2026, when it was promo
 ### 16.5 Step granularity — PARTIALLY SETTLED
 Working answer: granularity governed by **hands**, not grammar — a step ends when you next need to look at the screen. Section 4.1's order-independence rule operationalises this, but it has not yet been tested against real recipes at volume.
 
-### 16.6 Doneness photography — SCOPE UNDECIDED
-Agreed as the right mechanism (§5.2). Not yet decided: how many recipes get them, how many per recipe, who shoots them, and what that adds to the per-recipe production cost currently modelled at ~$40.
+### 16.6 Doneness photography and the tile carrier — SCOPE OPEN, PINNED TO THE PILOT
+
+*Revised 2 September 2026; previously “Doneness photography — SCOPE UNDECIDED”.*
+
+The mechanism is settled (§5.2), and so is which surface owns what (§5.5). Two things are not, and both are now questions the pilot answers rather than arguments to be won on paper.
+
+**Settled.** Doneness photographs are recipe-specific under every option, they carry the trust claim, and they are captured by the author while cooking — which is the only moment the state exists.
+
+**Open, and deliberately not guessed at here.**
+
+- **How many per recipe.** Not one per page: one per genuine decision point. `step-imagery-decision.md` §10 estimates **4–6**, against **8–14** for photo-per-page. That is an estimate, not a measurement — molokhia used doneness on 6 of 8 pages, and several of those were carrying the tile's job rather than their own. This figure is the multiplier on the largest content-cost line after the build, so **no number is recorded here until the pilot measures one.**
+- **What the 44 px tile carries** — a static glyph (A), an animated glyph (A+), a glyph plus a per-recipe photograph (C), or a short silent loop from a shot-once library (E). `step-imagery-decision.md` recommends E and argues it well. It is a recommendation, not a finding, and it says so.
+
+**How the pilot decides it, which is the point.** The pilot is already the shoot. The fifteen recipes are coverage-driven and will exercise most of the vocabulary whether or not a camera is running. Record for each tile whether the glyph was *sufficient*, whether it *needed motion*, or whether it *needed this specific dish* — roughly 150 judgements, and the only dataset on this question that will ever exist. The decision rules are already written and falsifiable: if **≥3 recipes** show a generic loop misleading because the ingredient changed the gesture, the action layer is not generic and the per-recipe options return; if **≥90%** of tiles read as glyph-sufficient, do not shoot at all.
+
+**Recording this as open is itself the decision.** Choosing an option now would fix the largest content-cost line in the model on an argument, two weeks before the measurement that settles it exists.
 
 ### 16.7 Filters and dietary attributes — NOT STARTED, NOW ON THE CRITICAL PATH
 Dietary requirements, personal preferences, heat, vegan/vegetarian, kids-suitable, weight-watching. The attributes are known; the interaction model is not.
@@ -738,3 +775,5 @@ shaped for aggregate reading from the outset.
 | 29 Aug 2026 | Cost on browse card: owners see it, sample set for everyone, blurred server-side otherwise | 16.2 |
 | 29 Aug 2026 | Weekly market price list free perpetually; dish cost paid; commitment is one-way | 17 |
 | 29 Aug 2026 | Palate adjustment as multipliers, auto-applied and marked, flowing through, components propagating | 18 |
+| 2 Sep 2026 | **Four surfaces settled, and what each one's cost scales with.** The arc is glyphs and can be nothing else; the doneness photograph is recipe-specific and carries the trust claim; prose is generated at build. The 44 px tile is the only open carrier | 5.5, 16.6 |
+| 2 Sep 2026 | Doneness count and tile carrier **left open and pinned to the pilot** rather than settled on paper. No per-recipe figure recorded until one is measured — it is the multiplier on the largest cost line after the build | 16.6 |

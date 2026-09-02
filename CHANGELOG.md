@@ -16,6 +16,8 @@ Format: `## YYYY-MM-DD — release`
 - **The vault's `.gitignore` un-ignores `*.xlsx` and `*.docx`**, which `~/.gitignore_global` excludes machine-wide. Without that, `git add -A` there silently skips the financial model, the business plan and the pilot tracker — and reports success.
 - `.gitignore`: `.claude/` added.
 
+- **PM-09 reframed, and half of it closed.** It had read "sign off option C, or reject it" since 19 August, pointing at the recommendation `step-imagery-decision.md` superseded on 21 August with option E. `DIRECTORY.md` called that file "Option C as finally specified" while the file itself recommends E and says "no decision taken" — two documents disagreeing, which is how the decision stayed aimed at the wrong option for eleven days. Both corrected. **`philosophy.md` §5.5 added:** four surfaces, each answering a different question at a different size and each scaling with something different — the arc with the vocabulary, the doneness photograph with the catalogue. **§16.6 rewritten** from *SCOPE UNDECIDED* to open and pinned to the pilot; no per-recipe photograph count is recorded until one is measured. A contradiction inside §9 of the decision document was resolved on the way and its hours column flagged as not following from its own counts.
+
 **Still open:** git is history on the same disk, not a backup. An encrypted off-machine backup remains unaddressed.
 
 

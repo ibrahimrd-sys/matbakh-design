@@ -91,7 +91,7 @@ screens render blank with no visible error.
 | `asset-spec.md` | **CANON** | Photography craft, derived from real render geometry. WebP q82, 1600×1280 hero, 1400×1050 step, subject in the middle 65%. A lighting change reads to a cook as a doneness change. |
 | `tokens.css` | **CANON** | The palette and type scale. Not a suggestion — an invented terracotta once pushed the undeclared-colour warning from 30 to 48. |
 | `step-imagery-research.md` | **CANON** | The four options studied. Records *why* photographs cannot replace icons: at 17px they are eight indistinguishable brown pans. |
-| `step-imagery-decision.md` | **CANON** | Option C as finally specified, after four corrections. |
+| `step-imagery-decision.md` | **CANON** | The options as finally analysed, and the recommendation — **option E**, shoot the vocabulary once rather than the catalogue. It **supersedes** `step-imagery-research.md`'s option C, which it improves on rather than restates. CANON here means the analysis is canonical; **the decision is PM-09 and has not been taken.** Reading this row as "C is settled" is how PM-09 spent eleven days pointed at the superseded option. |
 | `storyboard-companion.md` | **CANON** | The storyboard companion. |
 | `Matbakh-storyboard-companion.pdf` | **GENERATED** | A render of the file above. Regenerate rather than edit; if the two disagree, the `.md` is right. |
 | `tag-proposal.md` | **DRAFT** | The tag vocabulary awaiting decision (PM-07). Carries a stale ingredient count — its backfill sizing was built on the wrong number. |
