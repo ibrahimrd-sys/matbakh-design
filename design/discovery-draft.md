@@ -2,23 +2,24 @@
 
 > Drafted for review. Nothing here carries SETTLED. Positions are proposed with
 > their reasoning attached so each can be accepted, rewritten or rejected.
-> Genuine forks are marked **FORK** rather than resolved silently.
+> Genuine forks are marked \*\*FORK\*\* rather than resolved silently.
 >
-> **Revision 2** — rewritten after the first draft was found to assume a mature
+> \*\*Revision 2\*\* — rewritten after the first draft was found to assume a mature
 > single-locale (Egyptian) shelf. §2 is new and conditions everything after it.
 >
 > If accepted, this becomes a numbered section before philosophy §16, and philosophy §16.1 is deleted.
 
-> **Cross-reference convention.** A bare `§n` refers to a section of *this*
+> \*\*Cross-reference convention.\*\* A bare `§n` refers to a section of \*this\*
 > document. References to another file name it — `philosophy §9`,
 > `discovery-draft §2.4`. Adopted 2 August 2026 after an audit found 50 of 108
 > references across the three drafts ambiguous: every document numbers from 1,
 > so its section numbers collide with `philosophy.md`'s.
 
 
----
 
-## 1. The stance
+\---
+
+## 1\. The stance
 
 **Discovery is a shelf, not a feed.**
 
@@ -36,9 +37,9 @@ who reaches the end has seen the whole product. That is the risk philosophy §16
 confidence or thinness. It is accepted deliberately, because the alternative is
 padding, and padding is what one-recipe-per-dish exists to refuse.
 
----
+\---
 
-## 2. Locale is a first-class axis
+## 2\. Locale is a first-class axis
 
 philosophy §10 settles that the wordless principle makes the *interface* portable and does
 nothing for the pricing pillar, which is locale-bound by definition. philosophy §15 settles
@@ -48,14 +49,14 @@ price feed and a small shelf — not only for Cairo at 500 recipes.
 
 ### 2.1 What degrades, and what does not
 
-| Element | Mature locale | New locale, no price feed |
-|---|---|---|
-| The shelf itself | Full | Smaller, and must say so |
-| `why` on the card | Unchanged | Unchanged — translation only |
-| Cook mode | Unchanged | Unchanged — philosophy §15 makes it portable |
-| Cost per serving | First-class | **Absent** |
-| Cost as sort axis | Default on return | **Unavailable** |
-| Cost notification (philosophy §2) | The habit mechanism | **Does not exist** |
+|Element|Mature locale|New locale, no price feed|
+|-|-|-|
+|The shelf itself|Full|Smaller, and must say so|
+|`why` on the card|Unchanged|Unchanged — translation only|
+|Cook mode|Unchanged|Unchanged — philosophy §15 makes it portable|
+|Cost per serving|First-class|**Absent**|
+|Cost as sort axis|Default on return|**Unavailable**|
+|Cost notification (philosophy §2)|The habit mechanism|**Does not exist**|
 
 The middle column is the product Matbakh is being designed as. The right column
 is what actually launches in market two. **philosophy §2 assigns the
@@ -71,7 +72,7 @@ Discovery must never render a cost affordance that resolves to nothing —
 a greyed sort control, an empty field, a "coming soon" — because philosophy §3's honesty
 commitment makes a promised-but-absent number worse than an omitted one.
 
-Practically: `price_source` presence is a locale capability flag, and the browse
+Practically: `price\_source` presence is a locale capability flag, and the browse
 card and sort controls are composed from capabilities, not hardcoded.
 
 ### 2.3 FORK — one shelf or many?
@@ -97,9 +98,9 @@ voice in Cairo. Editorial ordering (§5 below) is the only ranking mechanism phi
 permits, which means **every new locale needs an editor before it needs
 recipes.** This is a hiring constraint disguised as a design decision.
 
----
+\---
 
-## 3. The posture is different, so the physics are different
+## 3\. The posture is different, so the physics are different
 
 philosophy §1 fixes the counter-top posture as the reader's design centre. Discovery has a
 different one: seated, unhurried, one thumb, hands clean. Every constraint the
@@ -108,22 +109,22 @@ reader inherits from wet hands and divided attention is absent.
 Three reader rules therefore do **not** carry into discovery, each with a stated
 reason as the Status line requires:
 
-| Reader rule | Status in discovery | Why |
-|---|---|---|
-| No scrolling (philosophy §3, principle 1) | **Lifted** | It exists so a cook never loses their place mid-task. A browser has no place to lose. |
-| One mandatory gesture (philosophy §3, principle 3) | **Lifted** | It protects a cook who cannot tap precisely. Not the situation here. |
-| Show the verb, say the noun (philosophy §3, principle 2) | **Partially lifted** | Icons carry actions. Discovery is about *which dish* — only a name and a picture carry that. Words do more work here. |
+|Reader rule|Status in discovery|Why|
+|-|-|-|
+|No scrolling (philosophy §3, principle 1)|**Lifted**|It exists so a cook never loses their place mid-task. A browser has no place to lose.|
+|One mandatory gesture (philosophy §3, principle 3)|**Lifted**|It protects a cook who cannot tap precisely. Not the situation here.|
+|Show the verb, say the noun (philosophy §3, principle 2)|**Partially lifted**|Icons carry actions. Discovery is about *which dish* — only a name and a picture carry that. Words do more work here.|
 
 What carries across unchanged:
 
-- **Every number carries a date and a source** (philosophy §3).
-- **Never present a computed estimate as a fact** (philosophy §3).
-- **Feedback is telemetry, never published** (philosophy §8). The most consequential
-  inherited constraint — see §6.
+* **Every number carries a date and a source** (philosophy §3).
+* **Never present a computed estimate as a fact** (philosophy §3).
+* **Feedback is telemetry, never published** (philosophy §8). The most consequential
+inherited constraint — see §6.
 
----
+\---
 
-## 4. The governing question
+## 4\. The governing question
 
 philosophy §16.1 states it: *how do I help you decide fast without pretending I know you.*
 
@@ -146,20 +147,20 @@ not. Spice level, effort, and course all mean different things by market, and
 cuisine is the tag whose presentation is most locale-relative. The vocabulary
 should be closed and global per philosophy §16.7; only the display is localised.
 
----
+\---
 
-## 5. The card is the unit
+## 5\. The card is the unit
 
 A shelf entry must answer *why this one* before anything else, because philosophy §9
 removed the alternative versions a user would otherwise compare against.
 
-| Element | Field | Why it earns the space |
-|---|---|---|
-| Name | `title` | — |
-| Image | `hero` | The only element that works pre-attention |
-| Why this version | `why` | philosophy §9's obligation, discharged here or nowhere |
-| Cost per serving | `cost_per_serving` + `price_source` | **Locale-conditional** (§2.1) |
-| Hands-on time | `hands_on_minutes` | The real question behind "is this a weeknight dish" |
+|Element|Field|Why it earns the space|
+|-|-|-|
+|Name|`title`|—|
+|Image|`hero`|The only element that works pre-attention|
+|Why this version|`why`|philosophy §9's obligation, discharged here or nowhere|
+|Cost per serving|`cost\_per\_serving` + `price\_source`|**Locale-conditional** (§2.1)|
+|Hands-on time|`hands\_on\_minutes`|The real question behind "is this a weeknight dish"|
 
 Deliberately **not** on the card: nutrition. philosophy §2 assigns it a findable panel and
 the job of authorising, not informing. Putting kcal on a browse card converts
@@ -169,11 +170,65 @@ Matbakh into a diet app by accident.
 is the *only* differentiating element left on the card. It is currently a schema
 field with no surface depending on it. This section makes it the most important
 string in the recipe, written once per dish, per language. That is an editorial
-cost not in the ~$40 per-recipe model (philosophy §16.6), and it recurs on every locale.
+cost not in the \~$40 per-recipe model (philosophy §16.6), and it recurs on every locale.
 
----
 
-## 6. What philosophy §8 forbids, and what that buys
+
+\### 5.1 Cost has three states on the card, not two
+
+
+
+Settled 29 August 2026 (philosophy §16.2). §2.2 establishes that a cost affordance
+
+must never resolve to nothing. Ownership introduces a third state, and it must
+
+not be confused with the second:
+
+
+
+| State | When | What the card shows |
+
+|---|---|---|
+
+| \*\*Priced\*\* | Locale has a feed; the reader owns the catalogue | The figure, with market and date |
+
+| \*\*Unpriced locale\*\* | No `price\_source` for this locale | The cost element is \*\*composed out entirely\*\* — no row, no grey, no placeholder (§2.2) |
+
+| \*\*Unpaid\*\* | Locale has a feed; the reader does not own the catalogue | A \*\*blurred figure\*\* in the same position and typography, market and date still legible |
+
+
+
+The second and third states must be \*\*visually distinct\*\*. They mean different
+
+things: one says \*this data does not exist here\*, the other says \*this data
+
+exists and is not yours yet\*. Collapsing them into a single grey treatment makes
+
+an honest signal and a commercial one indistinguishable, which is the failure
+
+§2.2 is written to prevent.
+
+
+
+The blurred state is not an exception to §2.2. That rule protects against a
+
+number being \*implied but absent\*. Here the number exists, is real and is dated
+
+— the reader simply has not bought access to it. Absence-because-no-data and
+
+absence-because-unpaid are different facts.
+
+
+
+\*\*A fixed editorial sample set of dishes shows its cost unblurred to everyone\*\*,
+
+precomputed and refreshed with the feed. This is the same set used off-app; it
+
+is chosen, not scraped, which is the point.
+
+\---
+
+## 6\. What philosophy §8 forbids, and what that buys
 
 philosophy §8 settles that cooks may report but never publish. Discovery inherits this,
 removing the standard toolkit entirely: no ratings, no star averages, no review
@@ -189,15 +244,15 @@ for every item being present — `why`, again.
 1. **Editorial** — the curator's order. Locale-specific (§2.4).
 2. **User-constrained** — the result of §4's subtraction.
 3. **Objective sorts** — hands-on time ascending everywhere; cost ascending only
-   where the feed exists.
+where the feed exists.
 
 Telemetry still runs. philosophy §8 and philosophy §4.7 already collect abandonment-by-step, the
 strongest editorial signal in the product. It informs what the curator promotes.
 It never becomes a number on a card.
 
----
+\---
 
-## 7. Two surfaces, not one
+## 7\. Two surfaces, not one
 
 **FORK.**
 
@@ -216,26 +271,34 @@ The alternative — one adaptive surface that changes with familiarity — is
 rejected as personalisation theatre, which philosophy §16.1 warns against by name. But it
 is a real fork.
 
----
+\---
 
-## 8. Search
+## 8\. Search
 
 With a finite collection and no duplicates, search-by-name works whenever the
 user arrives knowing the dish. Cheap, and it should exist.
 
-- **Normalisation is a per-script concern, resolved like philosophy §15's dialects.** For
-  Arabic: ة/ه, ي/ى, hamza forms, and diacritics normalised rather than
-  corrected. Each new script adds a normalisation pass, not a redesign.
-- **Dish names cross scripts; they do not translate.** *koshari*, *kushari*,
-  *كشري* and *كشرى* must all land on the same dish. A user in London searching
-  Latin characters for an Egyptian dish is the normal case, not an edge one.
-- **Ingredient search is deferred.** "What can I make with what's in the fridge"
-  is a pantry feature with no schema behind it. Different surface, argued
-  separately if at all.
+* **Normalisation is a per-script concern, resolved like philosophy §15's dialects.** For
+Arabic: ة/ه, ي/ى, hamza forms, and diacritics normalised rather than
+corrected. Each new script adds a normalisation pass, not a redesign.
+* **Dish names cross scripts; they do not translate.** *koshari*, *kushari*,
+*كشري* and *كشرى* must all land on the same dish. A user in London searching
+Latin characters for an Egyptian dish is the normal case, not an edge one.
+* **Ingredient search is a primary route, settled 29 August 2026\*\*** (philosophy §16.1). The earlier position in this draft deferred it as "a pantry feature with no schema behind it"; that is now overtaken. The schema does exist
 
----
+&#x20; — `content/ref/ingredients.yaml` is a closed, controlled vocabulary with scaling classes, which is precisely what the route resolves against. It is a \*\*subtraction\*\* in §4's sense, not a recommendation: the user supplies what they hold, the shelf removes what they cannot cook.
 
-## 9. The empty shelf
+&#x20; - \*\*Presence, not quantity.\*\* No inventory to maintain.
+
+&#x20;- \*\*Staples assumed present\*\*, unset rather than set.
+
+&#x20; - \*\*Rank by fewest missing\*\*, not by exact match only. A dish missing one ingredient is the useful result, and naming the missing item with its price is where this route meets the pricing pillar.
+
+&#x20; - It runs on the ingredient graph, so unlike §4's declared filters it does \*\*not\*\* block on philosophy §16.7.
+
+\---
+
+## 9\. The empty shelf
 
 Subtraction over a finite collection with several constraints will return three
 results, or none. This is the failure mode of the whole approach.
@@ -257,9 +320,9 @@ and each new locale starts with an incomplete one. Discovery must be able to say
 or the shelf silently lies about its own size at exactly the point a guest's
 dinner depends on it.
 
----
+\---
 
-## 10. Where `shorts` lives
+## 10\. Where `shorts` lives
 
 philosophy §7 evicted technique video from cook mode on the principle that a step needing a
 video is authored wrong, and gave technique clips a Techniques library. `shorts`
@@ -274,43 +337,48 @@ lexicon, it cannot be re-rendered per language. Following philosophy §15's logi
 should be **wordless or captioned, never voiced** — otherwise every locale is a
 reshoot, and the one genuinely portable acquisition asset becomes the least.
 
----
+\---
 
-## 11. What discovery must not do
+## 11\. What discovery must not do
 
-- **No infinite feed.** Contradicts philosophy §1.
-- **No personalisation before there is anything to personalise on.** philosophy §16.1 warns
-  against it by name.
-- **No algorithmic ranking presented as authority.** philosophy §8 forbids the input.
-- **No nutrition on browse cards.** philosophy §2.
-- **No bare numbers, and no cost affordance that resolves to nothing.** philosophy §3, §2.2.
-- **No hiding the collection's size.** Finiteness is the promise.
+* **No infinite feed.** Contradicts philosophy §1.
+* **No personalisation before there is anything to personalise on.** philosophy §16.1 warns
+against it by name.
+* **No algorithmic ranking presented as authority.** philosophy §8 forbids the input.
+* **No nutrition on browse cards.** philosophy §2.
+* **No bare numbers, and no cost affordance that resolves to nothing.** philosophy §3, §2.2.
+* **No hiding the collection's size.** Finiteness is the promise.
 
----
+\---
 
-## 12. What this section does not settle
+## 12\. What this section does not settle
 
-- **philosophy §16.2** — pre-commit presentation of cost and nutrition. §5 takes a position
-  on the *card*; the recipe page before commit is larger and remains open.
-- **philosophy §16.7** — the tag vocabulary. §4 is unbuildable without it.
-- **philosophy §16.3** — the meal planner. Adjacent, deliberately untouched.
-- **§2.3** — one shelf or many. The largest open question here.
-- **Minimum viable shelf size per locale.** Raised in §9, unanswered.
-- **Collections.** Whether editorial groupings (Ramadan, weeknight, one-pan) are
-  a first-class object with their own schema, or saved filter states.
+* **philosophy §16.2** — §5.1 and philosophy §16.2 now settle the card; the recipe page before commit remains open.
+* **philosophy §16.7** — the tag vocabulary. §4 is unbuildable without it.
+* **philosophy §16.3** — the meal planner. Adjacent, deliberately untouched.
+* **§2.3** — one shelf or many. The largest open question here.
+* **Minimum viable shelf size per locale.** Raised in §9, unanswered.
+* **Collections.** Whether editorial groupings (Ramadan, weeknight, one-pan) are
+a first-class object with their own schema, or saved filter states.
+* **The tag vocabulary blocks §4's declared filters only**. Computed constraints — cost, hands-on time, ingredients held — resolve against data that already exists and are buildable now.
 
----
+\---
 
 ## Proposed decision-log entries, if accepted
 
-| Date | Decision | Section |
-|---|---|---|
-| — | Discovery is a shelf, not a feed | 1 |
-| — | Locale capability flags compose the card; no affordance resolving to nothing | 2 |
-| — | Every locale needs an editor before it needs recipes | 2.4 |
-| — | Reader constraints on scroll and gesture lifted for discovery, with reasons | 3 |
-| — | User supplies the constraint; the app subtracts. No inferred preference | 4 |
-| — | Browse card: title, hero, `why`, cost (locale-conditional), hands-on | 5 |
-| — | No ratings, counts or popularity ordering; editorial + objective sorts only | 6 |
-| — | Never return zero; name the failing constraint and the withheld-data count | 9 |
-| — | `shorts` lives in discovery; wordless or captioned, never voiced | 10 |
+|Date|Decision|Section|
+|-|-|-|
+|—|Discovery is a shelf, not a feed|1|
+|—|Locale capability flags compose the card; no affordance resolving to nothing|2|
+|—|Every locale needs an editor before it needs recipes|2.4|
+|—|Reader constraints on scroll and gesture lifted for discovery, with reasons|3|
+|—|User supplies the constraint; the app subtracts. No inferred preference|4|
+|—|Browse card: title, hero, `why`, cost (locale-conditional), hands-on|5|
+|—|No ratings, counts or popularity ordering; editorial + objective sorts only|6|
+|—|Never return zero; name the failing constraint and the withheld-data count|9|
+|—|`shorts` lives in discovery; wordless or captioned, never voiced|10|
+|29 Aug 2026|Ingredient search is a primary route, not deferred; presence not quantity; rank by fewest missing|8|
+|29 Aug 2026|Cost has three card states; unpriced-locale and unpaid must be visually distinct|5.1|
+
+
+

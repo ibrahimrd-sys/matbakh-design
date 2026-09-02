@@ -10,8 +10,8 @@ chose subtraction — the user supplies the constraint, the app removes what
 fails it. This does not overturn that. It adds a second input, the cook's own
 history, and applies one rule:
 
-> **If a suggestion cannot be explained in one sentence from the user's own
-> record, it is not made.**
+> \\\\\\\*\\\\\\\*If a suggestion cannot be explained in one sentence from the user's own
+> record, it is not made.\\\\\\\*\\\\\\\*
 
 The app says *"you have made this six times, last 7 days ago"*. It never says
 *"we think you'll like this."* `philosophy §3` forbids presenting a computed
@@ -47,18 +47,18 @@ and which an additive score would get wrong.
 The first version ranked known and unknown dishes in one list. Two failures
 appeared immediately:
 
-- A favourite cooked six times **never appeared at all**, buried under dishes
-  the cook had never seen.
-- Every untried dish scored identically, so with 500 recipes the ranking among
-  them was arbitrary while looking authoritative.
+* A favourite cooked six times **never appeared at all**, buried under dishes
+the cook had never seen.
+* Every untried dish scored identically, so with 500 recipes the ranking among
+them was arbitrary while looking authoritative.
 
 Mixing them requires a taste model the app does not have and `philosophy §8`
 denies it the data to build. So they are no longer mixed:
 
-| List | Ranked by | Honest because |
-|---|---|---|
-| **Due for a return** | affinity × staleness | Entirely from the cook's own record |
-| **Not tried** | constraint fit, then pantry overlap | A shelf, not a prediction |
+|List|Ranked by|Honest because|
+|-|-|-|
+|**Due for a return**|affinity × staleness|Entirely from the cook's own record|
+|**Not tried**|constraint fit, then pantry overlap|A shelf, not a prediction|
 
 ## Event planning
 
@@ -73,8 +73,8 @@ exclusions is always reported, so the shelf never lies about its own size.
 Two structural rules come from the tag vocabulary and exist because a host
 would not think to ask for them but would feel their absence:
 
-- **`max_involved`** — how many demanding dishes one cook can actually run
-- **`max_immediate`** — how many dishes need serving the instant they are done
+* **`max\\\\\\\_involved`** — how many demanding dishes one cook can actually run
+* **`max\\\\\\\_immediate`** — how many dishes need serving the instant they are done
 
 Scoring favours menus the cook has made before, spread across cuisines, using
 the budget rather than hoarding it.
@@ -124,8 +124,8 @@ claim as much.
 
 ### Recall re-checks everything
 
-Reopening a menu rescales and reprices it — *"10 covers at \$56.50, now 16 at
-\$90.40, +\$33.90"* — and **re-checks every dish against the current profile.**
+Reopening a menu rescales and reprices it — *"10 covers at $56.50, now 16 at
+$90.40, +$33.90"* — and **re-checks every dish against the current profile.**
 
 A menu that worked in March may contain something a guest now cannot eat, or a
 dish whose dietary data has since been completed and turns out to exclude it.
@@ -152,5 +152,6 @@ record cannot be used here, however good its recommendations.
 
 ## Files
 
-- `planner.py` — the algorithm
-- `test_planner.py` — a plausible year of cooking history, both decisions
+* `planner.py` — the algorithm
+* `test\\\\\\\_planner.py` — a plausible year of cooking history, both decisions
+

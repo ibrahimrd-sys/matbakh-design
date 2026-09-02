@@ -2,7 +2,7 @@
 
 **Status:** Living document. Sections marked SETTLED are decided and should not be relitigated without a stated reason. Sections marked OPEN are unresolved.
 
-**Last updated:** 1 August 2026
+**Last updated:** 2026-08-29
 
 ---
 
@@ -193,6 +193,16 @@ Simmering 6 portions takes about as long as 4; browning 6 takes noticeably longe
 
 **Cost per dish computes from exact quantity consumed, never from pack size** — otherwise a pinch of saffron costs a whole jar and the headline cost figure becomes nonsense. Pack-size rounding belongs only to the shopping list.
 
+**Units display as authored, not as converted.** Where an ingredient record
+carries both a mass and a household measure, both are shown together — *200 g ·
+1 cup* — rather than behind a toggle. The app performs no unit conversion of its
+own: a household measure appears only because someone entered it for that
+ingredient. Egyptian cup and spoon sizes vary enough that a computed conversion
+would be a fabricated number, which §3 forbids.
+
+The consequence is an authoring requirement, not a rendering one: an ingredient
+displays dual units only if both fields are populated. See §11.
+
 ---
 
 ## 7. Technique video — SETTLED (revised from original concept)
@@ -220,6 +230,20 @@ The most valuable signal available: **which step people abandon on.** That is a 
 ## 9. "One recipe per dish" — SETTLED
 
 A promise, not scarcity. But it obligates the app to state **why this version** in one line. Without that, omission reads as absence rather than choice, and someone's grandmother's version becomes a complaint instead of a conversation.
+
+**The obligation is a field, and it is load-bearing.** `why` is required on every
+recipe. It is what replaces the contributor identity a UGC platform supplies for
+free: on a shelf with no ratings, no review counts and no popularity ordering
+(§8), the stated reason for a dish being the chosen version is the only
+differentiating element the reader has.
+
+Two consequences that must not be lost:
+
+- It is **the most important string in the recipe**, written once per dish, per
+  language.
+- It carries an editorial cost that is **not** in the per-recipe production
+  model. Add it to what the pilot measures rather than discovering it at recipe
+  three hundred.
 
 ---
 
@@ -292,6 +316,22 @@ station, so the shopping list counts one bird rather than three.
 `gluten_free` · `total_minutes` · `cost_per_serving` · `kcal_per_serving`. The
 test for which side a field belongs on: *could a careful person disagree?*
 Cuisine is judgement. "Contains dairy" is a fact about the ingredient list.
+
+### Additions, 29 August 2026
+
+**Ingredient records — household measure.** A second display unit alongside the
+mass unit, optional per ingredient. Populated by hand; never computed. Drives
+§6.7's dual display.
+
+**Palate deltas — a user-side store, not a recipe field.** Adjustments live
+against the user, keyed on `(recipe_id, ingredient_id)` — or on
+`(component_id, ingredient_id)` where the line belongs to a sub-recipe (§14).
+Stored as **multipliers**, never absolute amounts. See §18.
+
+The delta store is deliberately **aggregatable**: the same records read across
+users are the only quality signal available on a catalogue that one author
+cannot test at scale. Design the shape for that reading from the first commit,
+not after.
 
 ---
 
@@ -473,13 +513,69 @@ share an icon and should be merged.
 
 ## 16. Open questions
 
-### 16.1 Discovery — NOT STARTED
+### 16.1 Discovery — PARTLY SETTLED (29 August 2026)
 No philosophy established. 500 curated recipes with no duplicates means **browsing is the product** for the first ten minutes of anyone's relationship with Matbakh. This is where the curation promise reads either as confidence or as thinness.
 
 The governing question differs from the reader's. The reader asks *how do I not break your concentration.* Discovery asks *how do I help you decide fast without pretending I know you.* These do not share a design logic and should not be forced to.
 
-### 16.2 Pre-commit presentation of cost and nutrition — NOT STARTED
-How cost and nutrition present themselves on a recipe *before* the cook commits.
+**Settled 29 August 2026: ingredient-led entry is a primary discovery route.**
+The user names what they already have; the shelf subtracts everything they
+cannot cook. Three independent signals support it — it is given away free by one
+market leader, charged for as a premium feature by another, and is the entire
+product of the most-downloaded Egyptian recipe app.
+
+Two constraints settled with it:
+
+- **Presence, not quantity.** No pantry inventory. The user marks that they have
+  chicken, not that they have 340 g of it. Every product that has asked users to
+  maintain quantities has died on the maintenance burden. Quantity resolution
+  happens against the recipe, never against the pantry.
+- **Staples assumed present** — salt, oil, onion, garlic, flour, sugar — and
+  unset rather than set. A session that opens with twenty taps before returning
+  anything is not completed.
+
+**This route runs on the ingredient graph, not on tags.** It therefore does not
+block on §16.7. Recording that explicitly, because bundling the two made an
+accepted feature look blocked by the project's most overdue decision.
+
+The rest of §16.1 remains open, and `discovery-draft.md` remains its input.
+
+### 16.2 Pre-commit presentation of cost and nutrition — PARTLY SETTLED
+
+**Answered in practice 19 August 2026 by the bolognese prototype.** Nutrition
+sits on the Overview pane beneath the cost — same class of fact, same glance.
+The cost row shows its own absence: `—` with *no price feed connected*, never an
+invented number. That puts §3's honesty commitment on screen rather than in
+prose.
+
+**Settled 29 August 2026 — cost on the browse card.**
+
+Indicative cost is visible to owners on every browse card. Non-owners see it on
+a **fixed sample set** of dishes only, chosen editorially and precomputed —
+never a live query, which would be a free API over the catalogue.
+
+The split follows the pricing commitment in §17. The market price list is free;
+the cost of a *specific dish* is paid, because it requires the recipe.
+
+**What the card carries.** Not a bare figure: the named market, the date, and
+which serving preset the number refers to. Presets are discrete, so a cost
+without its preset is ambiguous. Where the owner holds a palate delta on that
+recipe (§18), the card shows the adjusted figure.
+
+**What a non-owner sees: a blurred figure**, in the same position and
+typography as an owner's, with the market and date still legible. Not a padlock.
+The blur must be produced server-side; a client-side effect over the true value
+leaves the number in the payload and makes the boundary decorative.
+
+**The distinction this rests on, stated because it is easy to get wrong.**
+`discovery-draft §2.2` forbids a cost affordance that resolves to nothing.
+Absence because *no data exists* is dishonest — it implies a number that is not
+there. Absence because *unpaid* is honest — the number exists, is real, and is
+dated. These are different facts and **they must be visually distinct.** A
+reader in a locale with no price feed and a non-owner in a priced locale must
+never see the same treatment.
+
+Still open: the recipe page before commit, which is larger than the card.
 
 ### 16.3 The meal planner — NOT STARTED
 How it stays advisory without becoming nagging. Established constraint from prior work: non-rigid, non-mandatory, treats deviation as normal; hard rules apply only to dietary exclusions.
@@ -499,6 +595,104 @@ Dietary requirements, personal preferences, heat, vegan/vegetarian, kids-suitabl
 **Raised in priority 1 August 2026.** §13 established that menu suggestion is blocked on this, and that tags are the one thing genuinely expensive to retrofit — every recipe authored before the vocabulary is settled has to be revisited. The vocabulary should be closed and small for the same reason the activity lexicon is: it is translated once, and it is what a filter can promise.
 
 At minimum it needs cuisine, course, protein, spice level, dietary exclusion (*vegetarian as written*, not *could be made vegetarian*), effort, and whether a dish holds well — that last one only matters for entertaining, which is why it surfaced now.
+
+## 17. Pricing and the free surface — SETTLED (29 August 2026)
+
+### 17.1 What is free, permanently
+
+**The weekly market price list.** What staples cost, at a named market, on a
+named date. Published in the app and — with no install required — on the
+channels where the audience already is.
+
+This is free **perpetually**. The commitment is one-way and cannot be withdrawn.
+
+### 17.2 What is paid
+
+**The catalogue, and the cost of a specific dish.** A dish cost requires the
+recipe, its quantities, its scaling classes and its purchase-unit rounding. It
+is therefore a property of the catalogue, not of the price list.
+
+The line is: **free is the raw data; paid is the data applied to a dish.**
+Knowing what tomatoes cost this week does not tell a cook what koshari costs,
+how much to buy, or how to make it.
+
+### 17.3 Why the free thing is never the paid thing
+
+A free tier carved out of the catalogue would give away fixed assets — each
+recipe authored, test-cooked and photographed once, at real cost — to someone
+who may never pay. The price list is the opposite: one dataset, produced weekly,
+served to everyone at no marginal cost. It also has to exist for the paid
+product regardless.
+
+The structural benefit is that **nothing ever has to be taken away.** Products
+that build a free audience and later paywall it pay for the retrofit in
+goodwill. A product where the free surface was never the paid surface cannot
+incur that.
+
+### 17.4 The consequence to hold
+
+Because the price list is permanently free, it cannot carry a renewal charge.
+Any recurring revenue must come from new catalogue content, not from access to
+prices. That constraint is now fixed.
+
+
+## 18. Palate adjustment — SETTLED (29 August 2026)
+
+After cooking a recipe as authored, a cook may adjust ingredient quantities to
+taste. The adjustment belongs to the cook, never to the catalogue.
+
+This does not weaken the test-cooked promise: they cooked the authored version
+first, and adjusting on a second attempt is the ordinary behaviour of a cook, not
+a deviation the product has to defend.
+
+### 18.1 Multipliers, never absolute amounts
+
+An adjustment is a factor — ×1.5 salt — applied **after** the ingredient's
+scaling class has been resolved (§6.2). Three reasons compound:
+
+- Serving presets are discrete, so an absolute delta captured at four servings is
+  wrong at eight.
+- Seasoning has its own scaling class precisely because it does not scale
+  linearly; an absolute delta would bypass that rule rather than compose with it.
+- When a later edition revises a recipe's quantities, a multiplier survives the
+  revision. An absolute silently corrupts.
+
+### 18.2 Deltas, never forks
+
+The adjustment is a layer over the canonical recipe. It never produces a copy.
+A fork would make the catalogue hold many recipes per dish through the user's own
+hands, which is exactly what §9 exists to prevent.
+
+### 18.3 Applied automatically, and marked
+
+Subsequent cooks show the adjusted quantities by default, with a visible marker
+that the recipe deviates from the authored version and a one-tap return to it.
+Never silent: the cook must always be able to see which state they are in, in the
+same way §6.1 requires for scaling.
+
+### 18.4 It flows through
+
+Adjusted quantities propagate to the consolidated shopping list, the computed
+nutrition panel and the cost figure. All three are computed rather than typed, so
+this is wiring — but it must be wired deliberately, or the nutrition panel
+describes a dish the cook is not making.
+
+### 18.5 Components propagate
+
+A sub-recipe is a first-class recipe (§14), never duplicated into its parent. An
+adjustment to a component therefore belongs to the component and follows it into
+every dish that uses it.
+
+### 18.6 What the deltas are also for
+
+Read across users, the deltas are a continuous quality signal: if most cooks
+reduce the salt in a recipe, that recipe is over-salted. This is telemetry, not
+publication, and §8 is untouched.
+
+Given that the catalogue is authored by one person who cannot test at scale, this
+may be the more valuable half of the feature. It only exists if the store is
+shaped for aggregate reading from the outset.
+
 
 ---
 
@@ -534,3 +728,15 @@ At minimum it needs cuisine, course, protein, spice level, dietary exclusion (*v
 | 1 Aug 2026 | Lexicon: 294 verbs → 81 activities, 124 qualifiers, 84 out of scope | 15 |
 | 1 Aug 2026 | Three Arabic dialects, lexicon-only, prose stays in ar | 15 |
 | 1 Aug 2026 | §11 reconciled against the built schema; July field names never existed | 11 |
+| 13 Aug 2026 | **Renumbered.** Open questions §13 → §16. Entertaining and hosting promoted from §13.4 to its own top-level §13. §16.4 left deliberately vacant rather than reused — renumbering 16.5–16.7 would silently invalidate every cross-reference written since. Anything written before this date cites the old numbers. | 13, 16 |
+| 15 Aug 2026 | **§11 status advanced** — schema fields moved from *to lock before authoring begins* to *SETTLED, and now implemented*. The validator enforces them; they are no longer a specification awaiting code. | 11 |
+| 15 Aug 2026 | **§11 status advanced** — schema fields moved from *to lock before authoring begins* to *SETTLED, and now implemented*. The validator enforces them; they are no longer a specification awaiting code. | 11 |
+| 15 Aug 2026 | **Sub-recipes — SETTLED.** A sub-recipe is a first-class recipe: own file, own steps, own yield, authored and test-cooked once, never duplicated into the parent. Referenced with a quantity; scales by `amt ÷ yield`. Ingredients roll into the parent's shopping list and allergens roll up recursively with cycle protection. A link in the reader, never spliced into the parent's flow. Found in testing: `fixed` ingredients scale on a roll-up share even though they do not scale with servings. | 14 |
+| 15 Aug 2026 | **Activity lexicon — SETTLED.** A recipe refers to an activity by key; the word and its Arabic live only in `activities.yaml`. 81 activities, ceiling ~95. Dialects are lexicon-only, resolving `ar_gulf → ar_eg → ar`; per-recipe prose stays in `ar`. Two activities sharing a word within one dialect is an error, not a warning. | 15 |
+| 29 Aug 2026 | Units display as authored; no computed conversion | 6.7, 11 |
+| 29 Aug 2026 | `why` is a required, load-bearing field with an editorial cost | 9 |
+| 29 Aug 2026 | Ingredient-led entry settled as a discovery route; presence not quantity; does not block on tags | 16.1 |
+| 29 Aug 2026 | Bolognese prototype's cost and nutrition placement written back | 16.2 |
+| 29 Aug 2026 | Cost on browse card: owners see it, sample set for everyone, blurred server-side otherwise | 16.2 |
+| 29 Aug 2026 | Weekly market price list free perpetually; dish cost paid; commitment is one-way | 17 |
+| 29 Aug 2026 | Palate adjustment as multipliers, auto-applied and marked, flowing through, components propagating | 18 |

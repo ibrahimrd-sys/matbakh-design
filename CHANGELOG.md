@@ -5,6 +5,22 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-08-29 — pricing and palate adjustment settled
+
+**Philosophy — two new settled sections, two open questions partly closed.**
+
+- **§17 Pricing and the free surface — SETTLED.** The weekly market price list is free perpetually and published without requiring an install; the cost of a specific dish is paid. The commitment is one-way. Consequence: recurring revenue must come from new catalogue content, not from access to prices.
+- **§18 Palate adjustment — SETTLED.** Post-cook adjustments stored against the user as multipliers, applied after the scaling class, auto-applied with a deviation marker, flowing through to the shopping list, nutrition and cost. Component adjustments propagate. Deltas layer over the canonical recipe and never fork it. The delta store is shaped for aggregate reading, which makes it a quality signal on the catalogue as well as a personalisation feature.
+- **§16.1 Discovery — partly settled.** Ingredient-led entry is a primary route: presence not quantity, staples assumed present, ranked by fewest missing. It resolves against the ingredient graph, so it does not block on §16.7.
+- **§16.2 Pre-commit cost and nutrition — partly settled.** The bolognese prototype's answers written back at last, plus the browse-card decision: owners see the figure, a fixed editorial sample set is unblurred for everyone, everyone else sees a server-side blurred figure carrying market and date.
+- **§6.7, §9, §11** amended: dual units display as authored with no computed conversion; `why` recorded as required and load-bearing; schema additions for the household-measure field and the palate delta store.
+- **Decision log reconciled.** Rows backfilled for the 13 August renumber and the 15 August §11 status change, sub-recipe and lexicon decisions.
+- **preflight:** the release-vs-changelog check was an unfinished `pass` and never warned. It now does.
+- `discovery-draft.md`: ingredient search is no longer deferred; cost now has three card states, and unpriced-locale must be visually distinct from unpaid.
+
+Source: nine-app competitor study, `02-strategy/ideas-from-cooking-apps.md`.
+
+
 ## 2026-08-26 — a directory you can rely on
 
 - **`DIRECTORY.md` added**, and it is the point of this release. Every file in
@@ -162,6 +178,67 @@ vault guards all still see the layout they expect.*
 - Deep links retargeted, `#recipe` and `#cook/1`–`#cook/9`, and the hash follows
   the cook.
 
+## 2026-08-15 — planner and discovery drafts, philosophy renumber
+
+- Planner and tests; `design/discovery-draft.md` and `design/availability-draft.md` added, both explicitly DRAFT.
+- **`philosophy.md` renumbered.** Open questions §13 → §16; entertaining and hosting promoted from §13.4 to its own top-level §13; §16.4 left deliberately vacant. Anything written before this date cites the old numbers.
+- **§14 Sub-recipes — SETTLED.** First-class recipes, referenced with a quantity, scaling by `amt ÷ yield`, allergens rolling up recursively.
+- **§15 The activity lexicon — SETTLED.** 81 activities, ceiling ~95, dialects lexicon-only.
+- **§11 advanced** from *schema fields to lock before authoring begins* to *SETTLED, and now implemented.*
+
+*Recorded retrospectively 29 Aug 2026 from git (`873a964`).*
+
+2026-08-12 — translator tool
+`tools/translator.html` added, the fourth authoring tool. Locale-scoped queue
+over any number of recipe files, with progress per recipe and a jump to the
+next gap.
+Structurally safe by construction: it walks for per-locale string maps and can
+reach nothing else. Tested on the demo recipe — 31 prose units, zero
+structural fields exposed, tiles byte-identical after a round-trip.
+Doneness cues are shown beside the photograph they describe.
+Translation memory for repeated phrases. Qualifiers are the case that matters:
+one recipe already repeats pot, and fine / covered / skin-side recur
+across any catalogue.
+Measured correction: a recipe carries ~31 translatable prose units, not the
+~10 previously estimated — qualifiers are per tile. The lexicon, by contrast,
+is 98 strings translated once per language, not the ~600 previously stated.
+
+2026-08-01e — sub-recipes
+A recipe can now consume another: `uses: \[{id, amt}]` on the parent,
+`yield: {amount, unit}` on the sub-recipe. Everything scales by amt ÷ yield.
+Sub-recipe ingredients roll into the parent's shopping list, summed by
+ingredient id; allergens roll up too, with cycle protection, so a sauce cannot
+hide its sesame.
+Testing found a real distinction: `fixed` ingredients do not scale with
+servings but DO scale on a roll-up share. Water for boiling is constant for
+two or eight, yet 37.5% of a sauce holds 37.5% of its water. The builder now
+separates the two cases.
+§13.8 records the decision; the recipe template documents it where an author
+will see it.
+2026-08-01d — diet field, and derived dietary tags
+Ingredients gained `diet`. The editor has a chip selector and a bulk-propose
+button that resolves 177 of the 179 from name rules plus a table of cases a
+name cannot reveal — worcestershire is fish, bechamel is dairy and gluten.
+`matbakh.py` derives `vegetarian`, `vegan`, `gluten\_free` and `contains` from
+it. If any ingredient in a recipe lacks the field, the flags are withheld
+entirely and the validator names what to fix: a wrong vegetarian claim costs a
+guest their dinner, so silence is the correct failure.
+§13.4 (the party plan) and §13.7 (filters) are unblocked by this.
+2026-08-01c — audit output, and the last dialect gaps
+The lexicon audit printed 70 warnings for one predictable fact — that most
+activities are unused when a single recipe is loaded. It now summarises, and
+only names them past 40 recipes, when "unused" starts to mean "probably does
+not need an icon".
+Retracted the ">60 activities, look for a merge" warning. 81 is the reviewed
+outcome of sorting 294 candidate verbs; it is a decision, not drift. The check
+that matters is collisions, and there are none.
+Station names and note labels now carry all three dialects — 30 strings that
+appear on every screen of every recipe, so a gap there cost more than any
+single verb. All five locales report complete.
+An Egyptian cook now reads الطبلية and متبعدش where a Gulf cook reads
+لوح التقطيع and لا تبعد.
+
+
 ## 2026-08-01b — lexicon editor
 
 - `tools/lexicon-editor.html` added, same pattern as the ingredient editor:
@@ -255,6 +332,52 @@ vault guards all still see the layout they expect.*
 - Per-serving nutrition can be computed from step amounts against the 156
   ingredients carrying per-100g figures, and reports what it could not include
   rather than silently under-reporting.
+
+2026-07-30e — authoring tools
+Offline nutrition search added: `nutrition-db.json`, a 6,389-food USDA export,
+loads through the same picker and is searched before the online API. Field
+order decoded and verified against known values — kcal, protein, carb, fat,
+satfat, cholesterol, sodium, fibre per 100 g.
+Ingredients gained `convert`: `cup\_g` and `piece\_g`. Tablespoons and teaspoons
+are derived at cup/16 and cup/48 rather than stored, so one number per
+ingredient can be kept right instead of three that can disagree.
+This closes both holes in computed nutrition: counted ingredients and
+spoon-measured ones previously contributed nothing, silently. The recipe
+editor now converts to grams first, and names anything it still cannot.
+`matbakh.py` warns when an ingredient has nutrition but no conversion, since
+that is exactly the case where the figures come out low without saying so.
+Ingredient editor gained USDA FoodData Central lookup: search per ingredient,
+or walk every ingredient with no nutrition. Results are labelled by data type
+— Foundation and SR Legacy are per 100 g and preferred; Branded is per serving
+and flagged, since taking it at face value would be wrong.
+ml-measured ingredients are called out on apply, because USDA reports per 100 g
+and density makes the two differ for oil, honey and cream.
+The API key is held in browser local storage, never in the file. USDA
+deactivates keys found in code repositories, and tools/ is in a public one.
+`tools/ingredient-editor.html` and `tools/recipe-editor.html`. Single files,
+opened in a browser: no server, no Python, no install. Files are read client
+side and never uploaded; editing produces a download you put back yourself.
+Both carry a live validation rail applying the same rules as `matbakh.py`,
+and refuse to produce a download while any error stands — so a file cannot
+leave the editor in a state the validator would reject.
+The recipe editor drives activities, stations, note kinds and ingredients
+from the lexicon and reference files, so a typo cannot enter the catalogue.
+Bespoke verb wording stays available per action.
+Per-serving nutrition can be computed from step amounts against the 156
+ingredients carrying per-100g figures, and reports what it could not include
+rather than silently under-reporting.
+2026-07-30d — hero shows the whole photo
+The pre-commit hero used `object-fit: cover`, which crops the photo to fill
+the band — on a phone this cut the top or bottom off the dish. Changed to
+`object-fit: contain`, so the whole photo is visible, letterboxed against the
+warm background. One property; the 318px band is unchanged.
+An earlier attempt also made the band height follow the photo. That broke
+scrolling on the recipe screen and was reverted. If the fixed band is
+revisited, test scrolling on a real device before shipping — the failure was
+not visible in preflight.
+app-iphone.html and recipe-screen-iphone.html. Step photos, shorts posters and
+the resume thumbnail still use `cover`; cropping is right for a thumbnail.
+
 
 ## 2026-07-30d — hero shows the whole photo
 

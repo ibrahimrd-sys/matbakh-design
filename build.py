@@ -122,9 +122,9 @@ def check_changelog():
         if fdate > newest_entry:
             warn(f"a prototype changed on {fdate} but the newest changelog entry "
                  f"is {newest_entry} — add a line before publishing")
-    if MAN["project"]["release"].replace(".", "-") < newest_entry.replace("-", "-")[:10]:
-        pass
-
+    if MAN["project"]["release"].replace(".", "-") < newest_entry:
+        warn(f"manifest release is {MAN['project']['release']} but the newest "
+             f"changelog entry is {newest_entry} — bump the release before publishing")
 
 
 # The PM log is the canonical tracker and it lives in the vault, outside this
