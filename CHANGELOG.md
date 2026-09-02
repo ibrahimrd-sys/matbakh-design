@@ -5,6 +5,20 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-02 — the vault gets history, and the guards learn the difference
+
+**`matbakh-private/` is under version control — local only, with no remote.** The vault had no history, and that cost real work: a stale `CHANGELOG.md` sitting three directories above this repo swallowed two days of edits, and only the half that had been committed came back. The vault is now its own git repository. No remote is configured, `.git/hooks/pre-push` refuses every push, and `scan.sh` fails if a remote ever appears.
+
+- **`scan.sh` and `setup-guards.sh` now check for a remote, not for `.git`.** Both previously failed on the vault being a repository at all, so both would have fired on every run from here on — and a guard that cries wolf is a guard you learn to bypass, as `.githooks/pre-commit` says in its own comments. A repository cannot leak; a push can, and git history keeps what you push even after you delete it. Absence of history is now a warning rather than the desired state.
+- **`scan.sh` also warns when the vault's `pre-push` hook is missing.** Nothing tracks that hook, so it could vanish without a sound.
+- **Both guards were tested by firing them.** A remote was added to the vault and a real push attempted against a throwaway bare repository: `scan.sh` reported FOUND and exited 1, the hook refused, and nothing was transferred. A check that has never been seen to fire is not a check.
+- **What this trades.** The vault's protection was structural — git was never pointed at it, so a leak needed someone to move files. It is now configurational: git is pointed at it, and what keeps it private is that no remote exists. That is a real downgrade, recorded in `matbakh-private/VaultReadme.md` rather than left to be rediscovered.
+- **The vault's `.gitignore` un-ignores `*.xlsx` and `*.docx`**, which `~/.gitignore_global` excludes machine-wide. Without that, `git add -A` there silently skips the financial model, the business plan and the pilot tracker — and reports success.
+- `.gitignore`: `.claude/` added.
+
+**Still open:** git is history on the same disk, not a backup. An encrypted off-machine backup remains unaddressed.
+
+
 ## 2026-08-29 — pricing and palate adjustment settled
 
 **Philosophy — two new settled sections, two open questions partly closed.**
