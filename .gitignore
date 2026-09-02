@@ -70,6 +70,7 @@ Thumbs.db
 *.swp
 .idea/
 .vscode/
+.claude/
 
 # ── Claude Design exports: self-contained email copies, not site files ──────
 *(offline).html
