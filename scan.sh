@@ -42,9 +42,18 @@ N=$(find content/recipes -name '*.yaml' 2>/dev/null | grep -vE '_template|molokh
 if [ "${N:-0}" -gt 0 ]; then bad "$N recipe file(s) beyond template + demo — catalogue belongs in the vault"
 else good "recipe catalogue not present (template + demo only)"; fi
 
+# The vault MAY be a git repository — local history is what makes a lost edit
+# recoverable. What it must never have is a remote. A repository cannot leak;
+# a push can, and git history keeps what you push even after you delete it.
 if [ -d ../matbakh-private ]; then
-  if [ -d ../matbakh-private/.git ]; then bad "the vault is a git repository — rm -rf ../matbakh-private/.git"
-  else good "vault sits outside this folder and is not a repository"; fi
+  if [ ! -d ../matbakh-private/.git ]; then
+    warn "vault is not a git repository — no history, so a lost edit stays lost"
+  elif [ -n "$(git -C ../matbakh-private remote 2>/dev/null)" ]; then
+    bad "the vault has a remote — it is local-only; git -C ../matbakh-private remote remove <name>"
+  else
+    good "vault is a local-only repository with no remote"
+    [ -x ../matbakh-private/.git/hooks/pre-push ]       || warn "vault pre-push hook missing — nothing blocks an accidental push"
+  fi
 else warn "no ../matbakh-private/ found — is the vault where it should be?"; fi
 
 echo

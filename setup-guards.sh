@@ -10,10 +10,15 @@
 #   1. .gitignore        — stops the obvious things being staged at all
 #   2. pre-commit hook   — stops a commit whatever tool made it
 #   3. global gitignore  — applies to every repo on this machine, so a stray
-#                          `git init` in the vault is still partly covered
+#                          `git init` anywhere is still partly covered
 #
 # The strongest protection is not any of these. It is that the vault sits
-# outside the repository folder, so git never sees it in the first place.
+# outside this repository, so git never sees it from here.
+#
+# NOTE: the vault is itself a local-only git repository as of 2 September 2026.
+# Its own .gitignore deliberately un-ignores the *.xlsx / *.docx that rule 3
+# excludes machine-wide — without that, `git add -A` in the vault silently
+# skips the financial model and the business plan. See VaultReadme.md.
 # ─────────────────────────────────────────────────────────────────────────────
 set -euo pipefail
 cd "$(dirname "$0")"
@@ -74,11 +79,18 @@ VAULT="../matbakh-private"
 if [ ! -d "$VAULT" ]; then
   echo "   WARNING: $VAULT not found. The vault should sit beside this folder,"
   echo "   not inside it. See ../README.md."
-elif [ -d "$VAULT/.git" ]; then
-  echo "   WARNING: $VAULT contains a .git folder. The vault must never be a"
-  echo "   git repository. Remove it: rm -rf $VAULT/.git"
+elif [ ! -d "$VAULT/.git" ]; then
+  echo "   note: $VAULT is not a git repository. That is no longer required —"
+  echo "   it may be a LOCAL-ONLY one. See $VAULT/VaultReadme.md."
+elif [ -n "$(git -C "$VAULT" remote 2>/dev/null)" ]; then
+  echo "   WARNING: $VAULT has a git remote. The vault is local-only and must"
+  echo "   never be pushed. Remove it: git -C $VAULT remote remove <name>"
 else
-  echo "   vault present, and correctly not a git repository"
+  echo "   vault present, a local-only repository, no remote"
+  if [ ! -x "$VAULT/.git/hooks/pre-push" ]; then
+    echo "   WARNING: $VAULT/.git/hooks/pre-push is missing or not executable."
+    echo "   Nothing currently blocks an accidental push."
+  fi
 fi
 
 echo
