@@ -203,7 +203,7 @@ vault guards all still see the layout they expect.*
 
 *Recorded retrospectively 29 Aug 2026 from git (`873a964`).*
 
-2026-08-12 — translator tool
+## 2026-08-12 — translator tool
 `tools/translator.html` added, the fourth authoring tool. Locale-scoped queue
 over any number of recipe files, with progress per recipe and a jump to the
 next gap.
@@ -218,7 +218,7 @@ Measured correction: a recipe carries ~31 translatable prose units, not the
 ~10 previously estimated — qualifiers are per tile. The lexicon, by contrast,
 is 98 strings translated once per language, not the ~600 previously stated.
 
-2026-08-01e — sub-recipes
+## 2026-08-01e — sub-recipes
 A recipe can now consume another: `uses: \[{id, amt}]` on the parent,
 `yield: {amount, unit}` on the sub-recipe. Everything scales by amt ÷ yield.
 Sub-recipe ingredients roll into the parent's shopping list, summed by
@@ -230,7 +230,7 @@ two or eight, yet 37.5% of a sauce holds 37.5% of its water. The builder now
 separates the two cases.
 §13.8 records the decision; the recipe template documents it where an author
 will see it.
-2026-08-01d — diet field, and derived dietary tags
+## 2026-08-01d — diet field, and derived dietary tags
 Ingredients gained `diet`. The editor has a chip selector and a bulk-propose
 button that resolves 177 of the 179 from name rules plus a table of cases a
 name cannot reveal — worcestershire is fish, bechamel is dairy and gluten.
@@ -239,7 +239,7 @@ it. If any ingredient in a recipe lacks the field, the flags are withheld
 entirely and the validator names what to fix: a wrong vegetarian claim costs a
 guest their dinner, so silence is the correct failure.
 §13.4 (the party plan) and §13.7 (filters) are unblocked by this.
-2026-08-01c — audit output, and the last dialect gaps
+## 2026-08-01c — audit output, and the last dialect gaps
 The lexicon audit printed 70 warnings for one predictable fact — that most
 activities are unused when a single recipe is loaded. It now summarises, and
 only names them past 40 recipes, when "unused" starts to mean "probably does
@@ -348,7 +348,7 @@ An Egyptian cook now reads الطبلية and متبعدش where a Gulf cook rea
   ingredients carrying per-100g figures, and reports what it could not include
   rather than silently under-reporting.
 
-2026-07-30e — authoring tools
+## 2026-07-30e — authoring tools
 Offline nutrition search added: `nutrition-db.json`, a 6,389-food USDA export,
 loads through the same picker and is searched before the online API. Field
 order decoded and verified against known values — kcal, protein, carb, fat,
@@ -381,7 +381,7 @@ Bespoke verb wording stays available per action.
 Per-serving nutrition can be computed from step amounts against the 156
 ingredients carrying per-100g figures, and reports what it could not include
 rather than silently under-reporting.
-2026-07-30d — hero shows the whole photo
+## 2026-07-30d — hero shows the whole photo
 The pre-commit hero used `object-fit: cover`, which crops the photo to fill
 the band — on a phone this cut the top or bottom off the dish. Changed to
 `object-fit: contain`, so the whole photo is visible, letterboxed against the
