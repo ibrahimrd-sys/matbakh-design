@@ -5,6 +5,115 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-05 — cuts become a library, not a per-recipe line item
+
+**`philosophy.md` §20 added — cut photography settled in part.**
+
+- **The Cut Library exists as a first-class, reusable image asset**, referenced
+  by recipes rather than embedded per recipe. Tight "cut identity" photographs
+  are produced once per distinct cut-state and re-used. A cut is a property of a
+  **technique**, not of a dish — the same butterflied breast or halved
+  tenderloin is visually identical across every recipe it appears in, so
+  per-recipe cut shots pay repeatedly to photograph the same object.
+- **Why this version.** Shooting each cut once and referencing it N times moves
+  cut photography off the column that scales with the catalogue and onto the one
+  that scales with the vocabulary — the move §5.5 already names as the entire
+  economic question — and it is the same "an asset that carries no words is made
+  once" logic that already justifies the lexicon and the ingredient vault.
+- **It is keyed to the activity lexicon.** Each cut photo is tagged to the
+  lexicon entry (technique) it depicts, so the correct shot resolves wherever
+  that technique appears, in any recipe and any dialect variant. The library is
+  the visual counterpart of a vocabulary that already exists, so it lands as a
+  resolved layer of the schema rather than a loose folder of images.
+- **Portability falls out for free.** A cut frame is the tightest, most
+  food-only image in the system — a board and a technique, no plated dish, no
+  kitchen, no cultural furniture — so it travels across every locale with **zero
+  re-shooting**. That separates the universal image asset from the locale-bound
+  ones (mise en place, plated hero), supporting the locale-portability premise
+  rather than eroding it.
+- **Division of labour confirmed at this level too: photo carries cut identity,
+  the digit carries quantity and dimension.** No photograph is relied on to
+  convey proportion or size, and quantities label each ingredient regardless of
+  any photograph.
+- **Board-as-orientation is the per-recipe default** — one wide mise en place,
+  "here's everything, prepped" — **plus at most one tight shot for the single
+  hardest or least-obvious cut** in that recipe, drawn from the Cut Library
+  where the cut already exists there.
+- **§20.2 — four things deliberately left OPEN, not decided.** The scope of the
+  head set; the granularity of the library key (*word + parameter*, since
+  "sliced" for a salad is not "sliced" for a braise, and the answer is a
+  four-fold swing — ~30 shots or ~130 — on a line that is shot once and then
+  lived with); the scale-reference convention; and whether the wide board shot
+  can instruct well enough to drop the tight shot. A one-afternoon validation
+  test is specified to settle all four before the library is shot at scale.
+- **Header date corrected.** `philosophy.md` read *Last updated: 2026-09-03*.
+
+Tracked in the vault as **D-13** (WS1). The open half is split rather than
+parked in one place: **scope and granularity open as PM-12** — deliberately not
+folded into PM-09, which was narrowed on 2 September to the single question of
+what the 44 px tile carries; the **scale reference folds into C-09**'s owed
+governing note, where `cut_mm` is already the mechanism; and **board sufficiency
+folds into C-06** as a cut-coverage judgement column in the pilot tracker,
+alongside the tile judgements.
+
+Cross-refs **PM-01** — it removes repeated cut shots from the catalogue
+photography line PM-01's options are priced against — and the step-imagery
+decision (**PM-09** / **D-11**), whose *shoot the vocabulary, not the catalogue*
+recommendation this is the same argument applied one level further out.
+
+## 2026-09-03 — the recipe box gets a storage decision
+
+**`philosophy.md` §19 added — the recipe box, settled in part.**
+
+- **§19.1 Storage — SETTLED.** The box is held on the device and carried between
+  devices by the platform's own backup: iCloud on iOS, Google Backup on Android.
+  No Matbakh account, no sync server, no real-time cross-device sync. Pure
+  local-only was rejected because a hand-built list has nothing to rebuild from
+  when a phone is replaced — the planner survives that failure only because it
+  can rebuild from cook history. Account-backed sync was rejected because
+  sign-up, recovery, session handling and a server holding user data are a
+  workstream rather than a feature, against R-06.
+- **What it buys is restore-on-reinstall, not sync**, and the interface must say
+  so. Two devices do not converge; what returns is the platform's last backup.
+  The word *synced* is not available to describe this.
+- **Two dependencies recorded rather than assumed away.** iCloud and Google
+  Backup are native mechanisms, so the decision assumes a platform-packaged app
+  and must be revisited if E-01 lands on web. And it is the first user data to
+  leave the device — a narrow, deliberate departure from the local-only position
+  the planner holds for free (L-06), and described as such rather than folded
+  into that claim.
+- **§19.2 Whether the box feeds the planner — left OPEN.** `suggest_home` splits
+  DUE from UNTRIED on cook history alone; a saved recipe is a third signal,
+  *wants to cook*, wired nowhere. Favourite *ingredients* feeding the planner is
+  accepted (KS-02); favourite *recipes* is not, and the two are not the same
+  claim. It belongs to PM-11 and cannot be tested before tags land.
+- **Header date corrected.** `philosophy.md` read *Last updated: 2026-08-29*
+  while already carrying §5.5, a rewritten §16.6 and two decision-log rows dated
+  2 September.
+
+Tracked in the vault as **D-12** (WS1), with the planner half folded into
+**PM-11**.
+
+## 2026-09-02 — the project consolidated into one folder
+
+- **`matbakh-design` and `matbakh-private` moved to sit as siblings under
+  `Matbakh_Project_Dir`**, previously nested three levels deep under
+  `~/matbakh/Matbakh/matbakh/`. Done with a plain `mv` of each folder — `.git`
+  history and the GitHub remote (`ibrahimrd-sys/matbakh-design`) came through
+  untouched, confirmed via `git status` and `git remote -v`.
+- **Vault resolution verified working end to end.** `matbakh.py status --write`
+  run against the moved repo found the vault, read 178 ingredients, and spliced
+  the generated block into the PM log with no error — the sibling-relative
+  path logic (`../../matbakh-private` from `content/`) needed no changes.
+- **`DIRECTORY.md` and `data-sources-and-updates.md` checked, not edited.**
+  Neither file hardcodes an absolute path to the old location — both resolve
+  relatively or refer to the vault/repo by name — so nothing needed updating.
+- **`scan.sh` re-run post-move: clean.** All three vault defences (working
+  folder, git tracking, commit history) reported clear. The vault has its own
+  local-only `.git` with no remote — confirmed fine, not a leak risk.
+- The Cowork project's connected local folder was re-pointed to the vault's
+  new path.
+
 ## 2026-09-02 — the vault gets history, and the guards learn the difference
 
 **`matbakh-private/` is under version control — local only, with no remote.** The vault had no history, and that cost real work: a stale `CHANGELOG.md` sitting three directories above this repo swallowed two days of edits, and only the half that had been committed came back. The vault is now its own git repository. No remote is configured, `.git/hooks/pre-push` refuses every push, and `scan.sh` fails if a remote ever appears.

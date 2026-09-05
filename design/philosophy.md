@@ -2,7 +2,7 @@
 
 **Status:** Living document. Sections marked SETTLED are decided and should not be relitigated without a stated reason. Sections marked OPEN are unresolved.
 
-**Last updated:** 2026-08-29
+**Last updated:** 2026-09-05
 
 ---
 
@@ -731,6 +731,155 @@ may be the more valuable half of the feature. It only exists if the store is
 shaped for aggregate reading from the outset.
 
 
+## 19. The recipe box — SETTLED IN PART (3 September 2026)
+
+A cook may save a recipe to a recipe box. It is an explicit action, in the same
+register as the rest of the product: the Profile is stated and never inferred,
+the planner remembers and never predicts, and a save is the same shape. Nothing
+enters the box by being cooked, viewed or searched for.
+
+### 19.1 Storage rides platform device backup — SETTLED
+
+The box is held on the device and carried between devices by the platform's own
+backup — iCloud on iOS, Google Backup on Android. There is no Matbakh account,
+no sync server, and no real-time cross-device sync.
+
+Two alternatives were considered and rejected.
+
+- **Pure local-only**, the planner's existing pattern. Rejected because the box
+  is a list the cook builds by hand over months, and losing it to a reinstall or
+  a new phone is the one failure that makes saving not worth doing. The planner
+  survives that failure because it can rebuild from cook history; a box has
+  nothing to rebuild from.
+- **Account-backed sync.** Rejected because it requires account infrastructure
+  the product does not otherwise have. Sign-up, recovery, session handling and a
+  server holding user data are a workstream rather than a feature, and founder
+  capacity is the binding constraint on everything (R-06). An account may later
+  arrive for entitlement reasons; the recipe box is not what should summon it.
+
+**What this buys is restore-on-reinstall, not sync.** Two devices signed into the
+same platform account do not converge, and what comes back is whatever the
+platform last backed up. That is the honest description of the mechanism, and it
+is what the interface must say. Never the word *synced*.
+
+**It assumes a platform-packaged app.** iCloud and Google Backup are native
+mechanisms and a web reader has neither, so this decision carries a dependency on
+the platform decision (E-01, not started) and must be revisited if that lands on
+web.
+
+**It is also the first user data to leave the device.** The planner is local-only
+by design, which is part of what makes the privacy position cheap to hold
+(L-06). A saved list riding platform backup is a deliberate, narrow departure
+from that — a list of recipe ids, held under the cook's own platform account,
+never Matbakh's — and it should be described that way rather than quietly folded
+into the local-only claim.
+
+### 19.2 Whether the box feeds the planner — OPEN
+
+`suggest_home` splits DUE from UNTRIED on cook history alone. A saved recipe is a
+third signal — *wants to cook*, as against *has cooked* — and it is wired
+nowhere. Favourite **ingredients** feeding the planner is accepted (KS-02);
+favourite **recipes** is not, and the two are not the same claim.
+
+This half is not decided here. It belongs to the planner framing question
+(PM-11), and it cannot be tested before the tag vocabulary lands and there are
+recipes to plan over (§16.7). Recording it as open rather than letting it
+default: *remembers, never predicts* is a stated promise, and a save quietly
+becoming a prediction input is the exact drift that promise exists to prevent.
+
+
+---
+
+## 20. The Cut Library — SETTLED IN PART (5 September 2026)
+
+A cut is a property of a **technique**, not of a recipe. The same butterflied
+breast or halved-crosswise tenderloin is visually identical in every dish it
+appears in, so a photograph of it is worth making once and referring to N times.
+That is the whole of this section.
+
+### 20.1 Cuts are shot once and referenced — SETTLED
+
+Tight "cut identity" photographs are produced **once per distinct cut-state**,
+held in a reusable **Cut Library keyed to the activity lexicon**, and referenced
+by recipes. They are not re-shot per recipe.
+
+Each cut photograph is tagged to the lexicon entry (§15) it depicts, so the
+correct shot resolves wherever that technique appears — in any recipe, and in
+any dialect variant, because the key is the activity and not the word.
+
+**Why this and not per-recipe cut shots.** Per-recipe shots pay repeatedly to
+photograph the same object. Shooting each cut once moves cut photography off the
+column that scales with the **catalogue** and onto the one that scales with the
+**vocabulary** — which §5.5 already names as the entire economic question, in
+those words. It is the same argument `asset-spec.md` opens with — *an asset that
+carries no words is made once* — and the same reason the activity lexicon and the
+ingredient reference exist at all. This is not a new idea. It is the idea Matbakh
+is already built on, applied to cuts.
+
+**Portability is part of the rationale, not a bonus.** A cut frame is the
+tightest, most food-only image in the system: a board and a technique, no plated
+dish, no kitchen, no cultural furniture. It therefore crosses every locale with
+**zero re-shooting**. That draws a clean line between the *universal* image
+assets (cuts) and the *locale-bound* ones (mise en place, plated hero), and it
+supports the adaptability position of §10 rather than eroding it.
+
+**Schema fit is the second half of the rationale.** The lexicon is already a
+controlled vocabulary of techniques; the Cut Library is its **visual
+counterpart** — the same closed set, photographed instead of named. It therefore
+lands as a resolved layer of the existing schema rather than as a folder of
+images sitting beside it.
+
+**The division of labour from §5.2 holds at this level too: the photograph
+carries cut identity, the digit carries quantity and dimension.** No photograph
+is relied on to convey proportion or size, and quantities label each ingredient
+regardless of any photograph. A library shot answers *what cut*. It does not
+answer *what size*, and must not be asked to.
+
+**The per-recipe default is board-as-orientation.** One wide mise en place —
+here is everything, prepped — plus at most one tight shot for the single hardest
+or least-obvious cut in that recipe, drawn from the Cut Library where the cut
+already exists there.
+
+### 20.2 Scope, granularity, scale reference and board sufficiency — OPEN
+
+Four things are deliberately not settled here, and none of them may be defaulted
+into by starting the shoot.
+
+- **Scope of the head set, and granularity of the key.** The library is scoped
+  from the recipe corpus rather than from intuition: mine the catalogue for
+  distinct cut-states, rank by frequency, shoot in frequency order. And the key
+  cannot be the word alone — *sliced* onion for a salad is thin rings, *sliced*
+  onion for a braise is thick half-moons, and they are not the same photograph.
+  The key must be **word + parameter**. How many parameter values are held is
+  what decides whether the library is ~30 shots or ~130, so it is settled before
+  anything is shot rather than discovered during. Both sit under **PM-12**.
+- **The scale reference.** Where dimension matters the recipe-level digit
+  carries it, and the mechanism already exists — `cut: brunoise` with
+  `cut_mm: 2` replaced the old `qualifier: fine`. What is owed is confirming that
+  the labelling convention extends from quantity to dimension. That belongs in
+  the cut lexicon's governing note (**C-09**), which is owed regardless.
+- **Whether the board shot can also instruct.** If a cook reproduces a hard cut
+  from the wide board shot alone, the extra tight shot can be dropped for that
+  recipe. This is a measurement rather than a judgement, and the pilot is already
+  the shoot — it is a cut-coverage judgement in the pilot tracker (**C-06**),
+  recorded the way the tile judgements already are.
+
+**The test that settles them is one afternoon.** Shoot the five or six
+highest-frequency cuts, then take the first ten recipes and count how many are
+fully cut-covered by that head set alone — library references plus quantity
+labels, no bespoke shot. **Eight of ten** and the library carries the catalogue,
+with per-recipe cut shots the rare exception already planned for; **around four
+of ten** and the tail is fatter than it looks, which sends scope and granularity
+back for revision before anything is scheduled. Separately, hand a cook the wide
+board shot alone for one recipe with a non-obvious cut and see whether they
+reproduce it.
+
+**Recording these as open is itself the decision**, on the same reasoning as
+§16.6. Granularity is a four-fold swing on a photography line that is shot once
+and then lived with, and choosing it now would fix that line on an argument two
+weeks before the afternoon of measurement that would settle it.
+
+
 ---
 
 ## Decision log
@@ -776,4 +925,6 @@ shaped for aggregate reading from the outset.
 | 29 Aug 2026 | Weekly market price list free perpetually; dish cost paid; commitment is one-way | 17 |
 | 29 Aug 2026 | Palate adjustment as multipliers, auto-applied and marked, flowing through, components propagating | 18 |
 | 2 Sep 2026 | **Four surfaces settled, and what each one's cost scales with.** The arc is glyphs and can be nothing else; the doneness photograph is recipe-specific and carries the trust claim; prose is generated at build. The 44 px tile is the only open carrier | 5.5, 16.6 |
+| 3 Sep 2026 | **Recipe box storage settled.** The box rides platform device backup — iCloud on iOS, Google Backup on Android — with no account, no sync server and no cross-device sync. Restore-on-reinstall, not sync, and the interface must not say *synced*. Rejected: pure local-only (a hand-built list has nothing to rebuild from) and account-backed sync (account infrastructure the product does not otherwise have, against R-06). Assumes a platform-packaged app (E-01). Whether the box feeds the planner is left open under PM-11 | 19 |
 | 2 Sep 2026 | Doneness count and tile carrier **left open and pinned to the pilot** rather than settled on paper. No per-recipe figure recorded until one is measured — it is the multiplier on the largest cost line after the build | 16.6 |
+| 5 Sep 2026 | **Cut photography settled as a reusable library, not a per-recipe cost.** Tight cut-identity photographs are produced **once per distinct cut-state**, held in a Cut Library **keyed to the activity lexicon**, and referenced by recipes rather than re-shot per recipe — a cut is a property of a *technique*, not of a dish, so the same butterflied breast is visually identical in every recipe it appears in and per-recipe cut shots pay repeatedly to photograph the same object. This moves cut photography off the column that scales with the catalogue and onto the one that scales with the vocabulary, which §5.5 already names as the whole economic question, on the same logic that justifies the lexicon and the ingredient vault. Two properties are part of the rationale rather than bonuses: a cut frame is the most food-only image in the system — a board and a technique, no plated dish, no kitchen, no cultural furniture — so it crosses every locale with zero re-shooting, separating the universal image asset from the locale-bound ones (mise en place, plated hero); and the lexicon is already a controlled vocabulary, so its visual counterpart resolves into the existing schema rather than sitting beside it as a folder of images. **The division of labour holds at this level too — the photograph carries cut identity, the digit carries quantity and dimension**; no photograph is relied on for proportion or size, and quantities label each ingredient regardless of any picture. **Per-recipe default:** one wide board-as-orientation mise en place, plus at most one tight shot for the single hardest cut, drawn from the library where the cut already exists. Scope, granularity, the scale-reference convention and whether the board shot can instruct unaided are deliberately **not** settled here | 20 |
