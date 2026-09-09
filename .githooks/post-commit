@@ -1,0 +1,37 @@
+#!/bin/bash
+# ─────────────────────────────────────────────────────────────────────────────
+# Matbakh — post-commit reminder: philosophy.md has a PDF that is now stale.
+#
+# `../matbakh-private/PDF Files/philosophy.pdf` is a render, not a source. It
+# is git-ignored on purpose (VaultReadme.md § Rendered PDFs), which means
+# nothing in version control will ever tell you it has gone out of date. This
+# hook is that telling.
+#
+# It runs AFTER the commit and always exits 0. It cannot block anything, and
+# it is not meant to: the commit is right, the PDF is simply now behind it.
+#
+# Scope is deliberately two files across the two repositories — philosophy.md
+# here, matbakh_pm_log.md in the vault. Those are the two that get read as
+# documents rather than as files. Every other PDF in that folder is a
+# convenience render nobody is waiting on. Widening this to every markdown
+# file would make it noise, and a reminder you learn to ignore is worse than
+# no reminder.
+# ─────────────────────────────────────────────────────────────────────────────
+set -uo pipefail
+
+CHANGED=$(git diff-tree --no-commit-id --name-only -r HEAD 2>/dev/null || true)
+echo "$CHANGED" | grep -qx 'design/philosophy.md' || exit 0
+
+cat <<EOF
+
+  ── PDF now stale ───────────────────────────────────────────────────────
+  This commit changed  design/philosophy.md
+  Its render           ../matbakh-private/PDF Files/philosophy.pdf
+                       is now behind and nothing else will say so.
+
+  Regenerate it when you are done changing it — not necessarily now.
+  VaultReadme.md § Rendered PDFs carries the method.
+  ────────────────────────────────────────────────────────────────────────
+
+EOF
+exit 0
