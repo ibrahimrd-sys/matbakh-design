@@ -882,6 +882,141 @@ weeks before the afternoon of measurement that would settle it.
 
 ---
 
+## 21. The Utensils Library — SETTLED IN PART (5 September 2026)
+
+A utensil is a property of a **kitchen** — not of a technique, and not of a
+dish. That single line does most of the work in this section, because the
+column a cost lands in is decided by what it varies with, and §5.5 already
+names that as the whole economic question.
+
+### 21.1 What is settled
+
+**Utensils are a first-class reference layer**, parallel to the ingredient
+reference: what equipment a recipe requires is a fact about the recipe, and the
+product needs to hold it. Its first job is the pre-commit surface (§16.2) —
+committing to a dish and discovering at the bench that it needs a blender you
+do not own is the failure that surface exists to prevent — and its second is as
+a filter (§16.7).
+
+**It is three features, not one, and they ship in this order.** The split
+matters more than anything else here, on the same reasoning as §13:
+
+1. **The requirement.** What equipment a recipe needs. A reference table and a
+   field. Settled here.
+2. **The visual carrier.** Whether a utensil is ever *shown*, and by what.
+   Open — see §21.2.
+3. **Substitution guidance.** *No stand mixer; here is what that costs you.*
+   This is cooking knowledge and irreducible judgement, so by §5.1 it is words,
+   authored per recipe, and it carries an editorial cost that is not in the
+   per-recipe production model — the same trap §9 records for `why`. Open, and
+   deliberately last.
+
+**Utensils are locale-bound, and this is the decision that matters.** §20
+admits the Cut Library partly on portability: a cut frame is the most food-only
+image in the system — a board and a technique, no plated dish, no kitchen, no
+cultural furniture — so it crosses every locale with zero re-shooting. **A
+utensil is nothing but cultural furniture.** A pot in an Egyptian kitchen is not
+a Dutch oven; a tagine, a baladi oven and a mehmas have nothing to travel to.
+The argument that makes cuts *universal* therefore **inverts** here, and it
+inverts rather than merely weakening: utensils belong in the **locale-bound**
+column with mise en place and the plated hero, not in the universal column with
+cuts. A utensils layer does not amortise across locales, and §10's caveat
+applies to it in full — the interface is portable, the furniture is not.
+
+**The division of labour holds a third time.** The picture carries **tool
+identity**; words and digits carry **size, capacity and substitution**. No
+photograph conveys *26 cm*, and none should be asked to — the same rule §20.1
+states for cuts and §5.2 states for quantity.
+
+**Presence, not inventory.** A cook may mark that they have a blender; never
+that they have a 700 W jug blender. This is §16.1's constraint carried over
+unchanged, for the same reason — every product that has asked users to maintain
+an inventory has died on the maintenance burden. Staples are assumed present
+and unset rather than set: a knife, a board, one pot, one pan.
+
+### 21.2 The visual layer, the scope, and authored-vs-derived — OPEN
+
+Four things are deliberately not settled, and the fourth changes what the
+question is, so it is resolved first.
+
+- **Whether a visual layer exists at all, and what carries it.** It cannot be
+  settled ahead of **PM-09**: the tile is 44 px and already has one open
+  carrier competing for it. A utensil shown *as well as* an act is a second
+  thing in the same square, and §3's *one mandatory gesture* and §4.4's
+  squint test both bear on that. Sequenced behind PM-09, not beside it.
+- **Scope and granularity.** Is `pot` one entry or five? This is the same
+  four-fold swing **PM-12** carries for cuts, and it takes the same answer:
+  mine the corpus for distinct requirements and rank by frequency rather than
+  scoping from intuition.
+- **Authored or derived.** §11's test is *could a careful person disagree?* —
+  and mostly they could not, since a recipe either uses a blender or it does
+  not, which argues **derived**. But nothing in the tile currently names a
+  tool, so there is nothing to derive *from*: either tiles gain a `tool:`
+  field or the recipe carries an authored `equipment:` list. That is a schema
+  decision, and it is the expensive kind to retrofit for exactly the reason
+  §16.7 gives about tags — every recipe authored before it is settled has to
+  be revisited.
+- **The measured finding that has to be resolved first.** **24 of the 81
+  activities — 23 distinct glyph values — already draw a tool, vessel or
+  appliance rather than the act.** `grate` is a grater, `sift` a sieve, `peel`
+  a peeler, `blend` a blender, `skim` a spoon, `simmer` a pot, `stir_fry` a
+  wok. That is four times the six ingredient-drawing activities **C-05**
+  already tracks as a defect against `asset-spec.md`'s *draw the action, not
+  the ingredient*. It reads two ways and they lead in opposite directions:
+  either it is that same defect at four times the scale, or **utensil-as-
+  carrier is already the de facto answer** for the instrument-defined verbs
+  and should be made deliberate rather than left accidental. It is currently
+  neither, which is the worst of the three. Folded into **C-05**.
+
+  *(The counts are generated from `content/lexicon/activities.yaml`; the
+  classification of what a glyph depicts is judgement, on the same footing as
+  the Class M / Class S split, and should be contested as the icons are
+  reviewed.)*
+
+**How this gets measured, rather than argued.** The pilot is already the
+instrument. Record per tile whether the utensil needed to be shown at all, and
+whether the activity glyph was already showing it — the same near-zero marginal
+cost as the `Tile judgements` tab, on recipes that are being cooked anyway.
+Folded into **C-06**.
+
+**Recording these as open is itself the decision**, on the same reasoning as
+§16.6 and §20.2. The carrier question in particular would, if answered now,
+pre-empt a 44 px square that a measurement two weeks out is about to settle.
+
+### 21.3 Amendment, 5 September 2026 — the list is taken, the repetition is not
+
+Settled the day §21 was written, against the Kitchen Stories instruction-layer
+reading (`02-strategy/competitor-study-part-five.md`).
+
+**The per-recipe equipment list is confirmed as the shape**, with an `optional`
+flag per entry — the pre-commit check must not warn a cook off a dish over a
+grater they could work around.
+
+**There is no separate per-step equipment surface.** Where a tool matters, it is
+already showing in that step's own photograph or icon. Kitchen Stories restates
+tools at every step because it has four fat steps, no station concept, and a
+cook who would otherwise scroll back to the top; Matbakh has **six stations**
+naming where the cook stands and a per-recipe list that has already said what to
+get out. The repetition earns less here than it does there.
+
+**This narrows §21.2's first open item without closing C-05.** The measured
+finding — 24 of 81 activities draw a tool rather than the act — was recorded as
+reading two ways. This decision leans on the second: for the instrument-defined
+verbs the utensil is *already on the tile*, and a second surface would draw it
+twice. C-05 stays open, because the glyph must still draw the **action** wherever
+the action is what distinguishes it from a neighbour. What is now closed is the
+narrower question of whether equipment gets a surface of its own per step. It
+does not.
+
+**One case the pilot should watch, recorded rather than argued:** a step where
+**two vessels are in play at one station** — a pan and a pot on the stove
+together — and neither the act glyph nor the station header says which the tile
+means. If it shows up in the fifteen it is a layout question, not grounds to
+reopen this. **C-06.**
+
+
+---
+
 ## Decision log
 
 | Date | Decision | Section |
@@ -928,3 +1063,5 @@ weeks before the afternoon of measurement that would settle it.
 | 3 Sep 2026 | **Recipe box storage settled.** The box rides platform device backup — iCloud on iOS, Google Backup on Android — with no account, no sync server and no cross-device sync. Restore-on-reinstall, not sync, and the interface must not say *synced*. Rejected: pure local-only (a hand-built list has nothing to rebuild from) and account-backed sync (account infrastructure the product does not otherwise have, against R-06). Assumes a platform-packaged app (E-01). Whether the box feeds the planner is left open under PM-11 | 19 |
 | 2 Sep 2026 | Doneness count and tile carrier **left open and pinned to the pilot** rather than settled on paper. No per-recipe figure recorded until one is measured — it is the multiplier on the largest cost line after the build | 16.6 |
 | 5 Sep 2026 | **Cut photography settled as a reusable library, not a per-recipe cost.** Tight cut-identity photographs are produced **once per distinct cut-state**, held in a Cut Library **keyed to the activity lexicon**, and referenced by recipes rather than re-shot per recipe — a cut is a property of a *technique*, not of a dish, so the same butterflied breast is visually identical in every recipe it appears in and per-recipe cut shots pay repeatedly to photograph the same object. This moves cut photography off the column that scales with the catalogue and onto the one that scales with the vocabulary, which §5.5 already names as the whole economic question, on the same logic that justifies the lexicon and the ingredient vault. Two properties are part of the rationale rather than bonuses: a cut frame is the most food-only image in the system — a board and a technique, no plated dish, no kitchen, no cultural furniture — so it crosses every locale with zero re-shooting, separating the universal image asset from the locale-bound ones (mise en place, plated hero); and the lexicon is already a controlled vocabulary, so its visual counterpart resolves into the existing schema rather than sitting beside it as a folder of images. **The division of labour holds at this level too — the photograph carries cut identity, the digit carries quantity and dimension**; no photograph is relied on for proportion or size, and quantities label each ingredient regardless of any picture. **Per-recipe default:** one wide board-as-orientation mise en place, plus at most one tight shot for the single hardest cut, drawn from the library where the cut already exists. Scope, granularity, the scale-reference convention and whether the board shot can instruct unaided are deliberately **not** settled here | 20 |
+| 5 Sep 2026 | **Utensils opened as a reference layer, and placed in the locale-bound column.** What equipment a recipe requires is a fact about the recipe and gets a first-class reference parallel to the ingredient one, serving the pre-commit surface (§16.2) first and filters (§16.7) second. **It is three features, not one, shipping in that order** — the requirement, the visual carrier, and substitution guidance — and only the first is settled. **The decision that matters is the column:** §20 admits the Cut Library partly because a cut frame is food-only and crosses every locale with zero re-shooting, and a utensil is *nothing but* cultural furniture — a tagine, a baladi oven and a mehmas have nothing to travel to — so the portability argument **inverts** and utensils sit with mise en place and the plated hero, not with cuts. A utensils layer does not amortise across locales. **Division of labour holds a third time** — the picture carries tool identity, words and digits carry size, capacity and substitution; no photograph conveys *26 cm*. **Presence, not inventory** (§16.1 carried over), staples assumed present and unset. **Left open:** whether a visual layer exists and what carries it (sequenced behind PM-09 — the 44 px tile already has one open carrier); scope and granularity, corpus-mined not intuited (PM-14); and whether the requirement is authored or derived, which is a schema retrofit on the same logic as §16.7. **Resolved first, because it changes the question:** **24 of 81 activities — 23 distinct glyphs — already draw a tool, vessel or appliance rather than the act** (`grate` a grater, `sift` a sieve, `simmer` a pot), four times the six ingredient-drawing activities C-05 tracks as a defect; either the same defect at four times the scale, or utensil-as-carrier is already de facto and should be made deliberate — currently neither. Folded into **C-05**, measured in **C-06** | 21 |
+| 5 Sep 2026 | **Utensils, second decision: the per-recipe list is taken, the per-step repetition is rejected.** The equipment list is confirmed as the shape, with an `optional` flag per entry so the pre-commit check does not warn a cook off a dish over a grater. **No separate per-step equipment surface** — where a tool matters it is already showing in that step's own photograph or icon. Kitchen Stories restates tools every step because it has four fat steps, no station concept and a cook who would otherwise scroll back; Matbakh has six stations naming where the cook stands and a per-recipe list that has already said what to get out, so the repetition earns less. **Narrows §21.2's first open item without closing C-05:** the measured finding that 24 of 81 activities draw a tool rather than the act was recorded as reading two ways, and this leans on the second — for instrument-defined verbs the utensil is already on the tile and a second surface would draw it twice — while C-05 stays open, because the glyph must still draw the **action** wherever the action is what distinguishes it. **Watch in the pilot (C-06):** two vessels in play at one station, where neither glyph nor station header says which the tile means. Source: the Kitchen Stories instruction-layer reading, `competitor-study-part-five.md` | 21.3 |

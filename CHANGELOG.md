@@ -5,6 +5,118 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-06 — two hand-drawn maps translated into pages
+
+**`design/worked-page-maps.md` added.** Beef Enchilada Skillet and Chicken
+Skewers with Thai Curry, drawn by hand on 5–6 September and mapped into the page
+grammar with the carrier named for every element. The third and fourth worked
+storyboards after molokhia and bolognese, and the first two that were **drawn
+before they were mapped** — so they test the grammar against a hand that was not
+following it.
+
+- **8 pages and 6 pages**, both inside the 6–10 target. Four in a row now
+  (8, 9, 8, 6).
+- **Four doneness photographs across two complete recipes** — three and one,
+  against §16.6's open estimate of 4–6 per recipe. Two maps is not a
+  measurement, but both sit at or below the bottom of the range, and that figure
+  multiplies the largest content line after the build.
+- **Nine authored strings across both recipes**, plus a `why` each: four
+  doneness cues, three notes, six qualifiers, one bespoke verb. Everything else
+  — verbs in five locales, unit symbols, station headers, page counter, the
+  whole prose view — is generated. The wordless claim, stated as a number.
+- **Logged for the ≥3 rule, no thresholds met:** `toast` resolves to a slice of
+  bread on a page toasting ground spices and `garnish` to a leaf on a page
+  garnishing three things (both already on C-05's ingredient-drawing list, now
+  seen in a drawn recipe); `season`/`to_taste` co-occur for the second recipe
+  running and survive by luck rather than design; `brush`/`baste` is genuinely
+  **ambiguous** rather than colliding when brushing marinade onto grilling
+  skewers; `char` appears as a doneness state rather than an act; two cuts the
+  vocabulary does not name (*into squares*, *into strips*).
+- **Two gaps recorded, both cheaper to close now than at recipe 400.** The
+  schema cannot **partition an in-recipe intermediate by fraction** — *set aside
+  a third* needs a yield a cook never measures, and a ratio is scale-invariant
+  where a millilitre figure is not, which argues for `fraction_of` rather than a
+  workaround. And the reader has no model for an **obligation during a wait** —
+  turning and brushing throughout a five-minute timer, the positive inverse of
+  `do_not_stir`, currently carried by a `stay_here` note.
+- **One rendering proposal:** render a `carried` item **without its amount**,
+  since the quantity was established on the page where it was prepped. Drops the
+  skewers' fattest tile from eight amounts to five.
+- Every activity key used was verified present in `content/lexicon/activities.yaml`.
+
+## 2026-09-05 — the equipment list is taken, the per-step repetition is not
+
+**`philosophy.md` §21.3 added — second utensils decision, same day as §21.**
+
+- **The per-recipe equipment list is confirmed as the shape**, with an
+  `optional` flag per entry: §16.2's pre-commit check must not warn a cook off a
+  dish over a grater they could work around.
+- **No separate per-step equipment surface.** Where a tool matters it is already
+  showing in that step's own photograph or icon. Kitchen Stories repeats tools
+  at every step because it has four fat steps, no station concept and a cook who
+  would otherwise scroll back to the top; Matbakh has six stations naming where
+  the cook stands and a per-recipe list that has already said what to get out.
+- **This narrows §21.2's first open item without closing C-05.** The measured
+  finding — 24 of 81 activities draw a tool rather than the act — was recorded as
+  reading two ways; this leans on the second, that for instrument-defined verbs
+  the utensil is already on the tile. C-05 stays open: the glyph must still draw
+  the **action** wherever the action is what distinguishes it.
+- **One case for the pilot to watch (C-06):** two vessels in play at one station,
+  where neither the act glyph nor the station header says which the tile means.
+- Source: the Kitchen Stories instruction-layer reading,
+  `matbakh-private/02-strategy/competitor-study-part-five.md`.
+
+## 2026-09-05 — utensils open as a reference layer, in the locale-bound column
+
+**`philosophy.md` §21 added — the utensils layer settled in part.**
+
+- **What equipment a recipe requires is a fact about the recipe**, and it gets a
+  first-class reference parallel to the ingredient one. Its first job is the
+  pre-commit surface (§16.2) — committing to a dish and finding at the bench
+  that it needs a blender you do not own is the failure that surface exists to
+  prevent — and its second is as a filter (§16.7).
+- **It is three features, not one, and they ship in that order:** the
+  requirement (settled), the visual carrier (open), and substitution guidance
+  (open, and deliberately last — it is irreducible judgement, so by §5.1 it is
+  words, and it carries an editorial cost not in the production model, the same
+  trap §9 records for `why`).
+- **The decision that matters is which column it lands in, and it is not the
+  Cut Library's.** §20 admits cuts partly on portability: a cut frame is the
+  most food-only image in the system — a board and a technique, no plated dish,
+  no kitchen, no cultural furniture — so it crosses every locale with zero
+  re-shooting. **A utensil is nothing but cultural furniture.** A pot in an
+  Egyptian kitchen is not a Dutch oven; a tagine, a baladi oven and a mehmas
+  have nothing to travel to. The argument therefore **inverts** rather than
+  merely weakening, and utensils sit in the **locale-bound** column with mise
+  en place and the plated hero. A utensils layer does not amortise across
+  locales, and §10's caveat applies in full.
+- **Division of labour holds a third time: the picture carries tool identity,
+  words and digits carry size, capacity and substitution.** No photograph
+  conveys *26 cm* and none should be asked to.
+- **Presence, not inventory** — §16.1's constraint carried over unchanged, for
+  the same reason it was set there. Staples assumed present and unset: knife,
+  board, one pot, one pan.
+- **Left open, and not defaulted into:** whether a visual layer exists at all
+  and what carries it — **sequenced behind PM-09**, because the 44 px tile
+  already has one open carrier competing for it; scope and granularity, mined
+  from the corpus by frequency rather than scoped from intuition (**PM-14**);
+  and whether the requirement is **authored or derived** — §11's *could a
+  careful person disagree?* argues derived, but nothing in the tile names a
+  tool, so there is nothing to derive from, which makes it a schema retrofit on
+  the same logic §16.7 gives for tags.
+- **One finding is resolved first, because it changes what the question is:**
+  **24 of the 81 activities — 23 distinct glyph values — already draw a tool,
+  vessel or appliance rather than the act.** `grate` is a grater, `sift` a
+  sieve, `peel` a peeler, `blend` a blender, `skim` a spoon, `simmer` a pot,
+  `stir_fry` a wok. That is four times the six ingredient-drawing activities
+  **C-05** already tracks as a defect against `asset-spec.md`'s *draw the
+  action, not the ingredient*. Either it is that same defect at four times the
+  scale, or **utensil-as-carrier is already the de facto answer** for the
+  instrument-defined verbs and should be made deliberate. It is currently
+  neither. Counts generated from `content/lexicon/activities.yaml`; the
+  classification of what a glyph depicts is judgement, on the same footing as
+  the Class M / Class S split. Folded into **C-05**, measured in **C-06**.
+
 ## 2026-09-05 — cuts become a library, not a per-recipe line item
 
 **`philosophy.md` §20 added — cut photography settled in part.**
