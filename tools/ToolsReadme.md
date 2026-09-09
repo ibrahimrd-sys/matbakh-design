@@ -79,7 +79,11 @@ Two sources, tried in order.
 **Offline first.** Open `nutrition-db.json` through the same button as the
 YAML — a USDA export of 6,389 foods, each carrying kcal, protein, carbohydrate,
 fat, saturated fat, cholesterol, sodium and fibre per 100 g. No key, no network,
-no waiting. Keep it in the vault beside `ingredients.yaml`.
+no waiting. **It lives in the vault at `03-catalogue/ref/nutrition-db.json`,
+beside `ingredients.yaml`** — the same folder `matbakh.py` resolves for the
+ingredient reference. It is loaded through the file picker, not by path, so
+moving it breaks nothing; the reason to keep it there is that it is the only
+copy and the vault is what gets backed up.
 
 **USDA online second**, for anything the export does not hold. That needs a key
 and a connection; see below.
