@@ -18,7 +18,7 @@ project:
            a kitchen. Everything here is arranged around the counter-top
            posture — hands busy, attention divided, the screen propped an
            arm's length away.
-  release: "2026.09.02"        # bump on every publish; shown in the header
+  release: "2026.09.05"        # bump on every publish; shown in the header
   public: false                # false → noindex banner stays on the site
 
 # The headline prototype. Exactly one.
@@ -127,8 +127,8 @@ caveats:
   - Prices are illustrative, not sourced.
 
 next_up:
-  - Decide the bolognese prototype — option C, yes or no (§16.6)
-  - Run the recipe pilot, waves 1–8 then 9–15
+  - Author pilot recipe 2 (koshari); run waves 1–8 then 9–15 (C-06)
   - Settle the tag vocabulary (PM-07, §16.7)
+  - Call the tool-glyph question before sourcing icons (C-05, §21.2)
   - Discovery (§16.1)
   - Meal planner screen (§16.3)
