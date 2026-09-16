@@ -1017,6 +1017,65 @@ reopen this. **C-06.**
 
 ---
 
+## 22. Ingredient substitutes for costing — SETTLED IN PART (16 September 2026)
+
+Recipes carry an **explicit substitute list per ingredient**, and every
+substitute is tagged either **cost-only** or **changes-the-cook**. Only cost-only
+substitutes are swappable in the app, with the recipe cost recomputing live.
+Changes-the-cook substitutes are shown as information, with a prose note on the
+steps they affect — not swappable in this version.
+
+**Why this version.** Meat cuts and fish species cannot be priced by averaging.
+*Beef* spans a two- to four-fold range across cuts, and fish species are not
+interchangeable in cost or in cook behaviour. The recipe already names the
+best-fit cut or species for its method; substitutes exist so that cost can vary
+without the primary ingredient's identity being blurred into a range. Splitting
+cost-only from changes-the-cook keeps that honest: a cut swap in a braise is
+usually just a price change, a fish-species swap usually is not — thickness and
+timing shift, and the doneness photograph (§16.6) was authored for the primary
+species specifically. It also keeps cook mode's wordless default intact: prose
+appears only once a cook actively selects a changes-the-cook substitute, never
+on the baseline path.
+
+### 22.1 What is DECIDED
+
+- **The primary ingredient is the cut or species the steps, timer and doneness
+  photograph were authored against.**
+- **Substitutes are an explicit authored list** — never inferred, and never
+  averaged from price data.
+- **Each substitute is tagged cost-only or changes-the-cook.**
+- **Cost-only substitutes are swappable in-app**, and the recipe cost
+  recomputes live.
+- **Changes-the-cook substitutes are informational only** — *with X instead:
+  from Y EGP* — plus a prose note on which steps are affected. Not swappable in
+  this version.
+- **The prose note is scoped to the substitute-selection moment.** It does not
+  appear anywhere in baseline cook mode.
+
+### 22.2 What is OPEN — PM-15
+
+- **Whether changes-the-cook substitutes become swappable later** — each with
+  its own timer and doneness cue, and possibly its own photograph. Costed
+  against the doneness-photograph economics once they are known per recipe, the
+  same line `step-imagery-decision.md` and §16.6 carry.
+- **Whether the pilot's fifteen recipes need to exercise changes-the-cook
+  substitutes**, or whether that waits until doneness-photograph cost per recipe
+  is known. Instrument: the pilot cook-through — flag any recipe that naturally
+  needs one (**C-06**).
+- **The reference-species convention for fish costing** — which species the
+  recipe's method and timing were written for, stated explicitly. There is no
+  governing document for it yet: the same shape of gap as the Cut Library's
+  (§20, D-13), and cut-level substitutes cannot be authored at volume until
+  that one exists.
+
+**The validation test, stated in advance.** If any substitute logged during the
+pilot as cost-only turns out to shift a step's timing or doneness cue, the
+cost-only / changes-the-cook split has failed and is reworked before authoring
+scales past the pilot.
+
+
+---
+
 ## Decision log
 
 | Date | Decision | Section |
@@ -1065,3 +1124,4 @@ reopen this. **C-06.**
 | 5 Sep 2026 | **Cut photography settled as a reusable library, not a per-recipe cost.** Tight cut-identity photographs are produced **once per distinct cut-state**, held in a Cut Library **keyed to the activity lexicon**, and referenced by recipes rather than re-shot per recipe — a cut is a property of a *technique*, not of a dish, so the same butterflied breast is visually identical in every recipe it appears in and per-recipe cut shots pay repeatedly to photograph the same object. This moves cut photography off the column that scales with the catalogue and onto the one that scales with the vocabulary, which §5.5 already names as the whole economic question, on the same logic that justifies the lexicon and the ingredient vault. Two properties are part of the rationale rather than bonuses: a cut frame is the most food-only image in the system — a board and a technique, no plated dish, no kitchen, no cultural furniture — so it crosses every locale with zero re-shooting, separating the universal image asset from the locale-bound ones (mise en place, plated hero); and the lexicon is already a controlled vocabulary, so its visual counterpart resolves into the existing schema rather than sitting beside it as a folder of images. **The division of labour holds at this level too — the photograph carries cut identity, the digit carries quantity and dimension**; no photograph is relied on for proportion or size, and quantities label each ingredient regardless of any picture. **Per-recipe default:** one wide board-as-orientation mise en place, plus at most one tight shot for the single hardest cut, drawn from the library where the cut already exists. Scope, granularity, the scale-reference convention and whether the board shot can instruct unaided are deliberately **not** settled here | 20 |
 | 5 Sep 2026 | **Utensils opened as a reference layer, and placed in the locale-bound column.** What equipment a recipe requires is a fact about the recipe and gets a first-class reference parallel to the ingredient one, serving the pre-commit surface (§16.2) first and filters (§16.7) second. **It is three features, not one, shipping in that order** — the requirement, the visual carrier, and substitution guidance — and only the first is settled. **The decision that matters is the column:** §20 admits the Cut Library partly because a cut frame is food-only and crosses every locale with zero re-shooting, and a utensil is *nothing but* cultural furniture — a tagine, a baladi oven and a mehmas have nothing to travel to — so the portability argument **inverts** and utensils sit with mise en place and the plated hero, not with cuts. A utensils layer does not amortise across locales. **Division of labour holds a third time** — the picture carries tool identity, words and digits carry size, capacity and substitution; no photograph conveys *26 cm*. **Presence, not inventory** (§16.1 carried over), staples assumed present and unset. **Left open:** whether a visual layer exists and what carries it (sequenced behind PM-09 — the 44 px tile already has one open carrier); scope and granularity, corpus-mined not intuited (PM-14); and whether the requirement is authored or derived, which is a schema retrofit on the same logic as §16.7. **Resolved first, because it changes the question:** **24 of 81 activities — 23 distinct glyphs — already draw a tool, vessel or appliance rather than the act** (`grate` a grater, `sift` a sieve, `simmer` a pot), four times the six ingredient-drawing activities C-05 tracks as a defect; either the same defect at four times the scale, or utensil-as-carrier is already de facto and should be made deliberate — currently neither. Folded into **C-05**, measured in **C-06** | 21 |
 | 5 Sep 2026 | **Utensils, second decision: the per-recipe list is taken, the per-step repetition is rejected.** The equipment list is confirmed as the shape, with an `optional` flag per entry so the pre-commit check does not warn a cook off a dish over a grater. **No separate per-step equipment surface** — where a tool matters it is already showing in that step's own photograph or icon. Kitchen Stories restates tools every step because it has four fat steps, no station concept and a cook who would otherwise scroll back; Matbakh has six stations naming where the cook stands and a per-recipe list that has already said what to get out, so the repetition earns less. **Narrows §21.2's first open item without closing C-05:** the measured finding that 24 of 81 activities draw a tool rather than the act was recorded as reading two ways, and this leans on the second — for instrument-defined verbs the utensil is already on the tile and a second surface would draw it twice — while C-05 stays open, because the glyph must still draw the **action** wherever the action is what distinguishes it. **Watch in the pilot (C-06):** two vessels in play at one station, where neither glyph nor station header says which the tile means. Source: the Kitchen Stories instruction-layer reading, `competitor-study-part-five.md` | 21.3 |
+| 16 Sep 2026 | **Ingredient substitutes for costing settled in part.** Recipes carry an explicit authored substitute list per ingredient — never inferred or averaged from price data — each tagged **cost-only** or **changes-the-cook**. The primary ingredient is the cut or species the steps, timer and doneness photograph were authored against. Cost-only substitutes swap in-app with a live cost recompute; changes-the-cook substitutes are informational (*with X instead: from Y EGP*) with a prose note on the affected steps, shown only at the moment of selection so baseline cook mode stays wordless. **Why:** cuts and fish species cannot be priced by averaging — *beef* spans a two- to four-fold range — and a species swap shifts thickness, timing and the doneness photograph where a cut swap in a braise usually does not. **Left open (PM-15):** whether changes-the-cook substitutes become swappable; whether the pilot must exercise them; the reference-species convention for fish, which lacks a governing document as the Cut Library does. **Validation test:** a pilot substitute logged cost-only that shifts a step's timing or doneness cue fails the split | 22 |

@@ -5,6 +5,12 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-16 — substitutes for costing: swap the price, not the cook
+
+**`philosophy.md` §22 added (D-15).** Recipes carry an explicit substitute list
+per ingredient, tagged cost-only (swappable, live cost recompute) or
+changes-the-cook (informational only, with a prose note); the open half is PM-15.
+
 ## 2026-09-06 — two hand-drawn maps translated into pages
 
 **`design/worked-page-maps.md` added.** Beef Enchilada Skillet and Chicken
