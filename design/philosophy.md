@@ -1076,6 +1076,66 @@ scales past the pilot.
 
 ---
 
+## 23. The cooking log — SETTLED (18 September 2026)
+
+A cook gets a plain, chronological record of the dishes they have finished —
+recipe and date, nothing else — surfaced in Profile. It describes what happened.
+It asks for nothing.
+
+The data already exists and is already trusted: the planner computes
+`times_cooked()` and `last_cooked()` per recipe, and `suggest_home` splits DUE
+from UNTRIED on that history alone (§19.2). The log is that same record shown to
+the cook directly, rather than read only as a ranking signal.
+
+### 23.1 Completions only
+
+An entry is written when the cook finishes — the last page turn in cook mode,
+which the prototypes already label **Finish** / *خلصنا*. Reaching the final page
+without taking it, or walking away partway, writes nothing.
+
+### 23.2 Abandonment is tracked, but not shown here
+
+§4.7 and §8 both record that the app has good reason to know how often cooks
+abandon and on which page — §8 calls it the most valuable signal available. That
+is telemetry for the editor. **It is deliberately not surfaced to the cook in
+this version**, and the line is drawn here so that a later reader finds a scope
+decision rather than an omission.
+
+### 23.3 Not a streak
+
+A streak — a consecutive-day counter that resets on a miss — is a pressure
+mechanic even when it is displayed honestly, because the number's whole job is to
+make you not want it to drop. That is the aggregate-behaviour optimisation §8
+declines. A plain log has nothing to protect and nothing that resets.
+
+### 23.4 It lives in Profile, not in the recipe box
+
+The recipe box (§19) is an **explicit** save: nothing enters it by being cooked,
+viewed or searched for. The cooking log is the opposite mechanism — implicit, and
+written by the act of cooking. Folding one into the other would blur a
+distinction §19 was drawn to make, so the log sits in Profile rather than as a
+tab inside the box.
+
+### 23.5 `recall_menu` is the entertaining-specific view of this
+
+The planner's `recall_menu()` re-opens a saved menu at a new headcount, and the
+saved-menu list already tells a host *you served this 3 times, last 47 days ago*.
+That is this same mechanism scoped to menus rather than to single recipes.
+Recording it as one mechanism with two views, rather than two parallel ones,
+costs nothing today and prevents them drifting apart later. **No behaviour in
+§13 changes.**
+
+### 23.6 Deferred: if abandonment is ever surfaced, it records *why*
+
+Should a later version show abandonment to the cook, a bare count — *you did not
+finish this 3 times* — is judgemental without being useful. The reason is what
+would make a cook's own record worth reading: the phone rang, an ingredient ran
+out, it took too long, they did not like it. Recorded now as a constraint on that
+future decision, not as something being built.
+
+
+---
+
 ## Decision log
 
 | Date | Decision | Section |
@@ -1125,3 +1185,4 @@ scales past the pilot.
 | 5 Sep 2026 | **Utensils opened as a reference layer, and placed in the locale-bound column.** What equipment a recipe requires is a fact about the recipe and gets a first-class reference parallel to the ingredient one, serving the pre-commit surface (§16.2) first and filters (§16.7) second. **It is three features, not one, shipping in that order** — the requirement, the visual carrier, and substitution guidance — and only the first is settled. **The decision that matters is the column:** §20 admits the Cut Library partly because a cut frame is food-only and crosses every locale with zero re-shooting, and a utensil is *nothing but* cultural furniture — a tagine, a baladi oven and a mehmas have nothing to travel to — so the portability argument **inverts** and utensils sit with mise en place and the plated hero, not with cuts. A utensils layer does not amortise across locales. **Division of labour holds a third time** — the picture carries tool identity, words and digits carry size, capacity and substitution; no photograph conveys *26 cm*. **Presence, not inventory** (§16.1 carried over), staples assumed present and unset. **Left open:** whether a visual layer exists and what carries it (sequenced behind PM-09 — the 44 px tile already has one open carrier); scope and granularity, corpus-mined not intuited (PM-14); and whether the requirement is authored or derived, which is a schema retrofit on the same logic as §16.7. **Resolved first, because it changes the question:** **24 of 81 activities — 23 distinct glyphs — already draw a tool, vessel or appliance rather than the act** (`grate` a grater, `sift` a sieve, `simmer` a pot), four times the six ingredient-drawing activities C-05 tracks as a defect; either the same defect at four times the scale, or utensil-as-carrier is already de facto and should be made deliberate — currently neither. Folded into **C-05**, measured in **C-06** | 21 |
 | 5 Sep 2026 | **Utensils, second decision: the per-recipe list is taken, the per-step repetition is rejected.** The equipment list is confirmed as the shape, with an `optional` flag per entry so the pre-commit check does not warn a cook off a dish over a grater. **No separate per-step equipment surface** — where a tool matters it is already showing in that step's own photograph or icon. Kitchen Stories restates tools every step because it has four fat steps, no station concept and a cook who would otherwise scroll back; Matbakh has six stations naming where the cook stands and a per-recipe list that has already said what to get out, so the repetition earns less. **Narrows §21.2's first open item without closing C-05:** the measured finding that 24 of 81 activities draw a tool rather than the act was recorded as reading two ways, and this leans on the second — for instrument-defined verbs the utensil is already on the tile and a second surface would draw it twice — while C-05 stays open, because the glyph must still draw the **action** wherever the action is what distinguishes it. **Watch in the pilot (C-06):** two vessels in play at one station, where neither glyph nor station header says which the tile means. Source: the Kitchen Stories instruction-layer reading, `competitor-study-part-five.md` | 21.3 |
 | 16 Sep 2026 | **Ingredient substitutes for costing settled in part.** Recipes carry an explicit authored substitute list per ingredient — never inferred or averaged from price data — each tagged **cost-only** or **changes-the-cook**. The primary ingredient is the cut or species the steps, timer and doneness photograph were authored against. Cost-only substitutes swap in-app with a live cost recompute; changes-the-cook substitutes are informational (*with X instead: from Y EGP*) with a prose note on the affected steps, shown only at the moment of selection so baseline cook mode stays wordless. **Why:** cuts and fish species cannot be priced by averaging — *beef* spans a two- to four-fold range — and a species swap shifts thickness, timing and the doneness photograph where a cut swap in a braise usually does not. **Left open (PM-15):** whether changes-the-cook substitutes become swappable; whether the pilot must exercise them; the reference-species convention for fish, which lacks a governing document as the Cut Library does. **Validation test:** a pilot substitute logged cost-only that shifts a step's timing or doneness cue fails the split | 22 |
+| 18 Sep 2026 | **The cooking log settled.** A cook gets a plain, chronological record of finished dishes — recipe and date, nothing more — in Profile. **Completions only:** an entry is written on the last page turn in cook mode, the one the prototypes label **Finish**; reaching the last page without taking it writes nothing. **Abandonment stays telemetry** (§4.7, §8) and is deliberately not shown to the cook in this version — a scope line, recorded so it reads as one later. **Not a streak:** a consecutive-day counter that resets on a miss is a pressure mechanic however honestly it is drawn, which is the aggregate-behaviour optimisation §8 declines; a plain log has nothing to protect. **In Profile, not in the recipe box** — §19 is an explicit save and this is its opposite, implicit and written by cooking, so folding them together would blur the distinction §19 exists to draw. **`recall_menu()` is reframed as the entertaining-specific view of the same mechanism**, not a parallel one, with no behaviour change in §13. Reuses `times_cooked()` / `last_cooked()`, already computed for `suggest_home`'s DUE list — no new tracked fields, no new authoring. **Deferred:** if abandonment is ever surfaced to the cook it must carry *why*, not merely *that* | 23 |

@@ -5,6 +5,13 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-18 — the cooking log, and what it deliberately is not
+
+**`philosophy.md` §23 added (D-16).** A plain chronological record of finished
+cooks in Profile — completions only, no streak, and separate from the recipe
+box's explicit save. `recall_menu()` is reframed as the entertaining-specific
+view of the same mechanism rather than a parallel one.
+
 ## 2026-09-16 — substitutes for costing: swap the price, not the cook
 
 **`philosophy.md` §22 added (D-15).** Recipes carry an explicit substitute list
