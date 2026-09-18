@@ -1136,6 +1136,88 @@ future decision, not as something being built.
 
 ---
 
+## 24. Course-weighted serving for the party plan — SETTLED IN PART (18 September 2026)
+
+The party plan (§13) computes each dish's quantity from an **effective covers**
+figure rather than from the guest count directly. Effective covers is a share of
+a per-course consumption target, divided across the dishes sharing that course,
+weighted per dish by the cook for that event. The result is fed into §6's
+existing scaling mechanism unchanged.
+
+**Why this version.** The planner currently scales every dish to the full guest
+count, as though each dish were the only thing on the table — `cost = sum(r["cost"]
+* covers for r in m)` appears twice in `plan_event()`, and the same per-dish
+`r["cost"] * covers` at three more sites, one of them in `recall_menu()`. Six
+dishes for ten guests therefore price six full ten-person portions, and the
+consolidated shopping list inherits the same arithmetic. Nobody eats six full
+servings in one sitting, and catering practice runs the other way: the more
+dishes share a course, the less of each a guest takes. **This is a capability
+being added, not a defect being repaired** — nothing in this document or in
+`planner/README.md` ever promised multi-dish discounting, so the code is not
+departing from a stated rule.
+
+**It is built on what exists.** §6 already has a tested scaling mechanism — the
+four classes, `max_scale_factor`, the rounding ladder, the presets — and this
+changes only the number fed *into* it. The grouping key is the `course` tag,
+which is where the real dependency lies: see the open half.
+
+**Per-dish weight belongs to the event, not the recipe.** The same dish is the
+anchor at one party and an accent at another, depending on what else is served.
+`course` is a fact about the dish and belongs on the recipe; weight is a fact
+about the evening and does not.
+
+**The cook's coefficient is free-form judgement, and deliberately unstructured.**
+The app does not ask *why* a number is being adjusted — a light gathering, drinks
+involved, a hungry family. Named event profiles and a drinks toggle were both
+considered and rejected: either would have the app modelling a judgement that is
+the cook's to make. This follows §19's rule that the Profile is **stated and
+never inferred**.
+
+### 24.1 What is DECIDED
+
+- **Per-guest consumption targets exist per course**, as one global reference
+  table, grouped by the `course` tag.
+- **Within a course holding more than one dish, the target is divided by a
+  weighted split**, not an even one. The weight is set by the cook **per event**
+  and is never written back to the recipe.
+- **The targets are adjustable as a standing Profile preference** — per course
+  individually, or by one coefficient across the whole table.
+- **That coefficient may be overridden for a single event**, as free judgement
+  with no structured inputs.
+- **The output is an effective-covers figure per dish**, fed into §6's existing
+  scaling class and `max_scale_factor`. No second scaling system.
+
+### 24.2 What is OPEN — PM-16, and one blocker that is not PM-16
+
+**The blocker first: `course` is not an authored tag yet.** It is proposed in
+`design/tag-proposal.md` (a draft of 1 August, closed list) and §11 still records
+`tags` as *not yet settled*. No recipe carries a `tags:` block — none of the
+sixteen in the catalogue — and the only live use is the validator's check that a
+*sub-recipe* is tagged `component`, `sauce` or `dip`. So the grouping key this
+mechanism needs does not exist on any recipe today. **This is blocked on PM-07**,
+and on the retrofit R-10 tracks, in exactly the way §13's menu suggestion already
+is. Nothing here can compute before that lands.
+
+Three questions are open in their own right, under **PM-16**:
+
+- **The course-target numbers themselves** — grams or millilitres per guest, per
+  course. Pending Ibrahim's own catering research and **deliberately not invented
+  as placeholders**, on the same reasoning §16.6 gives for the doneness count: a
+  number recorded before it is measured gets quoted back as though it were.
+- **The default split when a course holds several dishes and the cook has set no
+  weight.** An even split is the obvious fallback, but it is not yet decided, and
+  without a stated default the mechanism cannot compute unattended.
+- **Whether `drink`, `soup` and the other rarely-multiplied courses take part in
+  this at all.** Best settled alongside the reference numbers rather than now.
+
+**What to watch once the party plan is used in anger.** If dishes routinely go
+unweighted and the even-split default produces implausible quantities, that is
+evidence against the **default**, not against the mechanism — and it is the
+default that should be revisited.
+
+
+---
+
 ## Decision log
 
 | Date | Decision | Section |
@@ -1186,3 +1268,4 @@ future decision, not as something being built.
 | 5 Sep 2026 | **Utensils, second decision: the per-recipe list is taken, the per-step repetition is rejected.** The equipment list is confirmed as the shape, with an `optional` flag per entry so the pre-commit check does not warn a cook off a dish over a grater. **No separate per-step equipment surface** — where a tool matters it is already showing in that step's own photograph or icon. Kitchen Stories restates tools every step because it has four fat steps, no station concept and a cook who would otherwise scroll back; Matbakh has six stations naming where the cook stands and a per-recipe list that has already said what to get out, so the repetition earns less. **Narrows §21.2's first open item without closing C-05:** the measured finding that 24 of 81 activities draw a tool rather than the act was recorded as reading two ways, and this leans on the second — for instrument-defined verbs the utensil is already on the tile and a second surface would draw it twice — while C-05 stays open, because the glyph must still draw the **action** wherever the action is what distinguishes it. **Watch in the pilot (C-06):** two vessels in play at one station, where neither glyph nor station header says which the tile means. Source: the Kitchen Stories instruction-layer reading, `competitor-study-part-five.md` | 21.3 |
 | 16 Sep 2026 | **Ingredient substitutes for costing settled in part.** Recipes carry an explicit authored substitute list per ingredient — never inferred or averaged from price data — each tagged **cost-only** or **changes-the-cook**. The primary ingredient is the cut or species the steps, timer and doneness photograph were authored against. Cost-only substitutes swap in-app with a live cost recompute; changes-the-cook substitutes are informational (*with X instead: from Y EGP*) with a prose note on the affected steps, shown only at the moment of selection so baseline cook mode stays wordless. **Why:** cuts and fish species cannot be priced by averaging — *beef* spans a two- to four-fold range — and a species swap shifts thickness, timing and the doneness photograph where a cut swap in a braise usually does not. **Left open (PM-15):** whether changes-the-cook substitutes become swappable; whether the pilot must exercise them; the reference-species convention for fish, which lacks a governing document as the Cut Library does. **Validation test:** a pilot substitute logged cost-only that shifts a step's timing or doneness cue fails the split | 22 |
 | 18 Sep 2026 | **The cooking log settled.** A cook gets a plain, chronological record of finished dishes — recipe and date, nothing more — in Profile. **Completions only:** an entry is written on the last page turn in cook mode, the one the prototypes label **Finish**; reaching the last page without taking it writes nothing. **Abandonment stays telemetry** (§4.7, §8) and is deliberately not shown to the cook in this version — a scope line, recorded so it reads as one later. **Not a streak:** a consecutive-day counter that resets on a miss is a pressure mechanic however honestly it is drawn, which is the aggregate-behaviour optimisation §8 declines; a plain log has nothing to protect. **In Profile, not in the recipe box** — §19 is an explicit save and this is its opposite, implicit and written by cooking, so folding them together would blur the distinction §19 exists to draw. **`recall_menu()` is reframed as the entertaining-specific view of the same mechanism**, not a parallel one, with no behaviour change in §13. Reuses `times_cooked()` / `last_cooked()`, already computed for `suggest_home`'s DUE list — no new tracked fields, no new authoring. **Deferred:** if abandonment is ever surfaced to the cook it must carry *why*, not merely *that* | 23 |
+| 18 Sep 2026 | **Course-weighted serving settled as the party plan's quantity mechanism.** Each dish's quantity comes from an **effective covers** figure — a share of a per-course consumption target, divided across the dishes sharing that course, weighted per dish by the cook **for that event** and never written back to the recipe — fed into §6's existing scaling class and `max_scale_factor` rather than into a second scaling system. Targets are adjustable as a standing Profile preference, per course or by one coefficient, with a free-judgement per-event override; named event profiles and a drinks toggle were rejected because either would have the app modelling the cook's judgement, against §19's *stated and never inferred*. **Why:** the planner scales every dish to the full guest count — `cost = sum(r["cost"] * covers for r in m)` twice in `plan_event()`, plus three more per-dish sites including one in `recall_menu()` — so six dishes for ten guests price six full ten-person portions, and the consolidated shopping list inherits it. **This is a capability being added, not a defect repaired:** multi-dish discounting was never promised. **Blocked on PM-07:** `course` is proposed in `tag-proposal.md` but authored on no recipe, so the grouping key does not yet exist. **Open under PM-16:** the target numbers (pending catering research, not invented as placeholders), the default split when no weight is set, and whether `drink`/`soup` participate | 24 |

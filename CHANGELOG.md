@@ -5,6 +5,14 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-18b — the party plan stops pricing six full portions
+
+**`philosophy.md` §24 added (D-17).** Party-plan quantities come from an
+effective-covers figure — a per-course target split across the dishes sharing
+that course, weighted per event — fed into §6's existing scaling. Blocked on
+PM-07 until `course` is authored on recipes; the numbers and the default split
+are open as PM-16.
+
 ## 2026-09-18 — the cooking log, and what it deliberately is not
 
 **`philosophy.md` §23 added (D-16).** A plain chronological record of finished
