@@ -5,6 +5,14 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-22 — competitor citations point at one file
+
+**`philosophy.md` decision log: one row, no design change.** The vault's
+competitor research is now a single file, `competitor-study-combined.md`.
+Older citations are left as written: `competitor-study-part-five.md` is its
+chapter 3R and `ideas-from-cooking-apps.md` its Appendix A, with the KS- IDs
+unchanged — including the ones cited in `design/worked-page-maps.md`.
+
 ## 2026-09-18b — the party plan stops pricing six full portions
 
 **`philosophy.md` §24 added (D-17).** Party-plan quantities come from an
