@@ -50,7 +50,7 @@ committed by hand to get around it.
 - **New item P-06:** an indicative-pricing engine normalising brand, weight and
   origin variance to a standard unit. It feeds §28's tiers, so it decides what
   `cost_per_serving` means. Formula open.
-- Decided 20 September, filed 24 September. Release bumped to 2026.09.24d.
+- Decided and filed 24 September. Release bumped to 2026.09.24d.
 
 ## 2026-09-24c — substitutes stay on the shopping list
 
@@ -68,7 +68,7 @@ swappability question is resolved.
   prototype has and §4.6 does not describe.
 - **Still open:** one rules table or two, whether the packaged-goods tiers earn
   their own governing document, and how the protein table relates to D-13.
-- Decided 20 September, filed 24 September. Release bumped to 2026.09.24c.
+- Decided and filed 24 September. Release bumped to 2026.09.24c.
 
 ## 2026-09-24b — the monetisation fork resolved
 
@@ -88,7 +88,7 @@ M-02 and M-03 are decided as one set.
 - **Model referral at ~3%, not 5%** (Instacart 3%, Kroger 1.6–4.8%, Ocado 3%).
 - **Not closed: F-01.** The numeric base case has not been run against this
   shape.
-- Decided 20 September, filed 24 September. Release bumped to 2026.09.24b.
+- Decided and filed 24 September. Release bumped to 2026.09.24b.
 
 ## 2026-09-24 — the tag vocabulary is closed
 
@@ -109,7 +109,7 @@ but is not `vegan`, and no derived tag says that. `cuisine` gains `thai`,
   build.
 - **`main_protein` is not in the schema yet.** The recipe schema,
   `matbakh.py check` and `authoring-standard.md` do not know the field.
-- Decided 20 September, filed 24 September. Release bumped to 2026.09.24.
+- Decided and filed 24 September. Release bumped to 2026.09.24.
 
 ## 2026-09-22 — competitor citations point at one file
 

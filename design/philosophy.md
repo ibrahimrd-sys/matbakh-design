@@ -626,10 +626,10 @@ The mechanism is settled (§5.2), and so is which surface owns what (§5.5). Two
 
 **Recording this as open is itself the decision.** Choosing an option now would fix the largest content-cost line in the model on an argument, two weeks before the measurement that settles it exists.
 
-### 16.7 Filters and dietary attributes — VOCABULARY SETTLED (20 September 2026); INTERACTION MODEL OPEN
+### 16.7 Filters and dietary attributes — VOCABULARY SETTLED (24 September 2026); INTERACTION MODEL OPEN
 Dietary requirements, personal preferences, heat, vegan/vegetarian, kids-suitable, weight-watching. The attributes are known; the interaction model is not.
 
-**The vocabulary half is closed — see §26** (PM-07, 20 September 2026): nine authored fields, eight derived tags. **The interaction model — how filters compose in the interface — remains open**, which is the distinction this section has drawn from the start.
+**The vocabulary half is closed — see §26** (PM-07, 24 September 2026): nine authored fields, eight derived tags. **The interaction model — how filters compose in the interface — remains open**, which is the distinction this section has drawn from the start.
 
 **Raised in priority 1 August 2026.** §13 established that menu suggestion is blocked on this, and that tags are the one thing genuinely expensive to retrofit — every recipe authored before the vocabulary is settled has to be revisited. The vocabulary should be closed and small for the same reason the activity lexicon is: it is translated once, and it is what a filter can promise.
 
@@ -1256,7 +1256,7 @@ not resolved:
 
 ---
 
-## 26. Recipe tag vocabulary — SETTLED (20 September 2026)
+## 26. Recipe tag vocabulary — SETTLED (24 September 2026)
 
 **PM-07 is closed.** The vocabulary that §16.7 has waited on since 1 August is
 final. `design/tag-proposal.md` carries the full reasoning and is now
@@ -1305,7 +1305,7 @@ authored schema: the recipe schema, `matbakh.py check` and
 
 ---
 
-## 27. The monetisation fork resolved — SETTLED (20 September 2026)
+## 27. The monetisation fork resolved — SETTLED (24 September 2026)
 
 *A further addendum, per append-never-insert. It does not edit §25, the 20 Sept
 D-1 reversal, which stays as written; this settles what "premium" contains and
@@ -1313,7 +1313,7 @@ what the retail layer is. **M-01**, **M-02** and **M-03** are the PM log's
 commercial IDs (§6's **PM-02** and **PM-03**); **D-1** and **D-4** are the
 competitor study's.*
 
-## Addendum — 20 Sept 2026: M-01/M-02/M-03 resolved
+## Addendum — 24 Sept 2026: M-01/M-02/M-03 resolved
 
 Following the 20 Sept D-1 reversal (free catalogue, paid premium features),
 the shape of "premium" and the retail-layer strategy are now decided
@@ -1357,13 +1357,13 @@ concrete terms.
 
 ---
 
-## 28. Substitution scope and mechanism — SETTLED IN PART (20 September 2026)
+## 28. Substitution scope and mechanism — SETTLED IN PART (24 September 2026)
 
 *A further addendum, per append-never-insert. It stacks after §26 and §27 and
 edits neither, and it does not edit §22: **§22.2's open list is superseded on
 the swappability question only**, and PM-15's other items stay open there.*
 
-## Addendum — 20 Sept 2026: PM-15 resolved — substitution scope and mechanism
+## Addendum — 24 Sept 2026: PM-15 resolved — substitution scope and mechanism
 
 PM-15 (opened 16 Sept) is now resolved on the swappability question.
 
@@ -1406,13 +1406,13 @@ E-06 as new scope.
 
 ---
 
-## 29. Pricing data sourcing — SETTLED IN PART (20 September 2026)
+## 29. Pricing data sourcing — SETTLED IN PART (24 September 2026)
 
 *A further addendum, per append-never-insert. Its own topic, stacked after §28
 and merged into nothing. The facts about the portal are recorded as stated by
 Ibrahim; this file has not independently verified them.*
 
-## Addendum — 20 Sept 2026: Pricing data sourcing — P-01 updated, new indicative-pricing scope opened
+## Addendum — 24 Sept 2026: Pricing data sourcing — P-01 updated, new indicative-pricing scope opened
 
 P-01 status changes from "NS — HIGH RISK, no contact made" to "primary
 source identified and confirmed live; coverage and reliability
@@ -1509,8 +1509,8 @@ Left explicitly open:
 | 18 Sep 2026 | **Course-weighted serving settled as the party plan's quantity mechanism.** Each dish's quantity comes from an **effective covers** figure — a share of a per-course consumption target, divided across the dishes sharing that course, weighted per dish by the cook **for that event** and never written back to the recipe — fed into §6's existing scaling class and `max_scale_factor` rather than into a second scaling system. Targets are adjustable as a standing Profile preference, per course or by one coefficient, with a free-judgement per-event override; named event profiles and a drinks toggle were rejected because either would have the app modelling the cook's judgement, against §19's *stated and never inferred*. **Why:** the planner scales every dish to the full guest count — `cost = sum(r["cost"] * covers for r in m)` twice in `plan_event()`, plus three more per-dish sites including one in `recall_menu()` — so six dishes for ten guests price six full ten-person portions, and the consolidated shopping list inherits it. **This is a capability being added, not a defect repaired:** multi-dish discounting was never promised. **Blocked on PM-07:** `course` is proposed in `tag-proposal.md` but authored on no recipe, so the grouping key does not yet exist. **Open under PM-16:** the target numbers (pending catering research, not invented as placeholders), the default split when no weight is set, and whether `drink`/`soup` participate | 24 |
 | 22 Sep 2026 | **Competitor citations now resolve to one file.** The competitor research was consolidated into a single vault file, `competitor-study-combined.md`, and its separate parts, the `ideas-from-cooking-apps.md` register and the study PDFs were retired. Rows above that cite `competitor-study-part-five.md` or `ideas-from-cooking-apps.md` are left as written, per append-never-insert: read `competitor-study-part-five.md` as chapter 3R of the combined file and `ideas-from-cooking-apps.md` as its Appendix A, where the KS- IDs are unchanged. No design decision changes | — |
 | 20 Sep 2026 | **Monetisation model reversed — free catalogue, paid premium features.** Recorded as an addendum superseding **§17** (catalogue paid, prices free, settled 29 August) without editing it, per append-never-insert; §17 still reads SETTLED and the two now disagree. **Ripples flagged and deliberately left open:** the ownership positioning in the competitor study's recommendation, T-02's *visible to owners* wording, the Axis 7 monetisation arguments — Kitchen Stories becomes the closer analogue rather than the contrast case — and **M-02**, whose numeric base case was already NS and is unaffected. Decided outside the session that recorded it | 25 |
-| 20 Sep 2026 | **PM-07 (tag vocabulary) CLOSED.** Nine authored fields — `cuisine`, `course`, **`main_protein`** (new), `spice`, `effort`, `holds`, `season`, `occasion`, `contains_override` — and eight derived tags unchanged from the draft. `main_protein` is authored because it is the dish's claim rather than its ingredient list; `occasion` gains **`siami_seafood`** and **`siami_no_seafood`**, since a seafood-fast dish excludes meat, poultry and dairy yet is not `vegan`, a combination no derived tag expresses; `cuisine` gains `thai`, `latin_american` and `eastern_european`; **`hidden` is removed** as redundant against `course: component`. `tag-proposal.md` is closed to reference. **Not settled:** §16.7's interaction model, **S-07**'s derived-key translation, and the schema work `main_protein` implies | 26, 16.7 |
-| 20 Sep 2026 | **The monetisation fork resolved — M-01, M-02 and M-03 decided as one set.** **Build-to-own, Kurashiru-shaped** (retail media: audience first, retail relationship second, non-exclusive by construction — not the single-retailer exclusivity the study calls a trap), which resolves **PM-02**. **The free/paid boundary made concrete under §25's reversal:** raw weekly market prices stay **free forever** — NY-01 untouched and still irreversible — while the computed cost of a dish and the planner's costed week are **premium**; free is the raw data, premium is the data applied to a dish or a week. **Layer 3 confirmed as re-specified retail media** with a referral fee once a partnership is agreed. **Deliberately not decided:** the deal mechanic — flat referral, Kurashiru's points-back, or volume-tiered — which awaits a real retailer and is negotiation-prep material, not canon; **T-05** stays DEFER on the same grounds. **Benchmark of record: model referral at ~3%** (Instacart 3%, Kroger 1.6–4.8%, Ocado 3%), not the overstated 5% already corrected once in this project's documents. The numeric base case (**F-01**) still has to be run against this shape | 27, 25 |
-| 20 Sep 2026 | **Substitution scope and mechanism settled in part — PM-15's swappability question resolved.** **Substitutes are shopping-list-only and never enter the instruction set:** steps, technique and authored timers stay exactly as test-cooked (§6.1, and `availability-draft.md` §5's existing rejection of auto-substitution). **Mechanism is a rules table** keyed by (original, substitute) pairs, each carrying a consistent effect — a structured, reusable upgrade of D-15's informational prose note. **Two tiers:** packaged goods as brand/quality tiers side by side on the shopping list with no cooking impact, and the displayed `cost_per_serving` **pinned to one canonical tier (Class A)**, never an average or the cheapest; proteins carrying an attached rule that surfaces a **suggested timer adjustment, auto-applied but visibly flagged** and overridable in one tap, so the derivation is stated as such and the cook's judgement stays in a food-safety-relevant loop. **New UI scope: editing a timer's duration mid-session, logged under E-06.** **Left open:** one rules table or two for cuts and species; whether the packaged-goods tier layer earns its own governing document; and how the protein table relates to D-13's Cut Library while PM-12's scope is open. §22.2's remaining PM-15 items — the fish reference-species convention and whether the pilot must exercise substitutes — are untouched | 28, 22 |
-| 20 Sep 2026 | **Pricing data sourcing settled in part — P-01 de-risked, and an indicative-pricing engine opened.** **`agriprice.gov.eg/local-prices`, an official Egyptian government portal, is the primary source** — live and needing no negotiated access, which replaces the El-Obour relationship R-02 was written around. **Not a close:** coverage, data currency and weekly-cadence support are unverified. **The method is a compiled, multi-source pipeline** — the portal for wholesale and local commodity staples, plus direct collection from a small number of large chains for packaged goods, compiled into spreadsheets, reviewed, then adjusted; the first real description of the **P-03** mechanism, which still needs an owner, a cadence and tooling. **Collection cannot be uniform:** Carrefour Egypt blocks automated clients, so chains split into scrapable and manual. **L-05 is now concretely actionable** — a government portal's data and a retailer's posted prices likely carry different standing for reuse, and that is a real legal question rather than a hypothetical one. **New scope: an indicative-pricing engine** that normalises brand, weight and origin variance into one price per item on a standard-unit basis before applying a recipe's actual quantity; it feeds §28's tier system directly, because the canonical Class A rate is what `cost_per_serving` uses. **Open:** the normalisation formula, which chains and by which method, and P-03's owner, cadence and tooling | 29, 28 |
+| 24 Sep 2026 | **PM-07 (tag vocabulary) CLOSED.** Nine authored fields — `cuisine`, `course`, **`main_protein`** (new), `spice`, `effort`, `holds`, `season`, `occasion`, `contains_override` — and eight derived tags unchanged from the draft. `main_protein` is authored because it is the dish's claim rather than its ingredient list; `occasion` gains **`siami_seafood`** and **`siami_no_seafood`**, since a seafood-fast dish excludes meat, poultry and dairy yet is not `vegan`, a combination no derived tag expresses; `cuisine` gains `thai`, `latin_american` and `eastern_european`; **`hidden` is removed** as redundant against `course: component`. `tag-proposal.md` is closed to reference. **Not settled:** §16.7's interaction model, **S-07**'s derived-key translation, and the schema work `main_protein` implies | 26, 16.7 |
+| 24 Sep 2026 | **The monetisation fork resolved — M-01, M-02 and M-03 decided as one set.** **Build-to-own, Kurashiru-shaped** (retail media: audience first, retail relationship second, non-exclusive by construction — not the single-retailer exclusivity the study calls a trap), which resolves **PM-02**. **The free/paid boundary made concrete under §25's reversal:** raw weekly market prices stay **free forever** — NY-01 untouched and still irreversible — while the computed cost of a dish and the planner's costed week are **premium**; free is the raw data, premium is the data applied to a dish or a week. **Layer 3 confirmed as re-specified retail media** with a referral fee once a partnership is agreed. **Deliberately not decided:** the deal mechanic — flat referral, Kurashiru's points-back, or volume-tiered — which awaits a real retailer and is negotiation-prep material, not canon; **T-05** stays DEFER on the same grounds. **Benchmark of record: model referral at ~3%** (Instacart 3%, Kroger 1.6–4.8%, Ocado 3%), not the overstated 5% already corrected once in this project's documents. The numeric base case (**F-01**) still has to be run against this shape | 27, 25 |
+| 24 Sep 2026 | **Substitution scope and mechanism settled in part — PM-15's swappability question resolved.** **Substitutes are shopping-list-only and never enter the instruction set:** steps, technique and authored timers stay exactly as test-cooked (§6.1, and `availability-draft.md` §5's existing rejection of auto-substitution). **Mechanism is a rules table** keyed by (original, substitute) pairs, each carrying a consistent effect — a structured, reusable upgrade of D-15's informational prose note. **Two tiers:** packaged goods as brand/quality tiers side by side on the shopping list with no cooking impact, and the displayed `cost_per_serving` **pinned to one canonical tier (Class A)**, never an average or the cheapest; proteins carrying an attached rule that surfaces a **suggested timer adjustment, auto-applied but visibly flagged** and overridable in one tap, so the derivation is stated as such and the cook's judgement stays in a food-safety-relevant loop. **New UI scope: editing a timer's duration mid-session, logged under E-06.** **Left open:** one rules table or two for cuts and species; whether the packaged-goods tier layer earns its own governing document; and how the protein table relates to D-13's Cut Library while PM-12's scope is open. §22.2's remaining PM-15 items — the fish reference-species convention and whether the pilot must exercise substitutes — are untouched | 28, 22 |
+| 24 Sep 2026 | **Pricing data sourcing settled in part — P-01 de-risked, and an indicative-pricing engine opened.** **`agriprice.gov.eg/local-prices`, an official Egyptian government portal, is the primary source** — live and needing no negotiated access, which replaces the El-Obour relationship R-02 was written around. **Not a close:** coverage, data currency and weekly-cadence support are unverified. **The method is a compiled, multi-source pipeline** — the portal for wholesale and local commodity staples, plus direct collection from a small number of large chains for packaged goods, compiled into spreadsheets, reviewed, then adjusted; the first real description of the **P-03** mechanism, which still needs an owner, a cadence and tooling. **Collection cannot be uniform:** Carrefour Egypt blocks automated clients, so chains split into scrapable and manual. **L-05 is now concretely actionable** — a government portal's data and a retailer's posted prices likely carry different standing for reuse, and that is a real legal question rather than a hypothetical one. **New scope: an indicative-pricing engine** that normalises brand, weight and origin variance into one price per item on a standard-unit basis before applying a recipe's actual quantity; it feeds §28's tier system directly, because the canonical Class A rate is what `cost_per_serving` uses. **Open:** the normalisation formula, which chains and by which method, and P-03's owner, cadence and tooling | 29, 28 |
 

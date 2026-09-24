@@ -1,6 +1,6 @@
 # Recipe tags — proposal
 
-> **CLOSED 20 Sept 2026 — see `philosophy.md` for the decision-log entry.
+> **CLOSED 24 Sept 2026 — see `philosophy.md` for the decision-log entry.
 > This document is now historical/reference, not a live proposal.**
 >
 > The field list below is the final one, as settled. What changed between the
@@ -230,12 +230,12 @@ argument for `effort` and `holds` earning their place.
 
 ---
 
-## Changed at closure — 20 September 2026
+## Changed at closure — 24 September 2026
 
 The three questions this document left open are resolved, and the *Open* section
 is removed with them.
 
-| | Draft, 1 August | Closed, 20 September |
+| | Draft, 1 August | Closed, 24 September |
 |---|---|---|
 | **One cuisine per recipe?** | Open — Ottoman and Levantine inheritance might need two | **One value, kept.** Three values added to the list instead: `thai`, `latin_american`, `eastern_european` |
 | **Is `occasion` a tag or a collection?** | Open | **A tag, kept** — and extended, with `siami` split into `siami_seafood` and `siami_no_seafood` |
