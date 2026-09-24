@@ -104,5 +104,8 @@ git push -q origin "$BRANCH"
 echo "   pushed to origin/$BRANCH"
 echo
 echo "Pages will rebuild in about a minute."
+# Strip ".git" in its own step. As one pattern — (.+)(\.git)?$ — the greedy
+# group swallows the suffix and the optional one matches nothing, which
+# printed .../matbakh-design.git/ as the Pages address.
 git remote get-url origin 2>/dev/null \
-  | sed -E 's#.*github.com[:/]([^/]+)/(.+)(\.git)?$#   https://\1.github.io/\2/#' || true
+  | sed -E 's#\.git$##; s#.*github\.com[:/]([^/]+)/([^/]+)$#   https://\1.github.io/\2/#' || true

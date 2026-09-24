@@ -5,6 +5,14 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-24h — publish.sh prints the right Pages address
+
+**`publish.sh`'s closing line printed `…github.io/matbakh-design.git/`.** Its
+pattern, `(.+)(\.git)?$`, let the greedy group swallow the `.git` suffix, so the
+optional group matched nothing. The suffix is now stripped in its own step; the
+line prints `https://ibrahimrd-sys.github.io/matbakh-design/`, and gives the same
+for an SSH remote or one without `.git`.
+
 ## 2026-09-24g — §26–§29 carry the day they were decided
 
 **`philosophy.md` §26–§29 re-dated from 20 to 24 September.** PM-07 (the tag
