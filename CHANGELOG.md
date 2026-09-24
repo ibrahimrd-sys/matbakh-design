@@ -5,6 +5,83 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-24d — the price source is a government portal
+
+**`philosophy.md` §29 added — its own addendum, merged into nothing.**
+
+- **`agriprice.gov.eg/local-prices` is the primary price source**: live, and
+  needing no negotiated access, unlike the El-Obour relationship. **P-01 is
+  de-risked, not closed** — coverage, currency and weekly cadence unverified.
+- **P-03's mechanism described:** compile from the portal for staples plus
+  direct collection from a few large chains for packaged goods, review, adjust.
+  Still needs an owner, a cadence and tooling.
+- **Collection is not uniform** — Carrefour Egypt blocks automated clients.
+- **L-05 is now concretely actionable:** portal data and retailer-posted prices
+  likely differ in reuse standing.
+- **New item P-06:** an indicative-pricing engine normalising brand, weight and
+  origin variance to a standard unit. It feeds §28's tiers, so it decides what
+  `cost_per_serving` means. Formula open.
+- Decided 20 September, filed 24 September. Release bumped to 2026.09.24d.
+
+## 2026-09-24c — substitutes stay on the shopping list
+
+**`philosophy.md` §28 added — a further addendum; §22 is not edited.** PM-15's
+swappability question is resolved.
+
+- **Substitutes are shopping-list-only and never enter the instruction set.**
+  Steps, technique and authored timers stay as test-cooked.
+- **A rules table** of (original, substitute) pairs replaces D-15's prose note.
+- **Packaged goods** show quality tiers side by side; the displayed
+  `cost_per_serving` is **pinned to Class A**, not averaged or cheapest.
+- **Protein swaps** surface a **suggested timer adjustment — auto-applied,
+  visibly flagged, overridable in one tap.**
+- **New UI scope under E-06:** editing a timer's duration mid-session, which no
+  prototype has and §4.6 does not describe.
+- **Still open:** one rules table or two, whether the packaged-goods tiers earn
+  their own governing document, and how the protein table relates to D-13.
+- Decided 20 September, filed 24 September. Release bumped to 2026.09.24c.
+
+## 2026-09-24b — the monetisation fork resolved
+
+**`philosophy.md` §27 added — a further addendum, §25 left as written.** M-01,
+M-02 and M-03 are decided as one set.
+
+- **Build-to-own, Kurashiru-shaped** — retail media, audience first and the
+  retail relationship second, non-exclusive by construction, not single-retailer
+  exclusivity. Resolves PM-02.
+- **The free/paid boundary made concrete:** raw weekly market prices stay free
+  forever (NY-01 untouched); the computed cost of a dish and the planner's
+  costed, consolidated week are premium. Free is the raw data, premium is the
+  data applied to a dish or a week.
+- **Layer 3 confirmed as retail media**, with a referral fee once a partnership
+  is agreed. **The deal mechanic is deliberately not decided** — flat,
+  points-back or tiered awaits a real retailer — so T-05 stays DEFER.
+- **Model referral at ~3%, not 5%** (Instacart 3%, Kroger 1.6–4.8%, Ocado 3%).
+- **Not closed: F-01.** The numeric base case has not been run against this
+  shape.
+- Decided 20 September, filed 24 September. Release bumped to 2026.09.24b.
+
+## 2026-09-24 — the tag vocabulary is closed
+
+**`philosophy.md` §26 added, §16.7 re-titled (PM-07).** Nine authored fields and
+eight derived tags, final. `main_protein` is new and authored — the dish's claim,
+not its ingredient list. `occasion` splits `siami` into `siami_seafood` and
+`siami_no_seafood`: a seafood-fast dish still excludes meat, poultry and dairy
+but is not `vegan`, and no derived tag says that. `cuisine` gains `thai`,
+`latin_american` and `eastern_european`. `hidden` is removed, redundant against
+`course: component`.
+
+- **`design/tag-proposal.md` closed to reference** — final field list in place,
+  its three open questions resolved and recorded in a *Changed at closure*
+  table, the *Open* section removed.
+- **§16.7 is now VOCABULARY SETTLED; INTERACTION MODEL OPEN.** How filters
+  compose in the interface is not settled and was not part of this decision.
+- **S-07 untouched** — derived tag keys still render in English in the Arabic
+  build.
+- **`main_protein` is not in the schema yet.** The recipe schema,
+  `matbakh.py check` and `authoring-standard.md` do not know the field.
+- Decided 20 September, filed 24 September. Release bumped to 2026.09.24.
+
 ## 2026-09-22 — competitor citations point at one file
 
 **`philosophy.md` decision log: one row, no design change.** The vault's

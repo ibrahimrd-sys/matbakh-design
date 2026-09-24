@@ -1,5 +1,11 @@
 # Recipe tags — proposal
 
+> **CLOSED 20 Sept 2026 — see `philosophy.md` for the decision-log entry.
+> This document is now historical/reference, not a live proposal.**
+>
+> The field list below is the final one, as settled. What changed between the
+> 1 August draft and closure is listed at the foot, under *Changed at closure*.
+
 Draft for review, 1 August 2026. Written to unblock §13.4 (the party plan) and
 §13.7 (filters), and to be settled **before authoring reaches volume** — tags
 are the one thing genuinely expensive to retrofit.
@@ -29,19 +35,25 @@ Cuisine is a judgement. "Contains dairy" is a fact about the ingredient list.
 tags:
   cuisine: egyptian          # one, the primary claim
   course: main               # one
+  main_protein: beef         # one
   occasion: [everyday, ramadan]   # zero or more
   spice: 1                   # 0–3
   effort: moderate           # easy | moderate | involved
   holds: warm                # serve_immediately | warm | room | cold | better_next_day
   season: [summer]           # zero or more, omit for year-round
   contains_override: []      # rare; see below
-  hidden: false              # true keeps it out of suggestion but not search
 ```
 
 ### cuisine — closed list
 
 `egyptian · levantine · gulf · north_african · turkish · persian · italian ·
-french · chinese · indian · american · mexican · japanese · greek · spanish`
+french · chinese · indian · american · mexican · japanese · greek · spanish ·
+thai · latin_american · eastern_european`
+
+**`thai`, `latin_american` and `eastern_european` added at closure.**
+`eastern_european` bundles Russia, on the same pattern as `gulf` and
+`north_african` — a region that earns one filter value, not five with two
+recipes each.
 
 One value. A dish is *from* somewhere. If a recipe genuinely needs two, that is
 usually a sign it needs a better name.
@@ -60,12 +72,33 @@ consumed by another recipe — a spice mix, a dough, a stock. Already a settled
 concept (components are first-class recipes, never duplicated); this is how the
 planner knows not to suggest tahini sauce as a dish in its own right.
 
+### main_protein — closed list
+
+`beef · poultry · seafood · pork · vegetarian · mixed · none`
+
+One value. **A new authored field, formalised at closure** — §16.7 has asked for
+protein since 1 August and the draft never gave it a field. It is authored
+rather than derived because it is the dish's *claim*, not its ingredient list: a
+soup with a spoonful of stock is not a poultry dish, and `contains: poultry`
+cannot tell the difference. `mixed` is for a dish built on two proteins at once;
+`none` is for bread, pickles and drinks, where the question does not apply.
+
 ### occasion — closed list
 
-`everyday · guests · ramadan · eid · celebration · picnic · make_ahead_meal`
+`everyday · guests · ramadan · eid · siami_seafood · siami_no_seafood ·
+celebration · picnic · make_ahead_meal`
 
 `ramadan` and `eid` matter commercially. Ramadan is the single largest cooking
 event in the Egyptian year and the obvious moment for a sponsored collection.
+
+**`siami` is split in two, at closure.** `siami_seafood` is the Nativity Fast,
+which permits seafood; `siami_no_seafood` is Great Lent, which does not.
+
+The split is doing work no derived tag can do. A `siami_no_seafood` dish will
+generally also carry the derived `vegan` tag. A `siami_seafood` dish will not —
+it contains fish — but it still excludes meat, poultry and dairy, and **no
+single derived tag captures that combination.** The occasion tag is the only
+thing that can answer the question a cook actually asks during the fast.
 
 ### spice — 0 to 3
 
@@ -118,6 +151,17 @@ Computed by `matbakh.py` from the steps and the ingredient reference:
 calls for stock made from a bird, where the stock is an intermediate rather than
 a listed ingredient. Rare, and the validator should warn when it is used, since
 its normal use is to paper over a missing `diet` field.
+
+**Confirmed at closure:** every use of `contains_override` is **auto-flagged for
+validator review**, per this document's own caution above. It is the one
+authored field that can silently contradict the ingredient reference.
+
+**`contains: pork` is meaningful again**, now that pork is back in the catalogue
+(Revision 2, 14 September). Checked at closure: nothing treats it as permanently
+false — `matbakh.py` excludes `pork` in both the `vegetarian` and `vegan`
+derivations, the ingredient editor carries it in the `diet` vocabulary and
+proposes it for bacon, pancetta and ham, and the reference and the bolognese
+recipe both use it.
 
 ---
 
@@ -186,13 +230,21 @@ argument for `effort` and `holds` earning their place.
 
 ---
 
-## Open
+## Changed at closure — 20 September 2026
 
-- **Is one cuisine per recipe right?** Egyptian cooking has real Ottoman and
-  Levantine inheritance. A single value may be a simplification that shows.
-- **Does `occasion` belong here, or is it a collection?** A curated "Ramadan
-  2027" list may serve better than a tag, and collections are editorial where
-  tags are structural.
-- **`hidden`** — worth having at all? It exists so a component or a
-  work-in-progress does not surface in suggestion. `course: component` may cover
-  it already.
+The three questions this document left open are resolved, and the *Open* section
+is removed with them.
+
+| | Draft, 1 August | Closed, 20 September |
+|---|---|---|
+| **One cuisine per recipe?** | Open — Ottoman and Levantine inheritance might need two | **One value, kept.** Three values added to the list instead: `thai`, `latin_american`, `eastern_european` |
+| **Is `occasion` a tag or a collection?** | Open | **A tag, kept** — and extended, with `siami` split into `siami_seafood` and `siami_no_seafood` |
+| **Is `hidden` worth having?** | Open — `course: component` may cover it | **Removed.** `course: component` already keeps sub-recipes out of suggestion, and a work-in-progress recipe should not be in the authored catalogue at all until it is finished. A third mechanism is redundant |
+
+**Added:** `main_protein`, as a closed-list authored field. **Removed:**
+`hidden`. Still **nine authored fields**, and the derived set is unchanged.
+
+**Not closed here, and not part of this decision:** how filters compose in the
+interface — `philosophy §16.7` distinguishes the vocabulary from the interaction
+model, and only the vocabulary is settled. **S-07**, the translation layer for
+derived tag keys, also stays open.
