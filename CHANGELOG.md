@@ -5,6 +5,21 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-24e — publish.sh accepts the release it is given
+
+**`publish.sh` step 2 rewritten.** It demanded `release:` be today's bare date,
+so it refused every second publish of a day — while the CHANGELOG has used a
+`b`/`c`/`d` suffix since 18 September and `build.py` compares against it. The
+script was rejecting the repo's own convention, and four filings today were
+committed by hand to get around it.
+
+- The release is now **read from the manifest**, not assumed, so the commit
+  message's `Release …` line carries the suffix.
+- Accepted: today's date, optionally plus **one lowercase letter**. Rejected: a
+  wrong date, a two-letter or uppercase suffix, a missing `release:` key — each
+  with its own message.
+- Step 2 now prints the release it accepted instead of passing in silence.
+
 ## 2026-09-24d — the price source is a government portal
 
 **`philosophy.md` §29 added — its own addendum, merged into nothing.**

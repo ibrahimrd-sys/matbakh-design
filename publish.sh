@@ -39,12 +39,27 @@ $PY build.py
 
 echo
 echo "── 2/5  release stamp"
-REL=$(date +%Y.%m.%d)
-if ! grep -q "release: \"$REL\"" manifest.yaml; then
-  echo "   manifest release is not today's date ($REL)."
+# Today's date, optionally with a single lowercase suffix for the second and
+# later publishes of the same day — 2026.09.24, then .24b, .24c. The CHANGELOG
+# has used that suffix since 18 September and build.py compares against it, so
+# refusing anything but a bare date made the script reject its own convention.
+# The release is read FROM the manifest rather than assumed, so the commit
+# message carries the suffix too.
+REL_TODAY=$(date +%Y.%m.%d)
+REL_TODAY_RE=$(echo "$REL_TODAY" | sed 's/\./\\./g')
+REL=$(sed -n 's/^[[:space:]]*release:[[:space:]]*"\([^"]*\)".*/\1/p' manifest.yaml | head -1)
+if [ -z "$REL" ]; then
+  echo "   no 'release:' found in manifest.yaml."
+  exit 1
+fi
+if ! echo "$REL" | grep -Eq "^${REL_TODAY_RE}[a-z]?$"; then
+  echo "   manifest release is \"$REL\"; today's date is $REL_TODAY."
+  echo "   Expected $REL_TODAY, or $REL_TODAY plus one lowercase letter for a"
+  echo "   second publish the same day (${REL_TODAY}b, ${REL_TODAY}c, …)."
   echo "   Bump 'release:' in manifest.yaml and add a CHANGELOG entry, then rerun."
   exit 1
 fi
+echo "   release $REL"
 
 echo
 echo "── 3/5  leak check"
