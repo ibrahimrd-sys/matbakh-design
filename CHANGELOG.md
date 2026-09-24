@@ -5,6 +5,23 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-24g — §26–§29 carry the day they were decided
+
+**`philosophy.md` §26–§29 re-dated from 20 to 24 September.** PM-07 (the tag
+vocabulary), the monetisation fork, substitution scope and price sourcing were
+decided on 24 September, the day they were filed; the filing text carried
+20 September and the headings, addendum titles and decision-log rows took it.
+
+- **§25 keeps 20 September.** The D-1 reversal was decided that day, and every
+  "the 20 Sept D-1 reversal" reference to it stands.
+- The same correction runs through §16.7's pointer to §26, the closure note in
+  `tag-proposal.md`, the PM-07 line in `manifest.yaml`, and the four entries
+  below, which said "Decided 20 September, filed 24 September".
+- **`philosophy.md`'s *Last updated* moved to 2026-09-24.** §26–§29 landed on
+  the 24th while the header still said the 23rd.
+- The vault carries the matching correction in the PM log, the competitor
+  register and the 22–24 September session report.
+
 ## 2026-09-24f — referral-fee options, as prep rather than terms
 
 **`philosophy.md` §27's deal-mechanic line now names a file.** The vault gains
