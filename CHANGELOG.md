@@ -5,6 +5,20 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-24f — referral-fee options, as prep rather than terms
+
+**`philosophy.md` §27's deal-mechanic line now names a file.** The vault gains
+`02-strategy/referral-fee-variances.md`: the ~3% benchmark and five structures —
+flat, points-back to the shopper, per-unit-sold, volume-tiered, and a
+retail-media add-on — with a suggested sequencing for a first retailer
+conversation.
+
+- **It decides nothing.** M-03's shape stays settled and its terms stay open;
+  the pointer says so in §27, in the PM log's M-03 row, and in `DIRECTORY.md`,
+  where it is registered as reference rather than a decision.
+- KU-03 and KU-04, which the memo's sequencing leans on, remain SLOT in the
+  idea register — not accepted.
+
 ## 2026-09-24e — publish.sh accepts the release it is given
 
 **`publish.sh` step 2 rewritten.** It demanded `release:` be today's bare date,

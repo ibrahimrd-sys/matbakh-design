@@ -1341,7 +1341,9 @@ referral fee once a retail partnership is agreed. The exact deal
 mechanic (flat referral vs. Kurashiru's points-back-to-shopper vs. a
 volume-tiered structure) is deliberately NOT decided here — it depends on
 actual negotiation with a real retailer and is tracked separately as
-negotiation-prep material, not a settled decision.
+negotiation-prep material, not a settled decision, in
+`matbakh-private/02-strategy/referral-fee-variances.md` *(pointer added
+24 September 2026, when that file was written; the decision is unchanged)*.
 
 **Benchmark on record for any referral-fee modelling:** grocery affiliate
 commissions run ~3% (Instacart 3%, Kroger 1.6–4.8%, Ocado 3%) — corrected
