@@ -5,6 +5,21 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-24j — wine, and what "halal" can claim
+
+**`philosophy.md` §31 files a 2 September decision that never reached canon.**
+No halal second version of a recipe — a fork, which §9 and §18.2 forbid. Where
+wine is structural, the ingredient line carries an authored substitute note,
+never auto-applied. *Contains alcohol* derives from the existing `diet` class
+with no new schema. **The claim is alcohol-free, never halal**, unless a real
+sourcing record stands behind it: halal turns on slaughter and additives the
+schema does not track.
+
+- Decided in chat on 2 September and held until now only in that session's
+  handoff note, outside both repositories; the note is archived in the vault.
+- **Open:** whether an alcohol-free badge or filter ships, and what a halal
+  sourcing record would need.
+
 ## 2026-09-24i — three units authored, the cook shows two
 
 **`philosophy.md` §30 files the three-unit display.** Every ingredient record

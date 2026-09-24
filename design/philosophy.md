@@ -1499,6 +1499,52 @@ display-preference setting.
 
 ---
 
+## 31. Wine, and what "halal" can claim — SETTLED IN PART (2 September 2026)
+
+*Decided in a chat session on 2 September and carried until now only by that
+session's handoff note, which sat outside both repositories; filed here on 24
+September, and the note archived. Written in this file's terms rather than
+copied, as the note itself asked.*
+
+**No "halal" second version of a recipe.** The proposal was a second recipe
+file, labelled halal, for dishes cooked with wine. Rejected: it is a fork, and a
+fork is what §9 exists to prevent — §18.2's "many recipes per dish", made by the
+author's hand instead of the user's. It would also present a version the kitchen
+never tested as a tested recipe (§6.1).
+
+**Where wine is structural — deglazing, a braising liquid, a reduction — the
+line carries an authored substitute.** This is `availability-draft.md` §5's
+`note {kind: substitute}`: written once by the recipe's author, shown on the
+ingredient line, never applied automatically. Cost and nutrition compute from
+the wine as authored. Beef bourguignon, pilot recipe 5, is the first case.
+*The first-500 workbook (`03-catalogue/`, Revision 4, 14 September) goes further
+on Ibrahim's instruction — "always suggest substitutes for the alcohol" — so
+every alcohol line carries one, not only the structural ones.*
+
+**"Contains alcohol" needs no new schema.** `alcohol` is already a `diet` class
+on the ingredient (§11) and `contains` derives from it (§26), so a recipe's
+alcohol content is computed from its ingredient list the way vegetarian and
+gluten-free are — and withheld, as they are, when any ingredient's `diet` is
+unset.
+
+**The claim is "alcohol-free", not "halal".** Alcohol content is provable from
+the ingredient reference. Halal is not: it also turns on how the meat was
+sourced and slaughtered, and on additives — gelatin, rennet — that nothing in
+the schema tracks. A wrong halal claim is §11's warning about `diet` ("a
+vegetarian claim wrong once costs a guest their dinner") made heavier, because
+it is a claim about religious observance. **Any badge or filter says
+alcohol-free; halal is not claimed** unless a real sourcing record stands
+behind it.
+
+**Open:**
+
+- Whether an alcohol-free badge or filter ships at all, and where it sits in
+  §16.7's still-open filter interaction model.
+- What a sourcing record behind a halal claim would have to be — schema,
+  supplier evidence, certification — if one is ever wanted.
+
+---
+
 ## Decision log
 
 | Date | Decision | Section |
@@ -1557,4 +1603,5 @@ display-preference setting.
 | 24 Sep 2026 | **Substitution scope and mechanism settled in part — PM-15's swappability question resolved.** **Substitutes are shopping-list-only and never enter the instruction set:** steps, technique and authored timers stay exactly as test-cooked (§6.1, and `availability-draft.md` §5's existing rejection of auto-substitution). **Mechanism is a rules table** keyed by (original, substitute) pairs, each carrying a consistent effect — a structured, reusable upgrade of D-15's informational prose note. **Two tiers:** packaged goods as brand/quality tiers side by side on the shopping list with no cooking impact, and the displayed `cost_per_serving` **pinned to one canonical tier (Class A)**, never an average or the cheapest; proteins carrying an attached rule that surfaces a **suggested timer adjustment, auto-applied but visibly flagged** and overridable in one tap, so the derivation is stated as such and the cook's judgement stays in a food-safety-relevant loop. **New UI scope: editing a timer's duration mid-session, logged under E-06.** **Left open:** one rules table or two for cuts and species; whether the packaged-goods tier layer earns its own governing document; and how the protein table relates to D-13's Cut Library while PM-12's scope is open. §22.2's remaining PM-15 items — the fish reference-species convention and whether the pilot must exercise substitutes — are untouched | 28, 22 |
 | 24 Sep 2026 | **Pricing data sourcing settled in part — P-01 de-risked, and an indicative-pricing engine opened.** **`agriprice.gov.eg/local-prices`, an official Egyptian government portal, is the primary source** — live and needing no negotiated access, which replaces the El-Obour relationship R-02 was written around. **Not a close:** coverage, data currency and weekly-cadence support are unverified. **The method is a compiled, multi-source pipeline** — the portal for wholesale and local commodity staples, plus direct collection from a small number of large chains for packaged goods, compiled into spreadsheets, reviewed, then adjusted; the first real description of the **P-03** mechanism, which still needs an owner, a cadence and tooling. **Collection cannot be uniform:** Carrefour Egypt blocks automated clients, so chains split into scrapable and manual. **L-05 is now concretely actionable** — a government portal's data and a retailer's posted prices likely carry different standing for reuse, and that is a real legal question rather than a hypothetical one. **New scope: an indicative-pricing engine** that normalises brand, weight and origin variance into one price per item on a standard-unit basis before applying a recipe's actual quantity; it feeds §28's tier system directly, because the canonical Class A rate is what `cost_per_serving` uses. **Open:** the normalisation formula, which chains and by which method, and P-03's owner, cadence and tooling | 29, 28 |
 | 20 Sep 2026 | **Units: three authored, the cook shows two — T-04 corrected.** Every ingredient record authors **imperial, metric and kitchen-measure** values; the cook picks in settings which two display side by side. No computed conversion and no mid-recipe toggle, both unchanged. Supersedes the dual-unit paragraphs of §6.7 and §11's 29 Aug household-measure addition without editing them. **Open:** field names and storage, the default pair, blanks for counted items, and authoring cost. Recorded in the competitor register on 20 Sept; filed here 24 Sept | 30 |
+| 2 Sep 2026 | **Wine, and what "halal" can claim.** No halal second version of a recipe — a fork, which §9 and §18.2 forbid. Where wine is structural, the line carries an authored `substitute` note, never auto-applied (and per the first-500 workbook, 14 Sept, every alcohol line carries one). "Contains alcohol" derives from the existing `diet` class with no new schema. **The claim is *alcohol-free*, never *halal*,** unless a real sourcing record stands behind it — halal turns on slaughter and additives the schema does not track. **Open:** whether a badge or filter ships, and what a halal sourcing record would need. Decided in chat 2 Sept; filed 24 Sept | 31 |
 
