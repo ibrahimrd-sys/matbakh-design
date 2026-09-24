@@ -1517,7 +1517,7 @@ line carries an authored substitute.** This is `availability-draft.md` §5's
 `note {kind: substitute}`: written once by the recipe's author, shown on the
 ingredient line, never applied automatically. Cost and nutrition compute from
 the wine as authored. Beef bourguignon, pilot recipe 5, is the first case.
-*The first-500 workbook (`03-catalogue/`, Revision 4, 14 September) goes further
+*The first-500 workbook (`PDF Files/Documentation/` in the vault, Revision 4, 14 September) goes further
 on Ibrahim's instruction — "always suggest substitutes for the alcohol" — so
 every alcohol line carries one, not only the structural ones.*
 
@@ -1554,7 +1554,7 @@ values; this supersedes it without editing it.*
 pork · vegetarian · mixed · none`.
 
 Lamb was missing, and nothing in the seven could hold it truthfully. The first
-candidate catalogue (`03-catalogue/matbakh_first_500_recipes.xlsx`) builds 27 of
+candidate catalogue (`PDF Files/Documentation/matbakh_first_500_recipes.xlsx`, in the vault) builds 27 of
 its 500 dishes on lamb — fattah, mansaf, tarb, kuzu tandır, rogan josh, lamb
 tagine — across the Egyptian, Levantine, Turkish, Gulf, Persian, Indian, Greek
 and North African cuisines. Filed under `beef`, a cook filtering for beef gets

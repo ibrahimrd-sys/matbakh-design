@@ -5,6 +5,13 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-24l — the first-500 workbook's new path
+
+**`philosophy.md` §31 and §32 re-pointed.** The vault filed its narrative and
+reference documents, the first-500 workbook among them, in a new
+`PDF Files/Documentation/` subfolder; both sections named the workbook's old
+place in `03-catalogue/`. No decision changes.
+
 ## 2026-09-24k — `main_protein` gains `lamb`
 
 **`philosophy.md` §32: eight values, not seven.** `beef · lamb · poultry ·
