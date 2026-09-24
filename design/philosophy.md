@@ -1456,6 +1456,49 @@ Left explicitly open:
 
 ---
 
+## 30. Units — three authored, the cook shows two — SETTLED (20 September 2026)
+
+*An addendum, per append-never-insert. It supersedes the dual-unit paragraphs of
+§6.7 and §11's 29 August household-measure addition without editing them; both
+still describe two units. Recorded on 20 September as the T-04 correction in the
+competitor register (`competitor-study-combined.md`, Appendix A) and filed here
+on 24 September — until then this file did not carry it.*
+
+## Addendum — 20 Sept 2026: three authored units, two displayed
+
+T-04 (accepted 29 Aug) displayed whatever two units were already entered for an
+ingredient — a mass and, where someone had entered one, a household measure.
+This is corrected.
+
+**New decision, settled 20 Sept 2026:**
+
+- **Every ingredient record authors three unit values** — imperial (oz, lb,
+  fl oz), metric (g, ml) and kitchen measure (cup, spoon).
+- **The cook chooses, in settings, which two of the three display**, and those
+  two show side by side on every quantity.
+- **Still no computed conversion.** All three are authored per ingredient and
+  none is derived; §6.7's reason — Egyptian cup and spoon sizes vary too much
+  for a conversion to be anything but a fabricated number — stands.
+- **Still no toggling mid-recipe.** The choice is a setting, not a control on
+  the cook page; §6.7's "rather than behind a toggle" is unchanged.
+
+**What it adds:** a third unit field on the ingredient record (§11) and a
+display-preference setting.
+
+**Not settled here, flagged:**
+
+- **Field names and storage** in `content/ref/ingredients.yaml`. None of the
+  three is in the schema yet — §11's household measure of 29 August was never
+  implemented either.
+- **The default pair**, before the cook has chosen.
+- **Ingredients with no sensible value in a unit** — counted items such as eggs,
+  or a pinch. The decision requires all three; whether a field may be blank, and
+  what displays when it is, is open.
+- **Authoring cost.** A third hand-entered value on every entry in the ingredient
+  reference; the register still rates T-04 **XS**.
+
+---
+
 ## Decision log
 
 | Date | Decision | Section |
@@ -1513,4 +1556,5 @@ Left explicitly open:
 | 24 Sep 2026 | **The monetisation fork resolved — M-01, M-02 and M-03 decided as one set.** **Build-to-own, Kurashiru-shaped** (retail media: audience first, retail relationship second, non-exclusive by construction — not the single-retailer exclusivity the study calls a trap), which resolves **PM-02**. **The free/paid boundary made concrete under §25's reversal:** raw weekly market prices stay **free forever** — NY-01 untouched and still irreversible — while the computed cost of a dish and the planner's costed week are **premium**; free is the raw data, premium is the data applied to a dish or a week. **Layer 3 confirmed as re-specified retail media** with a referral fee once a partnership is agreed. **Deliberately not decided:** the deal mechanic — flat referral, Kurashiru's points-back, or volume-tiered — which awaits a real retailer and is negotiation-prep material, not canon; **T-05** stays DEFER on the same grounds. **Benchmark of record: model referral at ~3%** (Instacart 3%, Kroger 1.6–4.8%, Ocado 3%), not the overstated 5% already corrected once in this project's documents. The numeric base case (**F-01**) still has to be run against this shape | 27, 25 |
 | 24 Sep 2026 | **Substitution scope and mechanism settled in part — PM-15's swappability question resolved.** **Substitutes are shopping-list-only and never enter the instruction set:** steps, technique and authored timers stay exactly as test-cooked (§6.1, and `availability-draft.md` §5's existing rejection of auto-substitution). **Mechanism is a rules table** keyed by (original, substitute) pairs, each carrying a consistent effect — a structured, reusable upgrade of D-15's informational prose note. **Two tiers:** packaged goods as brand/quality tiers side by side on the shopping list with no cooking impact, and the displayed `cost_per_serving` **pinned to one canonical tier (Class A)**, never an average or the cheapest; proteins carrying an attached rule that surfaces a **suggested timer adjustment, auto-applied but visibly flagged** and overridable in one tap, so the derivation is stated as such and the cook's judgement stays in a food-safety-relevant loop. **New UI scope: editing a timer's duration mid-session, logged under E-06.** **Left open:** one rules table or two for cuts and species; whether the packaged-goods tier layer earns its own governing document; and how the protein table relates to D-13's Cut Library while PM-12's scope is open. §22.2's remaining PM-15 items — the fish reference-species convention and whether the pilot must exercise substitutes — are untouched | 28, 22 |
 | 24 Sep 2026 | **Pricing data sourcing settled in part — P-01 de-risked, and an indicative-pricing engine opened.** **`agriprice.gov.eg/local-prices`, an official Egyptian government portal, is the primary source** — live and needing no negotiated access, which replaces the El-Obour relationship R-02 was written around. **Not a close:** coverage, data currency and weekly-cadence support are unverified. **The method is a compiled, multi-source pipeline** — the portal for wholesale and local commodity staples, plus direct collection from a small number of large chains for packaged goods, compiled into spreadsheets, reviewed, then adjusted; the first real description of the **P-03** mechanism, which still needs an owner, a cadence and tooling. **Collection cannot be uniform:** Carrefour Egypt blocks automated clients, so chains split into scrapable and manual. **L-05 is now concretely actionable** — a government portal's data and a retailer's posted prices likely carry different standing for reuse, and that is a real legal question rather than a hypothetical one. **New scope: an indicative-pricing engine** that normalises brand, weight and origin variance into one price per item on a standard-unit basis before applying a recipe's actual quantity; it feeds §28's tier system directly, because the canonical Class A rate is what `cost_per_serving` uses. **Open:** the normalisation formula, which chains and by which method, and P-03's owner, cadence and tooling | 29, 28 |
+| 20 Sep 2026 | **Units: three authored, the cook shows two — T-04 corrected.** Every ingredient record authors **imperial, metric and kitchen-measure** values; the cook picks in settings which two display side by side. No computed conversion and no mid-recipe toggle, both unchanged. Supersedes the dual-unit paragraphs of §6.7 and §11's 29 Aug household-measure addition without editing them. **Open:** field names and storage, the default pair, blanks for counted items, and authoring cost. Recorded in the competitor register on 20 Sept; filed here 24 Sept | 30 |
 

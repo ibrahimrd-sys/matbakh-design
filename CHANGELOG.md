@@ -5,6 +5,20 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-24i — three units authored, the cook shows two
+
+**`philosophy.md` §30 files the three-unit display.** Every ingredient record
+authors imperial, metric and kitchen-measure values; the cook chooses in
+settings which two display side by side. No computed conversion and no
+mid-recipe toggle — both unchanged from §6.7.
+
+- Decided 20 September as the correction to T-04 in the competitor register,
+  filed here 24 September. It supersedes the dual-unit paragraphs of §6.7 and
+  §11's 29 August household-measure addition without editing them.
+- **Not in the schema yet**, and neither is the 29 August household measure.
+  Field names, the default pair, blanks for counted items and authoring cost
+  are open; `manifest.yaml`'s `next_up` carries the schema step.
+
 ## 2026-09-24h — publish.sh prints the right Pages address
 
 **`publish.sh`'s closing line printed `…github.io/matbakh-design.git/`.** Its
