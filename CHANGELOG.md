@@ -5,6 +5,17 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-24k — `main_protein` gains `lamb`
+
+**`philosophy.md` §32: eight values, not seven.** `beef · lamb · poultry ·
+seafood · pork · vegetarian · mixed · none`. The candidate 500 builds 27 dishes
+on lamb across eight cuisines, and neither `beef` nor `mixed` could hold them
+truthfully. §26 stays as written; `tag-proposal.md` carries a pointer.
+
+- Game is not decided: the one game dish, rabbit, sits under `poultry` in the
+  workbook as a noted judgement.
+- The vault's first-500 workbook is re-mapped to the eight values (Revision 5).
+
 ## 2026-09-24j — wine, and what "halal" can claim
 
 **`philosophy.md` §31 files a 2 September decision that never reached canon.**

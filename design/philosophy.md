@@ -1545,6 +1545,32 @@ behind it.
 
 ---
 
+## 32. `main_protein` gains `lamb` — SETTLED (24 September 2026)
+
+*An addendum to §26, per append-never-insert. §26's list still reads seven
+values; this supersedes it without editing it.*
+
+**`main_protein` is a closed list of eight:** `beef · lamb · poultry · seafood ·
+pork · vegetarian · mixed · none`.
+
+Lamb was missing, and nothing in the seven could hold it truthfully. The first
+candidate catalogue (`03-catalogue/matbakh_first_500_recipes.xlsx`) builds 27 of
+its 500 dishes on lamb — fattah, mansaf, tarb, kuzu tandır, rogan josh, lamb
+tagine — across the Egyptian, Levantine, Turkish, Gulf, Persian, Indian, Greek
+and North African cuisines. Filed under `beef`, a cook filtering for beef gets
+mansaf; filed under `mixed`, the value stops meaning *two proteins at once*. The
+field is the dish's claim (§26), so the claim has to be one the cook would make.
+
+**Unchanged:** one value per dish; authored, not derived; `mixed` for two
+proteins at once, `none` for bread, pickles and drinks.
+
+**Not decided here:** game. The catalogue has one game dish, rabbit with
+freekeh, placed under `poultry` in the workbook as a judgement recorded on its
+row — rabbit is sold at the poultry shop in Egypt and cooked like it — not as a
+rule. A second game dish would be the moment to decide.
+
+---
+
 ## Decision log
 
 | Date | Decision | Section |
@@ -1604,4 +1630,5 @@ behind it.
 | 24 Sep 2026 | **Pricing data sourcing settled in part — P-01 de-risked, and an indicative-pricing engine opened.** **`agriprice.gov.eg/local-prices`, an official Egyptian government portal, is the primary source** — live and needing no negotiated access, which replaces the El-Obour relationship R-02 was written around. **Not a close:** coverage, data currency and weekly-cadence support are unverified. **The method is a compiled, multi-source pipeline** — the portal for wholesale and local commodity staples, plus direct collection from a small number of large chains for packaged goods, compiled into spreadsheets, reviewed, then adjusted; the first real description of the **P-03** mechanism, which still needs an owner, a cadence and tooling. **Collection cannot be uniform:** Carrefour Egypt blocks automated clients, so chains split into scrapable and manual. **L-05 is now concretely actionable** — a government portal's data and a retailer's posted prices likely carry different standing for reuse, and that is a real legal question rather than a hypothetical one. **New scope: an indicative-pricing engine** that normalises brand, weight and origin variance into one price per item on a standard-unit basis before applying a recipe's actual quantity; it feeds §28's tier system directly, because the canonical Class A rate is what `cost_per_serving` uses. **Open:** the normalisation formula, which chains and by which method, and P-03's owner, cadence and tooling | 29, 28 |
 | 20 Sep 2026 | **Units: three authored, the cook shows two — T-04 corrected.** Every ingredient record authors **imperial, metric and kitchen-measure** values; the cook picks in settings which two display side by side. No computed conversion and no mid-recipe toggle, both unchanged. Supersedes the dual-unit paragraphs of §6.7 and §11's 29 Aug household-measure addition without editing them. **Open:** field names and storage, the default pair, blanks for counted items, and authoring cost. Recorded in the competitor register on 20 Sept; filed here 24 Sept | 30 |
 | 2 Sep 2026 | **Wine, and what "halal" can claim.** No halal second version of a recipe — a fork, which §9 and §18.2 forbid. Where wine is structural, the line carries an authored `substitute` note, never auto-applied (and per the first-500 workbook, 14 Sept, every alcohol line carries one). "Contains alcohol" derives from the existing `diet` class with no new schema. **The claim is *alcohol-free*, never *halal*,** unless a real sourcing record stands behind it — halal turns on slaughter and additives the schema does not track. **Open:** whether a badge or filter ships, and what a halal sourcing record would need. Decided in chat 2 Sept; filed 24 Sept | 31 |
+| 24 Sep 2026 | **`main_protein` gains `lamb` — eight values.** `beef · lamb · poultry · seafood · pork · vegetarian · mixed · none`. Lamb carries 27 of the candidate 500 across eight cuisines, and neither `beef` nor `mixed` could hold it truthfully. Supersedes §26's seven without editing it. **Not decided:** game — one dish, rabbit, placed under `poultry` in the workbook as a noted judgement | 32 |
 

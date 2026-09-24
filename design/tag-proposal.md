@@ -76,6 +76,8 @@ planner knows not to suggest tahini sauce as a dish in its own right.
 
 `beef · poultry · seafood · pork · vegetarian · mixed · none`
 
+*Amended 24 September 2026: **`lamb` added** — eight values. See `philosophy.md` §32.*
+
 One value. **A new authored field, formalised at closure** — §16.7 has asked for
 protein since 1 August and the draft never gave it a field. It is authored
 rather than derived because it is the dish's *claim*, not its ingredient list: a
