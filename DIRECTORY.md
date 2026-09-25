@@ -104,7 +104,7 @@ screens render blank with no visible error.
 | `availability-draft.md` | **DRAFT** | Ingredient availability. Not settled. |
 | `icons/` (20 SVG) | **PLACEHOLDER** | Geometric stand-ins. **Where the production set comes from is open — PM-13:** Tabler Icons (MIT), which would need its licence text at `design/icons/LICENSE`, or originals drawn for Matbakh. This row used to name Tabler as settled; it was not. **The prototypes render these at full fidelity, so a reviewer reads them as the icon set. They are not.** C-05 is open. |
 | `icons/cuts/` (8 SVG) | **PLACEHOLDER** | The cut glyphs — a closed set on the same terms as the activity lexicon, but with no governing document yet. |
-| `icons/README.md` | **CANON** | Says plainly that the glyphs are placeholders. Read it before commissioning anything. **Its line naming Tabler as the production set predates PM-13** and is out of date. |
+| `icons/README.md` | **CANON** | Says plainly that the glyphs are placeholders. Read it before commissioning anything. Its line naming Tabler as the production set was corrected on 25 Sep to say the source is open (PM-13). |
 | `source/ios-frame.jsx` | — | Claude Design build artefact. Not shipped, not loaded by anything. |
 | ~~`philosophy_old.md`~~ | **REMOVED 26 Aug** | A placeholder header plus the music decision, which now lives in `philosophy.md §12` in full. Nothing referenced it. |
 

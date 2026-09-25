@@ -6,10 +6,12 @@
 no `fill`, no width/height on the root, three strokes or fewer where possible,
 nothing finer than 2px.
 
-The production set is **Tabler Icons (MIT)**. When it lands, replace these and
-add Tabler's licence text at `design/icons/LICENSE` — MIT requires it be
-retained. These files are original geometry and carry no third-party licence,
-so nothing is owed for them.
+**Where the production set comes from is not decided.** It is PM-13, open since
+5 September: map these glyphs onto **Tabler Icons (MIT)**, or draw originals for
+Matbakh. If it is Tabler, add its licence text at `design/icons/LICENSE` — MIT
+requires it be retained. *Until 25 September this paragraph named Tabler as the
+production set; that was never decided.* These files are original geometry and
+carry no third-party licence, so nothing is owed for them.
 
 ## What is here
 
