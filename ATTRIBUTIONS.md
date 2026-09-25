@@ -26,6 +26,8 @@ not check this for you, because only you know where each file came from.
 
 ## Icons
 
-Activity glyphs are geometric placeholders. The production set is Tabler Icons
-(MIT). MIT requires the licence text be retained — keep a copy at
-`design/icons/LICENSE` when the real set lands.
+Activity glyphs are geometric placeholders. **Where the production set comes
+from is not decided** (PM-13): Tabler Icons (MIT), or originals drawn for
+Matbakh. If it is Tabler, MIT requires the licence text be retained — keep a
+copy at `design/icons/LICENSE`; originals would owe nothing. The cut glyphs in
+`design/icons/cuts/` wait on the Cut Library's keying (PM-12) either way.

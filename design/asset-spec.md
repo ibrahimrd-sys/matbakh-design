@@ -50,7 +50,8 @@ everywhere, and the reverse is not true.
 - **SVG**, one file per glyph key, filename exactly the key: `chop.svg`,
   `simmer_covered.svg`. The lexicon's `glyph:` field is the filename.
 - **24 × 24 viewBox**, stroke-based, **2px stroke**, round caps and joins.
-  This is the Tabler geometry, and the production set is Tabler Icons (MIT).
+  This matches Tabler's geometry, so the spec holds whichever way PM-13 goes —
+  Tabler Icons (MIT) or originals drawn for Matbakh. The source is not decided.
 - **`stroke="currentColor"`, no `fill`.** The reader colours icons by state —
   ink for normal, terracotta for accent, green for a running timer, red for
   danger. A hardcoded colour breaks all four.
@@ -97,11 +98,16 @@ Two rules follow:
 ```
 design/icons/
   chop.svg  crush.svg  fry.svg  sear.svg  …
-  LICENSE            ← Tabler's MIT text, retained as the licence requires
+  LICENSE            ← only if the set is Tabler: its MIT text, retained as the licence requires
 ```
 
 Around 60 activity icons and perhaps 25 ingredient-category icons. Not 179 —
 ingredients share by category.
+
+The **cut glyphs** (`design/icons/cuts/`, eight placeholders today) are a
+separate count. Their set follows the Cut Library's keying (PM-12), which is
+still open and under research — it need not stay the same eight — so they are
+not sourced or commissioned until that lands, from Tabler or anywhere else.
 
 ---
 
