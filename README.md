@@ -191,6 +191,9 @@ is what stops a half-finished design becoming the first Matbakh result on Google
       out.
 - [ ] Consolidate the undeclared colours and retire the two deprecated tokens
       (`#C0562F`, `#FAF6EE`) that preflight still reports.
+      *On hold, 25 Sep 2026 — a decision is being considered: the prototype
+      colours were generated as samples and the colour work has not started.
+      Left as written until that decision is made.*
 - [ ] Leave `public: false` until launch.
 
 Done, and no longer on this list: the real `philosophy.md` is in place, `assets/`
