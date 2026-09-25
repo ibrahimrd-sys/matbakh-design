@@ -4,6 +4,8 @@
 Written 26 August 2026. Companion to `README.md`, which explains the *loop*;
 this explains the *contents*.
 
+**Last updated:** 2026-09-25
+
 The vault, `matbakh-private/`, has its own `DIRECTORY.md` beside this one. It is
 not described here — this file is in a public repository.
 
@@ -32,6 +34,7 @@ Every row below carries one of these. It is the whole point of this document.
 | **DRAFT** | Real work, not yet decided. Do not cite as settled. |
 | **WORKING** | A sheet made to answer one question. Disposable once answered. |
 | **PLACEHOLDER** | Stands in for something not yet made. Reads finished; is not. |
+| **CLOSED** | A proposal that has been decided. Kept as reference; the decision lives where the row says. |
 | **GUARD** | Part of the safety net that keeps the vault out of git. Change with care. |
 
 ---
@@ -40,13 +43,14 @@ Every row below carries one of these. It is the whole point of this document.
 
 | File | Status | What it is |
 |---|---|---|
-| `manifest.yaml` | **CANON** | The only file you edit when a screen is added, renamed or retired. Also holds `release:` (must be today's date to publish) and `public:` (false keeps `noindex` on every prototype). |
+| `manifest.yaml` | **CANON** | The only file you edit when a screen is added, renamed or retired. Also holds `release:` — today's date, with one lowercase letter added for a second or later publish that day (`2026.09.24`, then `.24b`, `.24c` …) — and `public:` (false keeps `noindex` on every prototype). Its `next_up:` list is the short queue shown in the site footer. |
 | `index.html` | **GENERATED** | The reviewer entry point. `build.py` overwrites it from `manifest.yaml`. Hand edits vanish. |
 | `build.py` | **CANON** | Preflight + generates `index.html`. `python3 build.py --check` checks and writes nothing. Errors block; warnings are the standing backlog. |
-| `publish.sh` | **CANON** | check → build → commit → push. Refuses to run unless `release:` is today. |
+| `publish.sh` | **CANON** | preflight and build → release stamp → leak check → commit → push, then prints the Pages address. Refuses unless `release:` is today's date or today's date plus one lowercase letter — **fixed 24 Sep**; before that it rejected the suffix convention the CHANGELOG had used since 18 Sep. |
 | `scan.sh` | **GUARD** | Audits all three vault defences at once. Run it if you ever doubt them. |
 | `setup-guards.sh` | **GUARD** | Restores `+x` and installs the pre-commit hook. **Run after every fresh clone.** |
 | `.githooks/pre-commit` | **GUARD** | Blocks any commit staging a path containing `matbakh-private` or `DO-NOT-COMMIT`, whatever tool made it. Uses `#!/bin/bash`, not `env bash` — GitHub Desktop's PATH cannot resolve the latter. |
+| `.githooks/post-commit` | — | A reminder, not a guard: after a commit that changes `design/philosophy.md`, it says the rendered `philosophy.pdf` kept outside this repository is now behind. Always exits 0 and blocks nothing. Installed with the pre-commit hook, via `core.hooksPath`. |
 | `.gitignore` | **GUARD** | Second line of defence. Names four whitelisted content files by hand; see §5. |
 | `import-screen.sh` | — | Imports a Claude Design export into `prototypes/` with a safe name. |
 | `README.md` | **CANON** | The loop, the preflight table, the reviewer notes. Kept under this name by deliberate exception — GitHub renders only `README.md` as the landing page. See §11. |
@@ -86,20 +90,21 @@ screens render blank with no visible error.
 
 | File | Status | What it is |
 |---|---|---|
-| `philosophy.md` | **CANON** | The settled decisions and the open questions, with a dated decision log. Renumbered around 13 August: anything written before then cites the old sections. `§16.4` is deliberately vacant — see the note in place. |
+| `philosophy.md` | **CANON** | The settled decisions and the open questions, with a dated decision log. Renumbered around 13 August: anything written before then cites the old sections. `§16.4` is deliberately vacant — see the note in place. **Append-never-insert:** a later decision is filed as an addendum that supersedes an earlier section *without editing it* — §25 supersedes §17, §30 the two-unit text of §6.7 and §11, §32 the `main_protein` list in §26 — so read to the end before citing a section. Runs to **§32** as of 25 Sep; its header carries the date of the last change. |
 | `authoring-standard.md` | **CANON** | How to enter a recipe, with all 21 enforced errors and 11 warnings documented. Author against this, not memory. Closes C-03. |
 | `asset-spec.md` | **CANON** | Photography craft, derived from real render geometry. WebP q82, 1600×1280 hero, 1400×1050 step, subject in the middle 65%. A lighting change reads to a cook as a doneness change. |
-| `tokens.css` | **CANON** | The palette and type scale. Not a suggestion — an invented terracotta once pushed the undeclared-colour warning from 30 to 48. |
+| `tokens.css` | **CANON** | The palette and type scale. Not a suggestion — an invented terracotta once pushed the undeclared-colour warning from 30 to 48. **But the UI has not been started (Ibrahim, 24 Sep):** the colours in the prototypes were generated as samples to see a screen on the iPhone, not chosen, so preflight's colour warnings are expected until the colour work begins — they are not a backlog to clear. |
 | `step-imagery-research.md` | **CANON** | The four options studied. Records *why* photographs cannot replace icons: at 17px they are eight indistinguishable brown pans. |
 | `step-imagery-decision.md` | **CANON** | The options as finally analysed, and the recommendation — **option E**, shoot the vocabulary once rather than the catalogue. It **supersedes** `step-imagery-research.md`'s option C, which it improves on rather than restates. CANON here means the analysis is canonical; **the decision is PM-09 and has not been taken.** Reading this row as "C is settled" is how PM-09 spent eleven days pointed at the superseded option. |
 | `storyboard-companion.md` | **CANON** | The storyboard companion. |
 | `Matbakh-storyboard-companion.pdf` | **GENERATED** | A render of the file above. Regenerate rather than edit; if the two disagree, the `.md` is right. |
-| `tag-proposal.md` | **DRAFT** | The tag vocabulary awaiting decision (PM-07). Carries a stale ingredient count — its backfill sizing was built on the wrong number. |
+| `tag-proposal.md` | **CLOSED 24 Sep** | The tag vocabulary as settled — PM-07, recorded in `philosophy.md` §26 — with what changed since the 1 August draft at its foot. Reference now, not a live proposal. **§32 (24 Sep) adds `lamb` to `main_protein`**, noted beside the list. |
 | `discovery-draft.md` | **DRAFT** | §16.1. Not settled. |
+| `worked-page-maps.md` | **WORKING** | Two hand-drawn recipes — beef enchilada skillet, chicken skewers with Thai curry — translated into the page grammar, 6 Sep, with the carrier named for every element. The third and fourth worked examples after `storyboard-companion.md` §7, and the first drawn *before* they were mapped, so they test the grammar against a hand that was not following it. |
 | `availability-draft.md` | **DRAFT** | Ingredient availability. Not settled. |
-| `icons/` (20 SVG) | **PLACEHOLDER** | Geometric stand-ins. The production set is Tabler Icons (MIT), which will need its licence text at `design/icons/LICENSE`. **The prototypes render these at full fidelity, so a reviewer reads them as the icon set. They are not.** C-05 is open. |
+| `icons/` (20 SVG) | **PLACEHOLDER** | Geometric stand-ins. **Where the production set comes from is open — PM-13:** Tabler Icons (MIT), which would need its licence text at `design/icons/LICENSE`, or originals drawn for Matbakh. This row used to name Tabler as settled; it was not. **The prototypes render these at full fidelity, so a reviewer reads them as the icon set. They are not.** C-05 is open. |
 | `icons/cuts/` (8 SVG) | **PLACEHOLDER** | The cut glyphs — a closed set on the same terms as the activity lexicon, but with no governing document yet. |
-| `icons/README.md` | **CANON** | Says plainly that the glyphs are placeholders. Read it before commissioning anything. |
+| `icons/README.md` | **CANON** | Says plainly that the glyphs are placeholders. Read it before commissioning anything. **Its line naming Tabler as the production set predates PM-13** and is out of date. |
 | `source/ios-frame.jsx` | — | Claude Design build artefact. Not shipped, not loaded by anything. |
 | ~~`philosophy_old.md`~~ | **REMOVED 26 Aug** | A placeholder header plus the music decision, which now lives in `philosophy.md §12` in full. Nothing referenced it. |
 
@@ -134,8 +139,10 @@ screens render blank with no visible error.
 | `README.md` | **CANON** | How it works and what it deliberately does not do. |
 | ~~`__pycache__/`~~ | **REMOVED 26 Aug** | Build junk. Already gitignored; it was only ever on disk. |
 
-> Standing caveat: the planner can only plan over *tagged* recipes, so it has
-> nothing real to work on until PM-07 lands and recipes exist.
+> Standing caveat: the planner can only plan over *tagged* recipes. The tag
+> vocabulary is settled (PM-07, closed 24 Sep), but `main_protein` is not in
+> the schema yet and no catalogue recipe is tagged, so it still has nothing
+> real to work on.
 
 ---
 
@@ -205,7 +212,8 @@ And the standing traps, which no cleanup removes:
 - **Never hand-type a measurable number.** Run `matbakh.py status`.
 - **A fresh clone with no vault validates against a 12-entry sample**, and says
   so on every run. Read that line first.
-- **`publish.sh` refuses unless `release:` is today's date.** Deliberate.
+- **`publish.sh` refuses unless `release:` is today's date**, optionally with one
+  lowercase letter for a later publish the same day. Deliberate.
 - **iOS Safari caches hard.** Cache-bust with `?v=n` or use a Private tab.
 - **Right-to-left mirrors things that are not sentences.** Isolate sequence
   indicators as LTR.
@@ -220,6 +228,7 @@ And the standing traps, which no cleanup removes:
 | | |
 |---|---|
 | Recipe catalogue, ingredient reference | `matbakh-private/03-catalogue/` |
+| The app itself (Flutter) | A separate private repository — not described here |
 | Project tracker (canonical) | `matbakh-private/02-strategy/matbakh_pm_log.md` |
 | Handover | `matbakh-private/02-strategy/handover-2026-08-20.md` |
 | Financials, strategy, research, partners, legal | `matbakh-private/01-` … `07-` |
