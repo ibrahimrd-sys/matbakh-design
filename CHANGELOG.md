@@ -5,6 +5,50 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-27b — ingredient art: either source, one base per family, the label disambiguates
+
+**Corrects part of `philosophy.md` §33, point 6, filed earlier this session.**
+Its source was given only as "hand-drawn or AI-generated", which read as one
+pipeline — a hand-drawn base, retouched by computer. What was decided:
+
+- **Source is hand-drawn *or* AI-generated, chosen per asset,** PNG either way.
+  The difference is methodology, not format or acceptability, and there is no
+  commitment to one pipeline for the whole layer.
+- **Retouch-group logic applies to the wheel, sauces included:** one base
+  illustration per shape or visual family, retouched for colour and variants,
+  with the ingredient's name label doing the disambiguation colour cannot — a
+  generic onion retouched and labelled *red onion* is honest here.
+- **Scoped to the wheel only.** The Cut Library keeps point 3's *would a photo
+  mislead* test, with no retouch-and-label fallback: the cook-mode layer is
+  near-wordless by design (§5.5), the wheel carries a name label as standard.
+  A filing note records that *inside step tiles* does not settle PM-09.
+
+## 2026-09-27 — the Cut Library is shot at the stove
+
+**`philosophy.md` §33 resolves PM-12, both halves.** Cuts are photographed only
+at test cooks, never at a scheduled shoot (KS-03), so the library's size is
+discovered through authoring rather than forecast — the ~30 vs ~130 question
+is retired, and §20.2's head-set afternoon with it. Each (ingredient, cut) pair
+is shot once, ever, and referenced by every recipe that needs it. §20 stays as
+written.
+
+- **Granularity is decided per pair, at the stove:** prep both variants side by
+  side and ask whether a cook aiming for one would be misled by a photo of the
+  other. Yes, two keys; no, one entry and `cut_mm` carries the difference.
+  Mince fine/coarse stays as C-09 ruled it. Every other pair — dice/brunoise and
+  julienne/baton included, whose separate glyphs do not pre-decide separate
+  keys — is tested when a real recipe first needs it.
+- **The library indexes itself by filename,**
+  `cut-library/<ingredient_id>__<cut_key>.jpg`, with no manifest to drift.
+- **New tooling, not built yet:** `matbakh.py cuts <recipe>.yaml` lists which
+  of a recipe's cuts are covered and which to shoot this session, and warns on
+  near-miss names (`onion__dice` beside `onion_yellow__dice`).
+- **Ingredient identity art is illustrated, never photographed,** from a
+  library separate from cut photography — a new tracked item (PM-17), kept
+  apart from the glyph-sourcing question (PM-13).
+- **Still open from §20.2:** the scale-reference convention (C-09's governing
+  note, now unblocked) and whether the board shot can instruct (C-06).
+
 ## 2026-09-24l — the first-500 workbook's new path
 
 **`philosophy.md` §31 and §32 re-pointed.** The vault filed its narrative and

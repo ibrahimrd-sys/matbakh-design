@@ -4,7 +4,7 @@
 Written 26 August 2026. Companion to `README.md`, which explains the *loop*;
 this explains the *contents*.
 
-**Last updated:** 2026-09-25
+**Last updated:** 2026-09-27
 
 The vault, `matbakh-private/`, has its own `DIRECTORY.md` beside this one. It is
 not described here — this file is in a public repository.
@@ -90,7 +90,7 @@ screens render blank with no visible error.
 
 | File | Status | What it is |
 |---|---|---|
-| `philosophy.md` | **CANON** | The settled decisions and the open questions, with a dated decision log. Renumbered around 13 August: anything written before then cites the old sections. `§16.4` is deliberately vacant — see the note in place. **Append-never-insert:** a later decision is filed as an addendum that supersedes an earlier section *without editing it* — §25 supersedes §17, §30 the two-unit text of §6.7 and §11, §32 the `main_protein` list in §26 — so read to the end before citing a section. Runs to **§32** as of 25 Sep; its header carries the date of the last change. |
+| `philosophy.md` | **CANON** | The settled decisions and the open questions, with a dated decision log. Renumbered around 13 August: anything written before then cites the old sections. `§16.4` is deliberately vacant — see the note in place. **Append-never-insert:** a later decision is filed as an addendum that supersedes an earlier section *without editing it* — §25 supersedes §17, §30 the two-unit text of §6.7 and §11, §32 the `main_protein` list in §26, §33 the scope and granularity half of §20.2 — so read to the end before citing a section. Runs to **§33** as of 27 Sep; its header carries the date of the last change. |
 | `authoring-standard.md` | **CANON** | How to enter a recipe, with all 21 enforced errors and 11 warnings documented. Author against this, not memory. Closes C-03. |
 | `asset-spec.md` | **CANON** | Photography craft, derived from real render geometry. WebP q82, 1600×1280 hero, 1400×1050 step, subject in the middle 65%. A lighting change reads to a cook as a doneness change. |
 | `tokens.css` | **CANON** | The palette and type scale. Not a suggestion — an invented terracotta once pushed the undeclared-colour warning from 30 to 48. **But the UI has not been started (Ibrahim, 24 Sep):** the colours in the prototypes were generated as samples to see a screen on the iPhone, not chosen, so preflight's colour warnings are expected until the colour work begins — they are not a backlog to clear. |

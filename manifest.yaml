@@ -18,7 +18,7 @@ project:
            a kitchen. Everything here is arranged around the counter-top
            posture — hands busy, attention divided, the screen propped an
            arm's length away.
-  release: "2026.09.24l"        # bump on every publish; shown in the header
+  release: "2026.09.27b"        # bump on every publish; shown in the header
   public: false                # false → noindex banner stays on the site
 
 # The headline prototype. Exactly one.
@@ -131,5 +131,6 @@ next_up:
   - Fold `main_protein` into the recipe schema, the validator and the authoring standard (PM-07 closed 24 Sept)
   - Add the three unit fields and the display-preference setting to the ingredient schema (§30, T-04)
   - Call the tool-glyph question before sourcing icons (C-05, §21.2)
+  - Build `matbakh.py cuts` — a recipe's cuts against `cut-library/`, covered vs to shoot, near-miss names warned (§33, E-12)
   - Discovery (§16.1)
   - Meal planner screen (§16.3)

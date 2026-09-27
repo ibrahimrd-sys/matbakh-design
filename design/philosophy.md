@@ -2,7 +2,7 @@
 
 **Status:** Living document. Sections marked SETTLED are decided and should not be relitigated without a stated reason. Sections marked OPEN are unresolved.
 
-**Last updated:** 2026-09-24
+**Last updated:** 2026-09-27
 
 ---
 
@@ -1571,6 +1571,116 @@ rule. A second game dish would be the moment to decide.
 
 ---
 
+## 33. The Cut Library's open half — SETTLED (27 September 2026)
+
+*An addendum to §20 (D-13), per append-never-insert. §20.2 still reads OPEN;
+this supersedes its first item — scope and granularity — without editing it.*
+
+## Addendum — 27 Sept 2026: PM-12 resolved — Cut Library shooting model, keying protocol, and tooling
+
+Both halves of PM-12 (opened 5 Sept — scope and granularity of the Cut Library
+key) are now resolved, along with three related decisions.
+
+**1. Cut photography happens only at test-cook time, never as a separate
+scheduled shoot.** A cut is captured the first time a recipe that needs it is
+physically tested — consistent with KS-03 (*never shoot an untested recipe*),
+since the test-cook session is already happening regardless. This also resolves
+PM-12's scope half without needing to predict a number: the library's total size
+is now an emergent fact, discovered through authoring over time, not a figure to
+commission or forecast upfront. The ~30 vs ~130 estimate is no longer the
+operative question, and §20.2's *one afternoon* head-set test and its
+eight-of-ten rule are retired with it as the scoping instrument.
+
+**2. Each (ingredient, cut) pair is shot exactly once, ever, then referenced by
+every recipe that needs it.** Standard D-13 economics — amortised
+catalogue-wide from a fixed asset — now with the shooting mechanism specified
+rather than left as *a scheduled library shoot*. §20.1's *keyed to the activity
+lexicon* is made concrete here: the key is an ingredient plus a cut key.
+
+**3. Granularity — whether a qualifier earns its own key or rides on `cut_mm` —
+is decided empirically, per pair, at the test cook, not pre-scoped from a
+list.** Protocol: prep both variants side by side and ask *would a cook be
+misled, aiming for one, if shown only a photo of the other?*
+
+- **Yes** → two library entries, two separate keys
+- **No** → one library entry, and `cut_mm` (a number) carries the difference
+
+This does not reopen the mince fine/coarse case. That pair was already ruled on
+by C-09 and answered *no*, which is why `qualifier: fine` was deleted in favour
+of `cut_mm`; that ruling stands. **Every other pair is resolved the first time a
+real recipe needs it, at the stove, by whoever is testing that recipe** — slice
+thin/wide, chiffonade fine/wide, wedge size, any not yet encountered, and also
+**dice/brunoise and julienne/baton**. Those two keep their separate glyphs in
+the existing eight-glyph cut vocabulary (`design/icons/cuts/`), but a separate
+glyph does not pre-decide a separate library key. Note that C-09's own
+rationale — *brunoise and dice are the same shape at different sizes* — is
+the case this test is built to answer *no* to. How a pair that splits spells its
+two keys is decided at the first split, not here.
+
+**4. The library self-indexes by filename — no separate manifest.** Convention:
+`cut-library/<ingredient_id>__<cut_key>.jpg`. The folder on disk is the single
+source of truth for what exists; there is no index file that can drift out of
+sync with it.
+
+**5. New tooling: `matbakh.py cuts <recipe>.yaml`.** Checks a recipe's authored
+`cut:` fields against what is on disk in `cut-library/` and prints which pairs
+are already covered and which need shooting this session. It slots into the
+Definition of Done checklist (`authoring-standard.md` §7) alongside
+`matbakh.py check`, run before heading to the stove. Near-miss filenames — for
+example `onion__dice` beside `onion_yellow__dice` — are flagged as a warning,
+not silently treated as distinct, to catch naming drift early. *Not built yet;
+tracked as E-12. The checklist line is added when the command exists.*
+
+**6. Raw ingredient identity — the ingredients-wheel graphics — is illustrated,
+never photographed, and sourced from a separate library from cut
+photography.** This reverses the current prototype, which uses photographed
+ingredient images on that screen; existing prototype assets there need
+replacing, not just extending. It is tracked as a new item, **PM-17**. It is a
+different question from **PM-13** (action and cut glyph sourcing) and was
+deliberately not folded into it, for the same drift-prevention reason PM-12 was
+kept separate from PM-09.
+
+**Source: hand-drawn OR AI-generated — either is acceptable, output is a PNG
+either way. The difference between the two is methodology, not format or
+acceptability.** This is a source choice per asset, not a commitment to one
+pipeline for the whole layer.
+
+**Retouch-group logic applies to this layer, sauces included.** One base
+illustration per shape/visual family, computer-retouched for colour/variant
+differences, with the ingredient name label doing the disambiguation work
+colour alone can't — e.g. a generic onion illustration retouched and labelled
+*red onion* is honest here, in a way it was explicitly NOT for the Cut Library,
+because the wheel already permits a text label (§5.1) as the name of the thing,
+and nearby prepared-cut photography inside step tiles deliberately does not
+rely on a label as its disambiguator (see point 3's *would a photo mislead*
+test, which governs that layer instead and is unaffected by this one).
+*Filing note: "inside step tiles" names where cut photography sits relative to
+the wheel; it does not settle what the 44 px tile carries, which stays open
+under PM-09 (§5.5, §16.6).*
+
+**Explicitly scoped to the wheel/raw-identity layer only.** This does NOT
+extend to, alter, or reopen the Cut Library (D-13/PM-12) keying protocol filed
+in the same session — prepared cuts inside step tiles keep the *shoot both if a
+photo would mislead* test, not a retouch+label fallback. The two layers use
+different disambiguation mechanisms on purpose: one is near-wordless by design
+(§5.5), the other already carries a name label as standard practice.
+
+*Corrected 27 Sept, same session, before either repository was committed: the
+first wording of this point gave the source only as "hand-drawn or
+AI-generated", which was read as a hand-drawn base retouched by computer. The
+three paragraphs above are what was decided.* *Checked at filing: the ingredients screen in
+`prototypes/app-iphone.html` draws glyphs, and the photographs in the tracked
+prototypes are cook-mode doneness frames. The photographed ingredient images
+this point replaces were not found in either repository, so the set to replace
+is still to be identified.*
+
+**Still open from §20.2, and not part of PM-12:** the scale-reference
+convention, owed in C-09's governing note, which the settled key now unblocks;
+and whether the board shot can instruct unaided, which C-06's cut-coverage
+judgement measures.
+
+---
+
 ## Decision log
 
 | Date | Decision | Section |
@@ -1631,4 +1741,5 @@ rule. A second game dish would be the moment to decide.
 | 20 Sep 2026 | **Units: three authored, the cook shows two — T-04 corrected.** Every ingredient record authors **imperial, metric and kitchen-measure** values; the cook picks in settings which two display side by side. No computed conversion and no mid-recipe toggle, both unchanged. Supersedes the dual-unit paragraphs of §6.7 and §11's 29 Aug household-measure addition without editing them. **Open:** field names and storage, the default pair, blanks for counted items, and authoring cost. Recorded in the competitor register on 20 Sept; filed here 24 Sept | 30 |
 | 2 Sep 2026 | **Wine, and what "halal" can claim.** No halal second version of a recipe — a fork, which §9 and §18.2 forbid. Where wine is structural, the line carries an authored `substitute` note, never auto-applied (and per the first-500 workbook, 14 Sept, every alcohol line carries one). "Contains alcohol" derives from the existing `diet` class with no new schema. **The claim is *alcohol-free*, never *halal*,** unless a real sourcing record stands behind it — halal turns on slaughter and additives the schema does not track. **Open:** whether a badge or filter ships, and what a halal sourcing record would need. Decided in chat 2 Sept; filed 24 Sept | 31 |
 | 24 Sep 2026 | **`main_protein` gains `lamb` — eight values.** `beef · lamb · poultry · seafood · pork · vegetarian · mixed · none`. Lamb carries 27 of the candidate 500 across eight cuisines, and neither `beef` nor `mixed` could hold it truthfully. Supersedes §26's seven without editing it. **Not decided:** game — one dish, rabbit, placed under `poultry` in the workbook as a noted judgement | 32 |
+| 27 Sep 2026 | **PM-12 resolved — the Cut Library's scope, granularity and keying.** **Cuts are shot only at test cooks**, never at a scheduled shoot (KS-03), so the library's size is emergent rather than forecast and the ~30/~130 question is retired. **Each (ingredient, cut) pair is shot once, ever**, and referenced by every recipe that needs it. **Granularity is decided per pair at the stove:** prep both variants side by side — *would a cook be misled, aiming for one, if shown only a photo of the other?* Yes, two keys; no, one entry with `cut_mm` carrying the difference. Mince fine/coarse stays as C-09 ruled it; every other pair, dice/brunoise and julienne/baton included, is tested when a real recipe first needs it. **The library indexes itself by filename**, `cut-library/<ingredient_id>__<cut_key>.jpg`, with no manifest. **New tooling:** `matbakh.py cuts <recipe>.yaml` reports covered and to-shoot pairs and warns on near-miss names (E-12). **Ingredient identity art is illustrated, never photographed**, from a separate library — tracked as **PM-17**, kept apart from PM-13. **Its source is hand-drawn or AI-generated, chosen per asset, PNG either way**; one base illustration per visual family, sauces included, is retouched for variants, with the name label doing the disambiguation colour cannot — a retouch-and-label mechanism that is **scoped to the wheel and does not reach the Cut Library**, whose disambiguator stays the photograph (point 3). **Still open under §20.2:** the scale-reference note (C-09) and board sufficiency (C-06) | 33, 20 |
 
