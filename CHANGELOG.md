@@ -5,6 +5,16 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-27c — the cut glyphs stop waiting on PM-12
+
+**Three pointers brought level with §33.** `asset-spec.md`, `ATTRIBUTIONS.md`
+and the README checklist said the cut glyphs wait on the Cut Library's keying
+(PM-12). PM-12 closed today: photo keys are (ingredient, cut), each pair's
+granularity is settled at its test cook, and a separate glyph does not
+pre-decide a separate key. The glyphs' source is PM-13, like the activity set.
+Whether a pair that splits ever needs its own glyph is not decided. No decision
+changes.
+
 ## 2026-09-27b — ingredient art: either source, one base per family, the label disambiguates
 
 **Corrects part of `philosophy.md` §33, point 6, filed earlier this session.**

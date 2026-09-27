@@ -105,9 +105,13 @@ Around 60 activity icons and perhaps 25 ingredient-category icons. Not 179 —
 ingredients share by category.
 
 The **cut glyphs** (`design/icons/cuts/`, eight placeholders today) are a
-separate count. Their set follows the Cut Library's keying (PM-12), which is
-still open and under research — it need not stay the same eight — so they are
-not sourced or commissioned until that lands, from Tabler or anywhere else.
+separate count. They no longer wait on the Cut Library's keying: PM-12 closed
+on 27 September (`philosophy.md` §33). The library keys its *photographs* by
+(ingredient, cut) and decides each pair's granularity at its test cook, and a
+separate glyph does not pre-decide a separate photo key, so the photo keys can
+outgrow the eight glyphs without changing them. Whether a pair that splits ever
+needs a glyph of its own is not decided. Where the glyphs come from is PM-13,
+the same as for the activity set.
 
 ---
 

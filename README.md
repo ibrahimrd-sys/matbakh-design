@@ -1,6 +1,6 @@
 # Matbakh — application design
 
-*Repository landing page. Refreshed 26 August 2026; last updated 25 September 2026.*
+*Repository landing page. Refreshed 26 August 2026; last updated 27 September 2026.*
 
 Hi-fi prototypes and the design system behind them. This folder is the single
 place the design lives; everything a reviewer needs is reachable from
@@ -184,8 +184,9 @@ is what stops a half-finished design becoming the first Matbakh result on Google
       stand-ins that render at full fidelity, so a reviewer reads them as the
       icon set. **Where the real set comes from is PM-13, still open** — Tabler
       Icons (MIT), whose licence text would go at `design/icons/LICENSE`, or
-      originals drawn for Matbakh. The cut glyphs wait on the Cut Library's
-      keying (PM-12) either way.
+      originals drawn for Matbakh. The cut glyphs are part of the same
+      decision; the Cut Library's keying they used to wait on was settled on
+      27 September (PM-12, `philosophy.md` §33).
 - [ ] **Decide the bolognese prototype.** It is tagged `TEMPORARY` and exists to
       settle one question. Say yes or no, write it into `philosophy.md`, take it
       out.
