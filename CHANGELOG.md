@@ -5,6 +5,41 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-28b — the Osso Buco walkthrough: pages, heat, utensils, purchased cuts, feedback
+
+**`philosophy.md` §34–§38**, from walking a braised Osso Buco through the page
+grammar as a design exemplar. It is not a catalogue recipe: no recipe file, and
+the source card images are not in the repository. Labels are kept as decided:
+DECIDED, PROPOSED, OPEN, DRAFT.
+
+- **§34 — page composition, time and timers.** DECIDED: a page groups
+  activities done in sequence, in a short time, with one utensil at one station,
+  ordered or not — superseding the grouping wording of §3 principle 4 and §4.1,
+  including the sear/deglaze example, without editing them. The board is one
+  arrangement of cut results, like the ingredients wheel. Preparations are made
+  upfront unless they depend on another step or degrade. Time sits next to its
+  ingredients as live text: one ≈ number for attended activities, an exact timer
+  only for activities the cook could leave. Quantities show only where an
+  ingredient is used partly. One language on screen; every recipe ends on a
+  finished-product photo. PROPOSED: a page-level `utensil` field; derived
+  partial quantities.
+- **§35 — heat, fat, `flip`.** DECIDED: five heat levels, L to H, in colour;
+  existing `heat` 1–3 map to 1, 3, 5 when it ships, with no data changed now;
+  fat states as variants of the fat layer; `flip` as a class-N verb, taking the
+  lexicon to 82 — computed, never typed. OPEN: `cover`.
+- **§36 — utensils.** DECIDED: an illustrated utensil library, drawn once. The
+  layered step page — utensil base, ingredient layers — is PM-09's **leading
+  candidate**, a working design for the pilot to judge. PM-09 is not closed.
+- **§37 — purchased cuts.** DECIDED: the Cut Library holds butcher's cuts where
+  the form matters (`veal_shank__osso_buco_slice`), and prepared cuts are never
+  AI-generated.
+- **§38 — feedback.** DECIDED: T-06 — a private report card on the finished
+  page, opening a report page with the page map. A community was raised, not
+  decided; §8 stands.
+- **New DRAFT file:** `design/activity-attendance-draft.md`, the 81 activities
+  sorted by attendance, checked against `activities.yaml`. Not applied to it.
+- `activities.yaml`, recipes and the schema are unchanged.
+
 ## 2026-09-28 — no head-set cuts in the worked maps
 
 **`design/worked-page-maps.md` brought level with §33.** It called `dice`,

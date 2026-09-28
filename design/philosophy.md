@@ -2,7 +2,7 @@
 
 **Status:** Living document. Sections marked SETTLED are decided and should not be relitigated without a stated reason. Sections marked OPEN are unresolved.
 
-**Last updated:** 2026-09-27
+**Last updated:** 2026-09-28
 
 ---
 
@@ -1681,6 +1681,201 @@ judgement measures.
 
 ---
 
+## 34. Page composition, time and timers — SETTLED IN PART (28 September 2026)
+
+*Supersedes the grouping wording of §3 principle 4 and §4.1 only — including
+§4.1's example that "Sear the chicken" and "deglaze" are two pages. Neither is
+edited; the rest of both stands.*
+
+## Addendum — 28 Sept 2026: Osso Buco walkthrough — page composition, time and timers
+
+Decided in chat walking a braised Osso Buco through the page grammar, as a
+design exemplar for the graphic style. It is not a catalogue recipe, and no
+recipe file exists for it.
+
+- **DECIDED. Grouping rule:** group activities done in sequence, in a short
+  time, with the same utensil, at the same station, on one page as far as
+  possible. This widens §4.1 (order-independent, one station) to: one station,
+  one utensil, short time, ordered or not. `ordered: true` already permits it;
+  the change is to the rule's wording.
+- **PROPOSED.** A page-level `utensil` field, so the validator can enforce one
+  vessel per page and derive vessels for the equipment list (bears on
+  PM-14(b)). A page ends at a change of station or utensil, or right after an
+  unattended activity, so a timer is always on the last tile of its page.
+- **DECIDED. Board page:** one arrangement of the cut results, laid out like the
+  ingredients wheel (item image, quantity, cut digit), not a row per cut. Data
+  may stay one tile per cut, so check-off and validation are unchanged; only
+  rendering changes. Extra tiles appear only for real preparation (e.g. mixing)
+  that makes an intermediate.
+- **DECIDED. Preparations are made upfront on the board**, unless they depend on
+  another step or degrade while waiting; the test cook judges the second case.
+  Gremolata is prepared upfront (`makes: gremolata`) and consumed on the
+  finishing page.
+- **DECIDED. Time is shown next to the ingredient(s) it applies to**, as a live
+  text layer (§5.4), never inside artwork. An approximate time is one number
+  with ≈ (no min–max form). Attended activities always show ≈ as guidance;
+  unattended ones get an exact timer, advisory beside the doneness photo where
+  mass-sensitive (§6.6). The ≈ is derived from the activity's class, not
+  authored.
+- **DECIDED. A timer is a per-activity attribute:** only activities that can run
+  without attendance get one. Test: *could the cook leave the pan for the whole
+  duration without ruining the dish or being hurt?*
+- **DRAFT.** The classification is in `design/activity-attendance-draft.md`. It
+  is not written into `activities.yaml` until Ibrahim confirms it.
+- **DECIDED. A tile shows a quantity only when an ingredient in the ingredients
+  list is used only partly in that step.** **PROPOSED:** derive it (tile amount
+  less than the ingredient's total across the recipe), so authors never mark
+  it.
+- **DECIDED. The authoring standard's stated reader** is a cook with basic
+  cooking literacy (*half-literate in cooking*).
+- **DECIDED. One language on screen at a time;** the bilingual display in the
+  prototypes is a review convenience only.
+- **DECIDED. Every recipe ends with a finished-product photo page** (station
+  `serve`). **PROPOSED:** it shows only what the recipe makes; a side dish in
+  frame is a linked recipe or out of frame.
+
+*Filing note: the old grouping wording is quoted, and not edited, in
+`authoring-standard.md` (the page rule in §4), `storyboard-companion.md`,
+`prototypes/storyboard-bench-sheet.html` and `step-imagery-research.md`, and
+§16.5 here still calls §4.1's order-independence rule its operationalisation.
+In the vault, `competitor-study-combined.md` cites it in four places, one of
+them the do-not-take reason for Kitchen Stories' 3–7-step granularity.*
+
+---
+
+## 35. Heat scale, fat states, `flip` — SETTLED IN PART (28 September 2026)
+
+*Supersedes §5.2's heat line — a three-segment ordinal glyph — on the number of
+levels and the carrier only. §5.2 is not edited; spice level, which §5.2 says
+shares that mechanism, is unchanged.*
+
+## Addendum — 28 Sept 2026: heat in five levels, fat states, and `flip`
+
+- **DECIDED. Heat has five levels, L / ML / M / MH / H,** shown in colour (blue,
+  light blue, light blue with orange, orange, red). A designated temperature is
+  boxed. The app shows either a thermometer with digits or the graphic level,
+  chosen per case at authoring. Heat sits on the page by default and on a tile
+  where it changes within a page.
+- **DECIDED. Existing `heat` 1, 2, 3 map to 1, 3, 5 (L, M, H)** when the scale
+  ships; ML and MH are new. No data changes now. *At filing, three recipe files
+  carry `heat:` — the vault's `bolognese.yaml` (7 lines) and `molokhia.yaml`
+  (5), and the repo's `molokhia_bil_farakh.yaml` fixture (5) — plus the
+  template's placeholder.*
+- **PROPOSED.** A second cue that does not rely on colour (a five-segment bar
+  filled to the level, extending today's three-bar indicator), and a check that
+  level 5 cannot be mistaken for the alarm colour. Unconfirmed.
+- **DECIDED. Fat states,** shown as variants of the fat layer and chosen from a
+  list at authoring. Oil and ghee/samna: added, hot (shimmering), smoking.
+  Butter: melted, foaming, foam settled (ready), browned (only where wanted),
+  burnt. Only the fat layer has states. Smoking and burnt are never shown as
+  targets and fall under the `never` note. The fat used at test-cook is
+  recorded with the recipe.
+- **DECIDED. `flip` is a verb, class N;** the second side's ≈ time is authored on
+  that tile. It needs a curved-arrow glyph and a word in all five locales, each
+  distinct within its dialect. The lexicon count becomes 82 and must be
+  computed, never typed. It is an **exception to the pilot-time lexicon
+  freeze**, logged as one on C-05. `activities.yaml` is NOT edited by this
+  filing.
+- **OPEN.** `cover` (lid on) is not among the 81: a second candidate verb.
+  Upfront intermediates may also need a hold cue.
+
+*Filing note: "81" is typed as the lexicon count in `activities.yaml`'s header
+comment and a comment in `matbakh.py`, in this file, `authoring-standard.md`,
+`step-imagery-decision.md`, `step-imagery-research.md`,
+`storyboard-companion.md`, `worked-page-maps.md`, `DIRECTORY.md`, two
+prototypes and the recipe editor, and in the vault's PM log, pilot scheme,
+competitor study, market documents and `DIRECTORY.md`. None is edited here.
+`matbakh.py status` already computes the count.*
+
+---
+
+## 36. Utensil and equipment library; page illustration — SETTLED IN PART (28 September 2026)
+
+*Bears on D-14 / PM-14 / KS-05 / KS-06 and PM-09. Supersedes nothing: §21.2's
+carrier question stays open, and this records its leading candidate.*
+
+## Addendum — 28 Sept 2026: an illustrated utensil library, and the layered step page
+
+- **DECIDED. Utensils and equipment are an illustrated library** (hand-drawn or
+  AI-generated, PNG either way), each drawn once and reused. It is a separate
+  library from PM-17's raw-ingredient art (§33 point 6).
+- **DECIDED (working design, not closed).** On step pages the utensil is the base
+  of the action illustration with ingredient layers on top (e.g. pan, fat,
+  protein), each layer a separate PNG so digits, times and temperatures stay
+  live text (§5.4). This is not the per-step equipment list KS-06 rejected. It
+  is the last open PM-09 question (whether a utensil appears as a visual
+  element), so it is recorded as the **leading candidate carrier**, to be judged
+  in the pilot's Tile judgements. **PM-09 is NOT closed.**
+- **DECIDED.** The library also appears on the pre-commit equipment check
+  (§16.2).
+- **OBSERVATION** (Ibrahim's, recorded nowhere else). Illustration lowers the
+  cost of D-14's locale-bound problem: a second locale's drawing is cheap where
+  a second shoot was not.
+- **OPEN.** Legibility of a layered scene at the 44 px tile, and fit on one phone
+  screen without scrolling (needs one prototype page). **PROPOSED:** a
+  `matbakh.py equipment` check like `cuts`. PM-14(b): authored `equipment:`
+  list versus derived from a page utensil field.
+
+*Filing note, on the register's do-not-take row "AI-generated step imagery or
+video" (recognisable dish, wrong stage): that rejection covers AI depictions of
+a dish at a stage of cooking. These layers are reusable illustrated components,
+drawn once and composed per page, and the doneness photograph — the stage of
+the actual dish — stays a real photograph (§5.5). The row stands unchanged.*
+
+---
+
+## 37. Purchased cuts in the Cut Library — SETTLED IN PART (28 September 2026)
+
+*Extends §20 and §33 (D-13) to purchased cuts; neither is edited. Answers one of
+§28's open questions.*
+
+## Addendum — 28 Sept 2026: purchased cuts, and prepared cuts are never AI-generated
+
+- **DECIDED — a clarification of §33.** Prepared cuts are never AI-generated:
+  they are always shot at the test cook. The earlier split — real photography
+  for common cuts, AI for the rare tail — was withdrawn for cuts, and survives
+  only for raw-ingredient wheel art (PM-17).
+- **DECIDED (option A).** The register also holds purchased (butcher's) cuts for
+  proteins where the purchased form matters, e.g.
+  `veal_shank__osso_buco_slice`: one raw shot at the first test cook, reused by
+  the shopping list and the step page. Vegetables arrive uncut and are not
+  included. This extends D-13 and answers PM-15's question whether the protein
+  substitution table relates to D-13: yes, through the register's keys.
+- **OPEN.** Whether one rules table covers cuts and species (unchanged).
+- `matbakh.py cuts` reads authored `cut:` fields, so a purchased cut needs its
+  own authored field or it passes silently. Logged as scope on E-12.
+
+---
+
+## 38. Feedback, T-06, community — SETTLED IN PART (28 September 2026)
+
+*Supersedes nothing: §8 stands unchanged. Takes T-06 from the register.*
+
+## Addendum — 28 Sept 2026: the report card, and a community raised but not decided
+
+- **DECIDED. T-06 is taken.** A private feedback card sits on the
+  finished-product page. If the cook chooses to report, it opens a report page
+  that shows the page map, so the cook taps the step that went wrong, with no
+  typing. Nothing is ever shown to other users (§8 unchanged). It sits outside
+  cook mode.
+- Abandon-step telemetry (§8's most valuable signal) stays passive; the card
+  reaches only cooks who finish.
+- **RAISED, NOT DECIDED.** A team member favours user interaction, possibly a
+  community, with publishing later. §8 is settled and the study's do-not-take
+  list stands until reopened deliberately as its own item (PM-19). It must not
+  enter through the feedback card. Non-publishing alternatives, noted and not
+  decided: replying to reports ("fixed"), and sharing the finished photo to the
+  cook's own accounts.
+- **OPEN.** Poultry, pork and mince cooked through in a pan: a time alone is a
+  food-safety gap, and doneness and photo are meant to travel together.
+  **PROPOSED, not decided:** one standing "cooked through" note attached by
+  ingredient class (the reference already carries `diet: poultry / pork /
+  meat`). *Checked at filing: those classes exist — chicken carries
+  `[meat, poultry]` — but mince is not a class, so minced beef and a steak
+  cannot be told apart by `diet` alone.*
+
+---
+
 ## Decision log
 
 | Date | Decision | Section |
@@ -1742,4 +1937,8 @@ judgement measures.
 | 2 Sep 2026 | **Wine, and what "halal" can claim.** No halal second version of a recipe — a fork, which §9 and §18.2 forbid. Where wine is structural, the line carries an authored `substitute` note, never auto-applied (and per the first-500 workbook, 14 Sept, every alcohol line carries one). "Contains alcohol" derives from the existing `diet` class with no new schema. **The claim is *alcohol-free*, never *halal*,** unless a real sourcing record stands behind it — halal turns on slaughter and additives the schema does not track. **Open:** whether a badge or filter ships, and what a halal sourcing record would need. Decided in chat 2 Sept; filed 24 Sept | 31 |
 | 24 Sep 2026 | **`main_protein` gains `lamb` — eight values.** `beef · lamb · poultry · seafood · pork · vegetarian · mixed · none`. Lamb carries 27 of the candidate 500 across eight cuisines, and neither `beef` nor `mixed` could hold it truthfully. Supersedes §26's seven without editing it. **Not decided:** game — one dish, rabbit, placed under `poultry` in the workbook as a noted judgement | 32 |
 | 27 Sep 2026 | **PM-12 resolved — the Cut Library's scope, granularity and keying.** **Cuts are shot only at test cooks**, never at a scheduled shoot (KS-03), so the library's size is emergent rather than forecast and the ~30/~130 question is retired. **Each (ingredient, cut) pair is shot once, ever**, and referenced by every recipe that needs it. **Granularity is decided per pair at the stove:** prep both variants side by side — *would a cook be misled, aiming for one, if shown only a photo of the other?* Yes, two keys; no, one entry with `cut_mm` carrying the difference. Mince fine/coarse stays as C-09 ruled it; every other pair, dice/brunoise and julienne/baton included, is tested when a real recipe first needs it. **The library indexes itself by filename**, `cut-library/<ingredient_id>__<cut_key>.jpg`, with no manifest. **New tooling:** `matbakh.py cuts <recipe>.yaml` reports covered and to-shoot pairs and warns on near-miss names (E-12). **Ingredient identity art is illustrated, never photographed**, from a separate library — tracked as **PM-17**, kept apart from PM-13. **Its source is hand-drawn or AI-generated, chosen per asset, PNG either way**; one base illustration per visual family, sauces included, is retouched for variants, with the name label doing the disambiguation colour cannot — a retouch-and-label mechanism that is **scoped to the wheel and does not reach the Cut Library**, whose disambiguator stays the photograph (point 3). **Still open under §20.2:** the scale-reference note (C-09) and board sufficiency (C-06) | 33, 20 |
-
+| 28 Sep 2026 | **Page composition, time and timers (the Osso Buco walkthrough).** **DECIDED:** a page groups activities done in sequence, in a short time, with one utensil at one station, ordered or not — widening §3 principle 4 and §4.1, including §4.1's sear/deglaze example, without editing them; the board page is one arrangement of cut results laid out like the ingredients wheel, with data still one tile per cut; preparations are made upfront unless they depend on another step or degrade while waiting (gremolata upfront, `makes: gremolata`); time sits next to its ingredients as live text, one ≈ number for attended activities, an exact timer for unattended ones, advisory where mass-sensitive, and ≈ derived from the activity's class; a timer belongs only to activities the cook could leave for the whole duration; a tile shows a quantity only when an ingredient is used partly; the authoring standard's reader has basic cooking literacy; one language on screen at a time; every recipe ends on a finished-product photo page. **PROPOSED:** a page-level `utensil` field, pages ending after an unattended activity, derived partial quantities, the finished page showing only what the recipe makes. **DRAFT:** the attendance classification, `activity-attendance-draft.md` | 34, 3, 4.1 |
+| 28 Sep 2026 | **Heat in five levels, fat states, and `flip`.** **DECIDED:** heat is L / ML / M / MH / H in colour, a designated temperature boxed, a thermometer or the graphic level chosen per case, on the page by default and on a tile where it changes; existing `heat` 1–3 map to 1, 3, 5 when the scale ships, no data changed now; fat states as variants of the fat layer — oil and ghee/samna added, hot, smoking; butter melted, foaming, foam settled, browned, burnt — with smoking and burnt never targets; `flip` is a class-N verb, taking the lexicon to 82, computed and never typed, and logged as an exception to the pilot-time freeze; `activities.yaml` not edited. **PROPOSED:** a second, colour-free cue and a check against the alarm colour. **OPEN:** `cover` as a second candidate verb, and a hold cue for upfront intermediates. Supersedes §5.2's three-level heat line only; spice level unchanged | 35, 5.2 |
+| 28 Sep 2026 | **An illustrated utensil library, and the layered step page as PM-09's leading candidate.** **DECIDED:** utensils and equipment are an illustrated library, hand-drawn or AI-generated, PNG either way, drawn once, separate from PM-17's ingredient art, and shown on the pre-commit equipment check (§16.2). **DECIDED as working design, not closed:** on step pages the utensil is the base of the action illustration with ingredient layers on top, each a separate PNG so text stays live — the leading candidate for PM-09's last question, to be judged in the pilot; **PM-09 is not closed**, and this is not KS-06's per-step list. Distinguished from the do-not-take row on AI step imagery, which stands. **OPEN:** legibility at 44 px and one-screen fit; `matbakh.py equipment` proposed; PM-14(b) authored or derived | 36, 21 |
+| 28 Sep 2026 | **Purchased cuts join the Cut Library; prepared cuts are never AI-generated.** **DECIDED:** prepared cuts are always shot at the test cook, the earlier photo-for-common, AI-for-the-tail split surviving only for wheel art (PM-17) — a clarification of §33; the register also holds purchased butcher's cuts where the form matters (`veal_shank__osso_buco_slice`), one raw shot reused by the shopping list and the step page, vegetables excluded — which answers §28's question: the protein substitution table relates to D-13 through the register's keys. **OPEN:** one rules table or two. `matbakh.py cuts` needs an authored field for purchased cuts (E-12) | 37, 33, 28 |
+| 28 Sep 2026 | **T-06 taken: a private report card on the finished-product page.** **DECIDED:** reporting opens a page showing the page map, the cook taps the step that went wrong with no typing, nothing is shown to other users, and it sits outside cook mode; abandon-step telemetry stays passive. **RAISED, NOT DECIDED:** user interaction or a community, possibly publishing later — §8 and the do-not-take list stand until reopened as its own item (PM-19), never through the card. **OPEN:** cooked-through for poultry, pork and mince, with a class-attached note **PROPOSED**. §8 unchanged | 38, 8 |
