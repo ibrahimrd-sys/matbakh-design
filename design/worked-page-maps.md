@@ -126,7 +126,11 @@ glyph set is owed under every option: at 17 px in the arc, nothing else survives
 (the browned beef, the thickened sauce, the melted cheese), one in the skewers
 (the char). Plus two board-as-orientation shots and one tight cut reference from
 the Cut Library, which is a **library reference, not a per-recipe shot** —
-`dice`, `mince`, `chop` and the wedge are all head-set cuts.
+`dice`, `mince`, `chop` and the wedge are ~~all head-set cuts~~ each shot once
+and referenced after. *(Corrected 28 September: `philosophy.md` §33 retired the
+head set. Each (ingredient, cut) pair is shot at the first test cook that needs
+it, then referenced by every recipe after, so these cuts come from the library
+once they exist there.)*
 
 > **Against §16.6's open estimate of 4–6 per recipe, these two measure 3 and 1.**
 > Two maps is not a measurement, but both sit at or below the bottom of the

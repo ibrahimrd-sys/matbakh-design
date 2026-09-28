@@ -5,6 +5,15 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-28 — no head-set cuts in the worked maps
+
+**`design/worked-page-maps.md` brought level with §33.** It called `dice`,
+`mince`, `chop` and the wedge *head-set cuts*, but §33 retired the head set. The
+phrase is struck through, with a dated note: each (ingredient, cut) pair is shot
+at the first test cook that needs it and referenced after. The point it made
+still holds: a cut reference is a library reference, not a per-recipe shot. No
+decision changes.
+
 ## 2026-09-27c — the cut glyphs stop waiting on PM-12
 
 **Three pointers brought level with §33.** `asset-spec.md`, `ATTRIBUTIONS.md`
