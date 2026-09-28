@@ -5,6 +5,21 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-28d — the page rule, heat and timers, everywhere they are quoted
+
+**§34 and §35 carried into the documents that quote the old wording.** In place,
+with the superseded wording quoted:
+
+- `design/storyboard-companion.md` and `prototypes/storyboard-bench-sheet.html`:
+  the grouping rule is now *in sequence, briefly, one utensil, one station, ordered
+  or not*; the board is one arrangement and the last page is `serve`; `heat` notes
+  the five decided levels and the 1, 3, 5 mapping; timers only on activities the
+  cook can leave.
+- `design/step-imagery-research.md`, dated 18 August: a dated note that §34
+  widened the rule. Compressing to Kitchen Stories' four steps still fights it.
+
+No decision changes.
+
 ## 2026-09-28c — the authoring standard catches up with §33–§38
 
 **`design/authoring-standard.md` brought level with the decisions of 27–28

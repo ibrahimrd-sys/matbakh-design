@@ -66,10 +66,16 @@ product.
 
 - **One step = one page = one station.** If the cook has to move, that is a new
   page — even for a single action.
-- **A page may hold several actions only if they are order-independent and share
-  one station.** All the knife prep is one page with four tiles. *Sear* and
-  *deglaze* are two pages, because in cooking **the sequence is the
-  information**.
+- **Group on one page, as far as possible, what is done in sequence, in a short
+  time, with the same utensil, at the same station — ordered or not**
+  (`philosophy.md` §34, 28 Sept). All the knife prep is still one page with four
+  tiles; a short in-sequence run in one pan now shares a page, marked
+  `ordered: true`. *(Superseded 28 Sept: "only if they are order-independent and
+  share one station", with* sear *and* deglaze *as two pages.)*
+- **The board is one arrangement of the cut results**, like the ingredients
+  wheel, while the data stays one tile per cut; preparations are made upfront on
+  the board unless they depend on another step or degrade (§34).
+- **Every recipe ends on a `serve` page with the finished-product photo** (§34).
 - **Waiting is never a page.** *Simmer 20 minutes* is a timer attached to the
   preceding action.
 - **Target 6–10 pages. 14 is a hard ceiling.** Exceeding it is an editorial
@@ -112,9 +118,11 @@ ones (`philosophy §11`, reconciled 1 August).
 - station: stove              # board | stove | bench | grill | oven | serve
   qualifier: { en: takliya, ar: التقلية }    # renders "Stove · takliya"
   ordered: true               # only if out-of-sequence ruins the dish
-  heat: 3                     # 1 low · 2 medium · 3 high
+  heat: 3                     # 1 low · 2 medium · 3 high — five levels (L/ML/M/MH/H) decided
+                              # 28 Sept (§35); 1-3 map to 1, 3, 5 when they ship
   tiles: [...]
-  timer: { minutes: 40, label: {...}, mass_sensitive: true }
+  timer: { minutes: 40, label: {...}, mass_sensitive: true }   # only on activities the
+                              # cook can leave for the whole duration (§34)
   makes: takliya              # names an intermediate
   photo: assets/....jpg
   doneness: { en: ..., ar: ... }

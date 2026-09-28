@@ -184,7 +184,11 @@ That is the most important product finding here, because **Matbakh targets 6–1
 pages with a 14 ceiling**. Photo-per-page at Matbakh's granularity is two to
 three times Kitchen Stories' asset count per recipe. Either the image budget
 triples, or page count compresses — and compressing pages fights §4.1's
-order-independence rule, which is settled.
+order-independence rule, which is settled. *(Note, 28 September 2026:
+`philosophy.md` §34 has since widened that rule — a short in-sequence run in one
+utensil at one station may share a page. Compressing to Kitchen Stories' four
+steps still fights it, because their steps cross stations and utensils, and
+§16.5's hands-granularity. The finding stands; its citation is updated.)*
 
 **Kitchen Stories went from 12 languages to 2.** Reported as available in 12
 languages in 2015; today the App Store lists English and German only. No published

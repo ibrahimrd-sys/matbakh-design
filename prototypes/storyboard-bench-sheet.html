@@ -211,7 +211,8 @@ hr.thick{border:none; border-top:2px solid var(--ink); margin:0;}
       <h4>Structure</h4>
       <ul class="check">
         <li><strong>One step = one page = one station.</strong> If the cook has to move, that is a new page — even for a single action.</li>
-        <li><strong>Several actions on a page only if order-independent and one station.</strong> All the knife prep is one page. <em>Sear</em> and <em>deglaze</em> are two — in cooking the sequence is the information.</li>
+        <li><strong>Group what is done in sequence, briefly, in one utensil at one station — ordered or not.</strong> All the knife prep is one page; a short run in one pan shares a page, marked <code>ordered</code>. <em>(philosophy §34, 28 Sept — replaces “only if order-independent”, where sear and deglaze were two pages.)</em></li>
+        <li><strong>The board is one arrangement of cut results; the last page is <code>serve</code>, with the finished photo.</strong></li>
         <li><strong>Waiting is never a page.</strong> A timer attached to the preceding action.</li>
         <li><strong>6–10 pages typical, 14 hard ceiling.</strong> Over it is an editorial signal, not a formatting problem.</li>
         <li><strong>Nothing scrolls.</strong></li>
@@ -275,8 +276,8 @@ hr.thick{border:none; border-top:2px solid var(--ink); margin:0;}
         <li><code>station</code> — closed list of six: <code>board</code> <code>stove</code> <code>bench</code> <code>grill</code> <code>oven</code> <code>serve</code></li>
         <li><code>qualifier</code> — renders “Stove · takliya”. How four stove pages stay distinct</li>
         <li><code>ordered</code> — <strong>only if out-of-sequence ruins the dish.</strong> Default false; meaningless on a single tile</li>
-        <li><code>heat</code> — 1 low · 2 medium · 3 high</li>
-        <li><code>timer {minutes, label, mass_sensitive}</code> — belongs to the <strong>session</strong>, not the page</li>
+        <li><code>heat</code> — 1 low · 2 medium · 3 high. Five levels, L to H, decided 28 Sept (§35); 1–3 map to 1, 3, 5 when they ship</li>
+        <li><code>timer {minutes, label, mass_sensitive}</code> — belongs to the <strong>session</strong>, not the page; only on activities the cook can leave for the whole duration (§34)</li>
         <li><code>makes</code> — names an intermediate</li>
         <li><code>photo</code> + <code>doneness</code> — <strong>travel together, always</strong></li>
         <li><code>note {kind, text}</code> — four kinds only</li>
