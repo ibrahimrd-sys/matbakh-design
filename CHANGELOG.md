@@ -5,6 +5,35 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-28c — the authoring standard catches up with §33–§38
+
+**`design/authoring-standard.md` brought level with the decisions of 27–28
+September.** It is the operational spec, so it is edited in place, with the
+superseded wording quoted where it changed.
+
+- **Who you write for:** a cook with basic cooking literacy; one language on
+  screen at a time.
+- **Pages (§4.1):** the new grouping rule — in sequence, briefly, one utensil,
+  one station, ordered or not — replacing *order-independent*; the board as one
+  arrangement, still one tile per cut in data; preparations upfront (gremolata);
+  every recipe closing on a `serve` page with the finished photo.
+- **Step fields:** `heat` stays 1–3 until the five-level scale ships; fat states
+  decided but not yet authorable.
+- **Tiles:** keep writing `amt` everywhere — display is the reader's job; `flip`
+  decided but not in the lexicon.
+- **New §4.3a — cuts and the Cut Library:** `cut:` / `cut_mm:`, one shot per
+  (ingredient, cut) pair at the first test cook, the *would a photo mislead?*
+  test, purchased cuts, and `matbakh.py cuts` as not yet built.
+- **Timers:** only on activities the cook could leave; ≈ derived, not authored;
+  the classification referenced as DRAFT. Cooked-through for poultry, pork and
+  mince is OPEN.
+- **Pilot and definition of done:** cut variants settled at the stove, the
+  layered step page judged in Tile judgements, `flip` as the one lexicon-freeze
+  exception; three new done-checks. No cut-coverage check until the command
+  exists, per §33.
+
+PROPOSED, DRAFT and OPEN items are marked as such and are not rules.
+
 ## 2026-09-28b — the Osso Buco walkthrough: pages, heat, utensils, purchased cuts, feedback
 
 **`philosophy.md` §34–§38**, from walking a braised Osso Buco through the page

@@ -4,6 +4,12 @@
 **Written:** 15 August 2026. Verified against `content/matbakh.py`, `_template.yaml`,
 `lexicon/activities.yaml` (81 activities), `lexicon/chrome.yaml` and
 `ref/ingredients.yaml` (177 entries) as they stand today.
+**Last updated:** 2026-09-28 — `philosophy.md` §33–§38 folded in: page grouping,
+the board page, upfront preparations, time and timers by attendance, heat and
+fat, cuts and the Cut Library, the finished-product page. Where a decision is
+not yet something the schema or validator can take, this file says so rather
+than inventing a field. Labels from the filing are kept: **PROPOSED**, **DRAFT**
+and **OPEN** mean exactly that, and are not rules yet.
 
 This document is written so that **someone with no prior context can produce a
 compliant recipe**. If you are the founder authoring the pilot, skip to §2 — but
@@ -41,6 +47,13 @@ Only four things in a recipe are genuinely prose and need a translator:
 Everything else is a key, a number or a boolean. If you find yourself typing an
 English cooking word into a recipe file, stop — you are almost certainly doing
 it wrong. The exception is `verb:`, covered in §4.4, and it is rare on purpose.
+
+**Who you are writing for** (`philosophy.md` §34): a cook with **basic cooking
+literacy** — *half-literate in cooking*. They can hold a knife and light a
+burner; they cannot be assumed to know what *sweat*, *fond* or *a rolling boil*
+looks like. That is what the doneness cue and photograph are for. The cook sees
+**one language at a time**; the side-by-side English and Arabic in the
+prototypes is a review convenience, not the product.
 
 ---
 
@@ -192,13 +205,38 @@ This is the part that separates a good recipe from a compliant one.
 **One step = one page = one station. If the cook has to move, that is a new
 page — even for a single action.**
 
-**A page may hold several actions only if they are order-independent and share
-one station.** All the knife prep — onion, garlic, coriander, jointing the bird —
-is one page with four tiles. "Sear the chicken" and "deglaze the pan" are two
-pages, because in cooking *the sequence is the information*.
+**Group on one page, as far as possible, the activities done in sequence, in a
+short time, with the same utensil, at the same station** (`philosophy.md` §34,
+28 September). One station, one utensil, short time — **ordered or not.** All the
+knife prep — onion, garlic, coriander, jointing the bird — is still one page with
+four tiles. What changed: a short run of steps in one pan no longer splits just
+because its order matters. Mark it `ordered: true` and the sequence is carried on
+the page instead of across pages. *(Until 28 September this read: several actions
+only if order-independent and at one station — "Sear the chicken" and "deglaze
+the pan" were two pages. That wording is superseded.)*
+
+> **PROPOSED, not a rule yet:** a page ends at a change of station or utensil,
+> or right after an unattended activity — so a timer is always on the last tile
+> of its page. A page-level `utensil` field would let the validator enforce one
+> vessel per page. Neither exists; do not invent the field.
 
 **Waiting is never a page.** "Simmer 20 minutes" is a timer attached to the
 preceding action, not a step of its own.
+
+**The board page is one arrangement, not a row per cut** (§34). Author it as
+today — **one tile per cut**, so check-off and validation are unchanged — and the
+reader lays the cut results out like the ingredients wheel: item image, quantity,
+cut digit. Add an extra tile on the board only for **real preparation that makes
+an intermediate** (mixing, say), never for presentation.
+
+**Preparations are made upfront, on the board**, unless they depend on another
+step or degrade while waiting. The test cook judges the second case. Gremolata is
+the worked case: prepared on the board with `makes: gremolata`, and consumed on
+the finishing page.
+
+**Every recipe ends on a finished-product photo page**, station `serve` (§34).
+*PROPOSED:* it shows only what the recipe makes. A side dish in frame is either a
+linked recipe or kept out of frame.
 
 **Target 6–10 pages. 14 is a hard ceiling.** Exceeding it is an editorial signal,
 not a formatting problem: either the dish is genuinely a project and should be
@@ -237,7 +275,23 @@ Multiple pages at the same station are normal and expected — molokhia has four
 
 **`ordered: true` only if doing the tiles out of sequence ruins the dish.**
 Default to `false`. Setting `ordered: true` on a single-tile step is meaningless
-and the validator warns — it was the one real nit found in recipe 1.
+and the validator warns — it was the one real nit found in recipe 1. Under
+§4.1's grouping rule, a short in-sequence run in one pan is exactly what
+`ordered: true` is for.
+
+**`heat` stays 1 · 2 · 3 for now** (§35). Five levels are decided — L / ML / M /
+MH / H, shown in colour, with a designated temperature boxed and either a
+thermometer or the graphic level chosen per case — but they ship later (E-13).
+When they do, today's 1, 2, 3 become 1, 3, 5, and ML and MH become available. Do
+not write 4 or 5 now. Heat sits on the page; a per-tile heat, for where it
+changes within a page, is decided but has no field yet.
+
+**Fat states are decided, not yet authorable** (§35). The fat layer takes a state
+from a list — oil and ghee/samna: *added*, *hot (shimmering)*, *smoking*;
+butter: *melted*, *foaming*, *foam settled (ready)*, *browned* (only where
+wanted), *burnt*. **Smoking and burnt are never targets** — they belong in a
+`never` note. The fat used at the test cook is recorded with the recipe. There is
+no field for either yet; do not invent one.
 
 **`photo` and `doneness` travel together.** The photograph shows what the words
 say. Do not write one without the other.
@@ -283,6 +337,49 @@ when an ingredient is bought twice, and that warning is usually a missing
 
 **`amt` is in the ingredient's own unit**, whatever `unit:` says in the reference
 — `g`, `ml`, `tsp`, `tbsp`, `count`.
+
+**Keep writing `amt` on every tile, even though the cook will not always see
+it.** The tile *shows* a quantity only when an ingredient in the list is used
+only partly in that step (§34). Where one step uses all of it, the ingredients
+list has already said how much. The amount still feeds the shopping list and
+nutrition. *PROPOSED:* the reader derives *partly* (tile amount less than the
+recipe's total), so you never mark it.
+
+**`flip` is decided and not yet in the lexicon** (§35, E-18). It will be a
+no-time verb, with the second side's ≈ time authored on its own tile. Until it
+lands in `activities.yaml`, `do: flip` fails validation. `cover` (lid on) is a
+second candidate and is OPEN.
+
+### 4.3a Cuts, and the Cut Library
+
+```yaml
+    items:
+      - { id: onion,   amt: 1,  cut: brunoise, cut_mm: 2 }
+```
+
+**`cut:` names the result, `cut_mm:` carries the size** — the one thing a glyph
+cannot show. Brunoise and dice are the same shape at different sizes. The builder
+reads both; the validator does not check them yet.
+
+**Every (ingredient, cut) pair is photographed once, ever, at the first test cook
+that needs it** (`philosophy.md` §33), then referenced by every recipe after.
+There is no separate library shoot. The library is a folder named
+`cut-library/<ingredient_id>__<cut_key>.jpg`, with no index file. **Prepared cuts
+are never AI-generated** (§37).
+
+**Deciding whether a variant earns its own key happens at the stove, not here.**
+Prep both variants side by side and ask: *would a cook be misled, aiming for one,
+if shown only a photo of the other?* Yes → two keys. No → one key, and `cut_mm`
+carries the difference. Mince fine/coarse is already decided: one key, `cut_mm`.
+
+**Purchased cuts** — the butcher's form of a protein, where it matters
+(`veal_shank__osso_buco_slice`) — are in the library too, shot raw at the first
+test cook (§37). Vegetables arrive uncut and are not. *There is no authored field
+for a purchased cut yet* (E-12's scope), so for now it is shot and filed, and not
+referenced from the recipe.
+
+`matbakh.py cuts <recipe>.yaml`, which will list the covered pairs and the ones
+to shoot this session, is **not built yet** (E-12).
 
 **`into:` and `@intermediate`** — see §4.5.
 
@@ -360,6 +457,19 @@ dish, it is a sub-recipe, not an intermediate.
 Timers belong to the **session**, not the page — a timer keeps running when the
 cook turns the page, and the persistent band is what expresses parallelism.
 
+**A timer belongs only to an activity the cook can leave** (§34). The test:
+*could the cook leave the pan for the whole duration without ruining the dish or
+being hurt?* If yes, it gets a `timer:`. If no, it is attended: the reader shows
+an approximate time — one number with ≈, never a range — **derived from the
+activity, not authored by you.**
+
+> **DRAFT:** which of the 81 activities are unattended, attended, timeless or
+> context-dependent is in `design/activity-attendance-draft.md` — including four
+> it marks attended for safety and not overridable (`deep_fry`, `broil`, `char`,
+> `grill`). It is not confirmed and not in `activities.yaml`. Until it is, apply
+> the test above yourself. Once confirmed, the validator will warn on a timer on an attended or
+> no-time verb, and on a long unattended activity with no timer (E-14).
+
 **`mass_sensitive: true` when the time scales with the batch.** Simmering six
 portions takes about as long as four; browning six takes noticeably longer. A
 rest, a proof or a marinade does **not** scale — leave the flag off. When a
@@ -384,6 +494,11 @@ surface."
 Note that the doneness text and the doneness photograph must agree. If the words
 say straw-gold at the edges, the photograph has to show straw-gold at the edges —
 not one shade past.
+
+**Poultry, pork and mince cooked through in a pan: a time is not enough** (§38,
+OPEN). Doneness and photo must say *cooked through*, because a clock alone is a
+food-safety gap. *PROPOSED:* one standing "cooked through" note attached by
+ingredient class. Until that exists, write it into the doneness cue yourself.
 
 **Notes are a closed, typed set of four.** Free-text headers would destroy the
 convention a cook learns to read.
@@ -534,9 +649,17 @@ output. The other half is the measurement, and it is the reason the pilot exists
    verbs.
 7. **Log the row** in `recipe-pilot-tracker.xlsx` and tick the Coverage tab.
 
+8. **Settle cut variants at the stove** (§33): where a recipe needs a cut pair
+   not yet decided, prep both and apply the *would a photo mislead?* test.
+   Shoot every (ingredient, cut) pair the library does not have yet.
+9. **Judge the layered step page in `Tile judgements`** (§36): the utensil as the
+   base of the action illustration, ingredient layers on top, is PM-09's leading
+   candidate. It is not decided — the pilot decides it.
+
 **The governing discipline: nothing about the lexicon changes during the pilot.**
 Author against the vocabulary as it stands. Measure first, decide once — after
-the whole batch, so the vocabulary is not over-fitted to the first wave.
+the whole batch, so the vocabulary is not over-fitted to the first wave. **One
+logged exception:** `flip` (§35, C-05).
 
 ---
 
@@ -548,7 +671,11 @@ A recipe is authored when all of these hold:
       understood or fixed
 - [ ] `steps` is not empty *(the validator will not catch this — see §5)*
 - [ ] Page count is 6–10, or the dish is deliberately labelled a project
+- [ ] Pages group what is done in sequence, briefly, in one utensil at one
+      station (§4.1)
+- [ ] The last page is `serve`, with the finished-product photo
 - [ ] Every page has `photo` **and** `doneness`
+- [ ] Timers sit only on activities the cook could leave for the whole duration
 - [ ] Every doneness cue describes what to see, hear or feel — and the photograph
       agrees with it
 - [ ] Every repeated ingredient carries `carried: true`
@@ -563,7 +690,9 @@ A recipe is authored when all of these hold:
 ## Appendix A — the 81 activities, by station hint
 
 The hint is guidance for the editor's dropdown ordering, not a constraint. An
-activity may be used at any station.
+activity may be used at any station. The count is `activities.yaml`'s as it
+stands on 28 September. `flip` is decided and not yet added (§35). The DRAFT
+attendance classes are in `design/activity-attendance-draft.md`.
 
 **any (3)** — `add` · `pour` · `season`
 
