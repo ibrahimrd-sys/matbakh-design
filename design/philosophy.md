@@ -2,7 +2,7 @@
 
 **Status:** Living document. Sections marked SETTLED are decided and should not be relitigated without a stated reason. Sections marked OPEN are unresolved.
 
-**Last updated:** 2026-09-28
+**Last updated:** 2026-09-29
 
 ---
 
@@ -1876,6 +1876,50 @@ the actual dish — stays a real photograph (§5.5). The row stands unchanged.*
 
 ---
 
+## 39. Ingredient states join the libraries — SETTLED IN PART (29 September 2026)
+
+*Supersedes §5.5's "the doneness photograph is irreducibly recipe-specific" and
+§16.6's "doneness photographs are recipe-specific under every option" — for
+ingredient states only. Neither is edited. Dish-state doneness stays
+recipe-specific, as both sections say.*
+
+## Addendum — 29 Sept 2026: a state library for ingredient doneness
+
+Decided by Ibrahim while laying out the pilot tracker. The example that decided
+it: *caramelized onion is the same look across all recipes.*
+
+- **DECIDED. An ingredient's state is a library asset.** Caramelized onion,
+  golden garlic, toasted pine nuts, parboiled rice look the same in every recipe
+  that reaches them. So the doneness photograph of an ingredient state is keyed
+  (ingredient, state) — `onion__caramelized` — and **shot once, at the first test
+  cook that needs it** (KS-03, as §33 does for cuts), then reused by every recipe
+  after.
+- **DECIDED. Dish-state doneness stays recipe-specific:** the ragù that coats
+  the spoon, molokhia's consistency, the finished braise. Those photographs,
+  with the hero, carry the trust claim §5.5 gives them — the proof that *this*
+  recipe was cooked. §6.6's advisory timer still defers to them.
+- **DECIDED. Fat states stay separate.** §35's fat layer — oil shimmering, butter
+  foaming, browned, burnt — remains illustrated layer variants on the step page.
+  The state library does not hold them.
+- **DECIDED. It is entered like every reusable asset:** from a drop-down fed by
+  its register, a new entry showing itself as new (the pilot tracker's asset
+  rule, 29 September; `recipe-pilot-scheme.md` §3).
+- **PROPOSED:** a state's granularity follows §33's test. Golden and jammy
+  caramelized onion get two keys only if a photo of one would mislead a cook
+  aiming for the other.
+- **OPEN.**
+  - Whether **failure states** — one shade past, burnt garlic — are shot into the
+    library. `asset-spec.md` already recommends shooting the failure.
+  - There is **no authored field** yet by which a page references a state key.
+  - The page's `doneness` text is still authored per recipe, and must agree with
+    the photograph it borrows.
+  - Where the library lives is open, alongside `cut-library/`.
+
+**Consequence.** C-04's per-recipe doneness count falls further. What the pilot
+measures under §16.6 now splits into states reused and dish states shot.
+
+---
+
 ## Decision log
 
 | Date | Decision | Section |
@@ -1942,3 +1986,4 @@ the actual dish — stays a real photograph (§5.5). The row stands unchanged.*
 | 28 Sep 2026 | **An illustrated utensil library, and the layered step page as PM-09's leading candidate.** **DECIDED:** utensils and equipment are an illustrated library, hand-drawn or AI-generated, PNG either way, drawn once, separate from PM-17's ingredient art, and shown on the pre-commit equipment check (§16.2). **DECIDED as working design, not closed:** on step pages the utensil is the base of the action illustration with ingredient layers on top, each a separate PNG so text stays live — the leading candidate for PM-09's last question, to be judged in the pilot; **PM-09 is not closed**, and this is not KS-06's per-step list. Distinguished from the do-not-take row on AI step imagery, which stands. **OPEN:** legibility at 44 px and one-screen fit; `matbakh.py equipment` proposed; PM-14(b) authored or derived | 36, 21 |
 | 28 Sep 2026 | **Purchased cuts join the Cut Library; prepared cuts are never AI-generated.** **DECIDED:** prepared cuts are always shot at the test cook, the earlier photo-for-common, AI-for-the-tail split surviving only for wheel art (PM-17) — a clarification of §33; the register also holds purchased butcher's cuts where the form matters (`veal_shank__osso_buco_slice`), one raw shot reused by the shopping list and the step page, vegetables excluded — which answers §28's question: the protein substitution table relates to D-13 through the register's keys. **OPEN:** one rules table or two. `matbakh.py cuts` needs an authored field for purchased cuts (E-12) | 37, 33, 28 |
 | 28 Sep 2026 | **T-06 taken: a private report card on the finished-product page.** **DECIDED:** reporting opens a page showing the page map, the cook taps the step that went wrong with no typing, nothing is shown to other users, and it sits outside cook mode; abandon-step telemetry stays passive. **RAISED, NOT DECIDED:** user interaction or a community, possibly publishing later — §8 and the do-not-take list stand until reopened as its own item (PM-19), never through the card. **OPEN:** cooked-through for poultry, pork and mince, with a class-attached note **PROPOSED**. §8 unchanged | 38, 8 |
+| 29 Sep 2026 | **Ingredient states join the libraries.** An ingredient's doneness state — caramelized onion, golden garlic, parboiled rice — looks the same in every recipe, so its photograph is keyed (ingredient, state), shot once at the first test cook that needs it, and reused; **dish-state doneness stays recipe-specific** and keeps §5.5's trust claim. Fat states stay illustrated layers (§35), outside the state library. Entered from a register drop-down like every reusable asset. **PROPOSED:** §33's granularity test for state variants. **OPEN:** failure states, an authored field, the doneness text's agreement, where the library lives. Supersedes §5.5 and §16.6 for ingredient states only | 39, 5.5, 16.6 |

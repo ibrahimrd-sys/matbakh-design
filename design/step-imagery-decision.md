@@ -449,7 +449,11 @@ and the 18 Aug document was right to list trust as a genuine win for
 recipe-specific imagery. But the trust claim is carried by the **hero and the
 doneness photographs**, which stay recipe-specific under every option in this
 document. It was never the tile's job. The trust argument survives; it just does
-not live in the 44 px square.
+not live in the 44 px square. *(Note, 29 September 2026: `philosophy.md` §39
+made **ingredient-state** doneness photographs — caramelized onion, golden garlic
+— library assets reused across recipes. **Dish-state** doneness stays
+recipe-specific, and it carries the trust argument, so this objection's answer
+stands.)*
 
 **Objection 2: "It will read as stock footage."** It reads as stock if it *is*
 stock — and the research found ~950,000 cooking clips on iStock alone, unkeyed and

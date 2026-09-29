@@ -5,6 +5,22 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-29 — ingredient states join the libraries
+
+**`philosophy.md` §39.** An ingredient's doneness state — caramelized onion,
+golden garlic, parboiled rice — looks the same in every recipe. So its
+photograph is a library asset, keyed (ingredient, state) and shot once at the
+first test cook that needs it. **Dish-state doneness stays recipe-specific** and
+keeps the trust claim. §5.5 and §16.6 stand as written, superseded for
+ingredient states only. Fat states stay §35's illustrated layers.
+
+- **PROPOSED:** §33's *would a photo mislead?* test for state variants.
+- **OPEN:** failure states; an authored field for a state key; where the library
+  lives.
+- **Carried into** the authoring standard (doneness guidance, and a pilot duty),
+  `asset-spec.md` (two kinds of doneness photograph) and
+  `step-imagery-decision.md` §6.3 (a dated note — the trust argument stands).
+
 ## 2026-09-28d — the page rule, heat and timers, everywhere they are quoted
 
 **§34 and §35 carried into the documents that quote the old wording.** In place,

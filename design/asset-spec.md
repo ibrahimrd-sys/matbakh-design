@@ -155,6 +155,12 @@ shoot, the top and bottom go.
 These carry more weight than the hero. A cook is holding the tablet next to the
 pan, deciding whether to stop.
 
+- **Two kinds, since 29 September** (`philosophy.md` §39). An **ingredient's
+  state** — caramelized onion, golden garlic — is a library photograph, keyed
+  (ingredient, state), shot once and reused across recipes, so the
+  consistency rule below matters twice over: one frame will sit in many
+  recipes. A **dish's state** is shot for its recipe.
+
 - **Match the schema's claim.** `doneness.en` for the takliya says *"Straw-gold
   at the edges. One shade past this is bitter."* The photograph has to show
   straw-gold at the edges — not one shade past.

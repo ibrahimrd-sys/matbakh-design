@@ -4,9 +4,10 @@
 **Written:** 15 August 2026. Verified against `content/matbakh.py`, `_template.yaml`,
 `lexicon/activities.yaml` (81 activities), `lexicon/chrome.yaml` and
 `ref/ingredients.yaml` (177 entries) as they stand today.
-**Last updated:** 2026-09-28 — `philosophy.md` §33–§38 folded in: page grouping,
+**Last updated:** 2026-09-29 — `philosophy.md` §33–§39 folded in: page grouping,
 the board page, upfront preparations, time and timers by attendance, heat and
-fat, cuts and the Cut Library, the finished-product page. Where a decision is
+fat, cuts and the Cut Library, ingredient states as library photographs (§39,
+29 Sept), the finished-product page. Where a decision is
 not yet something the schema or validator can take, this file says so rather
 than inventing a field. Labels from the filing are kept: **PROPOSED**, **DRAFT**
 and **OPEN** mean exactly that, and are not rules yet.
@@ -495,6 +496,16 @@ Note that the doneness text and the doneness photograph must agree. If the words
 say straw-gold at the edges, the photograph has to show straw-gold at the edges —
 not one shade past.
 
+**Is this an ingredient's state or the dish's?** (§39, 29 September.) An
+ingredient's state — caramelized onion, golden garlic, parboiled rice — looks
+the same in every recipe, so its photograph comes from the **state library**,
+keyed (ingredient, state), shot at the first test cook that needs it and reused
+after. The dish's state — the ragù coating the spoon, molokhia's consistency —
+is shot for this recipe, as always. Fat states are not in the state library;
+they are §35's illustrated fat layer. Either way you still write the page's
+`doneness` text, and it must agree with the photograph. There is no field yet
+for referencing a state key, so for now note it in the pilot tracker.
+
 **Poultry, pork and mince cooked through in a pan: a time is not enough** (§38,
 OPEN). Doneness and photo must say *cooked through*, because a clock alone is a
 food-safety gap. *PROPOSED:* one standing "cooked through" note attached by
@@ -655,6 +666,8 @@ output. The other half is the measurement, and it is the reason the pilot exists
 9. **Judge the layered step page in `Tile judgements`** (§36): the utensil as the
    base of the action illustration, ingredient layers on top, is PM-09's leading
    candidate. It is not decided — the pilot decides it.
+10. **Shoot every ingredient state the state library lacks** (§39), alongside
+    the new cut shots, and record it in the tracker's register.
 
 **The governing discipline: nothing about the lexicon changes during the pilot.**
 Author against the vocabulary as it stands. Measure first, decide once — after
