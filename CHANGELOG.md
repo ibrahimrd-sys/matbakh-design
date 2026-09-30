@@ -5,6 +5,22 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-30 — the retail layer's boundaries
+
+**`philosophy.md` §40: three decisions for when retailer partnerships go live.**
+
+- **A recipe's cost is never retailer-specific.** `cost_per_serving` stays on the
+  indicative engine's Class A rate permanently. Only the shopping list shows a
+  live retailer's real prices.
+- **With more than one retailer, the shopper picks** from a row of logos, a
+  stored preference. IP may suggest a first default but never decides.
+- **Retailer and manufacturer promotions run outside the app.** Matbakh builds
+  and displays nothing for them.
+
+**Open:** Matbakh-brokered promotions, a future design task; and what IP-based
+suggestion does with the address (L-06). The reasoning is in the vault's
+referral-fee memo. §27–§29 stand as written.
+
 ## 2026-09-29 — ingredient states join the libraries
 
 **`philosophy.md` §39.** An ingredient's doneness state — caramelized onion,

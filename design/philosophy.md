@@ -2,7 +2,7 @@
 
 **Status:** Living document. Sections marked SETTLED are decided and should not be relitigated without a stated reason. Sections marked OPEN are unresolved.
 
-**Last updated:** 2026-09-29
+**Last updated:** 2026-09-30
 
 ---
 
@@ -1920,6 +1920,53 @@ measures under §16.6 now splits into states reused and dish states shot.
 
 ---
 
+## 40. The retail layer's boundaries — recipe cost, retailer choice, promotions — SETTLED IN PART (30 September 2026)
+
+*Extends §27 (the retail layer), §28 (`cost_per_serving` pinned to Class A) and
+§29 (the indicative-pricing engine). Supersedes nothing; none of them is edited.*
+
+## Addendum — 30 Sept 2026: three boundaries for when retailer partnerships go live
+
+Decided by Ibrahim on 30 September. The reasoning is in the vault at
+`02-strategy/referral-fee-variances.md`, in the sections *Multi-retailer
+selection*, *Recipe cost vs. shopping-list price* and *Promotions*. That file is
+otherwise negotiation prep, and its sections on catalogue format and
+attribution stay reference.
+
+- **DECIDED. A recipe's cost never becomes retailer-specific — a permanent
+  boundary.** A recipe's displayed `cost_per_serving` stays anchored to the
+  indicative-pricing engine's Class A rate (§28, §29) even once live retailer
+  partnerships exist, however many there are. That is what keeps a recipe's
+  cost stable and comparable across the whole catalogue. **Only the shopping
+  list**, once a retailer relationship is live, shows that retailer's real
+  prices for the matched items. **Not to be revisited** by wiring a recipe's
+  cost to a retailer's live prices; doing so would break the catalogue-wide
+  comparability the engine exists to provide.
+- **DECIDED. With more than one retailer, the shopper picks.** A single row of
+  retailer logos, tapped once, sets a **stored preference** — defaultable and
+  changeable at any time in settings. IP address **may suggest** a first-time
+  default (the likely city or region) but **never silently decides**, because
+  city-level IP geolocation is unreliable, especially on mobile networks. Build
+  order: the preference and logo picker first, since it needs no IP logic; IP
+  suggestion afterwards, as a refinement, not a dependency.
+- **DECIDED. Retailer and manufacturer promotions are entirely outside the
+  app.** A retailer's checkout discount, or a manufacturer's ad on the
+  retailer's cart page, runs on the retailer's platform after the handoff.
+  **Matbakh builds nothing for it and displays nothing for it.**
+- **OPEN. Matbakh-brokered promotions** — a separate tier, negotiated directly
+  with a retailer for a specific purpose, such as a launch moment or a seasonal
+  push. They need real design and placement work, distinct from the shopping
+  list, when the time comes. A future design task, not decided. *Filing note:
+  §27's retail media, promoted placement sold by Matbakh, is brokered by nature
+  and sits in this tier. MON-09 already bounds it: a promotion may attach to a
+  section or a campaign, never to a recipe's existence.*
+- **OPEN. What IP-based suggestion does with the address** — whether it is used
+  on the device only, and whether it is kept at all. A privacy question under
+  **L-06**, to settle before the suggestion is built. The picker itself needs
+  no location data.
+
+---
+
 ## Decision log
 
 | Date | Decision | Section |
@@ -1987,3 +2034,4 @@ measures under §16.6 now splits into states reused and dish states shot.
 | 28 Sep 2026 | **Purchased cuts join the Cut Library; prepared cuts are never AI-generated.** **DECIDED:** prepared cuts are always shot at the test cook, the earlier photo-for-common, AI-for-the-tail split surviving only for wheel art (PM-17) — a clarification of §33; the register also holds purchased butcher's cuts where the form matters (`veal_shank__osso_buco_slice`), one raw shot reused by the shopping list and the step page, vegetables excluded — which answers §28's question: the protein substitution table relates to D-13 through the register's keys. **OPEN:** one rules table or two. `matbakh.py cuts` needs an authored field for purchased cuts (E-12) | 37, 33, 28 |
 | 28 Sep 2026 | **T-06 taken: a private report card on the finished-product page.** **DECIDED:** reporting opens a page showing the page map, the cook taps the step that went wrong with no typing, nothing is shown to other users, and it sits outside cook mode; abandon-step telemetry stays passive. **RAISED, NOT DECIDED:** user interaction or a community, possibly publishing later — §8 and the do-not-take list stand until reopened as its own item (PM-19), never through the card. **OPEN:** cooked-through for poultry, pork and mince, with a class-attached note **PROPOSED**. §8 unchanged | 38, 8 |
 | 29 Sep 2026 | **Ingredient states join the libraries.** An ingredient's doneness state — caramelized onion, golden garlic, parboiled rice — looks the same in every recipe, so its photograph is keyed (ingredient, state), shot once at the first test cook that needs it, and reused; **dish-state doneness stays recipe-specific** and keeps §5.5's trust claim. Fat states stay illustrated layers (§35), outside the state library. Entered from a register drop-down like every reusable asset. **PROPOSED:** §33's granularity test for state variants. **OPEN:** failure states, an authored field, the doneness text's agreement, where the library lives. Supersedes §5.5 and §16.6 for ingredient states only | 39, 5.5, 16.6 |
+| 30 Sep 2026 | **The retail layer's boundaries.** A recipe's `cost_per_serving` **never becomes retailer-specific** and stays on the Class A rate permanently; only the shopping list shows a live retailer's real prices, and this is not to be revisited. With more than one retailer, **the shopper picks** from a row of logos, a stored preference changeable in settings; IP may suggest a first default but never decides, and the picker ships first. **Retailer and manufacturer promotions run outside the app** — Matbakh builds and displays nothing for them. **OPEN:** Matbakh-brokered promotions (a future design task; §27's retail media sits there, bounded by MON-09), and IP's privacy handling (L-06). Reasoning in the vault's `referral-fee-variances.md` | 40, 27, 28, 29 |
