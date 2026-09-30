@@ -4,7 +4,7 @@
 **Written:** 15 August 2026. Verified against `content/matbakh.py`, `_template.yaml`,
 `lexicon/activities.yaml` (81 activities), `lexicon/chrome.yaml` and
 `ref/ingredients.yaml` (177 entries) as they stand today.
-**Last updated:** 2026-09-29 — `philosophy.md` §33–§39 folded in: page grouping,
+**Last updated:** 2026-09-30 — `philosophy.md` §33–§41 folded in: page grouping,
 the board page, upfront preparations, time and timers by attendance, heat and
 fat, cuts and the Cut Library, ingredient states as library photographs (§39,
 29 Sept), the finished-product page. Where a decision is
@@ -365,7 +365,10 @@ reads both; the validator does not check them yet.
 **Every (ingredient, cut) pair is photographed once, ever, at the first test cook
 that needs it** (`philosophy.md` §33), then referenced by every recipe after.
 There is no separate library shoot. The library is a folder named
-`cut-library/<ingredient_id>__<cut_key>.jpg`, with no index file. **Prepared cuts
+`cut-library/<ingredient_id>__<cut_key>.jpg`, with no index file. It lives in
+the vault at `03-catalogue/cut-library/` (§41), outside git and inside every
+vault backup — **so take a snapshot after a cook that adds shots.** A photograph
+lost there can only be replaced by cooking the dish again. **Prepared cuts
 are never AI-generated** (§37).
 
 **Deciding whether a variant earns its own key happens at the stove, not here.**
@@ -500,7 +503,7 @@ not one shade past.
 ingredient's state — caramelized onion, golden garlic, parboiled rice — looks
 the same in every recipe, so its photograph comes from the **state library**,
 keyed (ingredient, state), shot at the first test cook that needs it and reused
-after. The dish's state — the ragù coating the spoon, molokhia's consistency —
+after. It lives beside the Cut Library, at `03-catalogue/state-library/` (§41). The dish's state — the ragù coating the spoon, molokhia's consistency —
 is shot for this recipe, as always. Fat states are not in the state library;
 they are §35's illustrated fat layer. Either way you still write the page's
 `doneness` text, and it must agree with the photograph. There is no field yet

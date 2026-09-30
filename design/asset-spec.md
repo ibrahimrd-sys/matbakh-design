@@ -178,7 +178,10 @@ pan, deciding whether to stop.
 
 - **Format: WebP**, quality 82. AVIF is smaller but the encode is slower and
   the gain does not repay it at these sizes. Keep JPEG only as an archive
-  master.
+  master. *(30 September: the Cut Library's and the state library's JPEG masters
+  live in the vault, at `03-catalogue/cut-library/` and `state-library/`, outside
+  git and inside every vault backup — `philosophy.md` §41. The WebP copies are
+  generated from them.)*
 - **Export at 3×** the rendered size, for a phone at DPR 3:
 
   | Use | Export |

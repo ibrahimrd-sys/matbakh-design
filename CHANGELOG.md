@@ -5,6 +5,20 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-30b — where the libraries live
+
+**`philosophy.md` §41.** The Cut Library and the state library live in the vault,
+at `03-catalogue/cut-library/` and `state-library/`. Git ignores the photographs.
+Every vault backup carries them, to the same encrypted OneDrive and plain `D:`
+locations as the rest of the vault. §41 records why: the tools already find the
+folder; it stays private, where this repo is public; and git history would grow
+by gigabytes.
+
+- **PROPOSED:** a snapshot before pilot recipe 2's first shot, then after every
+  test cook that adds shots.
+- **Carried into** the authoring standard (§4.3a, doneness) and `asset-spec.md`
+  (where the JPEG masters are).
+
 ## 2026-09-30 — the retail layer's boundaries
 
 **`philosophy.md` §40: three decisions for when retailer partnerships go live.**

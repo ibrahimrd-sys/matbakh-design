@@ -1967,6 +1967,61 @@ attribution stay reference.
 
 ---
 
+## 41. Where the Cut Library and the state library live — SETTLED IN PART (30 September 2026)
+
+*Settles the location left open in §33 (the Cut Library) and §39 (the state
+library). Neither is edited.*
+
+## Addendum — 30 Sept 2026: the libraries live in the vault, outside git, inside every backup
+
+- **DECIDED. Location:** `matbakh-private/03-catalogue/cut-library/` and
+  `matbakh-private/03-catalogue/state-library/`. Filenames stay as §33 and §39
+  set them: `<ingredient_id>__<cut_key>.jpg` and `<ingredient_id>__<state>.jpg`.
+- **DECIDED. Git ignores the photographs.** Each folder keeps only a tracked
+  README.
+- **DECIDED. The backups go where the vault's backups already go:** the
+  AES256-encrypted copy to `OneDrive/Matbakh-Backups/`, the plain copy to
+  `D:\Matbakh-Backups\`. No new location and no new procedure. A snapshot
+  archives the whole vault folder, **including what git ignores**, as it already
+  does for `PDF Files/`. So every snapshot carries both libraries.
+- **PROPOSED:**
+  - a fresh snapshot **before pilot recipe 2's first shot**;
+  - after that, a snapshot **after every test cook that adds shots**, before the
+    next cook.
+
+  Nothing schedules a snapshot today — the last was on 18 September — and a
+  library photograph cannot be recreated without cooking the dish again.
+- **OPEN.**
+  - **Snapshot size.** The retention rule keeps five generations, and each
+    carries the whole library. If the masters grow into gigabytes, revisit — a
+    separate library archive, or a looser retention for it.
+  - **Delivery copies.** Where the app's WebP copies go, and how cook mode
+    reaches them offline, is **E-03**.
+
+**Why here, and not elsewhere.**
+- **The tools already find it.** `matbakh.py` resolves the vault's
+  `03-catalogue/` through its existing order (`--vault`, then `MATBAKH_VAULT`,
+  then `content/vault.path`, then the default path). So `matbakh.py cuts` (E-12)
+  finds `cut-library/` beside `recipes/` with no new setting.
+- **It sits beside what it belongs to.** The recipes, the ingredient reference
+  and the pilot tracker, whose registers name these files, are all in
+  `03-catalogue/`.
+- **It stays private.** The photographs are the protectable asset L-03 names.
+- **Why not the design repo:** it is **public**, so every photograph would be
+  free to anyone.
+- **Why not the app repo:** the app should eventually *load* small delivery
+  copies (E-03), not carry the masters in its source history.
+- **Why outside git:** a re-shot master stays in git history forever, and
+  masters at 2–5 MB across hundreds of pairs would grow the vault's history by
+  gigabytes. Git LFS would need a remote, which the vault must never have
+  (R-15). The tracker's registers and the filenames are the record of what
+  exists.
+- **Why JPEG:** the folders hold the JPEG masters that `asset-spec.md` already
+  keeps as the archive format. The app's WebP q82 copies are generated from them
+  at build.
+
+---
+
 ## Decision log
 
 | Date | Decision | Section |
@@ -2035,3 +2090,4 @@ attribution stay reference.
 | 28 Sep 2026 | **T-06 taken: a private report card on the finished-product page.** **DECIDED:** reporting opens a page showing the page map, the cook taps the step that went wrong with no typing, nothing is shown to other users, and it sits outside cook mode; abandon-step telemetry stays passive. **RAISED, NOT DECIDED:** user interaction or a community, possibly publishing later — §8 and the do-not-take list stand until reopened as its own item (PM-19), never through the card. **OPEN:** cooked-through for poultry, pork and mince, with a class-attached note **PROPOSED**. §8 unchanged | 38, 8 |
 | 29 Sep 2026 | **Ingredient states join the libraries.** An ingredient's doneness state — caramelized onion, golden garlic, parboiled rice — looks the same in every recipe, so its photograph is keyed (ingredient, state), shot once at the first test cook that needs it, and reused; **dish-state doneness stays recipe-specific** and keeps §5.5's trust claim. Fat states stay illustrated layers (§35), outside the state library. Entered from a register drop-down like every reusable asset. **PROPOSED:** §33's granularity test for state variants. **OPEN:** failure states, an authored field, the doneness text's agreement, where the library lives. Supersedes §5.5 and §16.6 for ingredient states only | 39, 5.5, 16.6 |
 | 30 Sep 2026 | **The retail layer's boundaries.** A recipe's `cost_per_serving` **never becomes retailer-specific** and stays on the Class A rate permanently; only the shopping list shows a live retailer's real prices, and this is not to be revisited. With more than one retailer, **the shopper picks** from a row of logos, a stored preference changeable in settings; IP may suggest a first default but never decides, and the picker ships first. **Retailer and manufacturer promotions run outside the app** — Matbakh builds and displays nothing for them. **OPEN:** Matbakh-brokered promotions (a future design task; §27's retail media sits there, bounded by MON-09), and IP's privacy handling (L-06). Reasoning in the vault's `referral-fee-variances.md` | 40, 27, 28, 29 |
+| 30 Sep 2026 | **Where the Cut Library and the state library live.** `matbakh-private/03-catalogue/cut-library/` and `state-library/`, **ignored by git** except for a README each, and backed up where the vault's backups already go — encrypted to `OneDrive/Matbakh-Backups/`, plain to `D:\Matbakh-Backups\` — since a snapshot archives the whole vault, ignored files included. **Why:** the tools already resolve `03-catalogue/`; the libraries sit beside the recipes and tracker; they stay private (L-03), where the design repo is public; the app should load delivery copies, not carry masters; and git history would grow by gigabytes, with LFS needing a remote the vault must never have. **PROPOSED:** a snapshot before recipe 2's first shot, then after every test cook that adds shots. **OPEN:** snapshot size under five-generation retention; delivery copies (E-03). Settles §33's and §39's open location | 41, 33, 39 |
