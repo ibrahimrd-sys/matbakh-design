@@ -2020,6 +2020,21 @@ library). Neither is edited.*
   keeps as the archive format. The app's WebP q82 copies are generated from them
   at build.
 
+### 41.1 Amendment, 30 September 2026 — the snapshot cadence confirmed
+
+*Appended the same day, after §41 was committed; §41's text above is unchanged.
+Its PROPOSED snapshot cadence is now DECIDED.*
+
+- **DECIDED (Ibrahim, 30 September).** A vault snapshot is taken **before pilot
+  recipe 2's first shot**, and then **after every test cook that adds a
+  photograph** to either library, before the next cook. The snapshot is the
+  existing procedure in `VaultReadme.md` § Backups — encrypted to
+  `OneDrive/Matbakh-Backups/`, plain to `D:\Matbakh-Backups\` — run by Ibrahim,
+  since the encryption asks for the passphrase.
+- **Why a trigger, not a calendar:** the libraries only change at a test cook,
+  and a photograph lost between cooks can only be replaced by cooking the dish
+  again. Tying the snapshot to the cook protects exactly what changed.
+
 ---
 
 ## Decision log
@@ -2091,3 +2106,4 @@ library). Neither is edited.*
 | 29 Sep 2026 | **Ingredient states join the libraries.** An ingredient's doneness state — caramelized onion, golden garlic, parboiled rice — looks the same in every recipe, so its photograph is keyed (ingredient, state), shot once at the first test cook that needs it, and reused; **dish-state doneness stays recipe-specific** and keeps §5.5's trust claim. Fat states stay illustrated layers (§35), outside the state library. Entered from a register drop-down like every reusable asset. **PROPOSED:** §33's granularity test for state variants. **OPEN:** failure states, an authored field, the doneness text's agreement, where the library lives. Supersedes §5.5 and §16.6 for ingredient states only | 39, 5.5, 16.6 |
 | 30 Sep 2026 | **The retail layer's boundaries.** A recipe's `cost_per_serving` **never becomes retailer-specific** and stays on the Class A rate permanently; only the shopping list shows a live retailer's real prices, and this is not to be revisited. With more than one retailer, **the shopper picks** from a row of logos, a stored preference changeable in settings; IP may suggest a first default but never decides, and the picker ships first. **Retailer and manufacturer promotions run outside the app** — Matbakh builds and displays nothing for them. **OPEN:** Matbakh-brokered promotions (a future design task; §27's retail media sits there, bounded by MON-09), and IP's privacy handling (L-06). Reasoning in the vault's `referral-fee-variances.md` | 40, 27, 28, 29 |
 | 30 Sep 2026 | **Where the Cut Library and the state library live.** `matbakh-private/03-catalogue/cut-library/` and `state-library/`, **ignored by git** except for a README each, and backed up where the vault's backups already go — encrypted to `OneDrive/Matbakh-Backups/`, plain to `D:\Matbakh-Backups\` — since a snapshot archives the whole vault, ignored files included. **Why:** the tools already resolve `03-catalogue/`; the libraries sit beside the recipes and tracker; they stay private (L-03), where the design repo is public; the app should load delivery copies, not carry masters; and git history would grow by gigabytes, with LFS needing a remote the vault must never have. **PROPOSED:** a snapshot before recipe 2's first shot, then after every test cook that adds shots. **OPEN:** snapshot size under five-generation retention; delivery copies (E-03). Settles §33's and §39's open location | 41, 33, 39 |
+| 30 Sep 2026 | **§41's snapshot cadence confirmed.** A vault snapshot before pilot recipe 2's first shot, then after every test cook that adds a library photograph, before the next cook — the existing encrypted-OneDrive and plain-D: procedure, run by Ibrahim. Tied to the cook rather than the calendar, because only a cook changes the libraries and a lost photograph means cooking again. Filed as §41.1, an amendment appended after §41 | 41.1, 41 |

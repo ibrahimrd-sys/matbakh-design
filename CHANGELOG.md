@@ -5,6 +5,14 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-30c — the snapshot cadence confirmed
+
+**`philosophy.md` §41.1**, an amendment appended after §41: §41's proposed
+snapshot cadence is decided. A vault snapshot is taken before pilot recipe 2's
+first shot, then after every test cook that adds a library photograph. It uses
+the existing encrypted-OneDrive and plain-D: procedure, and it is tied to the
+cook because only a cook changes the libraries.
+
 ## 2026-09-30b — where the libraries live
 
 **`philosophy.md` §41.** The Cut Library and the state library live in the vault,
