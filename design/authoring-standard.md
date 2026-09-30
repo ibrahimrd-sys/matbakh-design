@@ -4,7 +4,7 @@
 **Written:** 15 August 2026. Verified against `content/matbakh.py`, `_template.yaml`,
 `lexicon/activities.yaml` (81 activities), `lexicon/chrome.yaml` and
 `ref/ingredients.yaml` (177 entries) as they stand today.
-**Last updated:** 2026-09-30 — `philosophy.md` §33–§41 folded in: page grouping,
+**Last updated:** 2026-09-30 — `philosophy.md` §33–§42 folded in: page grouping,
 the board page, upfront preparations, time and timers by attendance, heat and
 fat, cuts and the Cut Library, ingredient states as library photographs (§39,
 29 Sept), the finished-product page. Where a decision is
@@ -467,11 +467,12 @@ being hurt?* If yes, it gets a `timer:`. If no, it is attended: the reader shows
 an approximate time — one number with ≈, never a range — **derived from the
 activity, not authored by you.**
 
-> **DRAFT:** which of the 81 activities are unattended, attended, timeless or
-> context-dependent is in `design/activity-attendance-draft.md` — including four
-> it marks attended for safety and not overridable (`deep_fry`, `broil`, `char`,
-> `grill`). It is not confirmed and not in `activities.yaml`. Until it is, apply
-> the test above yourself. Once confirmed, the validator will warn on a timer on an attended or
+> **Confirmed 30 September (§42):** which of the 81 activities are unattended
+> (17), attended (14), timeless (44) or context-dependent (6) is in
+> `design/activity-attendance.md`. `deep_fry`, `broil`, `char` and `grill` are
+> attended for safety and not overridable. **`boil` is context-dependent:** mark
+> the page unattended for pasta water, attended for milk or a starchy pot. It is
+> not yet in `activities.yaml` (E-14), so for now look the verb up in that file. Once confirmed, the validator will warn on a timer on an attended or
 > no-time verb, and on a long unattended activity with no timer (E-14).
 
 **`mass_sensitive: true` when the time scales with the batch.** Simmering six
@@ -707,8 +708,8 @@ A recipe is authored when all of these hold:
 
 The hint is guidance for the editor's dropdown ordering, not a constraint. An
 activity may be used at any station. The count is `activities.yaml`'s as it
-stands on 28 September. `flip` is decided and not yet added (§35). The DRAFT
-attendance classes are in `design/activity-attendance-draft.md`.
+stands on 28 September. `flip` is decided and not yet added (§35). The
+attendance classes, confirmed 30 September, are in `design/activity-attendance.md`.
 
 **any (3)** — `add` · `pour` · `season`
 

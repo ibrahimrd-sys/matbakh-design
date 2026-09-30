@@ -5,6 +5,14 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-09-30d — which activities get a timer: confirmed
+
+**`philosophy.md` §42.** The attendance classification is confirmed, with `boil`
+moved to context-dependent — pasta water can be left; milk boils over. That gives
+17 unattended, 14 attended, 44 no-time and 6 context-dependent. The file is
+renamed `design/activity-attendance.md`, and the authoring standard now points
+to it. Not yet in `activities.yaml` (E-14).
+
 ## 2026-09-30c — the snapshot cadence confirmed
 
 **`philosophy.md` §41.1**, an amendment appended after §41: §41's proposed

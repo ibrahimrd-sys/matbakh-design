@@ -2037,6 +2037,31 @@ Its PROPOSED snapshot cadence is now DECIDED.*
 
 ---
 
+## 42. The attendance classification confirmed — SETTLED (30 September 2026)
+
+*Settles the DRAFT line of §34 — "the classification is in
+`design/activity-attendance-draft.md`… not written into `activities.yaml` until
+Ibrahim confirms it". §34 is not edited.*
+
+## Addendum — 30 Sept 2026: which activities get a timer
+
+- **DECIDED (Ibrahim, 30 September).** The 28 September classification of the 81
+  activities is confirmed, with **one change: `boil` moves from unattended to
+  context-dependent.** Pasta water can be left alone; milk, or a starchy pot,
+  boils over, so the author decides per page. The result:
+  - **17 unattended**, with a timer;
+  - **14 attended**, with ≈ guidance and no timer — `deep_fry`, `broil`, `char`
+    and `grill` attended for safety, not overridable;
+  - **44 with no time by default**;
+  - **6 context-dependent**, set per page at authoring.
+- **The file** is renamed `design/activity-attendance.md` on confirmation.
+  Records dated before 30 September keep the old name.
+- **Not yet in `activities.yaml`.** Writing the class into the lexicon, and the
+  validator warnings, are E-14. The lexicon edit waits on Ibrahim's go, because
+  the pilot freezes the lexicon.
+
+---
+
 ## Decision log
 
 | Date | Decision | Section |
@@ -2107,3 +2132,4 @@ Its PROPOSED snapshot cadence is now DECIDED.*
 | 30 Sep 2026 | **The retail layer's boundaries.** A recipe's `cost_per_serving` **never becomes retailer-specific** and stays on the Class A rate permanently; only the shopping list shows a live retailer's real prices, and this is not to be revisited. With more than one retailer, **the shopper picks** from a row of logos, a stored preference changeable in settings; IP may suggest a first default but never decides, and the picker ships first. **Retailer and manufacturer promotions run outside the app** — Matbakh builds and displays nothing for them. **OPEN:** Matbakh-brokered promotions (a future design task; §27's retail media sits there, bounded by MON-09), and IP's privacy handling (L-06). Reasoning in the vault's `referral-fee-variances.md` | 40, 27, 28, 29 |
 | 30 Sep 2026 | **Where the Cut Library and the state library live.** `matbakh-private/03-catalogue/cut-library/` and `state-library/`, **ignored by git** except for a README each, and backed up where the vault's backups already go — encrypted to `OneDrive/Matbakh-Backups/`, plain to `D:\Matbakh-Backups\` — since a snapshot archives the whole vault, ignored files included. **Why:** the tools already resolve `03-catalogue/`; the libraries sit beside the recipes and tracker; they stay private (L-03), where the design repo is public; the app should load delivery copies, not carry masters; and git history would grow by gigabytes, with LFS needing a remote the vault must never have. **PROPOSED:** a snapshot before recipe 2's first shot, then after every test cook that adds shots. **OPEN:** snapshot size under five-generation retention; delivery copies (E-03). Settles §33's and §39's open location | 41, 33, 39 |
 | 30 Sep 2026 | **§41's snapshot cadence confirmed.** A vault snapshot before pilot recipe 2's first shot, then after every test cook that adds a library photograph, before the next cook — the existing encrypted-OneDrive and plain-D: procedure, run by Ibrahim. Tied to the cook rather than the calendar, because only a cook changes the libraries and a lost photograph means cooking again. Filed as §41.1, an amendment appended after §41 | 41.1, 41 |
+| 30 Sep 2026 | **The attendance classification confirmed**, with `boil` moved from unattended to context-dependent (pasta water can be left; milk or a starchy pot boils over). 17 unattended (timer), 14 attended (≈; `deep_fry`/`broil`/`char`/`grill` for safety, not overridable), 44 no-time, 6 context-dependent. The file is renamed `design/activity-attendance.md`. Not yet in `activities.yaml` (E-14, which waits on a go under the lexicon freeze). Settles §34's DRAFT line | 42, 34 |
