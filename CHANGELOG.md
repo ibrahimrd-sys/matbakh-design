@@ -5,6 +5,20 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-01b — capture-draft: how to do a real run
+
+**`tools/CaptureDraftRunReadme.md`**, written before the tool's first run
+against the live API. It covers:
+- **the key** — environment only, prompted for so it stays out of shell
+  history, with a spend limit;
+- **a five-step first run,** dry run first, each step with its expected output;
+- **how to check a draft** against its source;
+- **every error message** the tool prints, with its fix.
+
+**Two of the tool's error messages are corrected.** They told the user to copy
+the recipe into a text file, which the tool cannot read; they now say to pass a
+screenshot. Linked from `ToolsReadme.md`, with a row in `DIRECTORY.md` §7.
+
 ## 2026-10-01 — capture-draft: a rough recipe draft from a URL or image
 
 **`tools/capture-draft.py`, an internal authoring tool** (competitor study HD-02,

@@ -141,8 +141,8 @@ def fetch_url(url):
             charset = r.headers.get_content_charset() or "utf-8"
             final = r.geturl()
     except urllib.error.HTTPError as e:
-        sys.exit(f"capture-draft: {url} returned HTTP {e.code}. Paste the recipe "
-                 f"text into a file, or screenshot it and pass the image instead.")
+        sys.exit(f"capture-draft: {url} returned HTTP {e.code}. Screenshot the "
+                 f"recipe and pass the image instead.")
     except urllib.error.URLError as e:
         sys.exit(f"capture-draft: could not fetch {url}: {e.reason}")
 
@@ -171,8 +171,8 @@ def fetch_url(url):
     content = "\n\n".join(parts)
     if len(content) > MAX_PAGE_CHARS:
         sys.exit(f"capture-draft: the page is {len(content):,} characters, over the "
-                 f"{MAX_PAGE_CHARS:,} limit. Copy just the recipe into a text file, or "
-                 f"screenshot it, rather than sending a cut-down page.")
+                 f"{MAX_PAGE_CHARS:,} limit. Screenshot the recipe and pass the image "
+                 f"instead, rather than sending a cut-down page.")
     if not recipes and len(text) < 200:
         print("capture-draft: warning — the page has almost no text. Social-video "
               "pages (TikTok, Instagram, YouTube) usually render in the browser and "

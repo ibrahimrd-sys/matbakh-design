@@ -195,6 +195,8 @@ Ctrl+Enter saves and advances. **Next untranslated** skips to the first gap.
 ## capture-draft.py
 
 *Added 1 October 2026. Competitor study HD-02 (chapter 11, Honeydew).*
+**How to do a real run — key, first run, checking a draft, every error message:
+`CaptureDraftRunReadme.md`.**
 
 Paste a recipe URL or give it a photo of a recipe — a screenshot, a cookbook
 page — and it returns a **rough draft for a chef**. The draft has the ingredients,
@@ -239,8 +241,8 @@ its source and the time it was captured.
 - **Some sites redirect visitors from Egypt** to a regional homepage — BBC Good
   Food does. The tool warns when a page redirects, and the draft will say there
   was no recipe.
-- **A page over 400,000 characters is refused, not cut down.** Copy the recipe
-  out, or screenshot it.
+- **A page over 400,000 characters is refused, not cut down.** Screenshot the
+  recipe and pass the image.
 
 **Setup and cost.**
 - **Install:** `pip install anthropic`.
