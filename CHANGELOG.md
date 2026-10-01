@@ -5,6 +5,13 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-01e — the consumer capture-app idea logged as HD-07
+
+`CaptureDraftRunReadme.md` §7 now names the consumer capture-and-author idea by
+its register ID, **HD-07** — REOPENS, open, unapproved and not planned toward —
+and keeps it distinct from the pre-filter engine. The register entry itself is
+in the vault, at Ibrahim's request, 1 Oct 2026.
+
 ## 2026-10-01d — capture-draft: where captures live, and the pre-filter design
 
 **Captures go to the vault's `08-unreviewed-captures/`** — Ibrahim, 1 Oct 2026.

@@ -2,7 +2,7 @@
 
 *Written 1 October 2026, before the first run against the live API.*
 
-**Last updated:** 2026-10-01 — the fallback turned off (release 2026.10.01c); §7, the pre-filter engine's design, added; captures go to `08-unreviewed-captures/`.
+**Last updated:** 2026-10-01 — the fallback turned off (release 2026.10.01c); §7, the pre-filter engine's design, added; captures go to `08-unreviewed-captures/`; the consumer-app idea logged as HD-07.
 
 This is the procedure for running `tools/capture-draft.py` against the real
 Anthropic API: first once to prove it works, then as a routine. What the tool is,
@@ -193,7 +193,9 @@ that changes.
 
 **It is not the consumer capture-and-author app** — an app in which cooks capture
 recipes that are then authored to Matbakh's specs. That idea was discussed on
-1 October 2026 and is a separate matter entirely:
+1 October 2026 and **logged the same day as HD-07** in the competitor study's
+register (vault, `02-strategy/competitor-study-combined.md`, Appendix A). It is a
+separate matter entirely:
 
 - **Open, unapproved, and explicitly not being planned toward.**
 - **It would reopen settled positions:** import-your-own-recipes, which is
