@@ -5,6 +5,26 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-01d — capture-draft: where captures live, and the pre-filter design
+
+**Captures go to the vault's `08-unreviewed-captures/`** — Ibrahim, 1 Oct 2026.
+It is a top-level folder, kept apart from `03-catalogue/` so that unreviewed
+content stays away from authored content. Git ignores it apart from its README.
+`CaptureDraftRunReadme.md`, `ToolsReadme.md` and the script's usage line now use
+it.
+
+**`CaptureDraftRunReadme.md` §7: the pre-filter engine, designed and not built.**
+It is a triage layer for the chef's queue. Five structural checks:
+- completeness;
+- plausibility, against thresholds a chef sets;
+- duplicates against the catalogue;
+- ingredients missing from the reference;
+- where the draft came from.
+
+It has no score or verdict, filters nothing, and has no write path. The section
+says plainly that it is **not** the consumer capture-and-author idea, which stays
+open, unapproved and not planned toward. Building it needs a separate brief.
+
 ## 2026-10-01c — capture-draft: the fallback turned off
 
 **`tools/capture-draft.py` no longer opts into the API's server-side fallback.**

@@ -5,7 +5,7 @@ capture-draft — a rough recipe draft from a URL or an image, for a chef to rew
     python3 capture-draft.py https://example.com/some-recipe
     python3 capture-draft.py photo-of-cookbook-page.jpg
     python3 capture-draft.py URL --format text            # plain text, not JSON
-    python3 capture-draft.py URL --out ~/drafts/x.json    # also write a file
+    python3 capture-draft.py URL --out ../../matbakh-private/08-unreviewed-captures/x.json
     python3 capture-draft.py URL --dry-run                # show what would be sent
 
 INTERNAL AUTHORING TOOL ONLY (competitor study HD-02). What it prints is a

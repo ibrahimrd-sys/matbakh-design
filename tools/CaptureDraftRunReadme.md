@@ -2,12 +2,13 @@
 
 *Written 1 October 2026, before the first run against the live API.*
 
-**Last updated:** 2026-10-01 — the fallback turned off (release 2026.10.01c).
+**Last updated:** 2026-10-01 — the fallback turned off (release 2026.10.01c); §7, the pre-filter engine's design, added; captures go to `08-unreviewed-captures/`.
 
 This is the procedure for running `tools/capture-draft.py` against the real
 Anthropic API: first once to prove it works, then as a routine. What the tool is,
 and what it refuses to do, is in `ToolsReadme.md` § capture-draft.py. This file
-says only how to run it.
+says how to run it, and §7 records the agreed design of the next piece, a
+pre-filter for its output, which has not been built.
 
 **As of writing, it has been tested offline only** — page extraction, images,
 the write guards, the error messages, and the request against a mocked API.
@@ -75,12 +76,12 @@ made.
 
 ### Step 2 — a URL, for real
 
-Make a folder for drafts **outside this repository and outside the vault's
-`03-catalogue/`** — the tool refuses both. Where drafts live is not yet decided
-(PM log, 1 Oct); until it is, something like `C:\Users\<you>\matbakh-drafts\`
-will do.
+Captures go in the vault's **`08-unreviewed-captures/`**. It is a top-level
+folder, kept apart from `03-catalogue/` on purpose, and git ignores everything
+in it except its README (Ibrahim, 1 Oct 2026; see its `CapturesReadme.md`).
+The tool refuses this repository and `03-catalogue/` in any case.
 
-    python3 tools/capture-draft.py https://www.themealdb.com/meal/52771 --format text --out C:/Users/<you>/matbakh-drafts/arrabiata.txt
+    python3 tools/capture-draft.py https://www.themealdb.com/meal/52771 --format text --out ../matbakh-private/08-unreviewed-captures/arrabiata.txt
 
 **Expect, in about ten to thirty seconds,** a plain-text draft that opens with
 `# UNREVIEWED MACHINE TRANSCRIPTION…`, then:
@@ -164,12 +165,108 @@ Every failure prints one line beginning `capture-draft:`.
 
 Record it in the PM log's §13 — the date, that the tool ran against the live
 API, the cost of the three calls, and anything that did not match the
-*Expect* lines above. Then, if it is to become routine, two open questions go to
-Ibrahim:
+*Expect* lines above. Then, if it is to become routine, one open question goes
+to Ibrahim:
 
-- **where drafts live** — a standard folder outside `03-catalogue/`;
+- ~~**where drafts live**~~ — **decided 1 Oct 2026:** `08-unreviewed-captures/`
+  in the vault, top-level, ignored by git apart from its README;
 - **whether a draft is kept** after the recipe is authored. It is a third-party
   transcription, so the case for deleting it is its copyright, and the case for
   keeping it is provenance.
 
-Until those are settled the tool stays outside every workflow, as it is now.
+Until that is settled the tool stays outside every workflow, as it is now.
+
+---
+
+## 7. Pre-filter engine for capture-draft.py (design, not yet built)
+
+*Design agreed by Ibrahim, 1 October 2026. **Not built.** The next step is a
+separate build brief, which is not part of this document.*
+
+### What this is, and what it is not
+
+**It is a triage layer for the chef's queue, not authoring.** It reads a draft
+that `capture-draft.py` has already produced, and attaches structural flags so
+a chef can review the draft faster. The chef still reviews every draft, rewrites
+it to `design/authoring-standard.md`, and the dish is still test-cooked. None of
+that changes.
+
+**It is not the consumer capture-and-author app** — an app in which cooks capture
+recipes that are then authored to Matbakh's specs. That idea was discussed on
+1 October 2026 and is a separate matter entirely:
+
+- **Open, unapproved, and explicitly not being planned toward.**
+- **It would reopen settled positions:** import-your-own-recipes, which is
+  recorded as structurally unavailable (competitor study, Appendix A §3); the
+  test-cooked promise; and one recipe per dish (§9).
+
+The pre-filter is a smaller, approved-to-design extension of an internal tool.
+**It does not move toward automating authoring,** and building it is not a step
+toward that app. A future reader should not treat one as progress on the other.
+
+### Purpose
+
+It speeds up the chef's review of captured drafts. It:
+
+- **never decides** which drafts a chef sees;
+- **never writes** to `03-catalogue/`;
+- **never assigns tags,** and never breaks a recipe into tiles, pages or
+  activities.
+
+Tags and the breakdown stay the chef's judgement calls, consistent with
+`philosophy.md` §11's test — *could a careful person disagree?* — and with the
+capture tool's original boundary: its job ends at a rough draft.
+
+### The checks
+
+All five are structural. None is a judgement call.
+
+**A. Completeness.**
+- Every ingredient has a name, a quantity and a unit, or is flagged as missing
+  one — never silently guessed.
+- Every step has real instructional text.
+- There is at least one ingredient and one step.
+
+*Example output: "3 of 8 ingredients have no quantity in the source."*
+
+**B. Plausibility.** Flags quantities wildly outside a sane range for their unit,
+using **thresholds set by a chef**, not invented by the engine. It only flags:
+it never corrects or discards anything.
+
+**C. Duplicates against the catalogue.** It fuzzy-matches the captured title and
+key ingredients against what is already authored in `03-catalogue/`, reading
+only. This is the one check with a direct economic payoff: it catches *"this
+looks like a dish we already have"* before a chef spends time on it.
+
+**D. Unmapped ingredients.** It fuzzy-matches every captured ingredient against
+`ref/ingredients.yaml` and flags anything not found. That shows how much new
+reference work a capture would need.
+
+**E. Source-type carryforward.** It passes on what `capture-draft.py` already
+knows about where a draft came from, instead of losing that context:
+- the site's own schema.org recipe data;
+- a screenshot or photograph;
+- a page that behaved oddly — a geo-redirect, or almost no text.
+
+### Non-goals, stated plainly
+
+- **No breakdown into tiles, pages or activities.**
+- **No tag assignment.**
+- **No pass/fail verdict, and no composite score of any kind.** A single score
+  would, over time, risk becoming an approval signal. That defeats the purpose,
+  which is that a person reviews every draft.
+- **No filtering of which drafts reach a chef.**
+- **No write path to `03-catalogue/`.** The output stays attached to the raw
+  capture in `08-unreviewed-captures/`.
+
+### Open, and not settled by this design
+
+- ~~**Where the drafts folder is.**~~ **Decided 1 Oct 2026:**
+  `08-unreviewed-captures/`. The design as first written named `04-drafts/`,
+  which would have collided with the vault's `04-research/`. Ibrahim chose a
+  top-level folder, not one nested under `03-catalogue/`, with a name that says
+  the contents are unreviewed captures, not recipes in progress.
+- **The chef-set thresholds for check B** do not exist yet. A chef has to set
+  them; the engine must not invent them.
+- **Whether a draft is kept** after authoring, from §6 above. It also decides how
+  long a draft's flags are kept.

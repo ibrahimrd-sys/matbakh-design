@@ -3,7 +3,7 @@
 *Written 26 August 2026. One file per tool question; there is no second copy of
 this document.*
 
-**Last updated:** 2026-10-01 — `capture-draft.py` added; its fallback turned off.
+**Last updated:** 2026-10-01 — `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
 
 **Five** authoring tools. Four are single HTML files: open them in a browser, no
 install, no server, no Python. The fifth, `capture-draft.py`, is a Python script
@@ -196,7 +196,10 @@ Ctrl+Enter saves and advances. **Next untranslated** skips to the first gap.
 
 *Added 1 October 2026. Competitor study HD-02 (chapter 11, Honeydew).*
 **How to do a real run — key, first run, checking a draft, every error message:
-`CaptureDraftRunReadme.md`.**
+`CaptureDraftRunReadme.md`.** Captures go in the vault's `08-unreviewed-captures/`.
+Its §7 holds the design of a planned **pre-filter engine** — triage flags for the
+chef's queue, with no score and no filtering. It is not built, and it is not a
+step toward automating authoring.
 
 Paste a recipe URL or give it a photo of a recipe — a screenshot, a cookbook
 page — and it returns a **rough draft for a chef**. The draft has the ingredients,
@@ -207,7 +210,7 @@ but missing from the list.
 
     python3 tools/capture-draft.py https://example.com/recipe          # JSON
     python3 tools/capture-draft.py cookbook-page.jpg --format text     # plain text
-    python3 tools/capture-draft.py URL --out C:/Users/you/drafts/x.json
+    python3 tools/capture-draft.py URL --out ../matbakh-private/08-unreviewed-captures/x.json
     python3 tools/capture-draft.py URL --dry-run                       # no API call
 
 **It is a starting draft and nothing more.** It does not choose activities,
