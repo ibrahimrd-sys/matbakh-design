@@ -5,6 +5,23 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-01 — capture-draft: a rough recipe draft from a URL or image
+
+**`tools/capture-draft.py`, an internal authoring tool** (competitor study HD-02,
+from chapter 11, Honeydew). Give it a recipe URL or a photo of a recipe, and it
+asks Claude for a rough draft: ingredients with quantities and units as written,
+steps as plain text, and notes for the chef. The draft is printed as JSON or
+plain text, for a chef to rewrite and test-cook.
+
+- **It never touches the schema:** no activities, tiles, tags, cuts, nutrition
+  or cost.
+- **It never writes into this repo or the vault's `03-catalogue/`.** An `--out`
+  file pointed at either, or given a `.yaml` name, is refused.
+- **The API key comes from the environment,** never from a file.
+
+Documented in `tools/ToolsReadme.md`, with a row in `DIRECTORY.md` §7. Nothing
+in the app or the authoring pipeline calls it.
+
 ## 2026-09-30d — which activities get a timer: confirmed
 
 **`philosophy.md` §42.** The attendance classification is confirmed, with `boil`

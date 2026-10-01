@@ -4,7 +4,7 @@
 Written 26 August 2026. Companion to `README.md`, which explains the *loop*;
 this explains the *contents*.
 
-**Last updated:** 2026-09-30
+**Last updated:** 2026-10-01
 
 The vault, `matbakh-private/`, has its own `DIRECTORY.md` beside this one. It is
 not described here — this file is in a public repository.
@@ -147,7 +147,7 @@ screens render blank with no visible error.
 
 ---
 
-## 7. `tools/` — the four browser authoring editors
+## 7. `tools/` — the four browser authoring editors and `capture-draft.py`
 
 Single HTML files. No server, no install, nothing uploaded. Each has a live
 validation rail applying the same rules as `matbakh.py`, and refuses to produce a
@@ -159,7 +159,8 @@ download while an error stands.
 | `lexicon-editor.html` | **CANON** | Per-dialect collision detection is the check that earns its keep. 44px and 17px previews. |
 | `recipe-editor.html` | **CANON** | Every field a dropdown fed from the lexicon and reference. **Repaired 15 August** — before that it silently deleted short-form ingredients on save, and `q()` truncated any prose containing a comma. Anything saved from it before 15 Aug should be re-read for lost clauses. |
 | `translator.html` | **CANON** | Prose only. A translator cannot reach a structural field. |
-| `ToolsReadme.md` | **CANON** | Covers all four. Named per §11; there is no `tools/README.md` any more. |
+| `capture-draft.py` | **CANON** | *Added 1 Oct.* Python, not a browser editor: a URL or recipe image in, a rough **unreviewed** JSON or text draft out, via the Anthropic API, for a chef to rewrite (competitor study HD-02). Maps nothing to the schema and writes nothing but stdout and an optional `--out`, which refuses this repo, the vault's `03-catalogue/` and `.yaml` names. Key from the environment, never a file. |
+| `ToolsReadme.md` | **CANON** | Covers all five. Named per §11; there is no `tools/README.md` any more. |
 | ~~`tools-README.md`~~ | **REMOVED 26 Aug** | Was `README.md` plus a Diet section. |
 | ~~`translator.md`~~ | **REMOVED 26 Aug** | Was `tools-README.md` plus a translator section — the fullest of the three, so it is the one the merged `README.md` is built from. Its name was an accident: it is what `Translator README.md` became when `publish.sh` refused a filename containing a space. |
 

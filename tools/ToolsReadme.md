@@ -1,10 +1,14 @@
-# Tools — the four authoring editors
+# Tools — the authoring editors and the capture-draft script
 
 *Written 26 August 2026. One file per tool question; there is no second copy of
 this document.*
 
-**Four** authoring tools. Each is a single HTML file: open it in a browser, no
-install, no server, no Python.
+**Last updated:** 2026-10-01 — `capture-draft.py` added.
+
+**Five** authoring tools. Four are single HTML files: open them in a browser, no
+install, no server, no Python. The fifth, `capture-draft.py`, is a Python script
+that calls the Anthropic API. It produces a starting draft for a chef and never
+edits a recipe.
 
 | File | Opens | For |
 |---|---|---|
@@ -12,8 +16,9 @@ install, no server, no Python.
 | `lexicon-editor.html` | `content/lexicon/activities.yaml` + `chrome.yaml` | the activity vocabulary and its Arabic |
 | `recipe-editor.html` | a recipe + the lexicon + the reference | authoring and editing recipes |
 | `translator.html` | recipe files + `chrome.yaml` | handing prose to a collaborator without exposing structure |
+| `capture-draft.py` | a URL or an image of a recipe | a rough, unreviewed draft of someone else's recipe, for a chef to rewrite — **never a Matbakh recipe** |
 
-**Nothing is uploaded.** Files are read in the browser and stay on your machine.
+**Nothing is uploaded by the four editors.** Files are read in the browser and stay on your machine.
 That is also why they cannot save in place — a web page may not write to disk.
 You download the edited file and put it back in the vault yourself.
 
@@ -187,9 +192,70 @@ not the field name.
 
 Ctrl+Enter saves and advances. **Next untranslated** skips to the first gap.
 
+## capture-draft.py
+
+*Added 1 October 2026. Competitor study HD-02 (chapter 11, Honeydew).*
+
+Paste a recipe URL or give it a photo of a recipe — a screenshot, a cookbook
+page — and it returns a **rough draft for a chef**. The draft has the ingredients,
+with quantity and unit exactly as the source wrote them, and the steps as plain
+text, divided the way the source divides them. It also has notes on anything it
+could not read or that does not add up, such as an ingredient used in the method
+but missing from the list.
+
+    python3 tools/capture-draft.py https://example.com/recipe          # JSON
+    python3 tools/capture-draft.py cookbook-page.jpg --format text     # plain text
+    python3 tools/capture-draft.py URL --out C:/Users/you/drafts/x.json
+    python3 tools/capture-draft.py URL --dry-run                       # no API call
+
+**It is a starting draft and nothing more.** It does not choose activities,
+stations, tiles, pages, tags or cuts, and it computes no nutrition or cost —
+that decomposition is the chef's judgement, not something to automate. A
+captured recipe becomes a Matbakh recipe only when a person rewrites it to
+`design/authoring-standard.md` and it is test-cooked.
+
+**What it can and cannot write.** It writes nothing except what it prints and an
+optional `--out` file. `--out` refuses:
+- any path inside this repository — it is public, and a draft is someone else's
+  recipe;
+- anything in the vault's `03-catalogue/`;
+- a `.yaml` name, so a draft can never pass for a recipe file.
+
+Each draft opens with an *UNREVIEWED MACHINE TRANSCRIPTION* warning, and gives
+its source and the time it was captured.
+
+**How it reads a source.**
+- **A URL:** it fetches the page and sends its visible text. If the page also
+  publishes schema.org recipe data, it sends that too.
+- **An image** (`.jpg`, `.png`, `.gif`, `.webp`): it goes straight to Claude's
+  vision.
+- **One API call** to Claude Opus 5.5 returns a fixed JSON shape. The prompt
+  says to transcribe and never invent, convert or scale.
+
+**Where it falls short.**
+- **Social-video links** (TikTok, Instagram, YouTube) render in the browser, and
+  a plain fetch gets almost nothing. The tool warns you; screenshot the caption
+  and pass the image.
+- **Some sites redirect visitors from Egypt** to a regional homepage — BBC Good
+  Food does. The tool warns when a page redirects, and the draft will say there
+  was no recipe.
+- **A page over 400,000 characters is refused, not cut down.** Copy the recipe
+  out, or screenshot it.
+
+**Setup and cost.**
+- **Install:** `pip install anthropic`.
+- **Credentials:** `ANTHROPIC_API_KEY` in the environment, or an
+  `ant auth login` profile. As with the USDA key above, **never write the key
+  into a file in this folder.** `--dry-run` shows what would be sent, with no
+  call and no key.
+- **Cost:** each run is one API call, billed to the key — a few cents for a
+  screenshot or a short page.
+- **Fallback:** the request opts into the API's server-side fallback, so a
+  request the model declines on safety grounds is retried on another model.
+
 ## What these do not do
 
-Comments in the original file are not preserved; the YAML is regenerated. Keep
+*This section is about the four editors.* Comments in the original file are not preserved; the YAML is regenerated. Keep
 that in mind for `_template.yaml` and the schema fixture, which are mostly
 comment.
 
@@ -198,7 +264,7 @@ before you walk away.
 
 ---
 
-*One README covers all four tools. Until 26 August 2026 there were three
+*One README covers all the tools — four editors until 1 October 2026, then `capture-draft.py`. Until 26 August 2026 there were three
 overlapping copies of this file in this folder — `README.md`, `tools-README.md`
 and `translator.md`, each a superset of the last. This is the merge of all three;
 the other two are gone.*
