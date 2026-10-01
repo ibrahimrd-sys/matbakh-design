@@ -5,6 +5,16 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-01c — capture-draft: the fallback turned off
+
+**`tools/capture-draft.py` no longer opts into the API's server-side fallback.**
+If the model declines a source on safety grounds, the tool now stops with an
+error that says so. Before, the request was re-run on another model without
+saying. The call moves from the beta endpoint to the standard
+`client.messages.parse`; the model, effort and output schema are unchanged.
+Ibrahim's instruction, 1 Oct 2026 — step 5 of the Recime/Honeydew/Pepesto usage
+plan. `ToolsReadme.md` and `CaptureDraftRunReadme.md` are updated to match.
+
 ## 2026-10-01b — capture-draft: how to do a real run
 
 **`tools/CaptureDraftRunReadme.md`**, written before the tool's first run

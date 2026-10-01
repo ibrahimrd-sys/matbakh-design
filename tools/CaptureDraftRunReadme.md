@@ -2,7 +2,7 @@
 
 *Written 1 October 2026, before the first run against the live API.*
 
-**Last updated:** 2026-10-01
+**Last updated:** 2026-10-01 — the fallback turned off (release 2026.10.01c).
 
 This is the procedure for running `tools/capture-draft.py` against the real
 Anthropic API: first once to prove it works, then as a routine. What the tool is,
@@ -150,7 +150,7 @@ Every failure prints one line beginning `capture-draft:`.
 | `API error 4xx/5xx: …` | 5xx is Anthropic's side — retry later. 4xx with a spend-limit message: the limit from §1 was reached |
 | `the API rejected the request: …` | Usually an image that is too large. Resize it to under about 5 MB and retry |
 | `could not reach the API…` | No connection, or a proxy is in the way |
-| `the model declined this source…` | It has been retried on a fallback model and declined again. Try a different source |
+| `the model declined this source…` | The model declined it on safety grounds, and nothing was retried on another model (the tool has no fallback). Try a different source; if an ordinary recipe is being declined, keep the request and report it |
 | `the response was cut off or unreadable…` | Rare. Retry once, and if it repeats, keep the `request_id` |
 | `… returned HTTP 403` (or 404, 429) | The site blocks scripts. Screenshot the recipe and pass the image |
 | warning: `… redirected to …` | The site sent you elsewhere — BBC Good Food sends Egypt to its regional homepage. Expect `found_recipe: false`; screenshot instead |

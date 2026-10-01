@@ -274,8 +274,10 @@ def main():
 
     import anthropic
     client = anthropic.Anthropic()
+    # No server-side fallback, deliberately (1 Oct 2026, Ibrahim): a declined
+    # request stops with a clear error instead of being re-run on another model.
     try:
-        resp = client.beta.messages.parse(
+        resp = client.messages.parse(
             model=MODEL,
             max_tokens=16000,
             system=INSTRUCTIONS,
@@ -283,8 +285,6 @@ def main():
             output_format=_schema(),
             thinking={"type": "adaptive"},
             output_config={"effort": "medium"},
-            betas=["server-side-fallback-2026-07-01"],
-            fallbacks="default",
         )
     except anthropic.AuthenticationError:
         sys.exit("capture-draft: the API rejected the credentials. Check ANTHROPIC_API_KEY.")
@@ -304,7 +304,8 @@ def main():
 
     if resp.stop_reason == "refusal":
         cat = resp.stop_details.category if resp.stop_details else None
-        sys.exit(f"capture-draft: the model declined this source (category: {cat}).")
+        sys.exit(f"capture-draft: the model declined this source (category: {cat}). "
+                 f"Nothing was retried on another model. Try a different source.")
     if resp.stop_reason == "max_tokens" or resp.parsed_output is None:
         sys.exit(f"capture-draft: the response was cut off or unreadable "
                  f"(stop_reason {resp.stop_reason}, request {resp._request_id}).")

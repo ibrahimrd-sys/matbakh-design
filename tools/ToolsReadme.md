@@ -3,7 +3,7 @@
 *Written 26 August 2026. One file per tool question; there is no second copy of
 this document.*
 
-**Last updated:** 2026-10-01 — `capture-draft.py` added.
+**Last updated:** 2026-10-01 — `capture-draft.py` added; its fallback turned off.
 
 **Five** authoring tools. Four are single HTML files: open them in a browser, no
 install, no server, no Python. The fifth, `capture-draft.py`, is a Python script
@@ -252,8 +252,11 @@ its source and the time it was captured.
   call and no key.
 - **Cost:** each run is one API call, billed to the key — a few cents for a
   screenshot or a short page.
-- **Fallback:** the request opts into the API's server-side fallback, so a
-  request the model declines on safety grounds is retried on another model.
+- **No fallback.** If the model declines a request on safety grounds, the tool
+  stops with an error saying so; nothing is retried on another model. *(Until
+  release 2026.10.01c it opted into the API's server-side fallback, which did
+  retry. Turned off 1 Oct 2026 at Ibrahim's instruction, so that a decline is
+  never a silent switch of model.)*
 
 ## What these do not do
 
