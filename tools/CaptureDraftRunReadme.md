@@ -2,7 +2,7 @@
 
 *Written 1 October 2026, before the first run against the live API.*
 
-**Last updated:** 2026-10-01 — the fallback turned off (release 2026.10.01c); §7, the pre-filter engine's design, added; captures go to `08-unreviewed-captures/`; the consumer-app idea logged as HD-07.
+**Last updated:** 2026-10-06 — §6: a chef's rewrites of captures go to `09-reviewed-captures/` (release 2026.10.06). Earlier, 2026-10-04: §7: checks F–H (duplicate entries, temperature units, list against method) added to the pre-filter design, with the Boeuf Bourguignon capture as their worked example (release 2026.10.04). Earlier, 2026-10-01: the fallback turned off (release 2026.10.01c); §7, the pre-filter engine's design, added; captures go to `08-unreviewed-captures/`; the consumer-app idea logged as HD-07.
 
 This is the procedure for running `tools/capture-draft.py` against the real
 Anthropic API: first once to prove it works, then as a routine. What the tool is,
@@ -170,7 +170,12 @@ to Ibrahim:
 
 - ~~**where drafts live**~~ — **decided 1 Oct 2026:** `08-unreviewed-captures/`
   in the vault, top-level, ignored by git apart from its README;
-- **whether a draft is kept** after the recipe is authored. It is a third-party
+- ~~**where a chef's rewrites live**~~ — **decided 6 Oct 2026:**
+  `09-reviewed-captures/` in the vault, beside `08-unreviewed-captures/`,
+  ignored by git apart from its README. A rewrite is the chef's working copy,
+  not a recipe: the recipe is authored fresh in `03-catalogue/recipes/`, and
+  nothing is copied across;
+- **whether a draft is kept**, and now its rewrite too, after the recipe is authored. It is a third-party
   transcription, so the case for deleting it is its copyright, and the case for
   keeping it is provenance.
 
@@ -180,8 +185,9 @@ Until that is settled the tool stays outside every workflow, as it is now.
 
 ## 7. Pre-filter engine for capture-draft.py (design, not yet built)
 
-*Design agreed by Ibrahim, 1 October 2026. **Not built.** The next step is a
-separate build brief, which is not part of this document.*
+*Design agreed by Ibrahim, 1 October 2026; checks F–H added at Ibrahim's
+request, 4 October 2026. **Not built.** The next step is a separate build brief, which is
+not part of this document.*
 
 ### What this is, and what it is not
 
@@ -221,7 +227,7 @@ capture tool's original boundary: its job ends at a rough draft.
 
 ### The checks
 
-All five are structural. None is a judgement call.
+All eight are structural. None is a judgement call.
 
 **A. Completeness.**
 - Every ingredient has a name, a quantity and a unit, or is flagged as missing
@@ -250,6 +256,58 @@ knows about where a draft came from, instead of losing that context:
 - a screenshot or photograph;
 - a page that behaved oddly — a geo-redirect, or almost no text.
 
+*Checks F–H added 4 October 2026, at Ibrahim's request. They work within the
+same limits as A–E: they only flag, they never correct anything, they give no
+score, and they hide nothing from the chef.*
+
+**F. Duplicate ingredient entries.** It lists every entry for the same
+ingredient across the list's sections, and shows their sum. A Matbakh recipe
+lists each ingredient once. **The chef consolidates; the check never merges
+anything.** If an entry has no quantity, or the units cannot be added, the check
+shows the entries without a total. It never guesses a total.
+
+*Example output: "butter — 1 tbsp (onions) + 2 tbsp (mushrooms) = 3 tbsp."*
+
+**G. Temperature units.** It flags a temperature that has no unit, or a unit
+other than Matbakh's convention, which is °C (`philosophy.md` §5.1). **It never
+converts.**
+
+*Example output: "Step 1: 450° has no unit. Step 14: 325°F is not °C."*
+
+**H. List against method.** For each ingredient, it adds up the quantities the
+steps use and flags any ingredient whose total does not match the list. If a
+quantity in a step cannot be read, it is flagged as unreadable, not guessed.
+
+*Example output: "butter — list 3 tbsp; steps use 1 + 2 + 1 = 4 tbsp."*
+
+**Worked example for F, G and H: the Boeuf Bourguignon capture.**
+`08-unreviewed-captures/Beef_Bourguignon.txt` in the vault is a capture of Julia
+Child's Boeuf Bourguignon from garlicandzest.com, made 4 October 2026. All three
+new checks would flag it:
+
+- **F:**
+  - butter: 1 tbsp + 2 tbsp = 3 tbsp;
+  - olive oil: 1 + 1 + 1 tbsp = 3 tbsp;
+  - thyme: 5–6 sprigs + 3–4 sprigs = 8–10 sprigs;
+  - bay leaf: 2 + ½ = 2½;
+  - parsley: 4 sprigs, plus a chopped garnish with no quantity, so there is no
+    total;
+  - beef stock 2–3 cups and beef broth ½ cup are named differently. They would
+    total 2½–3½ cups if they count as one ingredient (see *Open* below).
+- **G:**
+  - steps 1 and 6 give 450° and 325° with no unit;
+  - step 14 gives 325°F, which is not °C.
+- **H:**
+  - butter: the list has 3 tbsp, but the steps use 1 (step 9) + 2 (step 10) +
+    1 (step 11) = 4 tbsp;
+  - olive oil: step 10's "½1 tablespoon" cannot be read, so it is flagged
+    unreadable and no total is given;
+  - mushrooms: step 10's "half 1 pound" cannot be read either.
+
+The capture's own *Notes for the chef* already point out the butter conflict,
+the missing units and the garbled mushroom step, but only because the model
+happened to notice them. F–H would catch them on every capture.
+
 ### Non-goals, stated plainly
 
 - **No breakdown into tiles, pages or activities.**
@@ -272,3 +330,9 @@ knows about where a draft came from, instead of losing that context:
   them; the engine must not invent them.
 - **Whether a draft is kept** after authoring, from §6 above. It also decides how
   long a draft's flags are kept.
+- **How F and H decide that two entries are the same ingredient** — for example
+  *beef stock* and *beef broth, or stock*. Whether they use check D's mapping to
+  `ref/ingredients.yaml` or exact names is not settled.
+- **An ingredient used in the method but missing from the list** — for example
+  the fresh thyme garnish in the Bourguignon example. H as specified compares
+  quantities only. Whether to flag this is not settled.

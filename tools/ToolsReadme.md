@@ -3,7 +3,7 @@
 *Written 26 August 2026. One file per tool question; there is no second copy of
 this document.*
 
-**Last updated:** 2026-10-01 — `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
+**Last updated:** 2026-10-06 — the rewrites folder, `09-reviewed-captures/`, noted. Earlier, 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
 
 **Five** authoring tools. Four are single HTML files: open them in a browser, no
 install, no server, no Python. The fifth, `capture-draft.py`, is a Python script
@@ -196,7 +196,7 @@ Ctrl+Enter saves and advances. **Next untranslated** skips to the first gap.
 
 *Added 1 October 2026. Competitor study HD-02 (chapter 11, Honeydew).*
 **How to do a real run — key, first run, checking a draft, every error message:
-`CaptureDraftRunReadme.md`.** Captures go in the vault's `08-unreviewed-captures/`.
+`CaptureDraftRunReadme.md`.** Captures go in the vault's `08-unreviewed-captures/`; a chef's rewrites of them go in `09-reviewed-captures/`.
 Its §7 holds the design of a planned **pre-filter engine** — triage flags for the
 chef's queue, with no score and no filtering. It is not built, and it is not a
 step toward automating authoring.

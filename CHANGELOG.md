@@ -5,6 +5,33 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-06 — capture-draft: where a chef's rewrites live
+
+**A chef's rewrites of captures go to the vault's `09-reviewed-captures/`.**
+Ibrahim decided this on 6 Oct 2026. The folder is at the same level as
+`08-unreviewed-captures/` and comes one step after it. A rewrite is the chef's
+working copy, not a recipe. The recipe is still authored fresh in
+`03-catalogue/recipes/` and test-cooked, and nothing is copied across. Git
+ignores the folder apart from its README. `CaptureDraftRunReadme.md` §6,
+`ToolsReadme.md` and `DIRECTORY.md` now say so.
+
+## 2026-10-04 — pre-filter design: checks F–H
+
+`CaptureDraftRunReadme.md` §7 gains three checks, added at Ibrahim's request on
+4 Oct 2026. They are still design only, not built:
+- **F**, duplicate ingredient entries, listed with their sum. The chef
+  consolidates them; the check never merges anything.
+- **G**, temperature units: a temperature with no unit, or one that is not °C.
+  It never converts.
+- **H**, list against method: quantities used in the steps that do not add up to
+  the ingredient list.
+
+They work within the same limits as A–E: flags only, no correction, no score.
+The worked example is the Boeuf Bourguignon capture of 4 Oct in the vault's
+`08-unreviewed-captures/`. Two new open points: how F and H match an ingredient
+named two ways, and whether an ingredient the method uses but the list leaves
+out should be flagged.
+
 ## 2026-10-01e — the consumer capture-app idea logged as HD-07
 
 `CaptureDraftRunReadme.md` §7 now names the consumer capture-and-author idea by
