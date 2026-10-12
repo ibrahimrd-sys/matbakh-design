@@ -5,6 +5,19 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-12c — import sources; the check reports language
+
+**`philosophy.md` §44.3** (Ibrahim, 12 Oct 2026): imports come from Arabic,
+English and French recipe sites, and every import is shown in one consistent
+import layout, visibly distinct from a Matbakh recipe. Whether imports are
+translated is open; converting an import into the icon format was considered
+and set aside.
+
+**`tools/structured-data-check.py` now reports each page's language** —
+declared by the page, else by its recipe data, else guessed from the
+ingredient lines — and totals per language as well as per site.
+`ToolsReadme.md` updated.
+
 ## 2026-10-12b — tools: structured-data-check.py
 
 **A new research script, `tools/structured-data-check.py`** — the first of the

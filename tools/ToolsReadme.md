@@ -293,7 +293,11 @@ For each page it reports
 whether it was fetched, whether it carries a Recipe, and which fields it fills:
 ingredient and step counts, the share of ingredient lines with a quantity
 (Western or Arabic-Indic digits, or a fraction) and in Arabic, yield, times,
-nutrition, image and video. It then totals per site.
+nutrition, image and video, and the page's **language** — as the page declares
+it, else as the recipe declares it, else guessed from the ingredient lines
+(Arabic script, French cooking words, otherwise English). It then totals per site
+and **per language**, so Arabic, English and French sources can be compared
+(decided 12 Oct: imports come from all three).
 
 - **It keeps no recipe text.** The output is counts and yes/no flags only, so it
   can be filed anywhere and is not a copy of anyone's recipe.

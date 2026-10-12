@@ -42,8 +42,11 @@ ARABIC = re.compile(r"[؀-ۿݐ-ݿࢠ-ࣿﭐ-﷿ﹰ-﻿]")
 # a quantity: Western or Arabic-Indic digits, or a vulgar fraction
 QUANTITY = re.compile(r"[0-9٠-٩۰-۹¼-¾⅐-⅞]")
 MAX_BYTES = 5_000_000
+# French cooking words, for pages that do not declare their language
+FRENCH = re.compile(r"\b(c\.? ?à ?(soupe|café|s|c)|cuill[eè]res?|pinc[ée]es?|gousses?|beurre|farine|"
+                    r"sucre|sel|poivre|huile|oignons?|œufs?|crème|lait|eau)\b", re.I)
 
-FIELDS = ["url", "site", "status", "final_url", "lang", "jsonld_blocks", "recipe_source",
+FIELDS = ["url", "site", "status", "final_url", "language", "lang", "jsonld_blocks", "recipe_source",
           "name", "ingredients", "ingredients_with_quantity", "ingredients_arabic",
           "steps", "yield", "total_time", "nutrition", "image", "video"]
 
@@ -138,6 +141,22 @@ def _yes(v):
     return "yes" if v not in (None, "", [], {}) else "no"
 
 
+def _language(html_lang, in_language, ings):
+    """ar / en / fr / another code, or ? — the page's declaration first, then the
+    recipe's inLanguage, then a guess from the ingredient lines."""
+    for declared in (html_lang, in_language if isinstance(in_language, str) else ""):
+        code = declared.strip().lower()[:2]
+        if code.isalpha() and len(code) == 2:
+            return code
+    if not ings:
+        return "?"
+    if sum(1 for i in ings if ARABIC.search(i)) * 2 > len(ings):
+        return "ar"
+    if sum(1 for i in ings if FRENCH.search(i)) * 10 > len(ings) * 3:
+        return "fr"
+    return "en"
+
+
 def analyse(raw, charset):
     page = _Page()
     page.feed(raw.decode(charset or "utf-8", errors="replace"))
@@ -167,7 +186,8 @@ def analyse(raw, charset):
                    nutrition=_yes(mp.get("nutrition")), image=_yes(mp.get("image")),
                    video=_yes(mp.get("video")))
     else:
-        return {**row, "recipe_source": "none"}
+        return {**row, "recipe_source": "none", "language": _language(page.lang, None, [])}
+    row["language"] = _language(page.lang, r.get("inLanguage") if recipes else None, ings)
     row.update(ingredients=len(ings),
                ingredients_with_quantity=sum(1 for i in ings if QUANTITY.search(i)),
                ingredients_arabic=sum(1 for i in ings if ARABIC.search(i)))
@@ -298,33 +318,52 @@ def check(url, delay):
 # ── report ─────────────────────────────────────────────────────────────────
 
 def report(rows):
-    print(f"\n{'site':<28} {'pages':>5} {'fetched':>7} {'recipe':>6} {'json-ld':>7} "
-          f"{'ingr.':>5} {'w/ qty':>6} {'arabic':>6} {'steps':>5} {'nutr.':>5}")
-    by_site = collections.defaultdict(list)
-    for r in rows:
-        by_site[r["site"]].append(r)
-    for site in sorted(by_site) + ["ALL"]:
-        rs = rows if site == "ALL" else by_site[site]
+    pct = lambda n, d: f"{100 * n // d}%" if d else "—"
+
+    def line(label, rs, lang=""):
         got = [r for r in rs if r.get("status", "").startswith("ok")]
         rec = [r for r in got if r.get("recipe_source") not in (None, "none")]
         ing = sum(int(r.get("ingredients") or 0) for r in rec)
         qty = sum(int(r.get("ingredients_with_quantity") or 0) for r in rec)
         ara = sum(int(r.get("ingredients_arabic") or 0) for r in rec)
-        pct = lambda n, d: f"{100 * n // d}%" if d else "—"
-        if site == "ALL":
-            print("-" * 84)
-        print(f"{site[:28]:<28} {len(rs):>5} {len(got):>7} {pct(len(rec), len(got)):>6} "
+        print(f"{label[:26]:<26} {lang:>4} {len(rs):>5} {len(got):>7} {pct(len(rec), len(got)):>6} "
               f"{pct(sum(r['recipe_source'] == 'json-ld' for r in rec), len(got)):>7} "
               f"{ing:>5} {pct(qty, ing):>6} {pct(ara, ing):>6} "
               f"{sum(int(r.get('steps') or 0) for r in rec):>5} "
               f"{pct(sum(r.get('nutrition') == 'yes' for r in rec), len(rec)):>5}")
+
+    def main_language(rs):
+        langs = collections.Counter(r.get("language") or "?" for r in rs
+                                    if r.get("status", "").startswith("ok"))
+        if not langs:
+            return "?"
+        top = langs.most_common()
+        return top[0][0] if len(top) == 1 else top[0][0] + "+"
+
+    print(f"\n{'site':<26} {'lang':>4} {'pages':>5} {'fetched':>7} {'recipe':>6} {'json-ld':>7} "
+          f"{'ingr.':>5} {'w/ qty':>6} {'arabic':>6} {'steps':>5} {'nutr.':>5}")
+    by_site = collections.defaultdict(list)
+    for r in rows:
+        by_site[r["site"]].append(r)
+    for site in sorted(by_site):
+        line(site, by_site[site], main_language(by_site[site]))
+    print("-" * 92)
+    by_lang = collections.defaultdict(list)
+    for r in rows:
+        if r.get("status", "").startswith("ok"):
+            by_lang[r.get("language") or "?"].append(r)
+    for lang in sorted(by_lang, key=lambda l: ({"ar": 0, "en": 1, "fr": 2}.get(l, 3), l)):
+        line(f"all {lang} pages", by_lang[lang], lang)
+    line("ALL", rows)
     failed = [r for r in rows if not r.get("status", "").startswith("ok")]
     if failed:
         print(f"\nNot read ({len(failed)}):")
         for r in failed:
             print(f"  {r['status']:<20} {r['url']}")
-    print("\nrecipe and json-ld: share of fetched pages. w/ qty and arabic: share of "
-          "ingredient lines. nutr.: share of recipes carrying nutrition.")
+    print("\nlang: the page's declared language, else the recipe's, else a guess from the "
+          "ingredient lines; + means a site's pages are mixed. recipe and json-ld: share of "
+          "fetched pages. w/ qty and arabic: share of ingredient lines. nutr.: share of "
+          "recipes carrying nutrition.")
 
 
 def main():

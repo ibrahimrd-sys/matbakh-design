@@ -2163,6 +2163,21 @@ study's record of importing your own recipes as "structurally unavailable"
 The legal, privacy and cost questions import raises are tracked in the PM log,
 not here: D-19, R-16 and L-07.
 
+### 44.3 Amendment, 12 October 2026 — where imports come from
+
+- **DECIDED (Ibrahim, later on 12 October).** Imports come from **Arabic,
+  English and French** recipe sites.
+- **Every import is shown in one consistent import layout:** the title, the
+  creator and a link to the original, the imported visuals, the source's
+  ingredients and method as written, a *not tested by Matbakh* badge, then the
+  shopping list and the estimate. It stays visibly distinct from a Matbakh
+  recipe.
+- **Open:** whether an import is translated into the cook's language. Under
+  §44 it stays in its source language, so a French recipe reads in French.
+- **Considered and set aside:** an option to convert an import into Matbakh's
+  icon format. It is the open consumer capture-and-author question, unchanged
+  by this section.
+
 ---
 
 ## Decision log
@@ -2238,3 +2253,4 @@ not here: D-19, R-16 and L-07.
 | 30 Sep 2026 | **The attendance classification confirmed**, with `boil` moved from unattended to context-dependent (pasta water can be left; milk or a starchy pot boils over). 17 unattended (timer), 14 attended (≈; `deep_fry`/`broil`/`char`/`grill` for safety, not overridable), 44 no-time, 6 context-dependent. The file is renamed `design/activity-attendance.md`. Not yet in `activities.yaml` (E-14, which waits on a go under the lexicon freeze). Settles §34's DRAFT line | 42, 34 |
 | 12 Oct 2026 | **The feature review's decisions.** The screen stays awake in cook mode (HD-01). **The recipe box is free up to 10 recipes, more is premium, still no account — a stated reversal of §17.3 and of the rejected metered free tier.** "Meanwhile" prompts are kept, mechanism still PM-18. A substitute opens a pop-up explaining its effect, and the shopping list changes for that session only; §28 stands. Cost per dish stays premium, considered and kept against §27. Deferred items stay in the design for a later release: multi-recipe sessions, party quantities, retailer handoff, brand-tier substitutes, a price widget only, palate adjustment as a plain note first, and the cooking log | 43 |
 | 12 Oct 2026 | **Import taken.** Cooks may import recipes at their own risk; imports stay in source format and are never converted; Matbakh builds a shopping list and a nutrition estimate labelled تقدير; a tested import enters the catalogue only re-authored under §9. Free up to 10 imports a month, separate from the box's 10, reversing §17.3 for imports. **YouTube route:** description, then the linked recipe site, then the video read through Google's Gemini API, public videos only; Matbakh never downloads or stores video or audio. Reverses the competitor study's "structurally unavailable" (22 Sept) | 44 |
+| 12 Oct 2026 | **Import sources and layout.** Imports come from Arabic, English and French recipe sites; every import is shown in one consistent import layout, visibly distinct from a Matbakh recipe. Open: whether imports are translated. Considered and set aside: converting an import into Matbakh's icon format | 44.3 |
