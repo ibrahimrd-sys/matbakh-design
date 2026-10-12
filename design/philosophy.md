@@ -2,7 +2,7 @@
 
 **Status:** Living document. Sections marked SETTLED are decided and should not be relitigated without a stated reason. Sections marked OPEN are unresolved.
 
-**Last updated:** 2026-09-30
+**Last updated:** 2026-10-12
 
 ---
 
@@ -2062,6 +2062,109 @@ Ibrahim confirms it". §34 is not edited.*
 
 ---
 
+## 43. The feature review — cook mode, recipe box, "meanwhile", substitutes, cost per dish — SETTLED IN PART (12 October 2026)
+
+*A further addendum, per append-never-insert. It amends §4.5, §17.3, §18, §19,
+§23, §27 and §28 without editing them. The comparison it rests on, Matbakh's
+features against seven cooking apps, is in the vault.*
+
+## Addendum — 12 Oct 2026: decisions from the feature review
+
+Decided by Ibrahim on 11–12 October 2026, after the feature comparison.
+
+### 43.1 The screen stays awake in cook mode — DECIDED
+
+While a recipe is open in cook mode, the screen does not lock. This is now a
+stated behaviour of the reader (§4.5), not a prototype setting or an assumed
+default.
+
+### 43.2 The recipe box is free up to 10 recipes — DECIDED
+
+- A cook can save **up to 10 recipes free**. Saving more is a **premium**
+  feature.
+- **Still no account.** §19.1's storage is unchanged: the box lives on the
+  device and is carried by the platform's own backup.
+- **This reverses §17.3** — *the free thing is never the paid thing* — for the
+  recipe box, and it reverses the competitor study's rejection of a metered free
+  tier (22 Sept). Both are left as written. A cap of 10 is a free allowance of a
+  paid feature, which is the pattern both rejected, so it is recorded as a
+  reversal, not explained away.
+- §19.2, whether the box feeds the planner, is unaffected and stays open.
+
+### 43.3 "Meanwhile" prompts are kept — DECIDED
+
+What the cook can do while something runs stays in Matbakh. **Which mechanism
+carries it is not decided here.** The options are tracked as PM-18, and the
+pilot's page judgements still choose between them.
+
+### 43.4 Substitutes: the effect is explained, and the list changes for one session — DECIDED
+
+- Choosing a substitute opens a **pop-up that explains its effect** on the dish.
+- If the cook takes it, **the shopping list changes for that cooking session
+  only.** The recipe, and every later session, keep the original.
+- §28 stands: substitutes are shopping-list-only and never enter the
+  instruction set. Brand and quality tiers still wait on a retail partner.
+
+### 43.5 Cost per dish stays premium — considered and kept
+
+Reconsidered because one competitor shows an estimated cost on every recipe
+free. **§27's boundary is kept:** the raw weekly prices are free, and the cost
+of a dish is premium.
+
+### 43.6 Deferred is not removed — DECIDED
+
+These stay in the design and are built in a later release. Nothing here removes
+them:
+
+- multi-recipe sessions and party quantities (§13, §24);
+- the retailer handoff, and brand-tier substitutes (§27, §28);
+- widgets — **a price widget only**, later;
+- palate adjustment (§18) — **a plain note first**, multipliers after;
+- the cooking log (§23).
+
+Each waits on one of three things: the planner screen, a retail partner, or the
+price feed.
+
+---
+
+## 44. Import — SETTLED IN PART (12 October 2026)
+
+*A further addendum, per append-never-insert. It reverses the competitor
+study's record of importing your own recipes as "structurally unavailable"
+(22 Sept), and it does not edit §9.*
+
+## Addendum — 12 Oct 2026: cooks may import recipes
+
+- **DECIDED (Ibrahim, 12 October).** Cooks can import recipes into Matbakh,
+  **at their own risk.**
+- **Imports stay in their source format:** the original prose, plus whatever
+  visuals can be imported. They are **not converted** into Matbakh's format of
+  activities, stations and tiles. An earlier wording the same day, "converted to
+  Matbakh's own format", is superseded.
+- From an import, Matbakh builds a **shopping list** and a **nutrition
+  estimate** — calories, protein, carbs and fat — labelled **تقدير**
+  (estimate).
+- **An import is never a Matbakh recipe.** Matbakh may test-cook some imported
+  dishes. A tested dish enters the catalogue only when it is re-authored to the
+  authoring standard, under one recipe per dish (§9).
+- **Free up to 10 imports a month,** rolling; more is premium. This is a
+  separate allowance from the recipe box's 10 (§43.2), and like the box it
+  reverses §17.3 for imports.
+
+### 44.1 The YouTube route — DECIDED
+
+- An import from YouTube tries, in order: the video's description; then the
+  recipe website it links to; then the video itself, read through Google's
+  Gemini API. **Public videos only.**
+- **Matbakh never downloads or stores video or audio.**
+
+### 44.2 Open
+
+The legal, privacy and cost questions import raises are tracked in the PM log,
+not here: D-19, R-16 and L-07.
+
+---
+
 ## Decision log
 
 | Date | Decision | Section |
@@ -2133,3 +2236,5 @@ Ibrahim confirms it". §34 is not edited.*
 | 30 Sep 2026 | **Where the Cut Library and the state library live.** `matbakh-private/03-catalogue/cut-library/` and `state-library/`, **ignored by git** except for a README each, and backed up where the vault's backups already go — encrypted to `OneDrive/Matbakh-Backups/`, plain to `D:\Matbakh-Backups\` — since a snapshot archives the whole vault, ignored files included. **Why:** the tools already resolve `03-catalogue/`; the libraries sit beside the recipes and tracker; they stay private (L-03), where the design repo is public; the app should load delivery copies, not carry masters; and git history would grow by gigabytes, with LFS needing a remote the vault must never have. **PROPOSED:** a snapshot before recipe 2's first shot, then after every test cook that adds shots. **OPEN:** snapshot size under five-generation retention; delivery copies (E-03). Settles §33's and §39's open location | 41, 33, 39 |
 | 30 Sep 2026 | **§41's snapshot cadence confirmed.** A vault snapshot before pilot recipe 2's first shot, then after every test cook that adds a library photograph, before the next cook — the existing encrypted-OneDrive and plain-D: procedure, run by Ibrahim. Tied to the cook rather than the calendar, because only a cook changes the libraries and a lost photograph means cooking again. Filed as §41.1, an amendment appended after §41 | 41.1, 41 |
 | 30 Sep 2026 | **The attendance classification confirmed**, with `boil` moved from unattended to context-dependent (pasta water can be left; milk or a starchy pot boils over). 17 unattended (timer), 14 attended (≈; `deep_fry`/`broil`/`char`/`grill` for safety, not overridable), 44 no-time, 6 context-dependent. The file is renamed `design/activity-attendance.md`. Not yet in `activities.yaml` (E-14, which waits on a go under the lexicon freeze). Settles §34's DRAFT line | 42, 34 |
+| 12 Oct 2026 | **The feature review's decisions.** The screen stays awake in cook mode (HD-01). **The recipe box is free up to 10 recipes, more is premium, still no account — a stated reversal of §17.3 and of the rejected metered free tier.** "Meanwhile" prompts are kept, mechanism still PM-18. A substitute opens a pop-up explaining its effect, and the shopping list changes for that session only; §28 stands. Cost per dish stays premium, considered and kept against §27. Deferred items stay in the design for a later release: multi-recipe sessions, party quantities, retailer handoff, brand-tier substitutes, a price widget only, palate adjustment as a plain note first, and the cooking log | 43 |
+| 12 Oct 2026 | **Import taken.** Cooks may import recipes at their own risk; imports stay in source format and are never converted; Matbakh builds a shopping list and a nutrition estimate labelled تقدير; a tested import enters the catalogue only re-authored under §9. Free up to 10 imports a month, separate from the box's 10, reversing §17.3 for imports. **YouTube route:** description, then the linked recipe site, then the video read through Google's Gemini API, public videos only; Matbakh never downloads or stores video or audio. Reverses the competitor study's "structurally unavailable" (22 Sept) | 44 |

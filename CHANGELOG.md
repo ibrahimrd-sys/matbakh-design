@@ -5,6 +5,28 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-12 — philosophy §43–§44: the feature review, and import taken
+
+**`philosophy.md` §43 — decisions from the feature review**, Ibrahim, 11–12 Oct 2026:
+- the screen stays awake in cook mode;
+- the recipe box is free up to 10 recipes, more is premium, still no account —
+  **recorded as a reversal of §17.3**;
+- "meanwhile" prompts are kept, with the mechanism still open;
+- a substitute opens a pop-up explaining its effect, and the shopping list
+  changes for that session only;
+- cost per dish stays premium;
+- deferred items stay in the design for a later release.
+
+**§44 — import taken.** Cooks may import recipes at their own risk. Imports stay
+in source format and are never converted; Matbakh builds a shopping list and a
+nutrition estimate labelled تقدير. A tested import enters the catalogue only
+re-authored under one recipe per dish. Free up to 10 imports a month. YouTube
+imports read the description, then the linked recipe site, then the video
+through Google's Gemini API, public videos only; nothing is downloaded or
+stored.
+
+Both sections are appended; no earlier section is edited.
+
 ## 2026-10-06 — capture-draft: where a chef's rewrites live
 
 **A chef's rewrites of captures go to the vault's `09-reviewed-captures/`.**
