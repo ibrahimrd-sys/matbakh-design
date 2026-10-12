@@ -3,12 +3,13 @@
 *Written 26 August 2026. One file per tool question; there is no second copy of
 this document.*
 
-**Last updated:** 2026-10-06 — the rewrites folder, `09-reviewed-captures/`, noted. Earlier, 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
+**Last updated:** 2026-10-12 — `structured-data-check.py` added, the first import check (D-19). Earlier, 2026-10-06: the rewrites folder, `09-reviewed-captures/`, noted. 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
 
-**Five** authoring tools. Four are single HTML files: open them in a browser, no
+**Five** authoring tools and one research script. Four are single HTML files: open them in a browser, no
 install, no server, no Python. The fifth, `capture-draft.py`, is a Python script
 that calls the Anthropic API. It produces a starting draft for a chef and never
-edits a recipe.
+edits a recipe. `structured-data-check.py` authors nothing: it counts how many
+recipe pages publish their own recipe data.
 
 | File | Opens | For |
 |---|---|---|
@@ -17,6 +18,7 @@ edits a recipe.
 | `recipe-editor.html` | a recipe + the lexicon + the reference | authoring and editing recipes |
 | `translator.html` | recipe files + `chrome.yaml` | handing prose to a collaborator without exposing structure |
 | `capture-draft.py` | a URL or an image of a recipe | a rough, unreviewed draft of someone else's recipe, for a chef to rewrite — **never a Matbakh recipe** |
+| `structured-data-check.py` | a list of recipe URLs | counts of which pages carry schema.org Recipe data, and how complete it is — **no recipe text kept** |
 
 **Nothing is uploaded by the four editors.** Files are read in the browser and stay on your machine.
 That is also why they cannot save in place — a web page may not write to disk.
@@ -260,6 +262,47 @@ its source and the time it was captured.
   release 2026.10.01c it opted into the API's server-side fallback, which did
   retry. Turned off 1 Oct 2026 at Ibrahim's instruction, so that a decline is
   never a silent switch of model.)*
+
+## structured-data-check.py
+
+*Added 12 October 2026.* The first of the import checks in the PM log's §11 item 9
+(D-19): before an import engine is built, how many Arabic recipe pages publish
+schema.org Recipe data — JSON-LD or microdata — that an importer could read
+without AI?
+
+    python3 tools/structured-data-check.py urls.txt
+    python3 tools/structured-data-check.py urls.txt --csv ../matbakh-private/04-research/sd-check-2026-10-12.csv
+
+`urls.txt` holds one URL per line; `#` starts a comment. **Or let it pick the pages
+from each site's own sitemap:**
+
+    python3 tools/structured-data-check.py --site example.com --site example.org --per-site 10 --save-urls ../matbakh-private/04-research/sd-check-urls.txt
+
+`--site` reads the sitemaps named in the site's `robots.txt`, or the usual
+`/sitemap.xml` locations, keeps the URLs that look like single recipes, and picks
+`--per-site` of them at random. The pick is repeatable: `--seed` fixes it, and
+`--save-urls` keeps the list so the same sample can be checked again later.
+**Check the line it prints per site** — *N URLs, M look like recipes*. The
+built-in guess only keeps URLs containing *recipe*, *recette*, `/r/` or *وصفة*,
+so on a site whose recipe pages are named by dish alone the pool is small and
+skewed; give that site its own pattern with `--match`. A listing page that slips
+through reads as *none*, which counts against the site — glance at the saved
+URLs before reading the totals.
+
+For each page it reports
+whether it was fetched, whether it carries a Recipe, and which fields it fills:
+ingredient and step counts, the share of ingredient lines with a quantity
+(Western or Arabic-Indic digits, or a fraction) and in Arabic, yield, times,
+nutrition, image and video. It then totals per site.
+
+- **It keeps no recipe text.** The output is counts and yes/no flags only, so it
+  can be filed anywhere and is not a copy of anyone's recipe.
+- **It calls no AI service** and needs no key. Standard library only.
+- **It is polite:** it skips anything a site's `robots.txt` disallows and waits
+  between requests to the same site (`--delay`, 2 seconds by default).
+- **A page with no Recipe is a result, not an error.** Social-video pages
+  (TikTok, Instagram, YouTube) render in the browser and will read as *none*;
+  they are not what this check measures.
 
 ## What these do not do
 

@@ -5,6 +5,16 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-12b — tools: structured-data-check.py
+
+**A new research script, `tools/structured-data-check.py`** — the first of the
+import checks (D-19). Given recipe URLs, or sites to sample from their own
+sitemaps (`--site`), it counts how many pages publish schema.org Recipe data
+and how complete it is: ingredients, quantities (Arabic-Indic digits included),
+Arabic lines, steps, yield, times, nutrition, image, video. It keeps no recipe
+text, calls no AI service, respects `robots.txt` and waits between requests.
+`ToolsReadme.md` documents it.
+
 ## 2026-10-12 — philosophy §43–§44: the feature review, and import taken
 
 **`philosophy.md` §43 — decisions from the feature review**, Ibrahim, 11–12 Oct 2026:
