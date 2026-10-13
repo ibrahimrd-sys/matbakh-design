@@ -3,7 +3,7 @@
 *Written 26 August 2026. One file per tool question; there is no second copy of
 this document.*
 
-**Last updated:** 2026-10-12 — `structured-data-check.py` added, the first import check (D-19). Earlier, 2026-10-06: the rewrites folder, `09-reviewed-captures/`, noted. 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
+**Last updated:** 2026-10-13 — `structured-data-check.py` fixed after its first real run: Arabic addresses, sitemap order and fallbacks, `--verbose`. 2026-10-12: `structured-data-check.py` added, the first import check (D-19). Earlier, 2026-10-06: the rewrites folder, `09-reviewed-captures/`, noted. 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
 
 **Five** authoring tools and one research script. Four are single HTML files: open them in a browser, no
 install, no server, no Python. The fifth, `capture-draft.py`, is a Python script
@@ -282,6 +282,12 @@ from each site's own sitemap:**
 `/sitemap.xml` locations, keeps the URLs that look like single recipes, and picks
 `--per-site` of them at random. The pick is repeatable: `--seed` fixes it, and
 `--save-urls` keeps the list so the same sample can be checked again later.
+Recipe-named sitemaps are read first. If the sitemap `robots.txt` names is gone,
+it tries the standard locations; if a site has **no sitemap at all**, it takes
+the recipe links on the home page instead — which favours featured recipes, and
+the per-site line says so (*no usable sitemap; N home-page links*). A slow
+sitemap gets one retry with a longer wait. `--verbose` shows every sitemap read.
+Addresses with spaces or Arabic letters are encoded before fetching.
 **Check the line it prints per site** — *N URLs, M look like recipes*. The
 built-in guess only keeps URLs containing *recipe*, *recette*, `/r/` or *وصفة*,
 so on a site whose recipe pages are named by dish alone the pool is small and

@@ -5,6 +5,20 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-13 — structured-data-check.py fixed after its first real run
+
+The first run on Ibrahim's site list (13 Oct 2026; results in the vault) failed
+on four sites. Fixed:
+- **Arabic addresses:** URLs with spaces or unencoded Arabic letters are encoded
+  before fetching; one bad address no longer stops the run.
+- **Sitemap order:** recipe-named sitemaps are read first, including those named
+  in `robots.txt`, so a site listing news and image sitemaps first is still
+  sampled from its recipes.
+- **Fallbacks:** a dead sitemap in `robots.txt` falls back to the standard
+  locations; a site with no sitemap falls back to its home-page links.
+- **A slow sitemap** gets one retry with a 90-second wait.
+- **`--verbose`** shows each sitemap read while sampling.
+
 ## 2026-10-12c — import sources; the check reports language
 
 **`philosophy.md` §44.3** (Ibrahim, 12 Oct 2026): imports come from Arabic,

@@ -33,7 +33,7 @@ them at random, with a fixed --seed so a run can be repeated. --match narrows
 which URLs count as recipes when the default guess is wrong for a site.
 """
 
-import argparse, collections, csv, gzip, html.parser, json, random, re, sys, time
+import argparse, collections, csv, gzip, html.parser, http.client, json, random, re, sys, time
 import xml.etree.ElementTree as ET
 import urllib.error, urllib.parse, urllib.request, urllib.robotparser
 
@@ -217,7 +217,17 @@ def allowed(url):
     return _robots[base].can_fetch(UA, url)
 
 
-def fetch(url, delay):
+def _encode(url):
+    """Percent-encode spaces and non-ASCII letters (Arabic slugs), keeping existing %XX escapes."""
+    p = urllib.parse.urlsplit(url.strip())
+    safe = "/%:@!$&'()*+,;=-._~"
+    return urllib.parse.urlunsplit((p.scheme, p.netloc.encode("idna").decode("ascii"),
+                                    urllib.parse.quote(p.path, safe=safe),
+                                    urllib.parse.quote(p.query, safe=safe + "?"), ""))
+
+
+def fetch(url, delay, timeout=30):
+    url = _encode(url)
     site = urllib.parse.urlsplit(url).netloc
     wait = _last.get(site, 0) + delay - time.monotonic()
     if wait > 0:
@@ -226,7 +236,7 @@ def fetch(url, delay):
     req = urllib.request.Request(url, headers={"User-Agent": UA,
                                                "Accept": "text/html,application/xhtml+xml",
                                                "Accept-Language": "ar,en;q=0.5"})
-    with urllib.request.urlopen(req, timeout=30) as r:
+    with urllib.request.urlopen(req, timeout=timeout) as r:
         raw = r.read(MAX_BYTES + 1)
         if len(raw) > MAX_BYTES:
             raise ValueError("page over 5 MB")
@@ -239,15 +249,23 @@ def fetch(url, delay):
 RECIPE_PATH = re.compile(r"recipe|recette|/r/|وصف|%D9%88%D8%B5%D9%81", re.I)
 NOT_A_RECIPE = re.compile(r"/(tag|tags|category|categories|author|page|search|collection|"
                           r"collections|video|videos|wp-content|feed|amp)(/|$)|\.(jpe?g|png|webp|pdf)$", re.I)
-MAX_SITEMAPS = 8          # child sitemaps read per site
-MAX_SITEMAP_URLS = 20000  # URLs collected per site before sampling
+RECIPE_SITEMAP = re.compile(r"recipe|recette|وصف|%D9%88%D8%B5%D9%81", re.I)
+MAX_SITEMAPS = 12         # sitemaps read per site
+MAX_SITEMAP_URLS = 50000  # URLs collected per site before sampling
+ENOUGH = 400              # stop reading sitemaps once this many candidate pages are found
+VERBOSE = False
 
 
 def _get(url, delay):
     """Fetch a sitemap or robots-allowed resource; returns bytes, gunzipped if needed."""
     if not allowed(url):
         raise PermissionError("robots.txt disallows " + url)
-    raw, _, _ = fetch(url, delay)
+    try:
+        raw, _, _ = fetch(url, delay)
+    except (TimeoutError, urllib.error.URLError) as e:
+        if "timed out" not in str(getattr(e, "reason", e)):
+            raise
+        raw, _, _ = fetch(url, delay, timeout=90)     # big sitemaps can be slow; one retry
     if raw[:2] == b"\x1f\x8b":
         raw = gzip.decompress(raw)
     return raw
@@ -260,38 +278,87 @@ def _locs(xml):
     return kind, [e.text.strip() for e in root.iter() if e.tag.rsplit("}", 1)[-1] == "loc" and e.text]
 
 
+def _say(msg):
+    if VERBOSE:
+        print("  " + msg, file=sys.stderr)
+
+
+def _priority(u):
+    """recipe-named sitemaps first, then post-named, then the rest; news and images last"""
+    return (not RECIPE_SITEMAP.search(u), not re.search(r"post", u, re.I),
+            bool(re.search(r"news|image|video|tag|author|categor", u, re.I)))
+
+
+class _Links(html.parser.HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.hrefs = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag == "a":
+            href = dict(attrs).get("href")
+            if href:
+                self.hrefs.append(href)
+
+
+def _home_links(base, delay):
+    """Fallback for a site with no sitemap: the links on its home page."""
+    try:
+        if not allowed(base + "/"):
+            return []
+        raw, charset, final = fetch(base + "/", delay)
+    except (urllib.error.URLError, OSError, ValueError, http.client.HTTPException):
+        return []
+    p = _Links()
+    p.feed(raw.decode(charset or "utf-8", errors="replace"))
+    return [urllib.parse.urljoin(final, h).split("#")[0] for h in p.hrefs]
+
+
 def sample_site(site, n, match, delay, rng):
     base = site if re.match(r"https?://", site) else "https://" + site
     base = base.rstrip("/")
     allowed(base + "/")                                   # loads robots.txt
     rp = _robots[f"{urllib.parse.urlsplit(base).scheme}://{urllib.parse.urlsplit(base).netloc}"]
-    queue = list(rp.site_maps() or []) or [base + p for p in
-                                           ("/sitemap.xml", "/sitemap_index.xml", "/wp-sitemap.xml")]
-    seen, urls, read = set(), [], 0
-    while queue and read < MAX_SITEMAPS and len(urls) < MAX_SITEMAP_URLS:
+    standard = [base + p for p in ("/sitemap.xml", "/sitemap_index.xml", "/wp-sitemap.xml")]
+    # robots.txt's sitemaps first, recipe-named ones at the front; the standard
+    # locations after them, in case robots.txt names a sitemap that is gone
+    queue = sorted(rp.site_maps() or [], key=_priority) + standard
+    pattern = re.compile(match, re.I) if match else RECIPE_PATH
+    host = urllib.parse.urlsplit(base).netloc.removeprefix("www.")
+
+    def candidate(u):
+        s = urllib.parse.urlsplit(u)
+        return (s.netloc.removeprefix("www.") == host and pattern.search(u)
+                and not NOT_A_RECIPE.search(s.path))
+
+    seen, urls, read, pool = set(), [], 0, []
+    while queue and read < MAX_SITEMAPS and len(urls) < MAX_SITEMAP_URLS and len(pool) < ENOUGH:
         sm = queue.pop(0)
         if sm in seen:
             continue
         seen.add(sm)
         try:
             kind, locs = _locs(_get(sm, delay))
-        except (urllib.error.URLError, PermissionError, ET.ParseError, OSError, ValueError):
+        except (urllib.error.URLError, PermissionError, ET.ParseError, OSError, ValueError,
+                http.client.HTTPException) as e:
+            _say(f"{sm}: skipped ({str(getattr(e, 'code', '') or e)[:60]})")
             continue
         read += 1
         if kind == "sitemapindex":
-            # recipe- or post-named child sitemaps first; they are where the pages are
-            locs.sort(key=lambda u: (not re.search(r"recipe|وصف|%D9%88%D8%B5%D9%81", u, re.I),
-                                     not re.search(r"post", u, re.I)))
-            queue = locs + queue
+            _say(f"{sm}: index of {len(locs)}")
+            queue = sorted(locs, key=_priority) + queue
         else:
             urls += locs
-    pattern = re.compile(match, re.I) if match else RECIPE_PATH
-    host = urllib.parse.urlsplit(base).netloc.removeprefix("www.")
-    pool = [u for u in dict.fromkeys(urls)
-            if urllib.parse.urlsplit(u).netloc.removeprefix("www.") == host
-            and pattern.search(u) and not NOT_A_RECIPE.search(urllib.parse.urlsplit(u).path)]
+            pool = [u for u in dict.fromkeys(urls) if candidate(u)]
+            _say(f"{sm}: {len(locs)} URLs, {len(pool)} candidates so far")
+    source = f"{read} sitemap(s) read"
+    if not pool:
+        links = _home_links(base, delay)
+        pool = [u for u in dict.fromkeys(links) if candidate(u)]
+        if pool:
+            source = f"no usable sitemap; {len(links)} home-page links"
     picked = rng.sample(pool, min(n, len(pool)))
-    print(f"{site}: {read} sitemap(s) read, {len(urls)} URLs, {len(pool)} look like recipes, "
+    print(f"{site}: {source}, {len(urls)} sitemap URLs, {len(pool)} look like recipes, "
           f"{len(picked)} sampled", file=sys.stderr)
     return picked
 
@@ -305,10 +372,11 @@ def check(url, delay):
         raw, charset, final = fetch(url, delay)
     except urllib.error.HTTPError as e:
         return {**row, "status": f"http-{e.code}"}
-    except (urllib.error.URLError, TimeoutError, OSError, ValueError) as e:
+    except (urllib.error.URLError, TimeoutError, OSError, ValueError,
+            http.client.HTTPException) as e:
         return {**row, "status": "error: " + str(getattr(e, "reason", e))[:80]}
     row["status"] = "ok"
-    if final.rstrip("/") != url.rstrip("/"):
+    if urllib.parse.unquote(final).rstrip("/") != urllib.parse.unquote(url).rstrip("/"):
         row["final_url"] = final
         if urllib.parse.urlsplit(final).netloc.removeprefix("www.") != site:
             row["status"] = "ok, redirected off-site"
@@ -381,11 +449,15 @@ def main():
     ap.add_argument("--save-urls", help="write the URLs actually checked to this file, "
                     "so the same sample can be re-run later")
     ap.add_argument("--csv", help="also write one row per URL to this CSV file")
+    ap.add_argument("--verbose", action="store_true",
+                    help="show each sitemap read while sampling")
     ap.add_argument("--delay", type=float, default=2.0,
                     help="seconds between requests to the same site (default 2)")
     a = ap.parse_args()
     for stream in (sys.stdout, sys.stderr):      # Windows consoles default to cp1252
         stream.reconfigure(encoding="utf-8", errors="replace")
+    global VERBOSE
+    VERBOSE = a.verbose
     if not a.sources and not a.site:
         ap.error("give URLs, a URL file, or at least one --site")
 
