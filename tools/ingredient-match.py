@@ -1,0 +1,119 @@
+#!/usr/bin/env python3
+"""
+ingredient-match — find which reference ingredient an imported ingredient name means.
+
+    python3 ingredient-match.py "huile d'olive" "حليب سائل" "2 large eggs"
+    python3 ingredient-match.py --csv parsed.csv --out matched.csv     # a column named `name`
+
+Import step 3 (PM log §11 item 9, D-19): after `ingredient-lines.py` has split
+a line into quantity, unit and ingredient, this matches the ingredient against
+the vault's `ref/ingredients.yaml` — every entry's English and Arabic `name`
+and its `aliases` (philosophy §45). A match is the reference id, or empty.
+
+How it matches: both sides are lower-cased and normalised (Arabic diacritics
+and letter variants — أ إ آ → ا, ة → ه, ى → ي — the Arabic article ال, English
+plurals), then a reference name matches when **all its words appear in the
+ingredient's words**. The longest such name wins, so *garlic powder* finds
+`garlic_powder`, not `garlic`. It never guesses beyond that: no fuzzy spelling,
+no translation, no AI. An ingredient it cannot match comes back empty, and an
+importer keeps it on the shopping list as plain text.
+
+The reference is found the way `content/matbakh.py` finds it: --ref PATH,
+then MATBAKH_VAULT, then content/vault.path, then ../../matbakh-private/03-catalogue.
+"""
+
+import argparse, csv, os, pathlib, re, sys, unicodedata
+
+import yaml
+
+REPO = pathlib.Path(__file__).resolve().parent.parent
+
+
+def _reference(path=None):
+    if path:
+        return pathlib.Path(path)
+    if os.environ.get("MATBAKH_VAULT"):
+        return pathlib.Path(os.environ["MATBAKH_VAULT"]).expanduser() / "ref" / "ingredients.yaml"
+    cfg = REPO / "content" / "vault.path"
+    if cfg.exists():
+        line = cfg.read_text(encoding="utf-8").strip().splitlines()
+        if line and line[0].strip() and not line[0].startswith("#"):
+            return pathlib.Path(line[0].strip()).expanduser() / "ref" / "ingredients.yaml"
+    return REPO / ".." / "matbakh-private" / "03-catalogue" / "ref" / "ingredients.yaml"
+
+
+def words(s):
+    s = unicodedata.normalize("NFKC", str(s)).lower()
+    s = re.sub(r"[ً-ْـ]", "", s)              # Arabic diacritics, tatweel
+    s = s.translate(str.maketrans("أإآىة", "ااايه"))
+    s = unicodedata.normalize("NFKD", s)
+    s = "".join(c for c in s if not unicodedata.combining(c))  # é → e, but keep Arabic letters
+    s = re.sub(r"[^\w\s]", " ", s)
+    out = []
+    for t in s.split():
+        t = re.sub(r"^ال(?=\w{3})", "", t)
+        if re.fullmatch(r"[a-z]+", t) and len(t) > 3:
+            t = re.sub(r"ies$", "y", t)
+            t = re.sub(r"(oes|ches|shes)$", lambda m: m.group(1)[:-2], t)
+            t = re.sub(r"s$", "", t)
+        out.append(t)
+    return out
+
+
+class Matcher:
+    def __init__(self, ref_path=None):
+        self.path = _reference(ref_path)
+        ref = yaml.safe_load(open(self.path, encoding="utf-8"))
+        self.size = len(ref)
+        self.names = []                                   # (words, id, label)
+        for iid, v in ref.items():
+            labels = [str(n) for n in (v.get("name") or {}).values() if n]
+            labels += [str(a) for a in (v.get("aliases") or [])]
+            labels.append(iid.replace("_", " "))
+            for lab in labels:
+                w = words(lab)
+                if w:
+                    self.names.append((w, iid, lab))
+
+    def match(self, name):
+        """(id, matched label) for the longest reference name contained in `name`, or ("", "")."""
+        have = set(words(name))
+        best = None
+        for w, iid, lab in self.names:
+            if all(t in have for t in w) and (best is None or len(w) > len(best[0])):
+                best = (w, iid, lab)
+        return (best[1], best[2]) if best else ("", "")
+
+
+def main():
+    ap = argparse.ArgumentParser(description="Match imported ingredient names to the reference.")
+    ap.add_argument("names", nargs="*")
+    ap.add_argument("--csv", help="read names from this CSV's `name` column")
+    ap.add_argument("--out", help="write the input rows plus `match` and `matched_on`")
+    ap.add_argument("--ref", help="path to ingredients.yaml (default: the vault)")
+    a = ap.parse_args()
+    for stream in (sys.stdout, sys.stderr):
+        stream.reconfigure(encoding="utf-8", errors="replace")
+    m = Matcher(a.ref)
+    print(f"reference: {m.size} ingredients from {m.path}", file=sys.stderr)
+    rows = [{"name": n} for n in a.names]
+    if a.csv:
+        with open(a.csv, encoding="utf-8-sig") as fh:
+            rows += list(csv.DictReader(fh))
+    if not rows:
+        ap.error("give names, or --csv")
+    for r in rows:
+        r["match"], r["matched_on"] = m.match(r.get("name", ""))
+    if a.out:
+        with open(a.out, "w", encoding="utf-8-sig", newline="") as fh:
+            w = csv.DictWriter(fh, list(rows[0].keys()))
+            w.writeheader()
+            w.writerows(rows)
+        print(f"written {len(rows)} rows to {a.out}")
+    else:
+        for r in rows:
+            print(f"{r['match'] or '—':<22} {r['name']}" + (f"   (on: {r['matched_on']})" if r["match"] else ""))
+
+
+if __name__ == "__main__":
+    main()

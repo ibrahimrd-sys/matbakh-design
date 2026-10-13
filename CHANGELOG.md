@@ -5,6 +5,14 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-13e — tools: ingredient-match.py, the third import check
+
+**A new matcher, `tools/ingredient-match.py`** (D-19, import step 3): finds the
+reference ingredient an imported name means — English, Arabic, aliases — with
+no AI. On 961 fresh real lines: 75% right, 6% matched to the wrong entry; the
+lines, verdicts and proposed fixes stay in the vault. `ToolsReadme.md`
+documents it.
+
 ## 2026-10-13d — ingredients have other names: `aliases`
 
 **`philosophy.md` §45** (Ibrahim, 13 Oct 2026): every ingredient in the

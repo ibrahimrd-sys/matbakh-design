@@ -3,7 +3,7 @@
 *Written 26 August 2026. One file per tool question; there is no second copy of
 this document.*
 
-**Last updated:** 2026-10-13 — the ingredient editor gains *Other names* (aliases); `ingredient-lines.py` added, the second import check; `structured-data-check.py` fixed after its first real run: Arabic addresses, sitemap order and fallbacks, `--verbose`. 2026-10-12: `structured-data-check.py` added, the first import check (D-19). Earlier, 2026-10-06: the rewrites folder, `09-reviewed-captures/`, noted. 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
+**Last updated:** 2026-10-13 — `ingredient-match.py` added, the third import check; the ingredient editor gains *Other names* (aliases); `ingredient-lines.py` added, the second import check; `structured-data-check.py` fixed after its first real run: Arabic addresses, sitemap order and fallbacks, `--verbose`. 2026-10-12: `structured-data-check.py` added, the first import check (D-19). Earlier, 2026-10-06: the rewrites folder, `09-reviewed-captures/`, noted. 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
 
 **Five** authoring tools and one research script. Four are single HTML files: open them in a browser, no
 install, no server, no Python. The fifth, `capture-draft.py`, is a Python script
@@ -353,6 +353,36 @@ recipe sites: **147 of 150 fresh lines right (98%)** with the parser frozen —
 English 48/50, Arabic 49/50, French 49/50. The lines and the per-line verdicts
 are in the vault (`04-research/step2-summary-2026-10-13.md`), not here: they
 are other people's recipe text.
+
+## ingredient-match.py
+
+*Added 13 October 2026.* The matcher for import step 3 (D-19): it finds which
+reference ingredient an imported ingredient name means, with no AI.
+
+    python3 tools/ingredient-match.py "huile d'olive" "حليب سائل" "2 large eggs"
+    python3 tools/ingredient-match.py --csv parsed.csv --out matched.csv
+
+`--csv` reads a column named `name` — `ingredient-lines.py`'s output; `--out`
+writes every input column plus `match` (the reference id, or empty) and
+`matched_on` (the name or alias that matched). It reads the vault's
+`ref/ingredients.yaml` the way `content/matbakh.py` finds it, or `--ref PATH`.
+
+**How it matches.** Both sides are lower-cased and normalised — Arabic
+diacritics and letter variants (أ إ آ → ا, ة → ه, ى → ي), the article ال,
+English plurals, French accents. A reference name — English, Arabic, any
+`aliases` entry, or the id — matches when **all its words are in the
+ingredient's words**; the longest wins, so *garlic powder* finds `garlic_powder`,
+not `garlic`. **It never guesses beyond that:** an ingredient it cannot match
+comes back empty and stays on the shopping list as text.
+
+**Measured 13 October 2026** on 961 real lines from 90 pages step 2 never used:
+**75% right** (English 76%, Arabic 72%, French 74%), **6% matched to the wrong
+entry**. The wrong ones are compounds whose own name is not in the reference,
+falling back to a word inside them — *chicken broth* → a whole chicken, *cayenne
+pepper* → black pepper. Proposed fixes are in the vault
+(`04-research/step3-summary-2026-10-13.md`), with the lines and per-line
+verdicts; none is made yet. **Known bug:** the article ال is kept before a
+two-letter word, so *الخل* misses *خل*.
 
 ## What these do not do
 
