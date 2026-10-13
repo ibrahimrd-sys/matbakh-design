@@ -11,6 +11,7 @@ chicken_whole:
   diet: [meat, poultry]
   glyph: chicken
   name: { en: Chicken, whole, ar: فرخة كاملة }
+  aliases: []
   unit: g
   cls: continuous
   buy: { en: 1 bird, ar: فرخة }
@@ -19,6 +20,7 @@ molokhia_frozen:
   diet: []
   glyph: leaf
   name: { en: Molokhia, frozen, ar: ملوخية مجمدة }
+  aliases: []
   unit: g
   cls: continuous
   pack: 400
@@ -28,6 +30,7 @@ rice:
   diet: []
   glyph: grain
   name: { en: Rice, ar: أرز }
+  aliases: []
   unit: g
   cls: continuous
   pack: 1000
@@ -37,6 +40,7 @@ ghee:
   diet: [dairy]
   glyph: fat
   name: { en: Ghee, ar: سمن }
+  aliases: []
   unit: tbsp
   cls: continuous
   buy: { en: from jar, ar: من البرطمان }
@@ -45,6 +49,7 @@ onion:
   diet: []
   glyph: onion
   name: { en: Onion, ar: بصل }
+  aliases: []
   unit: count
   cls: discrete
   divisible: true
@@ -54,6 +59,7 @@ garlic:
   diet: []
   glyph: garlic
   name: { en: Garlic, ar: ثوم }
+  aliases: []
   unit: count
   cls: discrete
   divisible: false
@@ -63,6 +69,7 @@ coriander_fresh:
   diet: []
   glyph: herb
   name: { en: Coriander, fresh, ar: كزبرة خضراء }
+  aliases: []
   unit: tbsp
   cls: continuous
   buy: { en: 1 bunch, ar: ربطة }
@@ -71,6 +78,7 @@ coriander_ground:
   diet: []
   glyph: spice
   name: { en: Coriander, ground, ar: كزبرة ناشفة }
+  aliases: []
   unit: tsp
   cls: seasoning
   buy: { en: from jar, ar: من البرطمان }
@@ -79,6 +87,7 @@ lemon:
   diet: []
   glyph: lemon
   name: { en: Lemon, ar: ليمون }
+  aliases: []
   unit: count
   cls: discrete
   divisible: true
@@ -88,6 +97,7 @@ bay_leaf:
   diet: []
   glyph: leaf
   name: { en: Bay leaf, ar: ورق لورا }
+  aliases: []
   unit: count
   cls: discrete
   divisible: false
@@ -97,6 +107,7 @@ salt:
   diet: []
   glyph: salt
   name: { en: Salt, ar: ملح }
+  aliases: []
   unit: tsp
   cls: seasoning
   buy: { en: have it, ar: موجود }
@@ -105,6 +116,7 @@ water:
   diet: []
   glyph: water
   name: { en: Water, ar: ماء }
+  aliases: []
   unit: ml
   cls: fixed
   buy: { en: tap, ar: من الحنفية }

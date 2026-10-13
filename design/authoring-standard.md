@@ -4,7 +4,7 @@
 **Written:** 15 August 2026. Verified against `content/matbakh.py`, `_template.yaml`,
 `lexicon/activities.yaml` (81 activities), `lexicon/chrome.yaml` and
 `ref/ingredients.yaml` (177 entries) as they stand today.
-**Last updated:** 2026-09-30 — `philosophy.md` §33–§42 folded in: page grouping,
+**Last updated:** 2026-10-13 — Appendix C: the ingredient record gains `aliases` (`philosophy.md` §45). Earlier, 2026-09-30: `philosophy.md` §33–§42 folded in: page grouping,
 the board page, upfront preparations, time and timers by attendance, heat and
 fat, cuts and the Cut Library, ingredient states as library photographs (§39,
 29 Sept), the finished-product page. Where a decision is
@@ -775,6 +775,7 @@ You do not author these; you select them. But you need to read them.
 chicken_whole:
   glyph: chicken
   name: { en: Chicken, ar: فرخة كاملة }
+  aliases: [poulet, دجاج]      # other names, any language — see below
   diet: [meat, poultry]        # closed 14-value taxonomy — drives dietary tags
   unit: g                      # the unit your `amt` is in
   cls: continuous              # scaling class — required, or servings break
@@ -785,6 +786,17 @@ Plus, where relevant: `divisible` (can it be halved), `pack` (pack size, shoppin
 list only), `convert.cup_g` / `convert.piece_g` (what a cup or one item weighs —
 tbsp and tsp are *derived* at cup/16 and cup/48, never stored), and `nutrition`
 per 100 g.
+
+**`aliases` — other names the ingredient is known by** (13 October 2026,
+`philosophy.md` §45). A list, in any language: the French word (*lait*), the
+everyday Arabic where `name.ar` is the Egyptian or fuller one (*حليب* beside
+*لبن*), English variants (*EVOO*). **Every entry carries the list, empty when
+there is none.** Imports are matched against `name` and `aliases` together, so
+an alias is what lets *huile d'olive* find `olive_oil`. Recipes still refer to
+ingredients **by id only** — an alias is never a recipe key, and it is never
+shown to the cook in place of `name`. `matbakh.py check` refuses an alias
+claimed by two ingredients, and warns when an alias is another ingredient's
+name. Add aliases in the ingredient editor's *Other names* box, one per line.
 
 If an ingredient is missing, add it in **`tools/ingredient-editor.html`** before
 authoring the recipe. Fill `cls` first — without it, servings cannot be computed

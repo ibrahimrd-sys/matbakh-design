@@ -5,6 +5,17 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-13d — ingredients have other names: `aliases`
+
+**`philosophy.md` §45** (Ibrahim, 13 Oct 2026): every ingredient in the
+reference carries an `aliases` list — other names in any language — so imports
+in Arabic, English and French can be matched to it. Recipes still use ids only.
+- **`tools/ingredient-editor.html`**: an *Other names* box (one per line), and
+  `aliases:` written straight after `name` on every entry.
+- **`content/matbakh.py check`**: an alias claimed by two ingredients is an
+  error; an alias that is another ingredient's name is a warning.
+- **`authoring-standard.md`** Appendix C and **`ToolsReadme.md`** document it.
+
 ## 2026-10-13c — ingredient-editor: names with a comma are quoted
 
 **`tools/ingredient-editor.html` no longer writes a comma unquoted** inside

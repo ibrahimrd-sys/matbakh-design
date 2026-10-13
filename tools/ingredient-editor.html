@@ -304,6 +304,8 @@ function paintForm(){
       <div class="f"><div></div><div class="hint">Used by recipes and by the price feed. Changing it breaks any recipe already referring to it.</div></div>
       <div class="f"><label>Name, English</label><input id="i_en" value="${esc(v.name.en||'')}"></div>
       <div class="f"><label>الاسم بالعربية</label><input id="i_ar" class="ar" value="${esc(v.name.ar||'')}"></div>
+      <div class="f"><label>Other names</label><textarea id="i_alias" rows="3" dir="auto" placeholder="one per line — lait, حليب, EVOO">${esc((v.aliases||[]).join('\n'))}</textarea></div>
+      <div class="f"><div></div><div class="hint">Aliases: other words for this ingredient, in any language — French, everyday Arabic, English variants. Imports are matched against them. One per line; a name may contain a comma.</div></div>
       <div class="f"><label>Icon</label><input id="i_glyph" class="num" value="${esc(v.glyph||'')}"></div>
     </div>
 
@@ -387,6 +389,7 @@ function paintForm(){
   const put = (id, fn) => { const e = document.getElementById(id); if(e) e.oninput = e.onchange = fn; };
   put('i_en', e=>{ v.name.en = e.target.value; paintList(); paintRail(); });
   put('i_ar', e=>{ v.name.ar = e.target.value; paintList(); paintRail(); });
+  put('i_alias', e=>{ v.aliases = e.target.value.split('\n').map(s=>s.trim()).filter(Boolean); });
   put('i_glyph', e=>{ v.glyph = e.target.value || undefined; });
   put('i_unit', e=>{ v.unit = e.target.value; paintForm(); paintRail(); });
   put('i_cls', e=>{
@@ -464,6 +467,7 @@ function toYaml(){
     L.push(k + ':');
     if(v.glyph) L.push('  glyph: ' + v.glyph);
     L.push(`  name: { en: ${q(v.name&&v.name.en)}, ar: ${q(v.name&&v.name.ar)} }`);
+    L.push('  aliases: [' + (v.aliases||[]).map(q).join(', ') + ']');
     if(v.diet !== undefined)
       L.push('  diet: [' + v.diet.join(', ') + ']');
     L.push('  unit: ' + v.unit);

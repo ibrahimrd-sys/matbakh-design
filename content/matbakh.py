@@ -722,6 +722,40 @@ def _status_facts():
         no_nut=no_nut, no_conv=no_conv)
 
 
+def alias_problems():
+    """Check the reference's `aliases` lists (added 13 Oct 2026): other names an
+    ingredient is known by — French, everyday Arabic, English variants — so an
+    imported line can be matched to it. Returns (errors, warnings)."""
+    def key(s):
+        return " ".join(str(s).lower().split())
+
+    errors, warnings, owner = [], [], {}
+    names = {}
+    for iid, v in ING.items():
+        for lang in ("en", "ar"):
+            n = (v.get("name") or {}).get(lang)
+            if n:
+                names.setdefault(key(n), set()).add(iid)
+    for iid, v in ING.items():
+        al = v.get("aliases")
+        if al is None:
+            continue
+        if not isinstance(al, list) or not all(isinstance(a, str) and a.strip() for a in al):
+            errors.append(f"'{iid}': aliases must be a list of words — got {al!r}")
+            continue
+        for a in al:
+            k = key(a)
+            if k in owner and owner[k] != iid:
+                errors.append(f"alias '{a}' is claimed by both '{owner[k]}' and '{iid}' "
+                              f"— an imported line could not tell which is meant")
+            owner.setdefault(k, iid)
+            others = names.get(k, set()) - {iid}
+            if others:
+                warnings.append(f"'{iid}': alias '{a}' is also the name of "
+                                f"{', '.join(sorted(others))}")
+    return errors, warnings
+
+
 def status_block():
     import datetime
     f = _status_facts()
@@ -933,8 +967,17 @@ def main():
         if stubs:
             parts.append(f"{stubs} stub(s)")
         parts += [f"{bad} failing", f"{warn} warning(s)"]
+        a_err, a_warn = alias_problems()
+        if a_err or a_warn:
+            print("\ningredient reference — aliases")
+            for e in a_err:
+                print(f"  error    {e}")
+            for w in a_warn:
+                print(f"  warning  {w}")
         print("\n" + " · ".join(parts))
-        sys.exit(1 if bad else 0)
+        if a_err:
+            print(f"reference: {len(a_err)} alias error(s)")
+        sys.exit(1 if bad or a_err else 0)
 
     if cmd == "build":
         loc = next((a for a in sys.argv[2:] if a in CHROME["locales"]), "en")

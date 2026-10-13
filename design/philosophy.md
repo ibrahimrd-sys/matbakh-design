@@ -2,7 +2,7 @@
 
 **Status:** Living document. Sections marked SETTLED are decided and should not be relitigated without a stated reason. Sections marked OPEN are unresolved.
 
-**Last updated:** 2026-10-12
+**Last updated:** 2026-10-13
 
 ---
 
@@ -2180,6 +2180,28 @@ not here: D-19, R-16 and L-07.
 
 ---
 
+## 45. Ingredients have other names — SETTLED (13 October 2026)
+
+*A further addendum, per append-never-insert. It adds a field to the ingredient
+record of §11 and edits nothing.*
+
+## Addendum — 13 Oct 2026: an `aliases` list on every ingredient
+
+- **DECIDED (Ibrahim, 13 October).** Every entry in the ingredient reference
+  carries an **`aliases`** list: other names the ingredient is known by, in any
+  language — the French word, the everyday Arabic where the reference's Arabic
+  is the Egyptian or fuller name, English variants. Empty when there are none.
+- **Why:** import (§44) reads other people's recipes in Arabic, English and
+  French, and the reference named each ingredient once in English and once in
+  Arabic. Without aliases, almost no French ingredient and many everyday Arabic
+  ones could be matched, so the shopping list and the estimate would miss them.
+- **What it is not.** Recipes still refer to ingredients **by id only**; an
+  alias is never a recipe key, and the cook always sees `name`, never an alias.
+- **One rule:** an alias belongs to one ingredient. A word claimed by two would
+  leave an import unable to tell which is meant, so the validator refuses it.
+
+---
+
 ## Decision log
 
 | Date | Decision | Section |
@@ -2254,3 +2276,4 @@ not here: D-19, R-16 and L-07.
 | 12 Oct 2026 | **The feature review's decisions.** The screen stays awake in cook mode (HD-01). **The recipe box is free up to 10 recipes, more is premium, still no account — a stated reversal of §17.3 and of the rejected metered free tier.** "Meanwhile" prompts are kept, mechanism still PM-18. A substitute opens a pop-up explaining its effect, and the shopping list changes for that session only; §28 stands. Cost per dish stays premium, considered and kept against §27. Deferred items stay in the design for a later release: multi-recipe sessions, party quantities, retailer handoff, brand-tier substitutes, a price widget only, palate adjustment as a plain note first, and the cooking log | 43 |
 | 12 Oct 2026 | **Import taken.** Cooks may import recipes at their own risk; imports stay in source format and are never converted; Matbakh builds a shopping list and a nutrition estimate labelled تقدير; a tested import enters the catalogue only re-authored under §9. Free up to 10 imports a month, separate from the box's 10, reversing §17.3 for imports. **YouTube route:** description, then the linked recipe site, then the video read through Google's Gemini API, public videos only; Matbakh never downloads or stores video or audio. Reverses the competitor study's "structurally unavailable" (22 Sept) | 44 |
 | 12 Oct 2026 | **Import sources and layout.** Imports come from Arabic, English and French recipe sites; every import is shown in one consistent import layout, visibly distinct from a Matbakh recipe. Open: whether imports are translated. Considered and set aside: converting an import into Matbakh's icon format | 44.3 |
+| 13 Oct 2026 | **Ingredients have other names.** Every reference entry carries an `aliases` list — French, everyday Arabic, English variants — empty when there are none, so imports in three languages can be matched. Recipes still use ids only and the cook always sees `name`; an alias belongs to one ingredient, and the validator refuses one claimed by two | 45 |

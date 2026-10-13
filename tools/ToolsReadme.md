@@ -3,7 +3,7 @@
 *Written 26 August 2026. One file per tool question; there is no second copy of
 this document.*
 
-**Last updated:** 2026-10-13 — `ingredient-lines.py` added, the second import check; `structured-data-check.py` fixed after its first real run: Arabic addresses, sitemap order and fallbacks, `--verbose`. 2026-10-12: `structured-data-check.py` added, the first import check (D-19). Earlier, 2026-10-06: the rewrites folder, `09-reviewed-captures/`, noted. 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
+**Last updated:** 2026-10-13 — the ingredient editor gains *Other names* (aliases); `ingredient-lines.py` added, the second import check; `structured-data-check.py` fixed after its first real run: Arabic addresses, sitemap order and fallbacks, `--verbose`. 2026-10-12: `structured-data-check.py` added, the first import check (D-19). Earlier, 2026-10-06: the rewrites folder, `09-reviewed-captures/`, noted. 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
 
 **Five** authoring tools and one research script. Four are single HTML files: open them in a browser, no
 install, no server, no Python. The fifth, `capture-draft.py`, is a Python script
@@ -39,6 +39,13 @@ leave here in a state the validator would reject.
 
 Ingredients missing a scaling class are the ones to fix first; without it,
 servings cannot be computed at all.
+
+**Other names** (13 Oct 2026) holds the ingredient's **aliases**, one per line:
+the French word, the everyday Arabic, an English variant — *lait*, *حليب*,
+*EVOO*. They are written as an `aliases:` list straight after `name`, on every
+entry (empty when there are none), and imports are matched against them. A
+name may contain a comma. `matbakh.py check` reports an alias claimed by two
+ingredients as an error.
 
 ### Diet — the prerequisite for recipe tags
 
