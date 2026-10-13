@@ -3,7 +3,7 @@
 *Written 26 August 2026. One file per tool question; there is no second copy of
 this document.*
 
-**Last updated:** 2026-10-13 — `ingredient-match.py` added, the third import check; the ingredient editor gains *Other names* (aliases); `ingredient-lines.py` added, the second import check; `structured-data-check.py` fixed after its first real run: Arabic addresses, sitemap order and fallbacks, `--verbose`. 2026-10-12: `structured-data-check.py` added, the first import check (D-19). Earlier, 2026-10-06: the rewrites folder, `09-reviewed-captures/`, noted. 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
+**Last updated:** 2026-10-13 — `ingredient-match.py` added, the third import check, and fixed the same day (form words, Arabic endings); the ingredient editor gains *Other names* (aliases); `ingredient-lines.py` added, the second import check; `structured-data-check.py` fixed after its first real run: Arabic addresses, sitemap order and fallbacks, `--verbose`. 2026-10-12: `structured-data-check.py` added, the first import check (D-19). Earlier, 2026-10-06: the rewrites folder, `09-reviewed-captures/`, noted. 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
 
 **Five** authoring tools and one research script. Four are single HTML files: open them in a browser, no
 install, no server, no Python. The fifth, `capture-draft.py`, is a Python script
@@ -372,17 +372,21 @@ diacritics and letter variants (أ إ آ → ا, ة → ه, ى → ي), the arti
 English plurals, French accents. A reference name — English, Arabic, any
 `aliases` entry, or the id — matches when **all its words are in the
 ingredient's words**; the longest wins, so *garlic powder* finds `garlic_powder`,
-not `garlic`. **It never guesses beyond that:** an ingredient it cannot match
-comes back empty and stays on the shopping list as text.
+not `garlic`. **A match is refused** when the ingredient has a *form* word the
+matched name lacks — *powder*, *broth*, *stock*, *extract*, *syrup*, *sauce*,
+*paste*, *flakes*, *vinegar* and the like, in all three languages (`FORM` in the
+script) — so *chicken broth* never becomes a chicken; *salt* counts only as the
+last word (*garlic salt*). Arabic dual, plural and final ة are normalised
+(*بصلتان*, *بيضات*, *جزرة*). **It never guesses beyond that:** an ingredient it
+cannot match comes back empty and stays on the shopping list as text.
 
-**Measured 13 October 2026** on 961 real lines from 90 pages step 2 never used:
-**75% right** (English 76%, Arabic 72%, French 74%), **6% matched to the wrong
-entry**. The wrong ones are compounds whose own name is not in the reference,
-falling back to a word inside them — *chicken broth* → a whole chicken, *cayenne
-pepper* → black pepper. Proposed fixes are in the vault
-(`04-research/step3-summary-2026-10-13.md`), with the lines and per-line
-verdicts; none is made yet. **Known bug:** the article ال is kept before a
-two-letter word, so *الخل* misses *خل*.
+**Measured 13 October 2026.** First run, on 961 real lines from 90 pages step 2
+never used: 75% right, **6% matched to the wrong entry** — compounds falling back
+to a word inside them. After the form-word rule and 74 new aliases, on 1,087
+lines from 104 fresh pages with the matcher frozen: **79% right, 2% wrong**
+(English 79%, Arabic 82%, French 75%). The lines, the per-line verdicts and the
+next round of form words and aliases are in the vault
+(`04-research/step3-summary-2026-10-13.md`), not here.
 
 ## What these do not do
 

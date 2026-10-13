@@ -5,6 +5,16 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-13f — ingredient-match.py: wrong matches refused
+
+**`tools/ingredient-match.py`** (D-19, import step 3), at Ibrahim's go: a match
+is refused when the ingredient has a *form* word the matched name lacks —
+powder, broth, extract, syrup, sauce, paste, vinegar and the like — so *chicken
+broth* stays text instead of becoming a chicken; Arabic dual, plural and final
+ة are normalised; ال is removed before two-letter words. With 74 new aliases in
+the vault's reference, on 1,087 fresh real lines: 79% right, 2% wrong (was 6%).
+`ToolsReadme.md` updated.
+
 ## 2026-10-13e — tools: ingredient-match.py, the third import check
 
 **A new matcher, `tools/ingredient-match.py`** (D-19, import step 3): finds the

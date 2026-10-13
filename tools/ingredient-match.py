@@ -11,12 +11,16 @@ the vault's `ref/ingredients.yaml` — every entry's English and Arabic `name`
 and its `aliases` (philosophy §45). A match is the reference id, or empty.
 
 How it matches: both sides are lower-cased and normalised (Arabic diacritics
-and letter variants — أ إ آ → ا, ة → ه, ى → ي — the Arabic article ال, English
-plurals), then a reference name matches when **all its words appear in the
-ingredient's words**. The longest such name wins, so *garlic powder* finds
-`garlic_powder`, not `garlic`. It never guesses beyond that: no fuzzy spelling,
-no translation, no AI. An ingredient it cannot match comes back empty, and an
-importer keeps it on the shopping list as plain text.
+and letter variants — أ إ آ → ا, ة → ه, ى → ي — the Arabic article ال, Arabic
+dual and plural endings, English plurals), then a reference name matches when
+**all its words appear in the ingredient's words**. The longest such name wins,
+so *garlic powder* finds `garlic_powder`, not `garlic`. **A match is refused**
+when the ingredient has a word that makes it a different food — *broth*,
+*powder*, *extract*, *syrup*, *sauce*, *paste*, *flakes*, *vinegar* … (FORM) —
+and the matched name does not, so *chicken broth* never becomes a chicken. It
+never guesses beyond that: no fuzzy spelling, no translation, no AI. An
+ingredient it cannot match comes back empty, and an importer keeps it on the
+shopping list as plain text.
 
 The reference is found the way `content/matbakh.py` finds it: --ref PATH,
 then MATBAKH_VAULT, then content/vault.path, then ../../matbakh-private/03-catalogue.
@@ -51,13 +55,33 @@ def words(s):
     s = re.sub(r"[^\w\s]", " ", s)
     out = []
     for t in s.split():
-        t = re.sub(r"^ال(?=\w{3})", "", t)
+        t = re.sub(r"^ال(?=\w{2})", "", t)
         if re.fullmatch(r"[a-z]+", t) and len(t) > 3:
             t = re.sub(r"ies$", "y", t)
             t = re.sub(r"(oes|ches|shes)$", lambda m: m.group(1)[:-2], t)
             t = re.sub(r"s$", "", t)
+        elif re.fullmatch(r"[ء-ي]+", t):
+            # dual and plural endings (بصلتان, بيضتين, بيضات), then the ة that was
+            # turned into ه (جزرة → جزر, بودرة → بودر) — on both sides alike
+            if len(t) >= 5 and t.endswith(("تان", "تين")):
+                t = t[:-3]
+            elif len(t) >= 5 and t.endswith("ات"):
+                t = t[:-2]
+            if len(t) >= 4 and t.endswith("ه"):
+                t = t[:-1]
         out.append(t)
     return out
+
+
+# A word that makes an ingredient a different food from the plain thing named
+# inside it: chicken *broth* is not a chicken, *powdered* sugar is not granulated.
+# A match that lacks one of these words the ingredient has is refused, and the
+# ingredient stays on the list as text. LAST counts only as the last word:
+# *garlic salt* is not salt, but *salt and pepper* and *a sprinkle of salt* are.
+FORM = set(words("powder powdered poudre بودرة broth stock bouillon مرقة extract extrait "
+                 "خلاصة syrup sirop sauce صوص صلصة paste معجون flakes vinegar vinaigre خل "
+                 "condensed evaporated cereal root pâtissière"))
+LAST = set(words("salt sprinkles"))
 
 
 class Matcher:
@@ -76,13 +100,28 @@ class Matcher:
                     self.names.append((w, iid, lab))
 
     def match(self, name):
-        """(id, matched label) for the longest reference name contained in `name`, or ("", "")."""
-        have = set(words(name))
-        best = None
+        """(id, matched label) for the longest reference name contained in `name`, or ("", "").
+
+        Refused, and so empty, when the ingredient has a FORM word the name lacks,
+        or when it has one and two different names tie for longest (*garlic salt*:
+        garlic, or salt?). Two entries sharing one name is the reference's to fix;
+        the first in the file wins, as before."""
+        ws = words(name)
+        have = set(ws)
+        form = (have & FORM) | ({ws[-1]} & LAST if ws else set())
+        best = []
         for w, iid, lab in self.names:
-            if all(t in have for t in w) and (best is None or len(w) > len(best[0])):
-                best = (w, iid, lab)
-        return (best[1], best[2]) if best else ("", "")
+            if all(t in have for t in w):
+                if not best or len(w) > len(best[0][0]):
+                    best = [(w, iid, lab)]
+                elif len(w) == len(best[0][0]):
+                    best.append((w, iid, lab))
+        if not best:
+            return ("", "")
+        w, iid, lab = best[0]
+        if form and (form - set(w) or len({tuple(sorted(b[0])) for b in best}) > 1):
+            return ("", "")
+        return (iid, lab)
 
 
 def main():
