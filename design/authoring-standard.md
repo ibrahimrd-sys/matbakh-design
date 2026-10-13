@@ -4,7 +4,7 @@
 **Written:** 15 August 2026. Verified against `content/matbakh.py`, `_template.yaml`,
 `lexicon/activities.yaml` (81 activities), `lexicon/chrome.yaml` and
 `ref/ingredients.yaml` (177 entries) as they stand today.
-**Last updated:** 2026-10-13 — Appendix C: the ingredient record gains `aliases` (`philosophy.md` §45). Earlier, 2026-09-30: `philosophy.md` §33–§42 folded in: page grouping,
+**Last updated:** 2026-10-13 — Appendix C: the ingredient record gains `aliases` (`philosophy.md` §45), and a leading `=` marks a whole-name-only alias. Earlier, 2026-09-30: `philosophy.md` §33–§42 folded in: page grouping,
 the board page, upfront preparations, time and timers by attendance, heat and
 fat, cuts and the Cut Library, ingredient states as library photographs (§39,
 29 Sept), the finished-product page. Where a decision is
@@ -797,6 +797,10 @@ ingredients **by id only** — an alias is never a recipe key, and it is never
 shown to the cook in place of `name`. `matbakh.py check` refuses an alias
 claimed by two ingredients, and warns when an alias is another ingredient's
 name. Add aliases in the ingredient editor's *Other names* box, one per line.
+**An alias written with a leading `=` matches only the whole name** (13 October
+2026): `=pepper` on `black_pepper` catches *pepper* but not *cayenne pepper*;
+`=oil` on `vegetable_oil` catches *oil* but not *coconut oil*. Use it for a word
+that is also the last word of other foods.
 
 If an ingredient is missing, add it in **`tools/ingredient-editor.html`** before
 authoring the recipe. Fill `cls` first — without it, servings cannot be computed

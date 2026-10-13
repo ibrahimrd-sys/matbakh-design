@@ -17,7 +17,8 @@ dual and plural endings, English plurals), then a reference name matches when
 so *garlic powder* finds `garlic_powder`, not `garlic`. **A match is refused**
 when the ingredient has a word that makes it a different food — *broth*,
 *powder*, *extract*, *syrup*, *sauce*, *paste*, *flakes*, *vinegar* … (FORM) —
-and the matched name does not, so *chicken broth* never becomes a chicken. It
+and the matched name does not, so *chicken broth* never becomes a chicken. An
+alias written with a leading = (*=pepper*) matches only the whole name. It
 never guesses beyond that: no fuzzy spelling, no translation, no AI. An
 ingredient it cannot match comes back empty, and an importer keeps it on the
 shopping list as plain text.
@@ -69,6 +70,8 @@ def words(s):
                 t = t[:-2]
             if len(t) >= 4 and t.endswith("ه"):
                 t = t[:-1]
+            if t == "مسحوق":                     # مسحوق is powder, as بودرة is
+                t = "بودر"
         out.append(t)
     return out
 
@@ -80,7 +83,8 @@ def words(s):
 # *garlic salt* is not salt, but *salt and pepper* and *a sprinkle of salt* are.
 FORM = set(words("powder powdered poudre بودرة broth stock bouillon مرقة extract extrait "
                  "خلاصة syrup sirop sauce صوص صلصة paste معجون flakes vinegar vinaigre خل "
-                 "condensed evaporated cereal root pâtissière"))
+                 "condensed evaporated cereal root pâtissière flour farine دقيق starch "
+                 "amidon wine vin نبيذ beans haricots fritters beignets purée creamed زهر ورد"))
 LAST = set(words("salt sprinkles"))
 
 
@@ -89,15 +93,18 @@ class Matcher:
         self.path = _reference(ref_path)
         ref = yaml.safe_load(open(self.path, encoding="utf-8"))
         self.size = len(ref)
-        self.names = []                                   # (words, id, label)
+        self.names = []                                   # (words, id, label, whole)
         for iid, v in ref.items():
             labels = [str(n) for n in (v.get("name") or {}).values() if n]
             labels += [str(a) for a in (v.get("aliases") or [])]
             labels.append(iid.replace("_", " "))
             for lab in labels:
-                w = words(lab)
+                # an alias written =pepper matches only an ingredient that is that
+                # name and nothing more: *pepper*, but not *cayenne pepper*
+                whole = lab.startswith("=")
+                w = words(lab[1:] if whole else lab)
                 if w:
-                    self.names.append((w, iid, lab))
+                    self.names.append((w, iid, lab, whole))
 
     def match(self, name):
         """(id, matched label) for the longest reference name contained in `name`, or ("", "").
@@ -110,7 +117,9 @@ class Matcher:
         have = set(ws)
         form = (have & FORM) | ({ws[-1]} & LAST if ws else set())
         best = []
-        for w, iid, lab in self.names:
+        for w, iid, lab, whole in self.names:
+            if whole and set(w) != have:
+                continue
             if all(t in have for t in w):
                 if not best or len(w) > len(best[0][0]):
                     best = [(w, iid, lab)]
@@ -118,7 +127,7 @@ class Matcher:
                     best.append((w, iid, lab))
         if not best:
             return ("", "")
-        w, iid, lab = best[0]
+        w, iid, lab = best[0][:3]
         if form and (form - set(w) or len({tuple(sorted(b[0])) for b in best}) > 1):
             return ("", "")
         return (iid, lab)

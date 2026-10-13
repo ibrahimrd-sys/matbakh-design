@@ -2200,6 +2200,18 @@ record of §11 and edits nothing.*
 - **One rule:** an alias belongs to one ingredient. A word claimed by two would
   leave an import unable to tell which is meant, so the validator refuses it.
 
+## Addendum — 13 Oct 2026: an alias can be whole-name-only
+
+- **DECIDED (Ibrahim, 13 October).** An alias written with a leading **`=`**
+  matches only an imported ingredient that is that name and nothing more:
+  `=pepper` on `black_pepper` takes *pepper* but not *cayenne pepper*; `=oil` on
+  `vegetable_oil` takes *oil* but not *coconut oil*.
+- **Why:** some words are both an ingredient on their own and the last word of
+  other foods. As an ordinary alias, *pepper* sent every chili to black pepper;
+  removed, a bare *pepper* went unmatched. Measured in import step 3
+  (`04-research/step3-summary-2026-10-13.md` in the vault).
+- **For the one-owner rule above,** `=pepper` and `pepper` are the same name.
+
 ---
 
 ## Decision log
@@ -2277,3 +2289,4 @@ record of §11 and edits nothing.*
 | 12 Oct 2026 | **Import taken.** Cooks may import recipes at their own risk; imports stay in source format and are never converted; Matbakh builds a shopping list and a nutrition estimate labelled تقدير; a tested import enters the catalogue only re-authored under §9. Free up to 10 imports a month, separate from the box's 10, reversing §17.3 for imports. **YouTube route:** description, then the linked recipe site, then the video read through Google's Gemini API, public videos only; Matbakh never downloads or stores video or audio. Reverses the competitor study's "structurally unavailable" (22 Sept) | 44 |
 | 12 Oct 2026 | **Import sources and layout.** Imports come from Arabic, English and French recipe sites; every import is shown in one consistent import layout, visibly distinct from a Matbakh recipe. Open: whether imports are translated. Considered and set aside: converting an import into Matbakh's icon format | 44.3 |
 | 13 Oct 2026 | **Ingredients have other names.** Every reference entry carries an `aliases` list — French, everyday Arabic, English variants — empty when there are none, so imports in three languages can be matched. Recipes still use ids only and the cook always sees `name`; an alias belongs to one ingredient, and the validator refuses one claimed by two | 45 |
+| 13 Oct 2026 | **An alias can be whole-name-only:** written with a leading `=` (`=pepper`), it matches only an ingredient that is exactly that name — *pepper*, not *cayenne pepper*. Counts as the same name for the one-owner rule | 45 |

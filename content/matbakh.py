@@ -726,8 +726,8 @@ def alias_problems():
     """Check the reference's `aliases` lists (added 13 Oct 2026): other names an
     ingredient is known by — French, everyday Arabic, English variants — so an
     imported line can be matched to it. Returns (errors, warnings)."""
-    def key(s):
-        return " ".join(str(s).lower().split())
+    def key(s):                         # =pepper (whole name only) is still pepper
+        return " ".join(str(s).lower().lstrip("=").split())
 
     errors, warnings, owner = [], [], {}
     names = {}

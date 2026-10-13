@@ -5,6 +5,18 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-13g — ingredient-match.py: second round; `=` whole-name aliases
+
+**`tools/ingredient-match.py`** (D-19, import step 3), at Ibrahim's request:
+*مسحوق* is read as powder; more form words (*flour*, *starch*, *wine*, *beans*,
+*fritters*, *purée*, *creamed* and Arabic and French equivalents); an alias
+written with a leading `=` matches only the whole name (`=pepper`: *pepper*,
+not *cayenne pepper*) — Ibrahim's decision, `philosophy.md` §45 and a decision-log row. `content/matbakh.py check`
+reads `=pepper` and `pepper` as one name for clashes;
+`authoring-standard.md` Appendix C, `ToolsReadme.md` and the ingredient
+editor's hint document it. On 94 fresh pages: 75% right, 2.7% wrong — no
+better than round 1 on unseen pages; the vault has the detail.
+
 ## 2026-10-13f — ingredient-match.py: wrong matches refused
 
 **`tools/ingredient-match.py`** (D-19, import step 3), at Ibrahim's go: a match
