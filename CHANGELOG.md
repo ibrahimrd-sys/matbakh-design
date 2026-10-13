@@ -5,6 +5,15 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-13h — ingredient-match.py: ground spices accept powder
+
+**`tools/ingredient-match.py`** (D-19, import step 3), Ibrahim's small fixes:
+*powder*, *poudre*, *بودرة* and *مسحوق* no longer refuse a match to a
+`seasoning`-class entry, since a ground spice is a powder (*مسحوق الكمون* →
+cumin); filler words (*a little*, *قليل*) are ignored for whole-name `=` aliases.
+With 45 new aliases in the vault's reference, on 95 fresh pages: 81% right,
+3.4% wrong. `ToolsReadme.md` updated.
+
 ## 2026-10-13g — ingredient-match.py: second round; `=` whole-name aliases
 
 **`tools/ingredient-match.py`** (D-19, import step 3), at Ibrahim's request:

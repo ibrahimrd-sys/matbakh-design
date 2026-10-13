@@ -3,7 +3,7 @@
 *Written 26 August 2026. One file per tool question; there is no second copy of
 this document.*
 
-**Last updated:** 2026-10-13 — `ingredient-match.py` added, the third import check, and fixed twice the same day (form words, Arabic endings, مسحوق as powder, `=` whole-name aliases); the ingredient editor gains *Other names* (aliases); `ingredient-lines.py` added, the second import check; `structured-data-check.py` fixed after its first real run: Arabic addresses, sitemap order and fallbacks, `--verbose`. 2026-10-12: `structured-data-check.py` added, the first import check (D-19). Earlier, 2026-10-06: the rewrites folder, `09-reviewed-captures/`, noted. 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
+**Last updated:** 2026-10-13 — `ingredient-match.py` added, the third import check, and fixed three times the same day (form words, Arabic endings, مسحوق as powder, `=` whole-name aliases, ground spices accept powder); the ingredient editor gains *Other names* (aliases); `ingredient-lines.py` added, the second import check; `structured-data-check.py` fixed after its first real run: Arabic addresses, sitemap order and fallbacks, `--verbose`. 2026-10-12: `structured-data-check.py` added, the first import check (D-19). Earlier, 2026-10-06: the rewrites folder, `09-reviewed-captures/`, noted. 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
 
 **Five** authoring tools and one research script. Four are single HTML files: open them in a browser, no
 install, no server, no Python. The fifth, `capture-draft.py`, is a Python script
@@ -377,7 +377,8 @@ matched name lacks — *powder*, *broth*, *stock*, *extract*, *syrup*, *sauce*,
 *paste*, *flakes*, *vinegar* and the like, in all three languages (`FORM` in the
 script) — so *chicken broth* never becomes a chicken; *salt* counts only as the
 last word (*garlic salt*). Arabic dual, plural and final ة are normalised
-(*بصلتان*, *بيضات*, *جزرة*), and *مسحوق* is read as powder, like *بودرة*. **An
+(*بصلتان*, *بيضات*, *جزرة*), and *مسحوق* is read as powder, like *بودرة*. A ground
+spice (an entry with `cls: seasoning`) accepts *powder*: *cumin powder* is cumin. **An
 alias written `=pepper` matches only the whole name** — *pepper*, not *cayenne
 pepper* (`authoring-standard.md` Appendix C). **It never guesses beyond that:** an ingredient it
 cannot match comes back empty and stays on the shopping list as text.
@@ -389,8 +390,10 @@ lines from 104 fresh pages with the matcher frozen: **79% right, 2% wrong**
 (English 79%, Arabic 82%, French 75%). **A second round** (more form words, `=`
 aliases, مسحوق) measured on 94 more fresh pages: **75% right, 2.7% wrong** — no
 better on unseen pages; the errors left are mostly products named after an
-ingredient (*egg noodles*, *cake mix*). The lines, the per-line verdicts and a
-review workbook are in the vault
+ingredient (*egg noodles*, *cake mix*). After small fixes (ground spices accept
+powder, 45 aliases), on 95 more: **81% right, 3.4% wrong** — misses fell, wrong
+matches did not. The lines, the per-line verdicts and a review workbook are in
+the vault
 (`04-research/step3-summary-2026-10-13.md`), not here.
 
 ## What these do not do

@@ -86,6 +86,12 @@ FORM = set(words("powder powdered poudre بودرة broth stock bouillon مرق�
                  "condensed evaporated cereal root pâtissière flour farine دقيق starch "
                  "amidon wine vin نبيذ beans haricots fritters beignets purée creamed زهر ورد"))
 LAST = set(words("salt sprinkles"))
+# A ground spice is a powder already: *cumin powder* and *مسحوق الكمون* are
+# cumin_ground, though its name lacks the word. So these do not refuse a match
+# to an entry whose scaling class is `seasoning`.
+POWDER = set(words("powder powdered poudre بودرة"))
+# Filler words a whole-name alias ignores: *a little oil* (قليل زيت) is oil.
+FILLER = set(words("a little some few of قليل شوية بعض un peu de du"))
 
 
 class Matcher:
@@ -94,6 +100,7 @@ class Matcher:
         ref = yaml.safe_load(open(self.path, encoding="utf-8"))
         self.size = len(ref)
         self.names = []                                   # (words, id, label, whole)
+        self.seasoning = {iid for iid, v in ref.items() if v.get("cls") == "seasoning"}
         for iid, v in ref.items():
             labels = [str(n) for n in (v.get("name") or {}).values() if n]
             labels += [str(a) for a in (v.get("aliases") or [])]
@@ -118,7 +125,7 @@ class Matcher:
         form = (have & FORM) | ({ws[-1]} & LAST if ws else set())
         best = []
         for w, iid, lab, whole in self.names:
-            if whole and set(w) != have:
+            if whole and set(w) != have - FILLER:
                 continue
             if all(t in have for t in w):
                 if not best or len(w) > len(best[0][0]):
@@ -128,6 +135,8 @@ class Matcher:
         if not best:
             return ("", "")
         w, iid, lab = best[0][:3]
+        if iid in self.seasoning:
+            form -= POWDER
         if form and (form - set(w) or len({tuple(sorted(b[0])) for b in best}) > 1):
             return ("", "")
         return (iid, lab)
