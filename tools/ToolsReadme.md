@@ -3,7 +3,7 @@
 *Written 26 August 2026. One file per tool question; there is no second copy of
 this document.*
 
-**Last updated:** 2026-10-13 — `structured-data-check.py` fixed after its first real run: Arabic addresses, sitemap order and fallbacks, `--verbose`. 2026-10-12: `structured-data-check.py` added, the first import check (D-19). Earlier, 2026-10-06: the rewrites folder, `09-reviewed-captures/`, noted. 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
+**Last updated:** 2026-10-13 — `ingredient-lines.py` added, the second import check; `structured-data-check.py` fixed after its first real run: Arabic addresses, sitemap order and fallbacks, `--verbose`. 2026-10-12: `structured-data-check.py` added, the first import check (D-19). Earlier, 2026-10-06: the rewrites folder, `09-reviewed-captures/`, noted. 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
 
 **Five** authoring tools and one research script. Four are single HTML files: open them in a browser, no
 install, no server, no Python. The fifth, `capture-draft.py`, is a Python script
@@ -18,6 +18,7 @@ recipe pages publish their own recipe data.
 | `recipe-editor.html` | a recipe + the lexicon + the reference | authoring and editing recipes |
 | `translator.html` | recipe files + `chrome.yaml` | handing prose to a collaborator without exposing structure |
 | `capture-draft.py` | a URL or an image of a recipe | a rough, unreviewed draft of someone else's recipe, for a chef to rewrite — **never a Matbakh recipe** |
+| `ingredient-lines.py` | ingredient lines, or a CSV of them | each line split into quantity, unit and ingredient, in Arabic, English and French |
 | `structured-data-check.py` | a list of recipe URLs | counts of which pages carry schema.org Recipe data, and how complete it is — **no recipe text kept** |
 
 **Nothing is uploaded by the four editors.** Files are read in the browser and stay on your machine.
@@ -313,6 +314,38 @@ and **per language**, so Arabic, English and French sources can be compared
 - **A page with no Recipe is a result, not an error.** Social-video pages
   (TikTok, Instagram, YouTube) render in the browser and will read as *none*;
   they are not what this check measures.
+
+## ingredient-lines.py
+
+*Added 13 October 2026.* The parser for import step 2 (D-19): it splits an
+ingredient line into **quantity** (and range), **unit** and **ingredient**, with
+no AI.
+
+    python3 tools/ingredient-lines.py "2 c. à soupe d'huile d'olive" "كوبين ونصف حليب"
+    python3 tools/ingredient-lines.py --csv lines.csv --out parsed.csv
+
+`--csv` reads a column named `line`; `--out` writes every input column plus
+`qty`, `qty_max`, `unit`, `name`, `note` and `kind`. **Units** come out as one
+key each — `g`, `kg`, `ml`, `cl`, `l`, `tsp`, `tbsp`, `cup`, `oz`, `lb`, `pinch`,
+`clove`, `can`, `packet`, `piece`, `slice`, `bunch`, … — whatever the language
+or abbreviation. **Kinds:** `measured` (a quantity and a unit), `count` (2 eggs),
+`to_taste`, `no_quantity`, `heading` (*Pour la pâte :*), `unparsed`.
+
+What it reads: digits, decimal commas, mixed and `½`-style fractions,
+Arabic-Indic digits, ranges; number words in all three languages, the Arabic
+dual (*كوبان*, *ليتران*) and *ونصف*; abbreviations and spelling variants
+(*Tbsp*, *cuil. à s.*, *م ك*, *ملعقه صغيره*); size words before a unit (*heaping*,
+*belles*); Arabic's *ingredient - quantity* order and preparation words written
+before the quantity. **Capital `T` is a tablespoon, small `t` a teaspoon.**
+
+**It never guesses.** A line it cannot split comes back with the whole line as
+the ingredient, so it can still go on a shopping list as text.
+
+**Measured 13 October 2026** on real lines from Arabic, English and French
+recipe sites: **147 of 150 fresh lines right (98%)** with the parser frozen —
+English 48/50, Arabic 49/50, French 49/50. The lines and the per-line verdicts
+are in the vault (`04-research/step2-summary-2026-10-13.md`), not here: they
+are other people's recipe text.
 
 ## What these do not do
 

@@ -5,6 +5,14 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-13b — tools: ingredient-lines.py, the second import check
+
+**A new parser, `tools/ingredient-lines.py`** (D-19, import step 2): splits an
+ingredient line into quantity, unit and ingredient in Arabic, English and
+French, with no AI — number words and the Arabic dual included. On 150 fresh
+real lines it read 147 right (98%); the test lines stay in the vault.
+`ToolsReadme.md` documents it.
+
 ## 2026-10-13 — structured-data-check.py fixed after its first real run
 
 The first run on Ibrahim's site list (13 Oct 2026; results in the vault) failed
