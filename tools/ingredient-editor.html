@@ -445,8 +445,10 @@ function paintForm(){
 /* ── YAML out. Regenerated, so comments in the original are not preserved;
       section headings are rebuilt from the icon grouping. ──────────────── */
 function q(s){
+  // No comma in the safe set: name and buy are written inside { en: \u2026, ar: \u2026 },
+  // where an unquoted comma ends the value ("Cheese, feta" became "Cheese"; fixed 13 Oct 2026).
   s = String(s==null?'':s);
-  return /^[A-Za-z\u0600-\u06FF][\w \u0600-\u06FF().,\-\/]*$/.test(s) && s === s.trim()
+  return /^[A-Za-z\u0600-\u06FF][\w \u0600-\u06FF().\-\/]*$/.test(s) && s === s.trim()
     ? s : '"' + s.replace(/"/g,'\\"') + '"';
 }
 function toYaml(){

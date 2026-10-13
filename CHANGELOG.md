@@ -5,6 +5,14 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-13c — ingredient-editor: names with a comma are quoted
+
+**`tools/ingredient-editor.html` no longer writes a comma unquoted** inside
+`{ en: …, ar: … }`. It treated a comma as safe, so a name such as
+*Cheese, feta* was saved bare and read back as *Cheese* — 21 names in the
+vault's reference were cut short this way, and are repaired there. The same
+defect the recipe editor had until 15 Aug.
+
 ## 2026-10-13b — tools: ingredient-lines.py, the second import check
 
 **A new parser, `tools/ingredient-lines.py`** (D-19, import step 2): splits an
