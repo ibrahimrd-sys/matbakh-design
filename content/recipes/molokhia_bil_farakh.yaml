@@ -92,7 +92,7 @@ steps:
           - { id: chicken_whole, carried: true }   # same bird, not a second purchase
           - { id: water, amt: 1500 }
       - do: add
-        item: bay_leaf
+        item: bay_leaf_dry
         amt: 2
     timer:
       minutes: 40

@@ -2,7 +2,7 @@
 
 **Status:** Living document. Sections marked SETTLED are decided and should not be relitigated without a stated reason. Sections marked OPEN are unresolved.
 
-**Last updated:** 2026-10-13
+**Last updated:** 2026-10-19
 
 ---
 
@@ -2212,6 +2212,45 @@ record of §11 and edits nothing.*
   (`04-research/step3-summary-2026-10-13.md` in the vault).
 - **For the one-owner rule above,** `=pepper` and `pepper` are the same name.
 
+## 46. Herb ids name their form — SETTLED (19 October 2026)
+
+*A further addendum, per append-never-insert. It names ingredient ids under §11
+and edits nothing.*
+
+- **DECIDED (Ibrahim, 19 October).** Every herb in the ingredient reference
+  carries its form in its id: **`<herb>_fresh`** or **`<herb>_dry`** — also
+  for a herb sold in one form only, so nothing is renamed when the other form
+  arrives. Ground seed spices (`coriander_ground`, `cumin_ground`) are spices,
+  not dried herbs, and keep their names.
+- **Applied the same day:** `basil` → `basil_fresh`, `dill` → `dill_fresh`,
+  `parsley` → `parsley_fresh`, `chives` → `chives_fresh`, `rosemary` →
+  `rosemary_dry`, `thyme` → `thyme_dry`, `bay_leaf` → `bay_leaf_dry`;
+  `basil_dry`, `mint_fresh`, `mint_dry` and `coriander_fresh` already fitted.
+- **One entry per herb and form.** Where two entries were the same thing, one
+  is kept and the other's names become its aliases (§45): `cilantro` into
+  `coriander_fresh`; `oregano` and `dried_oregano` into `oregano_dry`.
+- **Why:** the reference had grown three conventions — `basil` beside
+  `basil_dry`, `mint_fresh` beside `mint_dry`, `dried_oregano` beside
+  `oregano` — and the import review (§44) was proposing new herb entries in
+  all of them. With the form in the id, a fresh and a dried herb cannot be
+  confused on a shopping list, and names stay predictable.
+- **What it does not change:** the cook sees `name`, never the id; names keep
+  their wording, so imported lines match as before.
+
+## Addendum — 19 Oct 2026: ginger, by the same rule
+
+- **DECIDED (Ibrahim, 19 October).** `ginger` and `ginger_fresh` were the same
+  root, so `ginger` is merged into `ginger_fresh`, keeping *ginger* and
+  *زنجبيل* as aliases; `ginger_powder` is unchanged. Ginger is not a herb; this
+  applies §46's one-entry-per-form rule, not its naming.
+
+## Addendum — 19 Oct 2026: dried white beans
+
+- **DECIDED (Ibrahim, 19 October).** `white_beans_pods` held dried white beans,
+  not pods, so it is renamed `white_beans_dry` (*White Beans, dried*);
+  `white_beans_boiled` is unchanged. Beans are not herbs; this borrows §46's
+  `_dry` ending for a food the old id misnamed.
+
 ---
 
 ## Decision log
@@ -2290,3 +2329,6 @@ record of §11 and edits nothing.*
 | 12 Oct 2026 | **Import sources and layout.** Imports come from Arabic, English and French recipe sites; every import is shown in one consistent import layout, visibly distinct from a Matbakh recipe. Open: whether imports are translated. Considered and set aside: converting an import into Matbakh's icon format | 44.3 |
 | 13 Oct 2026 | **Ingredients have other names.** Every reference entry carries an `aliases` list — French, everyday Arabic, English variants — empty when there are none, so imports in three languages can be matched. Recipes still use ids only and the cook always sees `name`; an alias belongs to one ingredient, and the validator refuses one claimed by two | 45 |
 | 13 Oct 2026 | **An alias can be whole-name-only:** written with a leading `=` (`=pepper`), it matches only an ingredient that is exactly that name — *pepper*, not *cayenne pepper*. Counts as the same name for the one-owner rule | 45 |
+| 19 Oct 2026 | **Herb ids name their form:** `<herb>_fresh` or `<herb>_dry`, for every herb, one form or two; ground seed spices keep their names. Seven ids renamed; `cilantro` merged into `coriander_fresh` and `oregano` with `dried_oregano` into `oregano_dry`, the retired names kept as aliases | 46, 45 |
+| 19 Oct 2026 | **`ginger` merged into `ginger_fresh`**, its names kept as aliases — §46's one-entry-per-form rule | 46 |
+| 19 Oct 2026 | **`white_beans_pods` renamed `white_beans_dry`** — it held dried beans, not pods; §46's `_dry` ending | 46 |

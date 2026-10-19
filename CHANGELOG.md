@@ -5,6 +5,19 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-19a — herb ids name their form
+
+`philosophy.md` §46 (Ibrahim, 19 October): herb ids end in `_fresh` or `_dry`.
+**`content/ref/ingredients.sample.yaml`** renames `bay_leaf` to `bay_leaf_dry`,
+and **`content/recipes/molokhia_bil_farakh.yaml`** follows. The full reference
+in the vault renames seven herbs and merges `cilantro` into `coriander_fresh`
+and `oregano` with `dried_oregano` into `oregano_dry`, and, by the same rule,
+`ginger` into `ginger_fresh` (223 entries), and renames `white_beans_pods`
+(dried beans, not pods) to `white_beans_dry`, which
+**`tools/ingredient-editor.html`** follows;
+`matbakh.py check` 0 failing; `tools/ingredient-match.py` unchanged and matches
+as before.
+
 ## 2026-10-13h — ingredient-match.py: ground spices accept powder
 
 **`tools/ingredient-match.py`** (D-19, import step 3), Ibrahim's small fixes:

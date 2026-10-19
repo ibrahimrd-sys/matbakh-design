@@ -93,7 +93,7 @@ lemon:
   divisible: true
   buy: { en: loose, ar: بالوزن }
 
-bay_leaf:
+bay_leaf_dry:
   diet: []
   glyph: leaf
   name: { en: Bay leaf, ar: ورق لورا }
