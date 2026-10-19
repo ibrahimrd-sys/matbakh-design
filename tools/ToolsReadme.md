@@ -3,7 +3,7 @@
 *Written 26 August 2026. One file per tool question; there is no second copy of
 this document.*
 
-**Last updated:** 2026-10-13 — `ingredient-match.py` added, the third import check, and fixed three times the same day (form words, Arabic endings, مسحوق as powder, `=` whole-name aliases, ground spices accept powder); the ingredient editor gains *Other names* (aliases); `ingredient-lines.py` added, the second import check; `structured-data-check.py` fixed after its first real run: Arabic addresses, sitemap order and fallbacks, `--verbose`. 2026-10-12: `structured-data-check.py` added, the first import check (D-19). Earlier, 2026-10-06: the rewrites folder, `09-reviewed-captures/`, noted. 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
+**Last updated:** 2026-10-19 — `ingredient-match.py` measured again after the reference grew to 436 entries. 2026-10-13: `ingredient-match.py` added, the third import check, and fixed three times the same day (form words, Arabic endings, مسحوق as powder, `=` whole-name aliases, ground spices accept powder); the ingredient editor gains *Other names* (aliases); `ingredient-lines.py` added, the second import check; `structured-data-check.py` fixed after its first real run: Arabic addresses, sitemap order and fallbacks, `--verbose`. 2026-10-12: `structured-data-check.py` added, the first import check (D-19). Earlier, 2026-10-06: the rewrites folder, `09-reviewed-captures/`, noted. 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
 
 **Five** authoring tools and one research script. Four are single HTML files: open them in a browser, no
 install, no server, no Python. The fifth, `capture-draft.py`, is a Python script
@@ -392,7 +392,9 @@ aliases, مسحوق) measured on 94 more fresh pages: **75% right, 2.7% wrong** 
 better on unseen pages; the errors left are mostly products named after an
 ingredient (*egg noodles*, *cake mix*). After small fixes (ground spices accept
 powder, 45 aliases), on 95 more: **81% right, 3.4% wrong** — misses fell, wrong
-matches did not. The lines, the per-line verdicts and a review workbook are in
+matches did not. After Ibrahim's review went into the reference (19 October,
+436 entries), on 69 more English and Arabic pages, the matcher unchanged:
+**88% right, 2.6% wrong** (English 92%, Arabic 83%). The lines, the per-line verdicts and a review workbook are in
 the vault
 (`04-research/step3-summary-2026-10-13.md`), not here.
 
