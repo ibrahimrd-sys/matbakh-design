@@ -395,7 +395,8 @@ powder, 45 aliases), on 95 more: **81% right, 3.4% wrong** — misses fell, wron
 matches did not. After Ibrahim's review went into the reference (19 October,
 436 entries), on 69 more English and Arabic pages, the matcher unchanged:
 **88% right, 2.6% wrong** (English 92%, Arabic 83%). After that sample's review
-(482 entries), on 68 more pages, mostly English: **90% right, 2.4% wrong**. The lines, the per-line verdicts and a review workbook are in
+(482 entries), on 68 more pages, mostly English: **90% right, 2.4% wrong**; after
+the next (517), on 70 more: **90% right, 1.8% wrong**. The lines, the per-line verdicts and a review workbook are in
 the vault
 (`04-research/step3-summary-2026-10-13.md`), not here.
 
