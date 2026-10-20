@@ -5,6 +5,19 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-20a — stock is bought in cubes
+
+`philosophy.md` §47 (Ibrahim, 20 October). **`content/matbakh.py`**: a new
+ingredient field, `makes: { per, ml }`; `check` refuses it on an entry not in
+`ml`, and `build` adds `purchase: { count, per }` to the shopping item, rounded
+up. **`tools/ingredient-editor.html`** keeps the field and flags the same error.
+**`design/authoring-standard.md`** Appendix C lists it. In the vault reference,
+`chicken_stock`, `beef_stock` and `vegetable_stock` (was `vegetable_bouillon`) move from grams of powder
+to millilitres of broth, 500 ml a cube; the bolognese's 200 ml of stock now buys
+one cube at four servings, two at twelve. The same day `dried_grapes` became
+`raisins` and `vinegar_cider` became `apple_cider_vinegar` in the reference,
+which the editor's diet list follows.
+
 ## 2026-10-19a — herb ids name their form
 
 `philosophy.md` §46 (Ibrahim, 19 October): herb ids end in `_fresh` or `_dry`.

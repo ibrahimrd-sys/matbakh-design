@@ -4,7 +4,7 @@
 **Written:** 15 August 2026. Verified against `content/matbakh.py`, `_template.yaml`,
 `lexicon/activities.yaml` (81 activities), `lexicon/chrome.yaml` and
 `ref/ingredients.yaml` (177 entries) as they stand today.
-**Last updated:** 2026-10-13 — Appendix C: the ingredient record gains `aliases` (`philosophy.md` §45), and a leading `=` marks a whole-name-only alias. Earlier, 2026-09-30: `philosophy.md` §33–§42 folded in: page grouping,
+**Last updated:** 2026-10-20 — Appendix C: `makes`, what one bought unit makes (`philosophy.md` §47). 2026-10-13: Appendix C: the ingredient record gains `aliases` (`philosophy.md` §45), and a leading `=` marks a whole-name-only alias. Earlier, 2026-09-30: `philosophy.md` §33–§42 folded in: page grouping,
 the board page, upfront preparations, time and timers by attendance, heat and
 fat, cuts and the Cut Library, ingredient states as library photographs (§39,
 29 Sept), the finished-product page. Where a decision is
@@ -784,8 +784,10 @@ chicken_whole:
 
 Plus, where relevant: `divisible` (can it be halved), `pack` (pack size, shopping
 list only), `convert.cup_g` / `convert.piece_g` (what a cup or one item weighs —
-tbsp and tsp are *derived* at cup/16 and cup/48, never stored), and `nutrition`
-per 100 g.
+tbsp and tsp are *derived* at cup/16 and cup/48, never stored), `makes` (what one
+bought unit makes, for an entry bought in another form: stock is `makes: { per:
+cube, ml: 500 }`, and the shopping list counts cubes — `philosophy.md` §47), and
+`nutrition` per 100 g.
 
 **`aliases` — other names the ingredient is known by** (13 October 2026,
 `philosophy.md` §45). A list, in any language: the French word (*lait*), the

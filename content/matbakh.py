@@ -448,7 +448,8 @@ def build_items(rec, factor=1.0, scale_fixed=False):
                     id=iid, name=ref.get("name", {}), glyph=ref.get("glyph"),
                     unit=ref.get("unit"), cls=cls,
                     divisible=bool(ref.get("divisible")),
-                    buy=ref.get("buy", {}), pack=ref.get("pack")),
+                    buy=ref.get("buy", {}), pack=ref.get("pack"),
+                    makes=ref.get("makes")),
                     raw=amount))
     return out
 
@@ -507,7 +508,8 @@ def build(path, loc, servings=None):
                     unit=it.get("unit") or d.get("unit"),
                     cls=it.get("cls") or d.get("cls"),
                     divisible=bool(d.get("divisible")),
-                    buy=t(d.get("buy"), loc), pack=d.get("pack"))
+                    buy=t(d.get("buy"), loc), pack=d.get("pack"),
+                    makes=d.get("makes"))
 
     pages, arc, purchases = [], [], {}
     for step in rec["steps"]:
@@ -628,10 +630,18 @@ def build(path, loc, servings=None):
     for iid, p in purchases.items():
         i0 = p["item"]
         v = p["amt"] * eff(i0["cls"], factor)
-        items.append(dict(id=iid, name=i0["name"],
-                          amount=snap(v, i0["unit"], i0.get("divisible")),
-                          unit=i0["unit"], cls=i0["cls"], buy=i0["buy"],
-                          pack=i0.get("pack")))
+        item = dict(id=iid, name=i0["name"],
+                    amount=snap(v, i0["unit"], i0.get("divisible")),
+                    unit=i0["unit"], cls=i0["cls"], buy=i0["buy"],
+                    pack=i0.get("pack"))
+        # Bought in a form that makes the thing the recipe uses (philosophy §47):
+        # 1 L of stock is bought as two 500 ml cubes, rounded up, never as grams
+        # of powder. The dish and its nutrition keep the millilitres.
+        mk = i0.get("makes")
+        if mk and i0["unit"] == "ml":
+            item["makes"] = mk
+            item["purchase"] = dict(count=max(1, math.ceil(v / mk["ml"] - 1e-9)), per=mk["per"])
+        items.append(item)
 
     contains, flags, _ = derive_diet(rec)
     cfg = CHROME["locales"][loc]
@@ -754,6 +764,24 @@ def alias_problems():
                 warnings.append(f"'{iid}': alias '{a}' is also the name of "
                                 f"{', '.join(sorted(others))}")
     return errors, warnings
+
+
+def makes_problems():
+    """Check `makes` (added 20 Oct 2026, philosophy §47): what one bought unit
+    makes, so the shopping list can count cubes instead of millilitres."""
+    errors = []
+    for iid, v in ING.items():
+        mk = v.get("makes")
+        if mk is None:
+            continue
+        if not (isinstance(mk, dict) and isinstance(mk.get("per"), str) and mk["per"].strip()
+                and isinstance(mk.get("ml"), (int, float)) and mk["ml"] > 0):
+            errors.append(f"'{iid}': makes needs a word and a positive ml — "
+                          f"{{ per: cube, ml: 500 }}; got {mk!r}")
+        elif v.get("unit") != "ml":
+            errors.append(f"'{iid}': makes counts millilitres, but the unit is "
+                          f"'{v.get('unit')}' — the entry must be in ml")
+    return errors
 
 
 def status_block():
@@ -968,15 +996,16 @@ def main():
             parts.append(f"{stubs} stub(s)")
         parts += [f"{bad} failing", f"{warn} warning(s)"]
         a_err, a_warn = alias_problems()
+        a_err += makes_problems()
         if a_err or a_warn:
-            print("\ningredient reference — aliases")
+            print("\ningredient reference — aliases and makes")
             for e in a_err:
                 print(f"  error    {e}")
             for w in a_warn:
                 print(f"  warning  {w}")
         print("\n" + " · ".join(parts))
         if a_err:
-            print(f"reference: {len(a_err)} alias error(s)")
+            print(f"reference: {len(a_err)} error(s)")
         sys.exit(1 if bad or a_err else 0)
 
     if cmd == "build":

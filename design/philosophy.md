@@ -2,7 +2,7 @@
 
 **Status:** Living document. Sections marked SETTLED are decided and should not be relitigated without a stated reason. Sections marked OPEN are unresolved.
 
-**Last updated:** 2026-10-19
+**Last updated:** 2026-10-20
 
 ---
 
@@ -2251,6 +2251,31 @@ and edits nothing.*
   `white_beans_boiled` is unchanged. Beans are not herbs; this borrows §46's
   `_dry` ending for a food the old id misnamed.
 
+## 47. Stock is used in millilitres and bought in cubes — SETTLED (20 October 2026)
+
+- **DECIDED (Ibrahim, 20 October).** A recipe uses stock as a liquid — *four
+  cups of chicken broth* — but a shopper buys cubes. The reference had
+  `chicken_stock`, `beef_stock` and `vegetable_stock` (was `vegetable_bouillon`) in grams with the
+  nutrition of the dry powder, so four cups became 950 g of bouillon on the
+  shopping list and about 2,400 phantom kcal in the dish. **The three entries
+  are now in `ml`, with the nutrition of prepared broth,** and the dish's
+  quantities and figures come from those millilitres.
+- **A new field, `makes: { per: cube, ml: 500 }`, says what one bought unit
+  makes.** The shopping list rounds up to whole units — *stock cubes ×2 (for
+  1 L)* — and the `buy` note states the basis (*1 per 500 ml*), because brands
+  differ and the cook may use powder or a carton. **It never converts to grams
+  of powder**: nobody weighs bouillon, and a weight would pretend to a precision
+  the brands do not share. 500 ml is the common Egyptian cube (Knorr, Maggi)
+  until checked.
+- This is §6's *Purchase* step (rounded up, shopping list only) for a product
+  that is bought in a different form from the one cooked with; cost still
+  computes from the exact quantity consumed. `makes` joins the ingredient fields
+  in the table under §11 *(one row added there would be an insertion, so it is
+  recorded here)*. `matbakh.py check` refuses a `makes` on an entry not in `ml`;
+  `build` adds `purchase: { count, per }` to the item; the ingredient editor
+  keeps the field. A recipe line already in cubes (*1 chicken bouillon cube*) is
+  for the importer to turn into millilitres at the same rate.
+
 ---
 
 ## Decision log
@@ -2332,3 +2357,4 @@ and edits nothing.*
 | 19 Oct 2026 | **Herb ids name their form:** `<herb>_fresh` or `<herb>_dry`, for every herb, one form or two; ground seed spices keep their names. Seven ids renamed; `cilantro` merged into `coriander_fresh` and `oregano` with `dried_oregano` into `oregano_dry`, the retired names kept as aliases | 46, 45 |
 | 19 Oct 2026 | **`ginger` merged into `ginger_fresh`**, its names kept as aliases — §46's one-entry-per-form rule | 46 |
 | 19 Oct 2026 | **`white_beans_pods` renamed `white_beans_dry`** — it held dried beans, not pods; §46's `_dry` ending | 46 |
+| 20 Oct 2026 | **Stock is used in ml and bought in cubes:** `chicken_stock`, `beef_stock`, `vegetable_stock` in `ml` with prepared-broth nutrition; `makes: { per: cube, ml: 500 }` rounds the shopping list up to whole cubes; never grams of powder | 47, 6 |

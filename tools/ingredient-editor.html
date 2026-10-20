@@ -220,6 +220,8 @@ function check(){
       out.push({k,lvl:'error',msg:`${nm} — unknown scaling class "${v.cls}"`});
     if(!v.unit || !UNITS.includes(v.unit))
       out.push({k,lvl:'error',msg:`${nm} — unit must be one of ${UNITS.join(', ')}`});
+    if(v.makes && v.unit !== 'ml')
+      out.push({k,lvl:'error',msg:`${nm} — makes counts millilitres; the unit must be ml`});
     if(v.divisible !== undefined && v.cls !== 'discrete')
       out.push({k,lvl:'warn',msg:`${nm} — divisible only affects discrete items; it does nothing here`});
     if(!v.name || !v.name.ar)
@@ -481,6 +483,7 @@ function toYaml(){
       L.push('  # tbsp = cup_g/16, tsp = cup_g/48 — derived, never stored');
       L.push('  convert: { ' + bits.join(', ') + ' }');
     }
+    if(v.makes) L.push(`  makes: { per: ${q(v.makes.per)}, ml: ${v.makes.ml} }`);
     if(v.buy) L.push(`  buy: { en: ${q(v.buy.en)}, ar: ${q(v.buy.ar)} }`);
     if(v.nutrition){
       L.push('  # per 100 ' + (v.unit==='ml'?'ml':'g'));
@@ -539,14 +542,14 @@ const DIET_KNOWN = {
   chocolate_chips:['dairy'], baking_chocolate_unsweetened:[], chocolate_syrup:[],
   cocoa_powder:[], vanilla_extract:['alcohol'], yeast:[], baking_powder:[],
   baking_soda:[], sodium_bicarbonate:[], cornstarch:[], granulated_sugar:[],
-  brown_sugar:[], sugar_icing:[], maple_syrup:[], jam:[], dried_grapes:[],
+  brown_sugar:[], sugar_icing:[], maple_syrup:[], jam:[], raisins:[],
   chia_seed:[], rice:[], vegetable_oil:[], olive_oil:[], mixed_vegetables:[],
   chickpea:[], fava_beans:[], beans_fava_in_pod_raw:[], lentils_raw:[],
   lentils_black:[], red_kidney_beans:[], white_beans_boiled:[], white_beans_dry:[],
   sweet_corn:[], crushed_tomatoes:[], tomato_paste:[], tomato_sauce:[], catsup:[],
   pickles:[], kalamata_olive:[], pomegranate_molasse:[], vinegar_white:[],
-  vinegar_cider:[], rice_vinegar:[], mustard:[], dijon_mustard:[],
-  vegetable_bouillon:[], pine_nuts:['nuts'], white_toast:['gluten'],
+  apple_cider_vinegar:[], rice_vinegar:[], mustard:[], dijon_mustard:[],
+  vegetable_stock:[], pine_nuts:['nuts'], white_toast:['gluten'],
   bechamel_sauce:['dairy','gluten'], ranch_sauce:['dairy','egg'],
   worcestershire_sauce:['fish'],
 };
