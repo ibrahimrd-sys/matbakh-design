@@ -5,6 +5,7 @@ from recipe_core, for import step 7 (design/shopping-list-design.md §6).
 
     python3 tools/export-for-app.py                 # into ~/Develop/matbakh
     python3 tools/export-for-app.py --app PATH
+    python3 tools/export-for-app.py --sample        # only the made-up sample, committed in the app
 
 Writes, in the app:
   assets/ref/ingredients.json     the vault's reference, as JSON (gitignored there:
@@ -17,6 +18,11 @@ Writes, in the app:
   test/parity/corpus.json         the same on every saved page of fresh samples 4–6
                                   (vault `04-research/step3-fresh{4,5,6}-lines-*.csv`) —
                                   real sites' text, so gitignored
+
+--sample writes, from tests/fixtures/app-sample.yaml (made up: 12 ingredients,
+3 invented recipes, 3 invented import pages), what the app commits so a fresh copy
+builds and tests without the vault:
+  assets/sample/ingredients.json, assets/sample/recipes/<id>.json, test/sample/parity.json
 
 A case's lines are what the list is given: the parser's quantity, with a package's
 stated size already applied ("1 (16 ounce) package tofu" → 16 oz), so the phone's
@@ -69,19 +75,34 @@ def case(name, raw, lang, m, ref):
                             notMatched=shop["not_matched"]))
 
 
+def sample(app, write):
+    """The made-up sample (tests/fixtures/app-sample.yaml), for the app's git."""
+    import tempfile
+    src = yaml.safe_load(open(HERE / "tests" / "fixtures" / "app-sample.yaml", encoding="utf-8"))
+    ref = src["reference"]
+    with tempfile.TemporaryDirectory() as d:
+        path = pathlib.Path(d) / "ingredients.yaml"
+        path.write_text(yaml.safe_dump(ref, allow_unicode=True), encoding="utf-8")
+        m = Matcher(str(path))
+    write("assets/sample/ingredients.json", {k: entry(v) for k, v in ref.items()})
+    for r in src["recipes"]:
+        write(f"assets/sample/recipes/{r['id']}.json", r)
+    cases = [case(c["name"], c["lines"], c["lang"], m, ref) for c in src["imports"]]
+    write("test/sample/parity.json", cases)
+    print(f"sample: {len(ref)} ingredients, {len(src['recipes'])} recipes, {len(cases)} cases — made up")
+
+
 def main():
     for s in (sys.stdout, sys.stderr):
         s.reconfigure(encoding="utf-8", errors="replace")
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[1])
     ap.add_argument("--app", default=str(pathlib.Path.home() / "Develop" / "matbakh"))
+    ap.add_argument("--sample", action="store_true", help="only the made-up sample")
     a = ap.parse_args()
     app = pathlib.Path(a.app)
     if not (app / "pubspec.yaml").exists():
         sys.exit(f"no Flutter app at {app}")
 
-    m = Matcher()
-    ref = yaml.safe_load(open(m.path, encoding="utf-8"))
-    vault = pathlib.Path(m.path).parent.parent          # 03-catalogue
 
     def write(rel, obj):
         p = app / rel
@@ -90,6 +111,13 @@ def main():
         print(f"  {rel}  ({p.stat().st_size // 1024} KB)")
 
     print(f"into {app}")
+    sample(app, write)
+    if a.sample:
+        return
+
+    m = Matcher()
+    ref = yaml.safe_load(open(m.path, encoding="utf-8"))
+    vault = pathlib.Path(m.path).parent.parent          # 03-catalogue
     write("assets/ref/ingredients.json", {k: entry(v) for k, v in ref.items()})
 
     # the catalogue's authored recipes, as the list receives them

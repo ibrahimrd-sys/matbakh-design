@@ -1,0 +1,194 @@
+# APP SAMPLE — MADE UP. Not catalogue, not the vault's reference.
+#
+# Committed into the Flutter app (by export-for-app.py --sample) so a fresh copy
+# builds and its tests run without the vault. Every name is a real ingredient, but
+# the pack sizes, weights and nutrition here are round invented numbers, and the
+# recipes are invented for the tests. Do not cite them.
+
+reference:
+  onion:
+    glyph: onion
+    name: { en: Onion, ar: بصل }
+    aliases: [onions, بصلة]
+    diet: []
+    unit: count
+    cls: discrete
+    divisible: true
+    convert: { piece_g: 100 }
+    buy: { en: loose, ar: بالوزن }
+    aisle: produce
+    nutrition: { kcal: 40, protein: 1, carb: 9, fat: 0, fiber: 2 }
+  garlic:
+    glyph: garlic
+    name: { en: Garlic, ar: ثوم }
+    aliases: [garlic cloves, فص ثوم]
+    diet: []
+    unit: count
+    cls: discrete
+    convert: { piece_g: 5 }
+    buy: { en: 1 head, ar: راس }
+    aisle: produce
+    nutrition: { kcal: 150, protein: 6, carb: 33, fat: 0, fiber: 2 }
+  tomato:
+    glyph: vegetable
+    name: { en: Tomato, ar: طماطم }
+    aliases: [tomatoes]
+    diet: []
+    unit: g
+    cls: continuous
+    convert: { cup_g: 180, piece_g: 120 }
+    buy: { en: loose, ar: بالوزن }
+    aisle: produce
+    nutrition: { kcal: 20, protein: 1, carb: 4, fat: 0, fiber: 1 }
+  parsley_fresh:
+    glyph: herb
+    name: { en: Parsley, ar: بقدونس }
+    aliases: [fresh parsley]
+    diet: []
+    unit: g
+    cls: seasoning
+    convert: { cup_g: 60 }
+    buy: { en: 1 bunch, ar: حزمة }
+    aisle: produce
+    nutrition: { kcal: 35, protein: 3, carb: 6, fat: 1, fiber: 3 }
+  lemon:
+    glyph: lemon
+    name: { en: Lemon, ar: ليمون }
+    aliases: [lemons, lemon juice]
+    diet: []
+    unit: count
+    cls: discrete
+    divisible: true
+    convert: { piece_g: 60 }
+    buy: { en: loose, ar: بالوزن }
+    aisle: produce
+    nutrition: { kcal: 30, protein: 1, carb: 9, fat: 0, fiber: 3 }
+  plain_yogurt:
+    glyph: dairy
+    name: { en: Plain yogurt, ar: زبادي }
+    aliases: [yogurt, yoghurt, زبادي سادة]
+    diet: [dairy]
+    unit: g
+    cls: continuous
+    pack: 500
+    convert: { cup_g: 240 }
+    buy: { en: 500 g pot, ar: علبة ٥٠٠ جم }
+    aisle: chiller
+    nutrition: { kcal: 60, protein: 4, carb: 5, fat: 3, fiber: 0 }
+  rice:
+    glyph: grain
+    name: { en: Rice, ar: أرز }
+    aliases: [white rice, رز]
+    diet: []
+    unit: g
+    cls: continuous
+    pack: 1000
+    convert: { cup_g: 200 }
+    buy: { en: 1 kg bag, ar: كيس كيلو }
+    aisle: dry_goods
+    nutrition: { kcal: 360, protein: 7, carb: 80, fat: 1, fiber: 1 }
+  red_lentils:
+    glyph: grain
+    name: { en: Red lentils, ar: عدس أصفر }
+    aliases: [lentils, عدس]
+    diet: []
+    unit: g
+    cls: continuous
+    pack: 500
+    convert: { cup_g: 190 }
+    buy: { en: 500 g bag, ar: كيس ٥٠٠ جم }
+    aisle: dry_goods
+    nutrition: { kcal: 350, protein: 24, carb: 60, fat: 1, fiber: 11 }
+  chicken_stock:
+    glyph: jar
+    name: { en: Chicken stock, ar: مرقة فراخ }
+    aliases: [chicken broth, مرق دجاج]
+    diet: [meat, poultry]
+    unit: ml
+    cls: continuous
+    makes: { per: cube, ml: 500 }
+    buy: { en: "stock cubes, 1 per 500 ml", ar: "مكعبات مرقة، مكعب لكل 500 مل" }
+    aisle: dry_goods
+    nutrition: { kcal: 5, protein: 0.5, carb: 0.5, fat: 0.1, fiber: 0 }
+  olive_oil:
+    glyph: fat
+    name: { en: Olive oil, ar: زيت زيتون }
+    aliases: [extra virgin olive oil]
+    diet: []
+    unit: ml
+    cls: continuous
+    buy: { en: bottle, ar: زجاجة }
+    aisle: dry_goods
+    staple: true
+    nutrition: { kcal: 820, protein: 0, carb: 0, fat: 92, fiber: 0 }
+  flour:
+    glyph: flour
+    name: { en: Flour, ar: دقيق }
+    aliases: [all-purpose flour, plain flour]
+    diet: [gluten]
+    unit: g
+    cls: continuous
+    pack: 1000
+    convert: { cup_g: 120 }
+    buy: { en: 1 kg bag, ar: كيس كيلو }
+    aisle: dry_goods
+    staple: true
+    nutrition: { kcal: 360, protein: 10, carb: 76, fat: 1, fiber: 3 }
+  salt:
+    glyph: salt
+    name: { en: Salt, ar: ملح }
+    aliases: [table salt, sea salt]
+    diet: []
+    unit: g
+    cls: seasoning
+    convert: { cup_g: 290 }
+    buy: { en: have it, ar: موجود }
+    aisle: spices
+    staple: true
+    nutrition: { kcal: 0, protein: 0, carb: 0, fat: 0, fiber: 0 }
+
+# Invented recipes, in the shape export-for-app.py writes a catalogue recipe:
+# their shopping items at the base servings.
+recipes:
+  - id: sample_lentil_soup
+    title: { en: Sample lentil soup, ar: شوربة عدس (عينة) }
+    servings: 4
+    items:
+      - { id: red_lentils, amount: 250, unit: g }
+      - { id: onion, amount: 1, unit: "" }
+      - { id: garlic, amount: 3, unit: "" }
+      - { id: chicken_stock, amount: 1250, unit: ml }
+      - { id: lemon, amount: 1, unit: "" }
+      - { id: olive_oil, amount: 30, unit: ml }
+      - { id: salt, amount: 5, unit: g }
+  - id: sample_tomato_rice
+    title: { en: Sample tomato rice, ar: أرز بالطماطم (عينة) }
+    servings: 4
+    items:
+      - { id: rice, amount: 400, unit: g }
+      - { id: tomato, amount: 360, unit: g }
+      - { id: onion, amount: 1, unit: "" }
+      - { id: olive_oil, amount: 30, unit: ml }
+      - { id: salt, amount: 6, unit: g }
+  - id: sample_yogurt_dip
+    title: { en: Sample yogurt dip, ar: سلطة زبادي (عينة) }
+    servings: 4
+    items:
+      - { id: plain_yogurt, amount: 600, unit: g }
+      - { id: garlic, amount: 1, unit: "" }
+      - { id: parsley_fresh, amount: 2, unit: tbsp }
+      - { id: lemon, amount: 0.5, unit: "" }
+      - { id: salt, amount: null, unit: g }
+
+# Invented import pages, as lines: the sample's parity cases.
+imports:
+  - name: sample import (en)
+    lang: en
+    lines: ["2 cups red lentils", "1 large onion, diced", "4 cloves garlic", "2-3 cups chicken broth",
+            "1 tbsp olive oil", "salt to taste", "1 cup frobnicated zizzle", "11 cups water"]
+  - name: sample import (ar)
+    lang: ar
+    lines: ["2 كوب أرز", "3 حبات طماطم", "بصلة", "ملعقة زيت زيتون", "ملح حسب الرغبة", "رشة كمون"]
+  - name: sample import (en, Arabic words)
+    lang: ar
+    lines: ["2 cups red lentils", "3 cups yogurt", "11 cups rice", "11 cups water", "1/2 lemon", "2 1/2 cups flour"]
