@@ -5,6 +5,26 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-21r — older Arabic sites read; the import screen
+
+Ibrahim's go. **Older Arabic sites:** the app reads windows-1256 and ISO 8859-6 (and the
+other windows-125x and ISO 8859 charsets) through **`enough_convert`**, held to Python on
+every byte of 24 charsets — `export-for-app.py` writes Python's decoding of all 256 bytes
+in each. The package needed four corrections, each found that way and kept in the app's
+`lib/import/charsets.dart`: a zero byte crashed it; it gave "?" for undefined bytes where
+Python gives U+FFFD; and four bytes differ from Python's tables (windows-1256 0x9D, the
+zero-width non-joiner; windows-1255 0xCA; ISO 8859-8 0xFD and 0xFE, the direction marks).
+**The import screen** (app `7bd1167`), from the shopping list's link button, to the
+mock-up and the step 6 review: a link in; the recipe as published, in its own language,
+under the *not tested* badge, with its address; the servings question before any
+per-serving figure, pre-filled from the page and never 1, and *as written* when the page
+gives none; the list check in the four §48 groups and the app's language, the source line
+under each item, items already on the list marked, *set amount*, *Add N items*; the
+estimate labelled تقدير, ≈, confidence dots, ranges, alternatives, what was not counted,
+the footer. App 44 of 44; it builds. **Not yet:** the thumbnail (showing it downloads the
+site's image), cost (no price feed), the 10-a-month count (no accounts), pasted text,
+*share to Matbakh*; the not-counted reasons and page errors are in English only.
+
 ## 2026-10-21q — the app's name to sites; plain http on iPhone, for now
 
 Ibrahim, 21 October: the app names itself **Matbakh/0.1 (Recipe Import)** to recipe sites
