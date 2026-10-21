@@ -1,0 +1,19 @@
+# UNREVIEWED MACHINE TRANSCRIPTION — a made-up draft for capture-prefilter's tests.
+# source: https://example.com/made-up-stew
+TITLE: Made-up stew
+SERVINGS (as given): 4
+
+INGREDIENTS
+- 1 tablespoon butter
+- 2 tablespoons butter
+- 2 cups beef stock
+- ½ cup beef broth
+- 1 cup flour
+- parsley, chopped
+- 1 cup frobnicated zizzle
+
+STEPS
+1. Preheat the oven to 450°.
+2. Melt 1 tablespoon butter, then 2 tablespoons butter, then 1 tablespoon butter.
+3. Add 1 cup flour and cook for 10 minutes.
+4. Bake at 325°F for 2 hours.

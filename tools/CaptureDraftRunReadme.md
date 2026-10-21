@@ -183,11 +183,13 @@ Until that is settled the tool stays outside every workflow, as it is now.
 
 ---
 
-## 7. Pre-filter engine for capture-draft.py (design, not yet built)
+## 7. Pre-filter engine for capture-draft.py
 
 *Design agreed by Ibrahim, 1 October 2026; checks F–H added at Ibrahim's
-request, 4 October 2026. **Not built.** The next step is a separate build brief, which is
-not part of this document.*
+request, 4 October 2026. **Built 21 October 2026** as `tools/capture-prefilter.py`
+on the engine it shares with the import prototype (`tools/RecipeCoreDesign.md`,
+approved 20 October): checks A, D, E, F, G and H; B and C are not built. How to run
+it: `ToolsReadme.md` § capture-prefilter.py. The design below is unchanged.*
 
 ### What this is, and what it is not
 
@@ -330,9 +332,11 @@ happened to notice them. F–H would catch them on every capture.
   them; the engine must not invent them.
 - **Whether a draft is kept** after authoring, from §6 above. It also decides how
   long a draft's flags are kept.
-- **How F and H decide that two entries are the same ingredient** — for example
-  *beef stock* and *beef broth, or stock*. Whether they use check D's mapping to
-  `ref/ingredients.yaml` or exact names is not settled.
+- ~~**How F and H decide that two entries are the same ingredient.**~~ **Decided
+  20 October 2026 (Ibrahim, with the shared-engine design):** by check D's mapping
+  to `ref/ingredients.yaml` — two entries matching the same reference id are the
+  same ingredient, so *beef stock* and *beef broth* add up; unmatched entries fall
+  back to the same name.
 - **An ingredient used in the method but missing from the list** — for example
   the fresh thyme garnish in the Bourguignon example. H as specified compares
   quantities only. Whether to flag this is not settled.

@@ -5,6 +5,22 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-21a — one engine under import and capture
+
+`tools/RecipeCoreDesign.md`, approved by Ibrahim 20 October. **`tools/recipe_core/`**
+holds the page reader, line parser and matcher — moved out of
+`structured-data-check.py`, `ingredient-lines.py` and `ingredient-match.py`, which
+stay as thin command lines with unchanged output (checked on 2,375 lines and three
+live pages) — plus a new shopping list and estimate (`basket.py`) and the
+pre-filter's checks (`checks.py`). New: **`tools/import-recipe.py`** (import plan
+step 5: a page in, the recipe as published, a shopping list and an estimate labelled
+تقدير out — no AI), **`tools/capture-prefilter.py`** (CaptureDraftRunReadme §7,
+checks A D E F G H, flags only), **`capture-draft.py --from-page-data`** (a draft
+from the page's own data with no API call; every draft records whether its page had
+recipe data), and **`tools/tests/run-tests.py`** with made-up fixture pages (25 of
+25). `ToolsReadme.md` documents all of it. In the vault reference, 103 entries gain
+cup or piece weights and 22 gain nutrition, for the estimate.
+
 ## 2026-10-20a — stock is bought in cubes
 
 `philosophy.md` §47 (Ibrahim, 20 October). **`content/matbakh.py`**: a new

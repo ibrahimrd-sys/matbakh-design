@@ -7,6 +7,7 @@ capture-draft — a rough recipe draft from a URL or an image, for a chef to rew
     python3 capture-draft.py URL --format text            # plain text, not JSON
     python3 capture-draft.py URL --out ../../matbakh-private/08-unreviewed-captures/x.json
     python3 capture-draft.py URL --dry-run                # show what would be sent
+    python3 capture-draft.py URL --from-page-data         # no AI: the page's own recipe data
 
 INTERNAL AUTHORING TOOL ONLY (competitor study HD-02). What it prints is a
 transcription of someone else's recipe: ingredients with quantities and units
@@ -23,7 +24,12 @@ A recipe reaches the app only after a human author rewrites it to
 `design/authoring-standard.md` and a chef test-cooks it.
 
 Needs `pip install anthropic` and credentials: ANTHROPIC_API_KEY, or an
-`ant auth login` profile. --dry-run needs neither.
+`ant auth login` profile. --dry-run needs neither, and neither does
+--from-page-data (added 20 October 2026, tools/RecipeCoreDesign.md): on a page
+that publishes schema.org recipe data, it builds the draft from that data through
+tools/recipe_core/, with no API call — the model stays for images and pages
+without data. Every draft records whether its page had recipe data
+(`_draft.page_recipe_data`), for capture-prefilter.py's check E.
 """
 
 import argparse, base64, datetime, html.parser, json, mimetypes, os, pathlib, re, sys
@@ -238,6 +244,46 @@ def as_text(doc):
     return "\n".join(out) + "\n"
 
 
+# ── no AI: a draft from the page's own recipe data ─────────────────────────
+
+def from_page_data(url):
+    """The same draft shape, built from schema.org data through tools/recipe_core/.
+    It transcribes exactly as published — the lines split by the import parser, which
+    never guesses — and makes no API call."""
+    if not re.match(r"https?://", url):
+        sys.exit("capture-draft: --from-page-data needs a URL; an image needs the model.")
+    sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+    from recipe_core.lines import parse
+    from recipe_core.page import PageError, read_recipe
+    try:
+        rec = read_recipe(url)
+    except PageError as e:
+        sys.exit(f"capture-draft: {e}. Run without --from-page-data to let the model read "
+                 f"the page, or pass a screenshot.")
+    ings = []
+    for line in rec["ingredients"]:
+        p = parse(line)
+        if p["kind"] == "heading":
+            continue
+        q = p["qty"] + ("-" + p["qty_max"] if p["qty_max"] else "")
+        ings.append(dict(name=p["name"], quantity=q, unit=p["unit"], note=p["note"], original_line=line))
+    notes = ["Built from the page's own schema.org recipe data, with no AI (--from-page-data). "
+             "Lines are split by the import parser; check them against the original lines."]
+    if rec["source"] == "microdata":
+        notes.append("The page publishes microdata, which carries the ingredients but not the steps; "
+                     "the steps are on the page.")
+    if rec["redirected"]:
+        notes.append(f"The page redirected to {rec['final_url']}.")
+    return {
+        "_draft": {"warning": WARNING, "source": url,
+                   "captured": datetime.datetime.now().isoformat(timespec="seconds"),
+                   "model": "none — the page's own recipe data", "request_id": None,
+                   "page_recipe_data": True, "redirected_to": rec["final_url"] if rec["redirected"] else None},
+        "recipe": dict(found_recipe=True, title=rec["title"], servings_as_given=rec["yield_text"],
+                       ingredients=ings, steps=rec["steps"], extraction_notes=notes),
+    }
+
+
 # ── main ───────────────────────────────────────────────────────────────────
 
 def main():
@@ -248,11 +294,23 @@ def main():
     ap.add_argument("--out", type=pathlib.Path, help="also write the draft to this file")
     ap.add_argument("--dry-run", action="store_true",
                     help="print what would be sent to the API, and stop")
+    ap.add_argument("--from-page-data", action="store_true",
+                    help="build the draft from the page's own recipe data, with no API call")
     a = ap.parse_args()
     for stream in (sys.stdout, sys.stderr):      # Windows consoles default to cp1252
         stream.reconfigure(encoding="utf-8", errors="replace")
 
     out_path = guard_out(a.out) if a.out else None
+    if a.from_page_data:
+        doc = from_page_data(a.source)
+        rendered = (as_text(doc) if a.format == "text"
+                    else json.dumps(doc, ensure_ascii=False, indent=2) + "\n")
+        sys.stdout.write(rendered)
+        if out_path:
+            out_path.parent.mkdir(parents=True, exist_ok=True)
+            out_path.write_text(rendered, encoding="utf-8")
+            print(f"capture-draft: written to {out_path}", file=sys.stderr)
+        return
     if re.match(r"https?://", a.source):
         content, had_ld = fetch_url(a.source)
         source = a.source
@@ -317,6 +375,7 @@ def main():
             "captured": datetime.datetime.now().isoformat(timespec="seconds"),
             "model": resp.model,
             "request_id": resp._request_id,
+            "page_recipe_data": had_ld if re.match(r"https?://", a.source) else None,
         },
         "recipe": resp.parsed_output.model_dump(),
     }

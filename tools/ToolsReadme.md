@@ -3,7 +3,7 @@
 *Written 26 August 2026. One file per tool question; there is no second copy of
 this document.*
 
-**Last updated:** 2026-10-20 — `ingredient-editor.html` keeps the new `makes` field (`philosophy.md` §47). 2026-10-19: `ingredient-match.py` measured again after the reference grew to 436 entries. 2026-10-13: `ingredient-match.py` added, the third import check, and fixed three times the same day (form words, Arabic endings, مسحوق as powder, `=` whole-name aliases, ground spices accept powder); the ingredient editor gains *Other names* (aliases); `ingredient-lines.py` added, the second import check; `structured-data-check.py` fixed after its first real run: Arabic addresses, sitemap order and fallbacks, `--verbose`. 2026-10-12: `structured-data-check.py` added, the first import check (D-19). Earlier, 2026-10-06: the rewrites folder, `09-reviewed-captures/`, noted. 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
+**Last updated:** 2026-10-21 — `recipe_core/`, the engine shared by two new scripts: `import-recipe.py` (import plan step 5: a page in, a shopping list and an estimate out, no AI) and `capture-prefilter.py` (the §7 pre-filter, checks A D E F G H); `capture-draft.py --from-page-data`; `tests/run-tests.py`; the three import checks now run on the shared engine with unchanged output (RecipeCoreDesign.md). 2026-10-20: `ingredient-editor.html` keeps the new `makes` field (`philosophy.md` §47). 2026-10-19: `ingredient-match.py` measured again after the reference grew to 436 entries. 2026-10-13: `ingredient-match.py` added, the third import check, and fixed three times the same day (form words, Arabic endings, مسحوق as powder, `=` whole-name aliases, ground spices accept powder); the ingredient editor gains *Other names* (aliases); `ingredient-lines.py` added, the second import check; `structured-data-check.py` fixed after its first real run: Arabic addresses, sitemap order and fallbacks, `--verbose`. 2026-10-12: `structured-data-check.py` added, the first import check (D-19). Earlier, 2026-10-06: the rewrites folder, `09-reviewed-captures/`, noted. 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
 
 **Five** authoring tools and one research script. Four are single HTML files: open them in a browser, no
 install, no server, no Python. The fifth, `capture-draft.py`, is a Python script
@@ -20,6 +20,11 @@ recipe pages publish their own recipe data.
 | `capture-draft.py` | a URL or an image of a recipe | a rough, unreviewed draft of someone else's recipe, for a chef to rewrite — **never a Matbakh recipe** |
 | `ingredient-lines.py` | ingredient lines, or a CSV of them | each line split into quantity, unit and ingredient, in Arabic, English and French |
 | `structured-data-check.py` | a list of recipe URLs | counts of which pages carry schema.org Recipe data, and how complete it is — **no recipe text kept** |
+| `ingredient-match.py` | ingredient names, or a CSV of them | each name's entry in the vault's ingredient reference, or nothing |
+| `import-recipe.py` | a recipe page URL | the recipe as published, a shopping list and a nutrition estimate labelled تقدير — **no AI** |
+| `capture-prefilter.py` | a `capture-draft.py` draft | structural flags for the chef (checks A, D, E, F, G, H) — **flags only** |
+| `recipe_core/` | — | the engine under the four import scripts and the pre-filter: page reader, line parser, matcher, shopping list and estimate, checks |
+| `tests/run-tests.py` | — | the import prototype's and the pre-filter's cases, on made-up pages |
 
 **Nothing is uploaded by the four editors.** Files are read in the browser and stay on your machine.
 That is also why they cannot save in place — a web page may not write to disk.
@@ -203,6 +208,11 @@ not the field name.
 Ctrl+Enter saves and advances. **Next untranslated** skips to the first gap.
 
 ## capture-draft.py
+
+*21 October 2026:* **`--from-page-data`** builds the draft from the page's own
+schema.org data through `recipe_core/`, with no API call — the model stays for
+images and pages without data — and every draft now records
+`_draft.page_recipe_data` for the pre-filter's check E.
 
 *Added 1 October 2026. Competitor study HD-02 (chapter 11, Honeydew).*
 **How to do a real run — key, first run, checking a draft, every error message:
@@ -399,6 +409,95 @@ matches did not. After Ibrahim's review went into the reference (19 October,
 the next (517), on 70 more: **90% right, 1.8% wrong**. The lines, the per-line verdicts and a review workbook are in
 the vault
 (`04-research/step3-summary-2026-10-13.md`), not here.
+
+## recipe_core/ — the shared engine
+
+*Added 21 October 2026* (`RecipeCoreDesign.md`, approved by Ibrahim 20 October).
+One importable package under `import-recipe.py`, `capture-prefilter.py`,
+`capture-draft.py --from-page-data` and the three import checks, so each part is
+written once:
+
+| Module | What it does | From |
+|---|---|---|
+| `page.py` | fetch a page politely (robots.txt, a delay per site) and read its schema.org Recipe — JSON-LD, then microdata; `read_recipe()` cleans double-encoded text (`8&quot;`, `za&#39;atar`) | `structured-data-check.py` |
+| `lines.py` | split a line into quantity, unit, name and note | `ingredient-lines.py`, unchanged |
+| `match.py` | find the line's reference entry | `ingredient-match.py`, unchanged |
+| `basket.py` | the shopping list and the estimate | new |
+| `checks.py` | the pre-filter's flags | new |
+
+**Moved, not rewritten.** The code was cut from the three scripts by a script,
+not retyped, and each script is now a thin command line over the package. Checked
+on 21 October: `ingredient-lines.py` and `ingredient-match.py` give byte-identical
+output on all 2,375 lines of fresh samples 4–6, and `structured-data-check.py` the
+same result on three live pages. Every earlier measurement can be repeated.
+
+## import-recipe.py
+
+*Added 21 October 2026.* Import plan step 5 — the first import test, on Ibrahim's
+machine. **No AI, no API key, no user data.**
+
+    python3 tools/import-recipe.py https://example.com/a-recipe
+    python3 tools/import-recipe.py URL --servings 6      # scaled, linearly, from the page's servings
+    python3 tools/import-recipe.py URL --json
+    python3 tools/import-recipe.py --html saved.html     # a saved page, offline
+
+It prints the recipe **as published** (imports stay in source format, `philosophy.md`
+§44), then:
+
+- **a shopping list** — one line per reference entry, quantities added when the
+  units allow (in the recipe's own unit when every line uses the same one, else
+  g/kg or ml/L), a range kept as a range, a package's size read from the line
+  (*1 (16 ounce) package tofu* → 16 oz), whole packs or stock cubes to buy (§47),
+  and **every line the reference does not know, as written — never dropped**;
+- **an estimate, labelled تقدير and *not tested by Matbakh*** — calories, protein,
+  carbohydrate and fat for the recipe and per serving. A line counts only when its
+  weight and its nutrition are both known; every other line is listed by name with
+  the reason. A range is taken at its middle, and the output says so.
+
+A page with no recipe data gets *this page has no recipe Matbakh can read*; a
+missing page or one robots.txt refuses gets a plain reason. **Never a guess.**
+
+**How much the estimate covers.** It weighs a line from g, kg, oz or lb; from ml,
+cups and spoons when the entry is measured in ml or carries `convert.cup_g`; from a
+count when it carries `convert.piece_g`. On 21 October a data pass gave 103 entries
+cup or piece weights and 22 entries missing nutrition — the ones that blocked most
+lines in samples 4–6 — taking the share of those samples' lines it can count from
+**27% to 74%**. Of the rest, 260 lines have no quantity or are a pinch; the others
+need weights on less common entries, a later pass. The weights are standard
+kitchen weights (a 240 ml cup; a medium item; a clove of garlic), Claude's first
+pass, to be reviewed in the ingredient editor.
+
+**Not yet:** the list and the estimate speak English units on an Arabic recipe
+(*2 cup*, *cube*); seasoning scales linearly, not as §6 scales a Matbakh recipe.
+
+## capture-prefilter.py
+
+*Added 21 October 2026.* The pre-filter of `CaptureDraftRunReadme.md` §7, built.
+
+    python3 tools/capture-prefilter.py ../matbakh-private/08-unreviewed-captures/Beef_Bourguignon.txt
+    python3 tools/capture-prefilter.py draft.json --json
+
+It reads a `capture-draft.py` draft — JSON or `--format text` — and prints flags
+under **A** completeness, **D** unmapped ingredients, **E** source, **F** duplicate
+entries with their sum, **G** temperatures with no unit or not in °C, and **H** list
+against method. **Flags only:** it corrects, converts, merges, scores and filters
+nothing, and writes nothing. **Two ingredients are the same when they match the
+same reference entry** (so *beef stock* and *beef broth* are one), settling the
+point §7 left open. H says *the steps use more* when they do, and *the steps account
+for less* — usually a later *remaining …* with no number — as a note, not a
+contradiction. **B** waits for a chef's thresholds; **C** for a larger catalogue.
+
+## Testing the import prototype and the pre-filter
+
+    python3 tools/tests/run-tests.py            # 23 cases, offline
+    python3 tools/tests/run-tests.py --online   # + a missing page and a page with no recipe
+
+The pages in `tests/fixtures/` are **made up for the tests** — no one's recipe text,
+so they live in this public repository. They match against the vault's reference,
+so the cases test behaviour (an unknown line kept, a range kept, a pinch not
+counted, Arabic-Indic digits read, a page with no data refused, F, G and H on a
+made-up draft) rather than exact figures, and a growing reference does not break
+them. 25 of 25 pass on 21 October 2026.
 
 ## What these do not do
 

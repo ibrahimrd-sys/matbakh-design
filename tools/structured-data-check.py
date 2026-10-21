@@ -37,124 +37,14 @@ import argparse, collections, csv, gzip, html.parser, http.client, json, random,
 import xml.etree.ElementTree as ET
 import urllib.error, urllib.parse, urllib.request, urllib.robotparser
 
-UA = "Mozilla/5.0 (Matbakh structured-data-check; internal research tool)"
-ARABIC = re.compile(r"[؀-ۿݐ-ݿࢠ-ࣿﭐ-﷿ﹰ-﻿]")
-# a quantity: Western or Arabic-Indic digits, or a vulgar fraction
-QUANTITY = re.compile(r"[0-9٠-٩۰-۹¼-¾⅐-⅞]")
-MAX_BYTES = 5_000_000
-# French cooking words, for pages that do not declare their language
-FRENCH = re.compile(r"\b(c\.? ?à ?(soupe|café|s|c)|cuill[eè]res?|pinc[ée]es?|gousses?|beurre|farine|"
-                    r"sucre|sel|poivre|huile|oignons?|œufs?|crème|lait|eau)\b", re.I)
+
+import pathlib as _pathlib, sys as _sys
+_sys.path.insert(0, str(_pathlib.Path(__file__).resolve().parent))   # tools/, for recipe_core
+from recipe_core.page import (UA, ARABIC, QUANTITY, MAX_BYTES, FRENCH, _Page, _is_recipe, _recipes_in, _flatten_steps, _as_list, _yes, _language, _robots, _last, allowed, _encode, fetch)
 
 FIELDS = ["url", "site", "status", "final_url", "language", "lang", "jsonld_blocks", "recipe_source",
           "name", "ingredients", "ingredients_with_quantity", "ingredients_arabic",
           "steps", "yield", "total_time", "nutrition", "image", "video"]
-
-
-# ── parsing ────────────────────────────────────────────────────────────────
-
-class _Page(html.parser.HTMLParser):
-    """Collects JSON-LD blocks, the <html lang>, and microdata Recipe properties."""
-
-    def __init__(self):
-        super().__init__(convert_charrefs=True)
-        self.lang, self.jsonld, self._ld = "", [], None
-        self.micro = False                       # an itemtype=…/Recipe was seen
-        self.micro_props = collections.Counter() # itemprop counts inside the page
-        self._prop, self._buf = None, []
-        self.micro_ingredients = []
-
-    def handle_starttag(self, tag, attrs):
-        a = {k.lower(): (v or "") for k, v in attrs}
-        if tag == "html" and a.get("lang"):
-            self.lang = a["lang"]
-        if tag == "script" and a.get("type", "").lower().split(";")[0].strip() == "application/ld+json":
-            self._ld = []
-        if re.search(r"schema\.org/Recipe\b", a.get("itemtype", ""), re.I):
-            self.micro = True
-        prop = a.get("itemprop")
-        if prop:
-            for p in prop.split():
-                self.micro_props[p] += 1
-            if "recipeIngredient" in prop.split() or "ingredients" in prop.split():
-                self._prop, self._buf = "ingredient", []
-
-    def handle_endtag(self, tag):
-        if tag == "script" and self._ld is not None:
-            self.jsonld.append("".join(self._ld))
-            self._ld = None
-        if self._prop == "ingredient" and tag in ("li", "span", "p", "div", "td"):
-            self.micro_ingredients.append("".join(self._buf).strip())
-            self._prop = None
-
-    def handle_data(self, data):
-        if self._ld is not None:
-            self._ld.append(data)
-        elif self._prop:
-            self._buf.append(data)
-
-
-def _is_recipe(node):
-    t = node.get("@type")
-    types = t if isinstance(t, list) else [t]
-    return any(isinstance(x, str) and x.split("/")[-1].lower() == "recipe" for x in types)
-
-
-def _recipes_in(node):
-    """Every Recipe object in a JSON-LD value, through arrays and @graph."""
-    out = []
-    if isinstance(node, list):
-        for n in node:
-            out += _recipes_in(n)
-    elif isinstance(node, dict):
-        if _is_recipe(node):
-            out.append(node)
-        for key in ("@graph", "mainEntity", "mainEntityOfPage", "itemListElement", "item"):
-            if key in node:
-                out += _recipes_in(node[key])
-    return out
-
-
-def _flatten_steps(v):
-    """recipeInstructions may be a string, a list of strings, HowToStep or HowToSection."""
-    if isinstance(v, str):
-        return [s for s in re.split(r"\n+", v) if s.strip()]
-    if isinstance(v, dict):
-        if "itemListElement" in v:
-            return _flatten_steps(v["itemListElement"])
-        return [v.get("text") or v.get("name") or ""]
-    if isinstance(v, list):
-        out = []
-        for x in v:
-            out += _flatten_steps(x)
-        return [s for s in out if str(s).strip()]
-    return []
-
-
-def _as_list(v):
-    if v is None:
-        return []
-    return v if isinstance(v, list) else [v]
-
-
-def _yes(v):
-    return "yes" if v not in (None, "", [], {}) else "no"
-
-
-def _language(html_lang, in_language, ings):
-    """ar / en / fr / another code, or ? — the page's declaration first, then the
-    recipe's inLanguage, then a guess from the ingredient lines."""
-    for declared in (html_lang, in_language if isinstance(in_language, str) else ""):
-        code = declared.strip().lower()[:2]
-        if code.isalpha() and len(code) == 2:
-            return code
-    if not ings:
-        return "?"
-    if sum(1 for i in ings if ARABIC.search(i)) * 2 > len(ings):
-        return "ar"
-    if sum(1 for i in ings if FRENCH.search(i)) * 10 > len(ings) * 3:
-        return "fr"
-    return "en"
 
 
 def analyse(raw, charset):
@@ -192,55 +82,6 @@ def analyse(raw, charset):
                ingredients_with_quantity=sum(1 for i in ings if QUANTITY.search(i)),
                ingredients_arabic=sum(1 for i in ings if ARABIC.search(i)))
     return row
-
-
-# ── fetching, politely ─────────────────────────────────────────────────────
-
-_robots, _last = {}, {}
-
-
-def allowed(url):
-    parts = urllib.parse.urlsplit(url)
-    base = f"{parts.scheme}://{parts.netloc}"
-    if base not in _robots:
-        rp = urllib.robotparser.RobotFileParser(base + "/robots.txt")
-        try:
-            req = urllib.request.Request(base + "/robots.txt", headers={"User-Agent": UA})
-            with urllib.request.urlopen(req, timeout=20) as r:
-                rp.parse(r.read().decode("utf-8", errors="replace").splitlines())
-        except urllib.error.HTTPError as e:
-            # 4xx: no robots file, everything allowed; 5xx: be cautious, allow nothing
-            rp.parse([] if e.code < 500 else ["User-agent: *", "Disallow: /"])
-        except (urllib.error.URLError, TimeoutError, OSError):
-            rp.parse([])
-        _robots[base] = rp
-    return _robots[base].can_fetch(UA, url)
-
-
-def _encode(url):
-    """Percent-encode spaces and non-ASCII letters (Arabic slugs), keeping existing %XX escapes."""
-    p = urllib.parse.urlsplit(url.strip())
-    safe = "/%:@!$&'()*+,;=-._~"
-    return urllib.parse.urlunsplit((p.scheme, p.netloc.encode("idna").decode("ascii"),
-                                    urllib.parse.quote(p.path, safe=safe),
-                                    urllib.parse.quote(p.query, safe=safe + "?"), ""))
-
-
-def fetch(url, delay, timeout=30):
-    url = _encode(url)
-    site = urllib.parse.urlsplit(url).netloc
-    wait = _last.get(site, 0) + delay - time.monotonic()
-    if wait > 0:
-        time.sleep(wait)
-    _last[site] = time.monotonic()
-    req = urllib.request.Request(url, headers={"User-Agent": UA,
-                                               "Accept": "text/html,application/xhtml+xml",
-                                               "Accept-Language": "ar,en;q=0.5"})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
-        raw = r.read(MAX_BYTES + 1)
-        if len(raw) > MAX_BYTES:
-            raise ValueError("page over 5 MB")
-        return raw, r.headers.get_content_charset(), r.geturl()
 
 
 # ── sampling recipe pages from a site's sitemap ────────────────────────────
