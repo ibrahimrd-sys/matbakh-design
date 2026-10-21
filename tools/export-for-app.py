@@ -158,6 +158,22 @@ def page_cases(app, write):
     write("test/sample/pages.json", out)
 
 
+CHARSETS = (["utf-8", "ascii", "latin-1", "windows-1252", "windows-1256", "iso-8859-6"]
+            + [f"windows-{n}" for n in range(1250, 1256) if n != 1252]
+            + [f"iso-8859-{n}" for n in (2, 3, 4, 5, 7, 8, 9, 10, 11, 13, 14, 15, 16)])
+
+
+def charset_cases(app, write):
+    """test/sample/charsets.json: every byte 0-255 in each charset, as Python decodes it with
+    errors="replace" — so the app accepts a charset only where it decodes the same."""
+    import base64
+    every = bytes(range(256))
+    write("test/sample/charsets.json", [
+        dict(charset=c, bytes=base64.b64encode(every).decode(), expect=every.decode(c, errors="replace"),
+             arabic=base64.b64encode("كوب أرز".encode(c, errors="ignore")).decode())
+        for c in CHARSETS])
+
+
 def sample(app, write):
     """The made-up sample (tests/fixtures/app-sample.yaml), for the app's git."""
     import tempfile
@@ -198,6 +214,7 @@ def main():
     entities(app)
     sample(app, write)
     page_cases(app, write)
+    charset_cases(app, write)
     if a.sample:
         return
 
