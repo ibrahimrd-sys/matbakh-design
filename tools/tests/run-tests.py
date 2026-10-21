@@ -142,8 +142,8 @@ def main():
          be["1 tsp Coriander (ground)"] == "coriander_ground", be["1 tsp Coriander (ground)"])
 
     _, lines_s, shop_s, _ = imported("en-full.html")
-    case("EN: cups and spoons of something sold by weight are listed in grams — sugar 1 cup + 1 tbsp = 212 g",
-         any(it["id"] == "granulated_sugar" and it["amount"] == "212 g" for it in shop_s["items"]),
+    case("EN: cups and spoons of something sold by weight are listed in grams — sugar 1 cup + 1 tbsp = 212 g, shown 210 g (§6.3)",
+         any(it["id"] == "granulated_sugar" and it["amount"] == "210 g" for it in shop_s["items"]),
          [it["amount"] for it in shop_s["items"] if it["id"] == "granulated_sugar"])
     case("EN: 'a tiny pinch' is a pinch", any(l["line"] == "1 tiny pinch cinnamon" and l["unit"] == "pinch" for l in lines_s))
 
@@ -202,6 +202,23 @@ def main():
          any("butter" in x.lower() and "more" in x for x in f["H"]), f["H"])
     case("Pre-filter H: '10 minutes' is not read as a quantity of flour",
          not any("flour" in x.lower() for x in f["H"]), f["H"])
+
+    # ── the app's shopping list rules (philosophy §48) ──
+    raw = ["237 g beef", "13 g butter", "103 g flour", "1/3 tsp salt", "1 tsp black pepper", "2 onions",
+           "1.5 cups buttermilk", "12 tortillas"]
+    by = {it["id"]: it for it in basket.shop(basket.read(raw, m, ref, parse))["items"]}
+    case("§48: imports' grams take the ladder — 237 g beef shows 240 g", by["beef"]["amount"] == "240 g", by["beef"]["amount"])
+    case("§48: ≈ where the ladder moves it more than 5% — 13 g shows ≈15 g, 103 g shows 100 g",
+         by["butter"]["amount"] == "≈15 g" and by["flour"]["amount"] == "100 g",
+         (by["butter"]["amount"], by["flour"]["amount"]))
+    case("§48: spoons to ¼ tsp — ⅓ tsp shows ≈0.25 tsp", by["salt"]["amount"] == "≈0.25 tsp", by["salt"]["amount"])
+    case("§48: staples come from the reference — black pepper is one, onion is not",
+         by["black_pepper"]["staple"] and not by["onion"]["staple"])
+    case("§48: every item carries its aisle — onion in produce", by["onion"]["aisle"] == "produce", by["onion"]["aisle"])
+    case("§48: packs for every unit — 355 ml buttermilk buys one 1000 ml pack",
+         by["buttermilk"].get("purchase") == "1 × 1000 ml pack", by["buttermilk"].get("purchase"))
+    case("§48: … and 12 tortillas buy two packs of 10",
+         by["tortilla"].get("purchase") == "2 × pack of 10", by["tortilla"].get("purchase"))
 
     # ── the catalogue's list: matbakh.py build (philosophy §48) ──
     built = catalogue_lists()

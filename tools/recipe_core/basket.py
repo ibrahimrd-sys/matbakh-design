@@ -29,7 +29,13 @@ PACKED = {"packet", "can", "jar", "stick"}   # weighed by the size the line give
 TOO_SMALL = {"pinch"}           # a pinch counts for nothing in an estimate
 
 NUTRIENTS = ("kcal", "protein", "carb", "fat")
-STAPLE_BUY = {"have it", "tap"}  # the reference's buy note for what a cook has at home: salt, water
+# the reference's `aisle`, in the order a shop is walked (philosophy §48)
+AISLES = ("produce", "butcher", "chiller", "freezer", "bakery", "dry_goods", "jars_tins", "spices", "drinks")
+
+
+def by_aisle(items):
+    """Items in aisle order, recipe order kept within an aisle; no aisle last."""
+    return sorted(items, key=lambda it: AISLES.index(it["aisle"]) if it.get("aisle") in AISLES else len(AISLES))
 
 # unit words as a shopper reads them, by the recipe's language
 UNIT_WORDS = {
@@ -42,8 +48,10 @@ UNIT_WORDS = {
            "fl_oz": "أونصة سائلة", "pint": "باينت", "quart": "كوارت", "inch": "بوصة", "glass": "كوب"},
 }
 PHRASES = {
-    "en": {"as_needed": "as needed", "pack": "{n} × {size} g pack", "cubes": "{n} × {per} (1 per {ml} ml)"},
-    "ar": {"as_needed": "حسب الحاجة", "pack": "{n} × عبوة {size} جم", "cubes": "{n} × مكعب (مكعب لكل {ml} مل)"},
+    "en": {"as_needed": "as needed", "pack": "{n} × {size} {unit} pack", "pack_count": "{n} × pack of {size}",
+           "cubes": "{n} × {per} (1 per {ml} ml)"},
+    "ar": {"as_needed": "حسب الحاجة", "pack": "{n} × عبوة {size} {unit}", "pack_count": "{n} × عبوة {size} حبات",
+           "cubes": "{n} × مكعب (مكعب لكل {ml} مل)"},
 }
 _OR = re.compile(r"\b(?:or)\b|أو|(?<![ء-ي])او(?![ء-ي])", re.I)
 
@@ -175,6 +183,24 @@ def _fmt(x):
     return str(int(x)) if float(x).is_integer() else f"{x:g}"
 
 
+def _ladder(v):
+    """philosophy §6.3: grams and millilitres to what a kitchen can measure — 1 under 10,
+    5 to 100, 10 to 500, 25 above."""
+    step = 1 if v < 10 else 5 if v < 100 else 10 if v < 500 else 25
+    return max(step, round(v / step) * step) if v > 0 else v
+
+
+def _spoon(v, unit):
+    """¼ tsp, ½ tbsp (§6.3)."""
+    step = 0.25 if unit == "tsp" else 0.5
+    return max(step, round(v / step) * step)
+
+
+def _off(exact, shown):
+    """§6.3's ≈: the shown figure is more than 5% from the exact one."""
+    return bool(exact) and abs(shown - exact) / exact > 0.05
+
+
 def _word(unit, n=1, lang="en"):
     """A unit key as a shopper reads it, in the recipe's language: rice_cup → rice cup(s)
     or كوب أرز, tbsp → tbsp or م.ك."""
@@ -190,9 +216,13 @@ def _show(lo, hi, dim, lang="en"):
         unit, div = "kg", 1000
     if dim == "volume" and lo >= 1000:
         unit, div = "L", 1000
-    r = (lambda x: round(x)) if div == 1 and dim != "count" and lo >= 10 else (lambda x: x)
-    amt = _fmt(r(lo / div)) + ("–" + _fmt(r(hi / div)) if hi and hi != lo else "")
-    return (amt + " " + _word(unit, lo, lang)).strip() if unit else amt
+    if dim == "count":
+        return _fmt(lo) + ("–" + _fmt(hi) if hi and hi != lo else "")
+    ends = [lo] + ([hi] if hi and hi != lo else [])
+    shown = [_ladder(x) for x in ends]
+    approx = "≈" if any(_off(x, y) for x, y in zip(ends, shown)) else ""
+    amt = "–".join(_fmt(y / div) for y in shown)
+    return (approx + amt + " " + _word(unit, lo, lang)).strip()
 
 
 def shop(lines, factor=1.0, lang="en"):
@@ -232,9 +262,16 @@ def shop(lines, factor=1.0, lang="en"):
             only = units[d].pop() if len(units[d]) == 1 else None
             if only and d != "count" and not (only in ("g", "ml") and lo >= 1000):
                 # all in one unit: say it the way the recipe does (but 1500 g reads as 1.5 kg)
+                # in the recipe's own unit, on §6.3's ladder where it has one
                 k = MASS.get(only, VOLUME.get(only, 1))
-                amounts.append((_fmt(lo / k) + ("–" + _fmt(hi / k) if hi != lo else "") + " "
-                                + _word(only, hi / k, lang)).strip())
+                if only in ("g", "ml"):
+                    amounts.append(_show(lo, hi, d, lang))
+                    continue
+                ends = [lo / k] + ([hi / k] if hi != lo else [])
+                shown = [_spoon(x, only) for x in ends] if only in ("tsp", "tbsp") else ends
+                approx = "≈" if any(_off(x, y) for x, y in zip(ends, shown)) else ""
+                amounts.append((approx + "–".join(_fmt(y) for y in shown) + " "
+                                + _word(only, shown[-1], lang)).strip())
             elif d == "volume" and e.get("unit") != "ml" and (e.get("convert") or {}).get("cup_g"):
                 # cups and spoons mixed, of something sold by weight: say it in grams
                 k = e["convert"]["cup_g"] / 240
@@ -244,15 +281,20 @@ def shop(lines, factor=1.0, lang="en"):
         ph = PHRASES.get(lang, PHRASES["en"])
         item = dict(id=iid, name=name, amount=" + ".join(amounts + extras),
                     lines=[p["line"] for p in ps], buy=((e.get("buy") or {}).get(lang) or ""),
-                    staple=((e.get("buy") or {}).get("en") in STAPLE_BUY),
+                    staple=e.get("staple") is True, aisle=e.get("aisle"),
                     unclear=not amounts)        # recognised, but the source gives no amount
         # what to buy: whole packs, or the cubes that make this much stock (§47)
         mk, pack = e.get("makes"), e.get("pack")
         if mk and "volume" in sums:
             item["purchase"] = ph["cubes"].format(n=max(1, math.ceil(sums["volume"][1] / mk["ml"] - 1e-9)),
                                                   per=mk["per"], ml=mk["ml"])
-        elif pack and e.get("unit") == "g" and "mass" in sums:
-            item["purchase"] = ph["pack"].format(n=max(1, math.ceil(sums["mass"][1] / pack - 1e-9)), size=pack)
+        elif pack:
+            # whole packs, for every unit the reference sells by (§48); a range buys for its top
+            dim = {"g": "mass", "ml": "volume", "count": "count"}.get(e.get("unit"))
+            if dim in sums:
+                n = max(1, math.ceil(sums[dim][1] / pack - 1e-9))
+                item["purchase"] = (ph["pack_count"].format(n=n, size=pack) if dim == "count" else
+                                    ph["pack"].format(n=n, size=pack, unit=_word(e["unit"], 1, lang)))
         out.append(item)
     return dict(items=out, not_matched=text)
 

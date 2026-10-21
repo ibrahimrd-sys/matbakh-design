@@ -63,7 +63,9 @@ repeatable.
 - Purchase rounding is the reference's: `pack`, and `makes` for stock — *stock
   cubes ×2 (for 1 L)* (`philosophy.md` §6, §47).
 - Lines that are not purchases (*water*, *for serving*) keep the source's words;
-  the list does not decide what the cook already has.
+  the list does not decide what the cook already has. *(21 October: staples are
+  on the list, set apart and unticked, by the reference's `staple` field —
+  `philosophy.md` §48.)*
 
 ## The estimate
 

@@ -793,6 +793,22 @@ def makes_problems():
     return errors
 
 
+AISLES = ("produce", "butcher", "chiller", "freezer", "bakery", "dry_goods", "jars_tins", "spices", "drinks")
+
+
+def list_field_problems():
+    """Check `aisle` and `staple` (added 21 Oct 2026, philosophy §48): where the
+    shopping list puts an entry, and whether it is set apart as a staple."""
+    errors = []
+    for iid, v in ING.items():
+        a = v.get("aisle")
+        if a is not None and a not in AISLES:
+            errors.append(f"'{iid}': aisle '{a}' is not one of {', '.join(AISLES)}")
+        if "staple" in v and v["staple"] is not True:
+            errors.append(f"'{iid}': staple is true or absent — got {v['staple']!r}")
+    return errors
+
+
 def status_block():
     import datetime
     f = _status_facts()
@@ -1005,9 +1021,9 @@ def main():
             parts.append(f"{stubs} stub(s)")
         parts += [f"{bad} failing", f"{warn} warning(s)"]
         a_err, a_warn = alias_problems()
-        a_err += makes_problems()
+        a_err += makes_problems() + list_field_problems()
         if a_err or a_warn:
-            print("\ningredient reference — aliases and makes")
+            print("\ningredient reference — aliases, makes, aisle and staple")
             for e in a_err:
                 print(f"  error    {e}")
             for w in a_warn:

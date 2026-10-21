@@ -191,6 +191,9 @@ main{flex:1;min-height:0;display:grid;grid-template-columns:296px 1fr 288px}
 
 <script>
 const UNITS = ['g','ml','count','tsp','tbsp','kg','L'];
+// The shopping list's aisles, in the order a shop is walked (philosophy §48).
+const AISLES = {produce:'Produce', butcher:'Butcher and fish', chiller:'Chiller', freezer:'Freezer',
+  bakery:'Bakery', dry_goods:'Dry goods', jars_tins:'Jars and tins', spices:'Spices', drinks:'Drinks'};
 const CLASSES = {
   continuous:'Scales with servings — flour, meat, stock, rice',
   discrete:'Whole or half units — onions, eggs, lemons',
@@ -222,6 +225,8 @@ function check(){
       out.push({k,lvl:'error',msg:`${nm} — unit must be one of ${UNITS.join(', ')}`});
     if(v.makes && v.unit !== 'ml')
       out.push({k,lvl:'error',msg:`${nm} — makes counts millilitres; the unit must be ml`});
+    if(v.aisle && !AISLES[v.aisle])
+      out.push({k,lvl:'error',msg:`${nm} — unknown aisle "${v.aisle}"`});
     if(v.divisible !== undefined && v.cls !== 'discrete')
       out.push({k,lvl:'warn',msg:`${nm} — divisible only affects discrete items; it does nothing here`});
     if(!v.name || !v.name.ar)
@@ -350,6 +355,14 @@ function paintForm(){
         <input id="i_buyen" value="${esc((v.buy&&v.buy.en)||'')}" placeholder="1 bunch">
         <input id="i_buyar" class="ar" value="${esc((v.buy&&v.buy.ar)||'')}" placeholder="ربطة"></div></div>
       <div class="f"><div></div><div class="hint">What a shopper looks for on the shelf. No price — that comes from the market feed.</div></div>
+      <div class="f"><label>Aisle</label><select id="i_aisle">
+        <option value="">— not bought (made at home, tap) —</option>${
+        Object.keys(AISLES).map(a=>`<option value="${a}" ${v.aisle===a?'selected':''}>${AISLES[a]}</option>`).join('')}
+      </select></div>
+      <div class="f"><label>Staple</label>
+        <select id="i_staple"><option value="false" ${!v.staple?'selected':''}>No — bought like anything else</option>
+        <option value="true" ${v.staple?'selected':''}>Yes — on the list, set apart and unticked</option></select></div>
+      <div class="f"><div></div><div class="hint">The shopping list runs in aisle order, staples last (philosophy §48).</div></div>
     </div>
 
     <div class="grp">
@@ -403,6 +416,8 @@ function paintForm(){
   put('i_pack', e=>{ const n = parseFloat(e.target.value); v.pack = isNaN(n)?undefined:n; });
   put('i_buyen', e=>{ v.buy = v.buy||{}; v.buy.en = e.target.value; });
   put('i_buyar', e=>{ v.buy = v.buy||{}; v.buy.ar = e.target.value; });
+  put('i_aisle', e=>{ v.aisle = e.target.value || undefined; });
+  put('i_staple', e=>{ if(e.target.value === 'true') v.staple = true; else delete v.staple; });
   NUT.forEach(n => put('i_'+n, e=>{
     const x = parseFloat(e.target.value);
     v.nutrition = v.nutrition||{};
@@ -485,6 +500,8 @@ function toYaml(){
     }
     if(v.makes) L.push(`  makes: { per: ${q(v.makes.per)}, ml: ${v.makes.ml} }`);
     if(v.buy) L.push(`  buy: { en: ${q(v.buy.en)}, ar: ${q(v.buy.ar)} }`);
+    if(v.aisle) L.push('  aisle: ' + v.aisle);
+    if(v.staple) L.push('  staple: true');
     if(v.nutrition){
       L.push('  # per 100 ' + (v.unit==='ml'?'ml':'g'));
       L.push('  nutrition: { ' + NUT.filter(n=>v.nutrition[n]!=null)

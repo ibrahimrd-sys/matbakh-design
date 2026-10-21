@@ -3,7 +3,7 @@
 *Written 26 August 2026. One file per tool question; there is no second copy of
 this document.*
 
-**Last updated:** 2026-10-21 — `import-recipe.py` shown as the mock-up shows it (step 6's five fixes); the line parser reads Egyptian amounts (معلقة, مكعب, duals, م كبيره) after the first real import run; `recipe_core/`, the engine shared by two new scripts: `import-recipe.py` (import plan step 5: a page in, a shopping list and an estimate out, no AI) and `capture-prefilter.py` (the §7 pre-filter, checks A D E F G H); `capture-draft.py --from-page-data`; `tests/run-tests.py`; the three import checks now run on the shared engine with unchanged output (RecipeCoreDesign.md). 2026-10-20: `ingredient-editor.html` keeps the new `makes` field (`philosophy.md` §47). 2026-10-19: `ingredient-match.py` measured again after the reference grew to 436 entries. 2026-10-13: `ingredient-match.py` added, the third import check, and fixed three times the same day (form words, Arabic endings, مسحوق as powder, `=` whole-name aliases, ground spices accept powder); the ingredient editor gains *Other names* (aliases); `ingredient-lines.py` added, the second import check; `structured-data-check.py` fixed after its first real run: Arabic addresses, sitemap order and fallbacks, `--verbose`. 2026-10-12: `structured-data-check.py` added, the first import check (D-19). Earlier, 2026-10-06: the rewrites folder, `09-reviewed-captures/`, noted. 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
+**Last updated:** 2026-10-21 — the shopping list follows `philosophy.md` §48: staples from the reference's `staple` field, on the list and unticked; aisle order; whole packs for every unit; grams and spoons on §6.3's ladder; `ingredient-editor.html` keeps `aisle` and `staple`. Earlier the same day: `import-recipe.py` shown as the mock-up shows it (step 6's five fixes); the line parser reads Egyptian amounts (معلقة, مكعب, duals, م كبيره) after the first real import run; `recipe_core/`, the engine shared by two new scripts: `import-recipe.py` (import plan step 5: a page in, a shopping list and an estimate out, no AI) and `capture-prefilter.py` (the §7 pre-filter, checks A D E F G H); `capture-draft.py --from-page-data`; `tests/run-tests.py`; the three import checks now run on the shared engine with unchanged output (RecipeCoreDesign.md). 2026-10-20: `ingredient-editor.html` keeps the new `makes` field (`philosophy.md` §47). 2026-10-19: `ingredient-match.py` measured again after the reference grew to 436 entries. 2026-10-13: `ingredient-match.py` added, the third import check, and fixed three times the same day (form words, Arabic endings, مسحوق as powder, `=` whole-name aliases, ground spices accept powder); the ingredient editor gains *Other names* (aliases); `ingredient-lines.py` added, the second import check; `structured-data-check.py` fixed after its first real run: Arabic addresses, sitemap order and fallbacks, `--verbose`. 2026-10-12: `structured-data-check.py` added, the first import check (D-19). Earlier, 2026-10-06: the rewrites folder, `09-reviewed-captures/`, noted. 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
 
 **Five** authoring tools and one research script. Four are single HTML files: open them in a browser, no
 install, no server, no Python. The fifth, `capture-draft.py`, is a Python script
@@ -500,9 +500,13 @@ step keeps its words and drops the address.
 `04-research/step6-review-2026-10-21.md`): **in the recipe's language** — an Arabic
 recipe gets the badge *وصفة مستوردة — لم يختبرها مطبخ*, Arabic headings and Arabic units
 (كوب، م.ك، م.ص، جم، مكعب); **the list in three groups** — recognised, recognised with
-no amount, not recognised (*غير مصنف*) — **staples** (salt, water: the reference's
-*have it* and *tap*) set apart and not added, and **the source line under every
-item**, so a wrong match can be seen; **the estimate** with ≈, calories rounded to 10
+no amount, not recognised (*غير مصنف*) — **staples** (the reference's `staple`:
+salt, black pepper, water, the cooking oils, sugar, flour) on the list, set apart and
+unticked, each group in **aisle order** (the reference's `aisle`; `philosophy.md` §48),
+and **the source line under every item**, so a wrong match can be seen; **amounts on
+§6.3's ladder** — grams and millilitres to 1, 5, 10 or 25, spoons to ¼ tsp or ½ tbsp,
+≈ where that moves them more than 5% — and **whole packs for every unit** the
+reference sells by (*1 × 1000 ml pack*, *2 × pack of 10*); **the estimate** with ≈, calories rounded to 10
 (25 above 500), whole grams, a **1–3 dot confidence** marker (3: 90% of lines
 counted or more; 2: 70–89%; 1: below) and the footer *not tested by Matbakh; sodium
 and vitamins not shown*; **the image's address** (nothing is downloaded); and **an

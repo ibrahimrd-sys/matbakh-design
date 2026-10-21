@@ -5,6 +5,23 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-21i — aisle and staple on the reference; the list follows §48
+
+Two new ingredient fields (`philosophy.md` §48): **`aisle`**, one of nine in the order a
+shop is walked, and **`staple: true`**. In the vault, a data pass gives 548 of 554
+entries an aisle from their `buy` hints and glyphs, with 40 set by hand (nuts out of
+*loose*, butter into the chiller, frozen packs into the freezer); the six without one
+are not bought (water, five things made at home). Eight are staples: salt, black
+pepper, water, vegetable, olive and canola oil, granulated sugar, flour (the reference
+has no ice). **`matbakh.py check`** refuses an unknown aisle or a staple that is not
+`true`; **`ingredient-editor.html`** edits and keeps both (the reference round-trips
+unchanged). **`recipe_core/basket.py`**: staples from the field, not the `buy` note;
+each item carries its aisle; whole packs for every unit (*1 × 1000 ml pack*, *2 × pack
+of 10*), not only grams; grams, millilitres and spoons on §6.3's ladder, with ≈ past 5%.
+**`import-recipe.py`**: each group in aisle order; staples *on the list, unticked*.
+Authoring standard App. C, ToolsReadme and RecipeCoreDesign follow. Seven cases added,
+one changed (sugar 212 g now shows 210 g) — 55 of 55.
+
 ## 2026-10-21h — the app's shopping list, decided; two list faults fixed
 
 Import step 7 opens with the phone's own shopping list. **`design/shopping-list-design.md`**,

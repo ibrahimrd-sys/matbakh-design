@@ -17,9 +17,11 @@ ingredient reference, and prints, in the recipe's language (Arabic or English):
     philosophy §44), under the badge *imported — not tested by Matbakh*;
   - a SHOPPING LIST in the mock-up's three groups (screen 4): recognised, with
     amounts and what to buy (whole packs, stock cubes, §47); recognised but with no
-    amount; and not recognised — kept as written, never dropped. Staples a cook has
-    at home (salt, water) are set apart and not added. The source line shows under
-    every item, so a wrong match can be seen;
+    amount; and not recognised — kept as written, never dropped. Staples (the
+    reference's `staple`: salt, pepper, water, the cooking oils, sugar, flour) are
+    on the list, set apart and unticked (philosophy §48). Within a group, items run
+    in aisle order. The source line shows under every item, so a wrong match can
+    be seen;
   - an ESTIMATE, labelled تقدير (screen 5): calories, protein, carbohydrate and fat,
     each ≈, calories rounded to 10 (25 above 500); a 1–3 dot confidence marker from
     the share of lines counted; every line it could not count, named, with why; and
@@ -49,7 +51,7 @@ T = {
         ingredients="INGREDIENTS, as written", method="METHOD, as written",
         no_steps="METHOD: the page's data has no steps — read them on the page",
         shopping="SHOPPING LIST", g1="Recognised", g2="Recognised — the recipe gives no amount",
-        g3="Not recognised — goes to Other, as written", staples="Staples you probably have — not added",
+        g3="Not recognised — goes to Other, as written", staples="Staples you probably have — on the list, unticked",
         buy="buy", estimate="ESTIMATE — تقدير", per_serving="per serving", whole="whole recipe",
         kcal="kcal", protein="protein", carb="carbs", fat="fat", g="g",
         conf={3: "●●● high", 2: "●●○ medium", 1: "●○○ low"}, confidence="confidence",
@@ -65,7 +67,7 @@ T = {
         ingredients="المكونات، كما وردت", method="الطريقة، كما وردت",
         no_steps="الطريقة: بيانات الصفحة لا تحتوي على الخطوات — اقرأها في الصفحة",
         shopping="قائمة التسوق", g1="معروفة", g2="معروفة — الوصفة لا تذكر الكمية",
-        g3="غير معروفة — تُضاف إلى «غير مصنف» كما وردت", staples="أساسيات غالباً عندك — لم تُضف",
+        g3="غير معروفة — تُضاف إلى «غير مصنف» كما وردت", staples="أساسيات غالباً عندك — في القائمة، بدون علامة",
         buy="اشترِ", estimate="تقدير — لم تختبره مطبخ", per_serving="للشخص", whole="الوصفة كاملة",
         kcal="سعرة", protein="بروتين", carb="كربوهيدرات", fat="دهون", g="جم",
         conf={3: "●●● عالية", 2: "●●○ متوسطة", 1: "●○○ منخفضة"}, confidence="الثقة",
@@ -128,6 +130,7 @@ def as_text(r):
         return [line] + [f"      ↳ {l}" for l in it["lines"]]
 
     items = sh["items"]
+    items = basket.by_aisle(items)
     g1 = [it for it in items if not it["staple"] and not it["unclear"]]
     g2 = [it for it in items if not it["staple"] and it["unclear"]]
     st = [it for it in items if it["staple"]]
