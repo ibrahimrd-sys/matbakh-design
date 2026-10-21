@@ -1,0 +1,149 @@
+# MADE UP. Pages, robots.txt files and addresses that each trip one rule of
+# recipe_core/page.py, for the Flutter app's page reader to be held to it
+# (export-for-app.py writes Python's answers into test/sample/pages.json).
+
+pages:
+  - name: nested span in a microdata ingredient — Python stops at the first closing tag
+    html: |
+      <html lang="en"><body><div itemscope itemtype="http://schema.org/Recipe">
+      <ul><li itemprop="recipeIngredient"><span>2</span> cups flour</li>
+      <li itemprop="recipeIngredient">1 tsp salt</li>
+      <li itemprop="ingredients">3 eggs &amp; a pinch</li></ul></div></body></html>
+  - name: "@graph, HowToSection, author list, image object, Arabic-digit yield"
+    html: |
+      <html lang="ar"><head><script type="application/ld+json">
+      {"@context":"https://schema.org","@graph":[{"@type":"WebPage","name":"x"},
+       {"@type":["Recipe","NewsArticle"],"name":"كشري","author":[{"@type":"Person","name":"مطبخ تجريبي"}],
+        "image":{"@type":"ImageObject","url":"https://example.com/k.jpg"},
+        "recipeYield":"٤ أشخاص",
+        "recipeIngredient":["كوب أرز","نصف كوب عدس"],
+        "recipeInstructions":[{"@type":"HowToSection","name":"الأرز","itemListElement":[
+          {"@type":"HowToStep","text":"اغسل الأرز."},{"@type":"HowToStep","name":"اطبخه."}]},
+          "قدّم ساخنًا."]}]}
+      </script></head><body></body></html>
+  - name: twice-encoded references, tags and a markdown link
+    html: |
+      <script type="application/ld+json">{"@type":"Recipe","name":"Test &amp;amp; pita",
+      "recipeIngredient":["8&amp;quot; pita bread","2 tbsp za&amp;#39;atar","1 <b>large</b>  onion",""],
+      "recipeInstructions":"Warm the [pita](https://example.com/pita).\n\nServe.\n"}</script>
+  - name: broken JSON-LD, then a good one
+    html: |
+      <script type="application/ld+json">{"@type": "Recipe", "name": broken}</script>
+      <script type="application/ld+json">{"@type":"http://schema.org/Recipe","name":"Second","recipeYield":6,
+      "recipeIngredient":["1 cup rice"]}</script>
+  - name: no language declared, French ingredients
+    html: |
+      <script type="application/ld+json">{"@type":"Recipe","name":"Tarte",
+      "recipeIngredient":["200 g de farine","100 g de beurre","1 pincée de sel","2 œufs"]}</script>
+  - name: no language declared, Arabic ingredients
+    html: |
+      <script type="application/ld+json">{"@type":"Recipe","name":"شوربة",
+      "recipeIngredient":["كوب عدس","بصلة","2 cups water"]}</script>
+  - name: script type with charset, upper case, a closing tag inside a JSON string
+    html: |
+      <SCRIPT TYPE="Application/LD+JSON; charset=utf-8">{"@type":"Recipe","name":"A <i>b</i> </div> c",
+      "recipeIngredient":["1 < 2 cups milk"],"inLanguage":"en-GB"}</SCRIPT>
+  - name: self-closing ingredient, bare attribute value, repeated attribute, entity in a value
+    html: |
+      <html lang=fr-FR><div itemscope itemtype=http://schema.org/Recipe>
+      <span itemprop="recipeIngredient"/>
+      <p itemprop="name" itemprop="recipeIngredient">4 pommes</p>
+      <td itemprop=&quot;x&quot; itemprop="recipeIngredient">sel &eacute;pic&eacute;</td></div>
+  - name: a recipe inside a comment is not read
+    html: |
+      <!-- <script type="application/ld+json">{"@type":"Recipe","name":"hidden"}</script> -->
+      <p>No recipe here.</p>
+  - name: mainEntity nesting, yield as a list, instructions as text lines
+    html: |
+      <html lang="EN"><script type="application/ld+json">{"@type":"WebPage","mainEntity":{"@type":"Recipe",
+      "name":"Stew","recipeYield":["","4","4 servings"],"author":"  Test Kitchen ",
+      "image":["/relative.jpg","https://example.com/s.jpg"],
+      "ingredients":["500 g beef","2 onions"],"recipeInstructions":"Brown.\nSimmer.\n\n"}}</script></html>
+  - name: no recipe at all
+    html: |
+      <html><body><h1>Just a page</h1><p>Hello &amp; welcome</p></body></html>
+  - name: style with a fake tag, a declaration and a processing instruction
+    html: |
+      <!DOCTYPE html><?xml version="1.0"?><style>p::before{content:"<script>"}</style>
+      <script type="application/ld+json">[{"@type":"Recipe","name":"In a list","recipeIngredient":"1 egg"}]</script>
+  - name: ItemList of recipes — the first is taken
+    html: |
+      <script type="application/ld+json">{"@type":"ItemList","itemListElement":[
+      {"@type":"ListItem","item":{"@type":"Recipe","name":"First","recipeIngredient":["1 apple"]}},
+      {"@type":"ListItem","item":{"@type":"Recipe","name":"Second"}}]}</script>
+
+robots:
+  - name: nothing disallowed
+    text: ""
+  - name: a group for everyone
+    text: |
+      User-agent: *
+      Disallow: /private/
+      Allow: /private/recipes/
+  - name: a group naming Matbakh
+    text: |
+      User-agent: *
+      Disallow: /
+
+      User-agent: matbakh
+      Disallow: /print/
+  - name: wildcards and an end anchor
+    text: |
+      User-agent: *
+      Disallow: /*.pdf$
+      Disallow: /search*q=
+      Allow: /recipes/*/print$
+      Disallow: /recipes/*/print
+  - name: a tie between allow and disallow — allow wins
+    text: |
+      User-agent: *
+      Disallow: /recipes/
+      Allow: /recipes/
+  - name: an empty disallow allows all; comments and odd spacing
+    text: "User-Agent :  *   # everyone\nDisallow:\n  \nCrawl-delay: 10\nSitemap: https://example.com/s.xml\n"
+  - name: two groups for one agent are merged
+    text: |
+      User-agent: matbakh
+      Disallow: /a/
+
+      User-agent: other
+      Disallow: /b/
+
+      User-agent: matbakh
+      Disallow: /c/
+  - name: percent-encoded and Arabic paths
+    text: |
+      User-agent: *
+      Disallow: /وصفات/خاص
+      Disallow: /a%2Fb
+      Disallow: /%7Euser
+  - name: rules before any user-agent are ignored
+    text: |
+      Disallow: /
+      User-agent: *
+      Disallow: /x
+
+robot_urls:
+  - https://example.com/
+  - https://example.com/private/x
+  - https://example.com/private/recipes/stew
+  - https://example.com/print/stew
+  - https://example.com/files/a.pdf
+  - https://example.com/files/a.pdf?x=1
+  - https://example.com/search?q=rice
+  - https://example.com/recipes/stew/print
+  - https://example.com/recipes/stew/print/2
+  - https://example.com/robots.txt
+  - https://example.com/وصفات/خاص/1
+  - https://example.com/~user/x
+  - https://example.com/a/b#frag
+
+urls:
+  - https://example.com/recipes/stew
+  - "  https://example.com/وصفات/كشري مصري  "
+  - https://example.com/a%20b/c d
+  - https://example.com/search?q=أرز&lang=ar
+  - https://example.com/r?
+  - https://example.com/r#section
+  - http://example.com:8080/x/y?z=1#f
+  - https://example.com
