@@ -15,6 +15,10 @@ Writes, in the app:
   test/parity/fixtures.json       basket.shop() on the made-up fixture pages and on the
                                   §48 test lines; each case carries the reference entries
                                   it uses (so gitignored, like everything here)
+  test/parity/lines.json          every saved ingredient line in the vault's 04-research
+                                  (steps 2 and 3, English, Arabic, French): lines.parse()
+                                  and Matcher.match() on its name — for the app's parser
+                                  and matcher (gitignored)
   test/parity/corpus.json         the same on every saved page of fresh samples 4–6
                                   (vault `04-research/step3-fresh{4,5,6}-lines-*.csv`) —
                                   real sites' text, so gitignored
@@ -22,7 +26,8 @@ Writes, in the app:
 --sample writes, from tests/fixtures/app-sample.yaml (made up: 12 ingredients,
 3 invented recipes, 3 invented import pages), what the app commits so a fresh copy
 builds and tests without the vault:
-  assets/sample/ingredients.json, assets/sample/recipes/<id>.json, test/sample/parity.json
+  assets/sample/ingredients.json, assets/sample/recipes/<id>.json, test/sample/parity.json,
+  test/sample/lines.json (made-up lines covering each parser rule, on the sample)
 
 A case's lines are what the list is given: the parser's quantity, with a package's
 stated size already applied ("1 (16 ounce) package tofu" → 16 oz), so the phone's
@@ -75,6 +80,30 @@ def case(name, raw, lang, m, ref):
                             notMatched=shop["not_matched"]))
 
 
+# Made-up lines, one or more for each rule the parser has, for the sample's parse cases.
+LINE_RULES = [
+    "2 cups flour", "1 1/2 cups milk", "½ cup sugar", "1¼ tsp salt", "2-3 tbsp olive oil", "1 T sugar",
+    "1 t salt", "2 to 3 onions", "a pinch of salt", "Pinch of salt", "dashes pepper", "3 cloves garlic, minced",
+    "1 (14 oz) can tomatoes", "2 - 15.5 ounce cans chickpeas", "10 tablespoons (1 1/4 sticks) butter",
+    "1 heaping tablespoon flour", "salt to taste", "salt and pepper, to taste", "For the sauce:", "Ingredients",
+    "1 large onion, diced", "2 stalks celery", "500g rice", "1 kg lamb", "250 ml water", "1 l stock",
+    "1 rice cup water", "4 cups chicken broth", "1 lemon (juiced)", "zest of 1 lemon", "1 dozen eggs",
+    "half a lemon", "2 1/2 cups flour", "1,5 kg potatoes", "3/4 cup yogurt", "1 cup frobnicated zizzle",
+    "كوب أرز", "2 كوب أرز", "كوبان دقيق", "ملعقتان كبيرتان زيت زيتون", "ملعقة صغيرة ملح", "نصف كوب لبن",
+    "كوب ونصف سكر", "2 ونصف بيضة", "بصلة", "جزرتين", "3 فصوص ثوم", "مكعب مرقة", "ملح - حسب الرغبة",
+    "ملح حسب الرغبة", "مطحون نصف ملعقة صغيرة زنجبيل", "٢ كوب دقيق", "١٫٥ كيلو لحمة", "المكونات",
+    "شرائح لوز", "ثلاث بصلات", "معلقتين كبيرة سمنة", "1 م.ك زيت",
+    "2 cuillères à soupe d'huile d'olive", "1 c. à c. de sel", "200 g de farine", "une pincée de sel",
+    "3 gousses d'ail", "1 noix de beurre", "sel - au goût", "1 verre de lait",
+]
+
+
+def line_case(raw, m):
+    p = parse(raw)
+    return dict(line=raw, parse={k: p[k] for k in ("qty", "qty_max", "unit", "name", "note", "kind")},
+                match=list(m.match(p["name"])) if p["name"] else ["", ""])
+
+
 def sample(app, write):
     """The made-up sample (tests/fixtures/app-sample.yaml), for the app's git."""
     import tempfile
@@ -89,6 +118,7 @@ def sample(app, write):
         write(f"assets/sample/recipes/{r['id']}.json", r)
     cases = [case(c["name"], c["lines"], c["lang"], m, ref) for c in src["imports"]]
     write("test/sample/parity.json", cases)
+    write("test/sample/lines.json", [line_case(l, m) for l in LINE_RULES])
     print(f"sample: {len(ref)} ingredients, {len(src['recipes'])} recipes, {len(cases)} cases — made up")
 
 
@@ -160,6 +190,18 @@ def main():
                 pages.setdefault((row["url"], row["lang"]), []).append(row["line"])
     corpus = [case(url, raw, "ar" if lang == "ar" else "en", m, ref) for (url, lang), raw in pages.items()]
     write("test/parity/corpus.json", corpus)
+
+    seen = {}
+    for f in sorted(research.glob("step[23]-*.csv")):
+        with open(f, encoding="utf-8-sig", newline="") as fh:
+            rd = csv.DictReader(fh)
+            if "line" not in (rd.fieldnames or []):
+                continue
+            for row in rd:
+                if row["line"] and row["line"] not in seen:
+                    seen[row["line"]] = None
+    write("test/parity/lines.json", [line_case(l, m) for l in seen])
+    print(f"{len(seen)} saved lines for the parser and matcher")
     print(f"{len(cases)} fixture cases, {len(corpus)} saved pages "
           f"({sum(len(c['lines']) for c in corpus)} lines)")
 

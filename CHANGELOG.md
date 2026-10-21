@@ -5,6 +5,21 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-21n — the parser and matcher in the app
+
+Import step 7, the next part. In the app (`bcf9e4d`), **`lib/import/`**: `lines.py`,
+`match.py` and `basket.read()` in Dart — a line read into quantity, unit, name and note
+(Arabic, English, French), matched to the reference, and handed to the shopping list
+with its descriptor, Arabic singular, stock cube, stalk and package size taken into
+account. What Python's `re` does that Dart's does not is written out: its Unicode `\w`
+and `\b` as Unicode classes, `(?-i:T)` (a tablespoon) as a second case-sensitive
+pattern, `%.3g` with exact half-to-even rounding, NFKC and NFKD by `unorm_dart`.
+**`export-for-app.py`** writes the parse-and-match cases: 66 made-up lines covering each
+parser rule on the sample (`test/sample/lines.json`, in the app's git), and every
+saved line in the vault's step 2 and 3 files (5,563, `test/parity/lines.json`, not).
+**Identical to Python on all of them, and on the 215 pages read into list lines;**
+breaking one rule on purpose fails the tests, so they are watching. App 24 of 24.
+
 ## 2026-10-21m — the app runs without the vault, on a made-up sample
 
 Ibrahim's go: the vault, the pilot recipes and the real test cases stay out of the app's
