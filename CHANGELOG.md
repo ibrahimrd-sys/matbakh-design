@@ -5,6 +5,19 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-21s — share to Matbakh, Android and the app side
+
+Import step 7. In the app (`7ce5c42`): **Android** — the manifest takes plain text shared
+to the app, and `MainActivity.kt` keeps it for the app on a `matbakh/share` channel,
+at launch or while the app is open; **not yet compiled**, as this machine has no Android
+SDK. **The app side** (`lib/share/share_inbox.dart`), tested: the link picked out of what
+was shared (a title then the link, trailing punctuation, Arabic commas and question marks,
+a bracket the address owns), the import screen opened on it and read at once; shared text
+with no link is answered plainly (reading text is not built). The app's label is now
+*Matbakh*, as the share sheet shows it. **iPhone** needs a share extension, made in Xcode
+on a Mac — not yet. **Correction:** the app has been built and tested for the web only;
+running it on a phone needs the Android SDK (Android Studio) on this machine. App 59 of 59.
+
 ## 2026-10-21r — older Arabic sites read; the import screen
 
 Ibrahim's go. **Older Arabic sites:** the app reads windows-1256 and ISO 8859-6 (and the
