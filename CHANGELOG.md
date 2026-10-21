@@ -5,6 +5,19 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-21m — the app runs without the vault, on a made-up sample
+
+Ibrahim's go: the vault, the pilot recipes and the real test cases stay out of the app's
+git, and **a small made-up sample goes in**. **`tools/tests/fixtures/app-sample.yaml`**:
+12 ingredients with round invented numbers, 3 invented recipes, 3 invented import pages
+(English, Arabic, and English lines in Arabic words — *2 كوبان*, *3 أكواب*, *11 كوبًا*, *2.5
+كوب*). **`export-for-app.py --sample`** writes it into the app (`assets/sample/`,
+`test/sample/parity.json`). In the app (`f675467`): the vault's export when `assets/ref/`
+has one, else the sample, said in the log, in a banner on the list (*Sample data — made
+up*) and in every test run. **Checked on a fresh clone with no vault:** it builds (web)
+and its tests pass, 17 with the two vault parity groups skipped and saying so; with the
+vault, 19 of 19.
+
 ## 2026-10-21l — a combined list speaks the app's language
 
 Decided by Ibrahim, filed as a **`philosophy.md` §48 addendum**: every line of a combined
