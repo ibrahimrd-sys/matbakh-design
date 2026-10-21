@@ -466,7 +466,10 @@ lines in samples 4–6 — taking the share of those samples' lines it can count
 most of the Arabic rest is lines the source gives no amount for). Of the rest, 260 lines have no quantity or are a pinch; the others
 need weights on less common entries, a later pass. The weights are standard
 kitchen weights (a 240 ml cup; a medium item; a clove of garlic), Claude's first
-pass, to be reviewed in the ingredient editor.
+pass, to be reviewed in the ingredient editor. **For a bone-in cut, `piece_g` is the
+edible meat in one piece, not the bone** (a chicken leg 210 g, a wing 55 g), because
+the nutrition is per 100 g of meat — added 21 October for chicken legs, wings,
+drumsticks and bone-in thighs, turkey drumsticks and wings, and pork chops.
 
 **Egyptian amounts** (21 October, after the first run on a real Egyptian page, which
 counted 6 of 14 lines and then 14 of 14): the parser reads **معلقة / معلقه / معالق**
