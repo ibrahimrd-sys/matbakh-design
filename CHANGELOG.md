@@ -9,8 +9,9 @@ Format: `## YYYY-MM-DD — release`
 
 Two new ingredient fields (`philosophy.md` §48): **`aisle`**, one of nine in the order a
 shop is walked, and **`staple: true`**. In the vault, a data pass gives 548 of 554
-entries an aisle from their `buy` hints and glyphs, with 40 set by hand (nuts out of
-*loose*, butter into the chiller, frozen packs into the freezer); the six without one
+entries an aisle from their `buy` hints and glyphs, with 80 named by hand (16 drinks,
+28 dry goods among the *pantry staple* jars, and 36 corrections — nuts out of *loose*,
+butter into the chiller, frozen packs into the freezer); the six without one
 are not bought (water, five things made at home). Eight are staples: salt, black
 pepper, water, vegetable, olive and canola oil, granulated sugar, flour (the reference
 has no ice). **`matbakh.py check`** refuses an unknown aisle or a staple that is not
