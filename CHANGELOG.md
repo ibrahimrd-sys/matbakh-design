@@ -5,6 +5,15 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-21c — a descriptor is matched with the name
+
+The second real run (an atyabtabkha fish recipe) put *dried coriander* — written
+*ناشفة ملعقة كبيرة كزبرة* — on the list as fresh, then added it to the fresh coriander.
+**`tools/recipe_core/basket.py`** now also matches the name with a short note (*كزبرة
+ناشفة*, *Cloves (ground)*) and keeps the more specific match, unless the note is
+another name for the same thing. 10 of 2,839 saved lines change, all for the better.
+**`page.py`** keeps a markdown link's words in a step. Four cases added (35 of 35).
+
 ## 2026-10-21b — Egyptian amounts
 
 The first run of `import-recipe.py` on a real Egyptian page counted 6 of 14 lines.

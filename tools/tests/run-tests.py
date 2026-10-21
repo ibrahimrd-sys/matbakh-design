@@ -97,6 +97,16 @@ def main():
          and any("cube" in it.get("purchase", "") for it in shop["items"] if it["id"] == "chicken_stock"))
     case("EG: معلقتين كبيرة is two tablespoons", by["معلقتين كبيرة زيت"]["unit"] == "tbsp" and by["معلقتين كبيرة زيت"]["q"] == 2)
 
+    case("EG: a descriptor before the amount is matched with the name — ناشفة كزبرة is ground coriander",
+         by["ناشفة ملعقة كبيرة كزبرة"]["id"] == "coriander_ground" and by["مفرومة ملعقتان كبيرتان كزبرة"]["id"] == "coriander_fresh")
+    case("EG: a markdown link in a step keeps its words", rec["steps"][-1].endswith("طرق أخرى"), rec["steps"])
+    rec_e, lines_e, _, _ = imported("en-full.html")
+    be = {l["line"]: l["id"] for l in lines_e}
+    case("EN: a note naming the thing differently does not change it — cornstarch (corn flour) stays cornstarch",
+         be["2 tablespoons cornstarch (corn flour)"] == "cornstarch", be["2 tablespoons cornstarch (corn flour)"])
+    case("EN: a note that describes it does — Coriander (ground) is ground coriander",
+         be["1 tsp Coriander (ground)"] == "coriander_ground", be["1 tsp Coriander (ground)"])
+
     # ── French ──
     rec, lines, shop, est = imported("fr-full.html")
     case("FR: a list comes back; nothing is dropped",

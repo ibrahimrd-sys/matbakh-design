@@ -46,6 +46,7 @@ def read(raw_lines, matcher, ref, parse):
         if p["kind"] == "heading":
             continue
         iid, on = matcher.match(p["name"]) if p["name"] else ("", "")
+        iid, on = _with_descriptor(p, iid, on, matcher)
         e = ref.get(iid) if iid else None
         p.update(id=iid, matched_on=on, entry=e, q=_f(p["qty"]), q_max=_f(p["qty_max"]))
         if e:
@@ -70,6 +71,22 @@ def _pack_size(p):
 
 
 _AR_UNITY = re.compile(r"^[ء-ي]{2,}(?:ة|ه|اية|ايه)(?![ء-ي])")
+
+
+def _with_descriptor(p, iid, on, matcher):
+    """Some sites put a short descriptor before the amount — "ناشفة ملعقة كبيرة كزبرة"
+    (dried coriander) — and the parser sets it aside in the note. Match the name with
+    it too, and keep that match when it finds a longer, more specific name: كزبرة
+    ناشفة is ground coriander, not the fresh coriander a bare كزبرة means."""
+    seg = (p.get("note") or "").split(";")[0].strip()
+    if not seg or len(seg.split()) > 2 or not p["name"]:
+        return iid, on
+    i2, on2 = matcher.match(p["name"] + " " + seg)
+    if iid and i2 and matcher.match(seg)[0] == i2:
+        return iid, on   # "cornstarch (corn flour)": the note is another name, not a description
+    if i2 and i2 != iid and len(on2.lstrip("=").split()) > len((on or "").lstrip("=").split()):
+        return i2, on2
+    return iid, on
 
 
 def _one_by_singular(p, e):

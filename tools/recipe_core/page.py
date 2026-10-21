@@ -189,6 +189,7 @@ def _clean(s):
     tags, and collapse the spaces. Nothing else is changed."""
     s = _html.unescape(_html.unescape(str(s)))
     s = re.sub(r"<[^>]+>", " ", s)
+    s = re.sub(r"\[([^\]]+)\]\((?:https?://|/)[^)]*\)", r"\1", s)   # a markdown link: keep its words
     return re.sub(r"\s+", " ", s).strip()
 
 

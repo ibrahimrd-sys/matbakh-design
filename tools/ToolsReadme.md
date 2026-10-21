@@ -477,6 +477,15 @@ one** (بصلة, بصلايه — one onion), but only for an entry counted one 
 with the singular ending, so *قرفة* stays without a quantity. Checked against every
 saved line (3,218): 29 changed, each a line that now reads right.
 
+**A descriptor before or after the name** (21 October, the second real run): *ناشفة
+ملعقة كبيرة كزبرة* — the site puts *dried* first, and the parser sets it aside — is
+matched as *كزبرة ناشفة*, ground coriander, not the fresh coriander a bare *كزبرة*
+means. The list keeps the longer, more specific match, unless the note is just
+another name for what was already found (*cornstarch (corn flour)* stays cornstarch).
+On the 2,839 saved step 3 lines, 10 matches change, each now right (*Cloves (ground)*,
+*olive oil (extra virgin)*, *Bell Peppers (red)*, *نباتي سمن*). A markdown link inside a
+step keeps its words and drops the address.
+
 **Not yet:** the list and the estimate speak English units on an Arabic recipe
 (*2 cup*, *cube*); seasoning scales linearly, not as §6 scales a Matbakh recipe.
 
@@ -499,7 +508,7 @@ contradiction. **B** waits for a chef's thresholds; **C** for a larger catalogue
 
 ## Testing the import prototype and the pre-filter
 
-    python3 tools/tests/run-tests.py            # 29 cases, offline
+    python3 tools/tests/run-tests.py            # 33 cases, offline
     python3 tools/tests/run-tests.py --online   # + a missing page and a page with no recipe
 
 The pages in `tests/fixtures/` are **made up for the tests** — no one's recipe text,
@@ -507,7 +516,7 @@ so they live in this public repository. They match against the vault's reference
 so the cases test behaviour (an unknown line kept, a range kept, a pinch not
 counted, Arabic-Indic digits read, a page with no data refused, F, G and H on a
 made-up draft) rather than exact figures, and a growing reference does not break
-them, including an Egyptian page's ways of writing amounts. 31 of 31 pass on
+them, including an Egyptian page's ways of writing amounts. 35 of 35 pass on
 21 October 2026, with `--online`.
 
 ## What these do not do
