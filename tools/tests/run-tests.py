@@ -107,6 +107,12 @@ def main():
     case("EN: a note that describes it does — Coriander (ground) is ground coriander",
          be["1 tsp Coriander (ground)"] == "coriander_ground", be["1 tsp Coriander (ground)"])
 
+    _, lines_s, shop_s, _ = imported("en-full.html")
+    case("EN: cups and spoons of something sold by weight are listed in grams — sugar 1 cup + 1 tbsp = 212 g",
+         any(it["id"] == "granulated_sugar" and it["amount"] == "212 g" for it in shop_s["items"]),
+         [it["amount"] for it in shop_s["items"] if it["id"] == "granulated_sugar"])
+    case("EN: 'a tiny pinch' is a pinch", any(l["line"] == "1 tiny pinch cinnamon" and l["unit"] == "pinch" for l in lines_s))
+
     # ── French ──
     rec, lines, shop, est = imported("fr-full.html")
     case("FR: a list comes back; nothing is dropped",

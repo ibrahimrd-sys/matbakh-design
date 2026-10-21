@@ -5,6 +5,13 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-21d — fourth real run: sugar in grams, a tiny pinch
+
+An allrecipes peach pie: **`basket.py`** lists cups and spoons mixed, of something
+sold by weight, in grams (sugar 1 cup + 1 tbsp = 212 g, not 255 ml); **`lines.py`**
+reads *tiny* and *good* as size words (*1 tiny pinch salt* is a pinch). In the vault,
+a pie crust weighs 270 g. Two cases added (37 of 37).
+
 ## 2026-10-21c — a descriptor is matched with the name
 
 The second real run (an atyabtabkha fish recipe) put *dried coriander* — written

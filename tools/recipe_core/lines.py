@@ -135,7 +135,7 @@ TO_TASTE = re.compile(
     r"(?:حسب|بحسب)\s+(?:الرغبة|الحاجة|الذوق|الطلب)|للتزيين|للتقديم|حسب الرغبه",
     re.I)
 HEADING = re.compile(r"^(?:.*:|ingr[ée]dients?|المكونات|المقادير)$", re.I)
-SIZE = re.compile(r"(?:heaping|heaped|level|rounded|scant|generous|large|small|medium|big|"
+SIZE = re.compile(r"(?:heaping|heaped|level|rounded|scant|generous|large|small|medium|big|tiny|good|"
                   r"belles?|grosses?|gros|petites?|petits?|bonnes?|bons?)\s+", re.I)
 AFTER_UNIT = re.compile(r"^(?:rases?|bomb[ée]es?|pleines?|heaping|level|rounded)\b\s*", re.I)
 AR_PLURAL = re.compile(r"(?:شرائح|أكواب|اكواب|ملاعق|معالق|مكعبات|فصوص|حبات|علب|أكياس|ظروف|باقات|أعواد|أصابع|رؤوس|قطع|غرامات|جرامات|لترات)(?![؀-ۿ])")

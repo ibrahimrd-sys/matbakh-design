@@ -176,6 +176,10 @@ def shop(lines, factor=1.0, lang="en"):
                 # all in one unit: say it the way the recipe does (but 1500 g reads as 1.5 kg)
                 k = MASS.get(only, VOLUME.get(only, 1))
                 amounts.append((_fmt(lo / k) + ("–" + _fmt(hi / k) if hi != lo else "") + " " + only).strip())
+            elif d == "volume" and e.get("unit") != "ml" and (e.get("convert") or {}).get("cup_g"):
+                # cups and spoons mixed, of something sold by weight: say it in grams
+                k = e["convert"]["cup_g"] / 240
+                amounts.append(_show(lo * k, hi * k, "mass"))
             else:
                 amounts.append(_show(lo, hi, d))
         item = dict(id=iid, name=name, amount=" + ".join(amounts + extras),
