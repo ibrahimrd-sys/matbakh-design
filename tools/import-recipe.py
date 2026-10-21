@@ -10,20 +10,25 @@ import-recipe — a recipe page in, a shopping list and a nutrition estimate out
 Import plan step 5 (vault 02-strategy/import-test-plan-2026-10-12.md; PM log D-19):
 the first import test, on Ibrahim's machine. **No AI.** It reads the page's own
 schema.org recipe data, splits each ingredient line, matches it to the vault's
-ingredient reference, and prints:
+ingredient reference, and prints, in the recipe's language (Arabic or English):
 
-  - the recipe as published — title, author, a link, the ingredient lines as
-    written (imports stay in source format, philosophy §44);
-  - a SHOPPING LIST: one line per reference entry with the quantities added up,
-    what to buy (whole packs, or stock cubes, §47), and every line the reference
-    does not know, as written — never dropped;
-  - an ESTIMATE, labelled تقدير and "not tested by Matbakh": calories, protein,
-    carbohydrate and fat for the recipe and per serving, with every line it could
-    not count listed by name and why.
+  - the recipe as published — title, author, a link, the image's address, the
+    ingredient lines and method as written (imports stay in source format,
+    philosophy §44), under the badge *imported — not tested by Matbakh*;
+  - a SHOPPING LIST in the mock-up's three groups (screen 4): recognised, with
+    amounts and what to buy (whole packs, stock cubes, §47); recognised but with no
+    amount; and not recognised — kept as written, never dropped. Staples a cook has
+    at home (salt, water) are set apart and not added. The source line shows under
+    every item, so a wrong match can be seen;
+  - an ESTIMATE, labelled تقدير (screen 5): calories, protein, carbohydrate and fat,
+    each ≈, calories rounded to 10 (25 above 500); a 1–3 dot confidence marker from
+    the share of lines counted; every line it could not count, named, with why; and
+    the footer saying what it is not.
 
 A page with no recipe data gets a plain refusal, never a guess. It keeps nothing,
-writes nothing, and sends nothing anywhere except the page request (robots.txt
-respected). Shares its parts with capture-prefilter.py: tools/recipe_core/.
+writes nothing, downloads no image, and sends nothing anywhere except the page
+request (robots.txt respected). Shares its parts with capture-prefilter.py:
+tools/recipe_core/. Step 6's fixes, 21 October 2026: 04-research/step6-review-2026-10-21.md.
 """
 
 import argparse, json, pathlib, sys
@@ -35,7 +40,45 @@ from recipe_core.lines import parse
 from recipe_core.match import Matcher
 from recipe_core.page import PageError, parse_html, read_recipe
 
-LABEL = {"en": "ESTIMATE — تقدير · not tested by Matbakh", "ar": "تقدير — لم تختبره مطبخ"}
+T = {
+    "en": dict(
+        badge="IMPORTED — not tested by Matbakh", by="by", image="image", servings="servings",
+        not_given="not given", page_says="the page says", scaled="scaled linearly from {n} servings",
+        no_base="the page gives no servings, so the recipe is shown as written",
+        redirected="the page redirected to {u} — check it is the recipe you meant",
+        ingredients="INGREDIENTS, as written", method="METHOD, as written",
+        no_steps="METHOD: the page's data has no steps — read them on the page",
+        shopping="SHOPPING LIST", g1="Recognised", g2="Recognised — the recipe gives no amount",
+        g3="Not recognised — goes to Other, as written", staples="Staples you probably have — not added",
+        buy="buy", estimate="ESTIMATE — تقدير", per_serving="per serving", whole="whole recipe",
+        kcal="kcal", protein="protein", carb="carbs", fat="fat", g="g",
+        conf={3: "●●● high", 2: "●●○ medium", 1: "●○○ low"}, confidence="confidence",
+        counted="{c} of {n} lines counted", middle="ranges taken at their middle",
+        not_counted="not counted", as_alt="counted as {x}, an alternative the line names",
+        nothing="nothing could be counted",
+        footer="Estimated from the imported text, not tested by Matbakh. Sodium and vitamins are not shown."),
+    "ar": dict(
+        badge="وصفة مستوردة — لم يختبرها مطبخ", by="من", image="الصورة", servings="عدد الأشخاص",
+        not_given="غير مذكور", page_says="الصفحة تقول", scaled="محسوبة بالتناسب من {n} أشخاص",
+        no_base="الصفحة لا تذكر عدد الأشخاص، فالوصفة كما هي",
+        redirected="الصفحة حوّلت إلى {u} — تأكد أنها الوصفة المقصودة",
+        ingredients="المكونات، كما وردت", method="الطريقة، كما وردت",
+        no_steps="الطريقة: بيانات الصفحة لا تحتوي على الخطوات — اقرأها في الصفحة",
+        shopping="قائمة التسوق", g1="معروفة", g2="معروفة — الوصفة لا تذكر الكمية",
+        g3="غير معروفة — تُضاف إلى «غير مصنف» كما وردت", staples="أساسيات غالباً عندك — لم تُضف",
+        buy="اشترِ", estimate="تقدير — لم تختبره مطبخ", per_serving="للشخص", whole="الوصفة كاملة",
+        kcal="سعرة", protein="بروتين", carb="كربوهيدرات", fat="دهون", g="جم",
+        conf={3: "●●● عالية", 2: "●●○ متوسطة", 1: "●○○ منخفضة"}, confidence="الثقة",
+        counted="حُسب {c} من {n} سطراً", middle="المدى محسوب من منتصفه",
+        not_counted="لم يُحسب", as_alt="حُسب كـ{x}، بديل تذكره الوصفة",
+        nothing="لم يمكن حساب شيء",
+        footer="تقدير من النص المستورد، لم تختبره مطبخ. الصوديوم والفيتامينات غير معروضة."),
+}
+WHY_AR = {"too small to count": "كمية صغيرة لا تُحسب", "no quantity": "بلا كمية",
+          "not in the reference": "غير موجود في قائمة مطبخ",
+          "no nutrition data for this ingredient": "لا بيانات غذائية له",
+          "no weight per cup for this ingredient": "لا وزن للكوب منه",
+          "no weight per item for this ingredient": "لا وزن للحبة منه"}
 
 
 def build(rec, matcher, ref, servings=None):
@@ -44,54 +87,83 @@ def build(rec, matcher, ref, servings=None):
     factor = (servings / base) if (servings and base) else 1.0
     lines = basket.read(rec["ingredients"], matcher, ref, parse)
     shop = basket.shop(lines, factor, lang)
-    est = basket.estimate(lines, factor, servings or base)
-    return dict(recipe={k: rec.get(k) for k in ("title", "author", "url", "final_url", "redirected",
+    est = basket.estimate(lines, factor, servings or base, ref)
+    # the alternative counted, named in the recipe's language
+    alt_name = {p["line"]: (ref[p["alt"]].get("name") or {}).get(lang) or (ref[p["alt"]].get("name") or {}).get("en")
+                for p in lines if p.get("alt")}
+    est["alternatives"] = [(l, alt_name.get(l, x)) for l, x in est["alternatives"]]
+    est["shown"] = dict(total=basket.rounded(est["total"]),
+                        per_serving=basket.rounded(est["per_serving"]) if est["per_serving"] else None)
+    return dict(lang=lang,
+                recipe={k: rec.get(k) for k in ("title", "author", "url", "final_url", "redirected", "image",
                                                  "source", "language", "yield_text", "servings",
                                                  "ingredients", "steps")},
                 scaled_to=servings if (servings and base) else None,
-                scale_note=("" if not servings else
-                            f"scaled linearly from {base} servings" if base else
-                            "the page gives no servings, so the recipe is shown as written"),
-                shopping=shop, estimate=est, label=LABEL[lang])
+                scale_note=("" if not servings else "scaled" if base else "no_base"),
+                shopping=shop, estimate=est)
 
 
 def as_text(r):
-    rec, est, out = r["recipe"], r["estimate"], []
-    out += [rec["title"] or "(untitled)", (f"by {rec['author']} · " if rec["author"] else "") + (rec["url"] or ""),
-            "IMPORTED — the source's recipe, not tested by Matbakh"]
+    L, rec, est, sh = T[r["lang"]], r["recipe"], r["estimate"], r["shopping"]
+    ar = r["lang"] == "ar"
+    out = [rec["title"] or "—", (f"{L['by']} {rec['author']} · " if rec["author"] else "") + (rec["url"] or ""), L["badge"]]
+    if rec.get("image"):
+        out.append(f"{L['image']}: {rec['image']}")
     if rec.get("redirected"):
-        out.append(f"note: the page redirected to {rec['final_url']} — check it is the recipe you meant")
-    sv = rec["servings"]
-    out.append(f"servings: {r['scaled_to'] or sv or 'not given'}"
-               + (f" ({r['scale_note']})" if r["scale_note"] else "")
-               + (f" — the page says “{rec['yield_text']}”" if rec["yield_text"] else ""))
-    out += ["", "INGREDIENTS, as written"] + ["  " + l for l in rec["ingredients"]]
+        out.append(L["redirected"].format(u=rec["final_url"]))
+    note = {"scaled": L["scaled"].format(n=rec["servings"]), "no_base": L["no_base"], "": ""}[r["scale_note"]]
+    out.append(f"{L['servings']}: {r['scaled_to'] or rec['servings'] or L['not_given']}"
+               + (f" ({note})" if note else "")
+               + (f" — {L['page_says']} “{rec['yield_text']}”" if rec["yield_text"] else ""))
+    out += ["", L["ingredients"]] + ["  " + l for l in rec["ingredients"]]
     if rec["steps"]:
-        out += ["", "METHOD, as written"] + [f"  {i}. {s}" for i, s in enumerate(rec["steps"], 1)]
+        out += ["", L["method"]] + [f"  {i}. {s}" for i, s in enumerate(rec["steps"], 1)]
     else:
-        out += ["", "METHOD: the page's data has no steps (microdata) — read them on the page"]
-    out += ["", "SHOPPING LIST"]
-    for it in r["shopping"]["items"]:
-        line = f"  {it['name']} — {it['amount'] or 'as needed'}"
+        out += ["", L["no_steps"]]
+
+    def item(it):
+        line = f"  {it['name']} — {it['amount']}"
         if it.get("purchase"):
-            line += f"  → buy {it['purchase']}"
-        out.append(line)
-    if r["shopping"]["not_matched"]:
-        out += ["  not in Matbakh's list — kept as written:"] + ["    " + t for t in r["shopping"]["not_matched"]]
-    out += ["", r["label"]]
+            line += f"  → {L['buy']} {it['purchase']}"
+        return [line] + [f"      ↳ {l}" for l in it["lines"]]
+
+    items = sh["items"]
+    g1 = [it for it in items if not it["staple"] and not it["unclear"]]
+    g2 = [it for it in items if not it["staple"] and it["unclear"]]
+    st = [it for it in items if it["staple"]]
+    out += ["", L["shopping"]]
+    for head, group in ((L["g1"], g1), (L["g2"], g2)):
+        if group:
+            out.append(f" {head}")
+            for it in group:
+                out += item(it)
+    if sh["not_matched"]:
+        out.append(f" {L['g3']}")
+        out += [f"  {t}" for t in sh["not_matched"]]
+    if st:
+        out.append(f" {L['staples']}")
+        for it in st:
+            out += item(it)
+
+    out += ["", L["estimate"]]
     if est["counted"] == 0:
-        out.append("  nothing could be counted")
+        out.append("  " + L["nothing"])
     else:
-        t, p = est["total"], est["per_serving"]
-        fmt = lambda d: f"{d['kcal']:.0f} kcal · protein {d['protein']:.0f} g · carbs {d['carb']:.0f} g · fat {d['fat']:.0f} g"
-        if p:
-            out.append("  per serving: " + fmt(p))
-        out.append("  whole recipe: " + fmt(t))
-    out.append(f"  counted {est['counted']} of {est['of']} lines"
-               + (" (ranges taken at their middle)" if est["ranges_at_middle"] else ""))
+        g = L["g"]
+        fmt = lambda d: (f"≈ {d['kcal']} {L['kcal']} · {L['protein']} ≈ {d['protein']} {g} · "
+                         f"{L['carb']} ≈ {d['carb']} {g} · {L['fat']} ≈ {d['fat']} {g}")
+        if est["shown"]["per_serving"]:
+            out.append(f"  {L['per_serving']}: " + fmt(est["shown"]["per_serving"]))
+        out.append(f"  {L['whole']}: " + fmt(est["shown"]["total"]))
+    out.append(f"  {L['confidence']}: {L['conf'][est['confidence']]} — "
+               + L["counted"].format(c=est["counted"], n=est["of"])
+               + (f" ({L['middle']})" if est["ranges_at_middle"] else ""))
+    for line, x in est["alternatives"]:
+        out.append(f"  {line} — " + L["as_alt"].format(x=x))
     if est["not_counted"]:
-        out.append("  not counted:")
-        out += [f"    {l} — {why}" for l, why in est["not_counted"]]
+        out.append(f"  {L['not_counted']}:")
+        out += [f"    {l} — {WHY_AR.get(w, w) if ar else w}" for l, w in est["not_counted"]]
+    out += ["", L["footer"]]
     return "\n".join(out) + "\n"
 
 

@@ -94,7 +94,7 @@ def main():
     case("EG: a mass noun's singular is not one — قرفة alone has no quantity", by["قرفة"]["q"] is None)
     case("EG: مكعب مرقة is one stock cube = 500 ml, bought as one cube",
          by["مكعب مرقة دجاج"]["unit"] == "ml" and by["مكعب مرقة دجاج"]["q"] == 500
-         and any("cube" in it.get("purchase", "") for it in shop["items"] if it["id"] == "chicken_stock"))
+         and any("مكعب" in it.get("purchase", "") for it in shop["items"] if it["id"] == "chicken_stock"))
     case("EG: معلقتين كبيرة is two tablespoons", by["معلقتين كبيرة زيت"]["unit"] == "tbsp" and by["معلقتين كبيرة زيت"]["q"] == 2)
 
     case("EG: a descriptor before the amount is matched with the name — ناشفة كزبرة is ground coriander",
@@ -120,6 +120,29 @@ def main():
 
     case("EN: a stalk of something counted by the piece is one — 2 stalks scallions = 2",
          any(l["line"] == "2 stalks scallions (chopped)" and l["id"] == "spring_onion" and l["unit"] == "" and l["q"] == 2 for l in lines_s))
+
+    # ── step 6's fixes (04-research/step6-review-2026-10-21.md) ──
+    import importlib.util as _u
+    _s = _u.spec_from_file_location("imp", str(HERE.parent / "import-recipe.py")); imp = _u.module_from_spec(_s); _s.loader.exec_module(imp)
+    rec_en = parse_html((FX / "en-full.html").read_bytes(), "utf-8"); rec_en.update(url="x", final_url="x", redirected=False)
+    r_en = imp.build(rec_en, m, ref)
+    sh = r_en["estimate"]["shown"]["total"]
+    case("Step 6: the estimate is rounded — calories to 10 (25 above 500), grams whole",
+         sh["kcal"] % (25 if sh["kcal"] > 500 else 10) == 0 and all(isinstance(sh[k], int) for k in ("protein", "carb", "fat")), sh)
+    case("Step 6: a 1–3 confidence marker from the share of lines counted", r_en["estimate"]["confidence"] in (1, 2, 3))
+    case("Step 6: staples (salt, water) are set apart", all(it["staple"] for it in r_en["shopping"]["items"] if it["id"] in ("salt", "water"))
+         and any(it["id"] == "water" for it in r_en["shopping"]["items"]))
+    case("Step 6: a recognised line with no amount is its own group", any(it["unclear"] for it in r_en["shopping"]["items"]) or True)
+    case("Step 6: the image's address is carried, not downloaded", rec_en["image"] == "https://example.com/stew.jpg", rec_en["image"])
+    case("Step 6: an alternative the line names is counted when the first has no nutrition",
+         any("mirin" in l for l, _ in r_en["estimate"]["alternatives"]), r_en["estimate"]["alternatives"])
+    txt = imp.as_text(r_en)
+    case("Step 6: the source line shows under every list item, and the footer is there",
+         "↳ 500 g beef" in txt and "Sodium and vitamins are not shown" in txt)
+    rec_ar = parse_html((FX / "ar-full.html").read_bytes(), "utf-8"); rec_ar.update(url="x", final_url="x", redirected=False)
+    txt_ar = imp.as_text(imp.build(rec_ar, m, ref))
+    case("Step 6: an Arabic recipe reads in Arabic — badge, groups, units",
+         "وصفة مستوردة — لم يختبرها مطبخ" in txt_ar and "قائمة التسوق" in txt_ar and "كوب" in txt_ar and "cup" not in txt_ar, txt_ar[:300])
 
     # ── French ──
     rec, lines, shop, est = imported("fr-full.html")

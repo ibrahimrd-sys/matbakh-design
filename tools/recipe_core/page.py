@@ -202,6 +202,16 @@ def _author(v):
     return ""
 
 
+def _image(v):
+    """The recipe's image address, as published — never downloaded here."""
+    for a in _as_list(v):
+        if isinstance(a, dict):
+            a = a.get("url") or a.get("contentUrl") or ""
+        if isinstance(a, str) and a.startswith(("http://", "https://")):
+            return a
+    return ""
+
+
 def _servings(v):
     """recipeYield as written, and the first whole number in it (or None)."""
     texts = [_clean(x) for x in _as_list(v) if str(x).strip()]
@@ -228,11 +238,11 @@ def parse_html(raw, charset=None):
         steps = [_clean(s) for s in _flatten_steps(r.get("recipeInstructions"))]
         yield_text, servings = _servings(r.get("recipeYield"))
         rec = dict(source="json-ld", title=_clean(r.get("name") or ""), author=_author(r.get("author")),
-                   yield_text=yield_text, servings=servings,
+                   yield_text=yield_text, servings=servings, image=_image(r.get("image")),
                    language=_language(page.lang, r.get("inLanguage"), ings))
     elif page.micro:
         ings, steps = [_clean(x) for x in page.micro_ingredients], []
-        rec = dict(source="microdata", title="", author="", yield_text="", servings=None,
+        rec = dict(source="microdata", title="", author="", yield_text="", servings=None, image="",
                    language=_language(page.lang, None, ings))
     else:
         return None

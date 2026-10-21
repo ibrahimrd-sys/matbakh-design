@@ -29,6 +29,23 @@ PACKED = {"packet", "can", "jar", "stick"}   # weighed by the size the line give
 TOO_SMALL = {"pinch"}           # a pinch counts for nothing in an estimate
 
 NUTRIENTS = ("kcal", "protein", "carb", "fat")
+STAPLE_BUY = {"have it", "tap"}  # the reference's buy note for what a cook has at home: salt, water
+
+# unit words as a shopper reads them, by the recipe's language
+UNIT_WORDS = {
+    "en": {"rice_cup": "rice cup", "fl_oz": "fl oz"},
+    "ar": {"g": "جم", "kg": "كجم", "mg": "مجم", "ml": "مل", "L": "لتر", "l": "لتر", "cl": "سل", "dl": "دل",
+           "cup": "كوب", "tbsp": "م.ك", "tsp": "م.ص", "spoon": "ملعقة", "pinch": "رشة", "clove": "فص",
+           "piece": "حبة", "can": "علبة", "packet": "كيس", "jar": "برطمان", "bunch": "حزمة",
+           "slice": "شريحة", "stick": "عود", "head": "رأس", "sprig": "عرق", "leaf": "ورقة",
+           "handful": "حفنة", "cube": "مكعب", "oz": "أونصة", "lb": "رطل", "rice_cup": "كوب أرز",
+           "fl_oz": "أونصة سائلة", "pint": "باينت", "quart": "كوارت", "inch": "بوصة", "glass": "كوب"},
+}
+PHRASES = {
+    "en": {"as_needed": "as needed", "pack": "{n} × {size} g pack", "cubes": "{n} × {per} (1 per {ml} ml)"},
+    "ar": {"as_needed": "حسب الحاجة", "pack": "{n} × عبوة {size} جم", "cubes": "{n} × مكعب (مكعب لكل {ml} مل)"},
+}
+_OR = re.compile(r"\b(?:or)\b|أو|(?<![ء-ي])او(?![ء-ي])", re.I)
 
 
 def _f(x):
@@ -54,8 +71,31 @@ def read(raw_lines, matcher, ref, parse):
             _one_by_singular(p, e)
             _cube_to_ml(p, e)
             _stalk_is_one(p, e)
+        if not _has_nutrition(e):
+            p["alt"] = _alternative(p, matcher, ref)
         out.append(p)
     return out
+
+
+def _has_nutrition(e):
+    return bool(e) and any(k in (e.get("nutrition") or {}) for k in NUTRIENTS)
+
+
+def _alternative(p, matcher, ref):
+    """'mirin, rice vinegar, or cider vinegar': when the first has no nutrition, the first
+    alternative the line itself names that does — for the estimate only; the list keeps
+    the line as written. Only on a line that offers alternatives ("or", أو)."""
+    if not _OR.search(p["line"]):
+        return None
+    text = p["name"] + ", " + (p.get("note") or "")
+    for frag in re.split(r"\s*(?:,|،|;|/|\bor\b|أو|(?<![ء-ي])او(?![ء-ي]))\s*", text, flags=re.I):
+        frag = frag.strip(" ()")
+        if not frag:
+            continue
+        iid, _ = matcher.match(frag)
+        if iid and iid != p["id"] and _has_nutrition(ref.get(iid)):
+            return iid
+    return None
 
 
 _SIZE = re.compile(r"(\d+(?:[.,]\d+)?)\s*-?\s*(ounces?|oz|grams?|g|kg|pounds?|lbs?|lb|ml|milliliters?|l|liters?)\b", re.I)
@@ -135,13 +175,15 @@ def _fmt(x):
     return str(int(x)) if float(x).is_integer() else f"{x:g}"
 
 
-def _word(unit, n=1):
-    """A unit key as a shopper reads it: rice_cup → rice cup(s), fl_oz → fl oz."""
-    w = {"rice_cup": "rice cup", "fl_oz": "fl oz"}.get(unit, unit)
-    return w + "s" if w == "rice cup" and n and n > 1 else w
+def _word(unit, n=1, lang="en"):
+    """A unit key as a shopper reads it, in the recipe's language: rice_cup → rice cup(s)
+    or كوب أرز, tbsp → tbsp or م.ك."""
+    words = UNIT_WORDS.get(lang, UNIT_WORDS["en"])
+    w = words.get(unit, UNIT_WORDS["en"].get(unit, unit))
+    return w + "s" if lang == "en" and w == "rice cup" and n and n > 1 else w
 
 
-def _show(lo, hi, dim):
+def _show(lo, hi, dim, lang="en"):
     """A total in the unit a shopper reads: g or kg, ml or L, items."""
     unit, div = {"mass": ("g", 1), "volume": ("ml", 1), "count": ("", 1)}[dim]
     if dim == "mass" and lo >= 1000:
@@ -150,7 +192,7 @@ def _show(lo, hi, dim):
         unit, div = "L", 1000
     r = (lambda x: round(x)) if div == 1 and dim != "count" and lo >= 10 else (lambda x: x)
     amt = _fmt(r(lo / div)) + ("–" + _fmt(r(hi / div)) if hi and hi != lo else "")
-    return (amt + " " + unit).strip()
+    return (amt + " " + _word(unit, lo, lang)).strip() if unit else amt
 
 
 def shop(lines, factor=1.0, lang="en"):
@@ -177,7 +219,8 @@ def shop(lines, factor=1.0, lang="en"):
             if p["q"] is None or dim == "other":
                 q = (_fmt(p["q"] * factor) + ("–" + _fmt(p["q_max"] * factor) if p["q_max"] else "")
                      if p["q"] is not None else "")
-                extras.append((q + " " + p["unit"]).strip() if q else "as needed")
+                extras.append((q + " " + _word(p["unit"], p["q"], lang)).strip() if q
+                              else PHRASES.get(lang, PHRASES["en"])["as_needed"])
                 continue
             lo, hi = sums.get(dim, (0.0, 0.0))
             b = _base(p["q"] * factor, p["unit"])
@@ -190,21 +233,26 @@ def shop(lines, factor=1.0, lang="en"):
             if only and d != "count" and not (only in ("g", "ml") and lo >= 1000):
                 # all in one unit: say it the way the recipe does (but 1500 g reads as 1.5 kg)
                 k = MASS.get(only, VOLUME.get(only, 1))
-                amounts.append((_fmt(lo / k) + ("–" + _fmt(hi / k) if hi != lo else "") + " " + _word(only, hi / k)).strip())
+                amounts.append((_fmt(lo / k) + ("–" + _fmt(hi / k) if hi != lo else "") + " "
+                                + _word(only, hi / k, lang)).strip())
             elif d == "volume" and e.get("unit") != "ml" and (e.get("convert") or {}).get("cup_g"):
                 # cups and spoons mixed, of something sold by weight: say it in grams
                 k = e["convert"]["cup_g"] / 240
-                amounts.append(_show(lo * k, hi * k, "mass"))
+                amounts.append(_show(lo * k, hi * k, "mass", lang))
             else:
-                amounts.append(_show(lo, hi, d))
+                amounts.append(_show(lo, hi, d, lang))
+        ph = PHRASES.get(lang, PHRASES["en"])
         item = dict(id=iid, name=name, amount=" + ".join(amounts + extras),
-                    lines=[p["line"] for p in ps], buy=((e.get("buy") or {}).get(lang) or ""))
+                    lines=[p["line"] for p in ps], buy=((e.get("buy") or {}).get(lang) or ""),
+                    staple=((e.get("buy") or {}).get("en") in STAPLE_BUY),
+                    unclear=not amounts)        # recognised, but the source gives no amount
         # what to buy: whole packs, or the cubes that make this much stock (§47)
         mk, pack = e.get("makes"), e.get("pack")
         if mk and "volume" in sums:
-            item["purchase"] = f"{max(1, math.ceil(sums['volume'][1] / mk['ml'] - 1e-9))} × {mk['per']} (1 per {mk['ml']} ml)"
+            item["purchase"] = ph["cubes"].format(n=max(1, math.ceil(sums["volume"][1] / mk["ml"] - 1e-9)),
+                                                  per=mk["per"], ml=mk["ml"])
         elif pack and e.get("unit") == "g" and "mass" in sums:
-            item["purchase"] = f"{max(1, math.ceil(sums['mass'][1] / pack - 1e-9))} × {pack} g pack"
+            item["purchase"] = ph["pack"].format(n=max(1, math.ceil(sums["mass"][1] / pack - 1e-9)), size=pack)
         out.append(item)
     return dict(items=out, not_matched=text)
 
@@ -236,18 +284,22 @@ def _grams(p, e):
     return None, f"no weight for a {unit}"
 
 
-def estimate(lines, factor=1.0, servings=None):
+def estimate(lines, factor=1.0, servings=None, ref=None):
     """Totals for the recipe (scaled by factor) and per serving, with every line it
-    could not count and why. The caller labels it تقدير."""
+    could not count and why, and every line counted as an alternative it names. The
+    caller labels it تقدير."""
     tot = dict.fromkeys(NUTRIENTS, 0.0)
-    counted, skipped, ranged = 0, [], False
+    counted, skipped, ranged, alts = 0, [], False, []
     for p in lines:
         e = p["entry"]
+        if e and e.get("glyph") == "water":
+            counted += 1                      # water: nothing to count, and nothing missing
+            continue
+        if not _has_nutrition(e) and p.get("alt") and ref:
+            e = ref[p["alt"]]                 # "mirin, rice vinegar, or cider vinegar"
+            alts.append((p["line"], (e.get("name") or {}).get("en") or p["alt"]))
         if not e:
             skipped.append((p["line"], "not in the reference"))
-            continue
-        if e.get("glyph") == "water":
-            counted += 1                      # water: nothing to count, and nothing missing
             continue
         n = e.get("nutrition") or {}
         if not any(k in n for k in NUTRIENTS):
@@ -262,5 +314,17 @@ def estimate(lines, factor=1.0, servings=None):
             tot[k] += g * factor / 100 * (n.get(k) or 0)
         counted += 1
     per = {k: v / servings for k, v in tot.items()} if servings else None
+    share = counted / len(lines) if lines else 0
+    confidence = 3 if share >= 0.9 else 2 if share >= 0.7 else 1
     return dict(total=tot, per_serving=per, counted=counted, of=len(lines),
-                not_counted=skipped, ranges_at_middle=ranged)
+                not_counted=skipped, ranges_at_middle=ranged, alternatives=alts,
+                confidence=confidence)
+
+
+def rounded(n):
+    """How the estimate is shown (the mock-up's screen 5): calories to 10, or to 25 above
+    500; grams to whole numbers. Precision the data does not have is not shown."""
+    k = n["kcal"]
+    step = 25 if k > 500 else 10
+    return dict(kcal=int(round(k / step) * step), protein=round(n["protein"]),
+                carb=round(n["carb"]), fat=round(n["fat"]))

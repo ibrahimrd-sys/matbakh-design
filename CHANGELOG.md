@@ -5,6 +5,17 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-21g — step 6: the import shown as the mock-up shows it
+
+Step 6 (vault `04-research/step6-review-2026-10-21.md`), accepted by Ibrahim with
+five fixes. **`import-recipe.py`**: the recipe's language throughout (Arabic badge,
+headings, units); the list in three groups — recognised, no amount, not recognised —
+with staples apart and the source line under every item; the estimate with ≈,
+rounding, a 1–3 dot confidence marker and the footer; the image's address.
+**`recipe_core/basket.py`**: Arabic unit words, staples, a named alternative counted
+when the first has no nutrition, `rounded()`. **`page.py`**: the image's address. 47 of
+47 cases.
+
 ## 2026-10-21f — a stalk is one
 
 Rasa Malaysia's claypot chicken rice: *2 stalks scallions* was listed as *2 stick* and
