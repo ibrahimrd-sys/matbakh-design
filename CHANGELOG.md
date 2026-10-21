@@ -5,6 +5,14 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-21q — the app's name to sites; plain http on iPhone, for now
+
+Ibrahim, 21 October: the app names itself **Matbakh/0.1 (Recipe Import)** to recipe sites
+(`lib/import/reader.dart`; `export-for-app.py` asks Python's robots.txt rules about the same
+name). **iOS: plain `http://` pages allowed, temporarily** (`NSAllowsArbitraryLoads` in the
+app's `Info.plist`), so import can be tested on any site — to remove or narrow before
+release. App `e4f15d1`, 35 of 35.
+
 ## 2026-10-21p — reading a recipe page on the phone
 
 Import step 7. In the app (`dd21b38`, `7981d5e`), **`lib/import/`**: `page.dart` reads a

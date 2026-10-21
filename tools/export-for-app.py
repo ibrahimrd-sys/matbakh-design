@@ -136,7 +136,7 @@ def entities(app):
     print(f"  lib/import/html_entities.dart  ({len(html.entities.html5)} entities)")
 
 
-APP_UA = "Matbakh/0.1 (recipe import)"     # the app's, as lib/import/reader.dart names it
+APP_UA = "Matbakh/0.1 (Recipe Import)"     # the app's, as lib/import/reader.dart names it (Ibrahim, 21 Oct)
 
 
 def page_cases(app, write):
