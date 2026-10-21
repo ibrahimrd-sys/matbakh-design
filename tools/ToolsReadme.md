@@ -3,7 +3,7 @@
 *Written 26 August 2026. One file per tool question; there is no second copy of
 this document.*
 
-**Last updated:** 2026-10-21 — `recipe_core/`, the engine shared by two new scripts: `import-recipe.py` (import plan step 5: a page in, a shopping list and an estimate out, no AI) and `capture-prefilter.py` (the §7 pre-filter, checks A D E F G H); `capture-draft.py --from-page-data`; `tests/run-tests.py`; the three import checks now run on the shared engine with unchanged output (RecipeCoreDesign.md). 2026-10-20: `ingredient-editor.html` keeps the new `makes` field (`philosophy.md` §47). 2026-10-19: `ingredient-match.py` measured again after the reference grew to 436 entries. 2026-10-13: `ingredient-match.py` added, the third import check, and fixed three times the same day (form words, Arabic endings, مسحوق as powder, `=` whole-name aliases, ground spices accept powder); the ingredient editor gains *Other names* (aliases); `ingredient-lines.py` added, the second import check; `structured-data-check.py` fixed after its first real run: Arabic addresses, sitemap order and fallbacks, `--verbose`. 2026-10-12: `structured-data-check.py` added, the first import check (D-19). Earlier, 2026-10-06: the rewrites folder, `09-reviewed-captures/`, noted. 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
+**Last updated:** 2026-10-21 — the line parser reads Egyptian amounts (معلقة, مكعب, duals, م كبيره) after the first real import run; `recipe_core/`, the engine shared by two new scripts: `import-recipe.py` (import plan step 5: a page in, a shopping list and an estimate out, no AI) and `capture-prefilter.py` (the §7 pre-filter, checks A D E F G H); `capture-draft.py --from-page-data`; `tests/run-tests.py`; the three import checks now run on the shared engine with unchanged output (RecipeCoreDesign.md). 2026-10-20: `ingredient-editor.html` keeps the new `makes` field (`philosophy.md` §47). 2026-10-19: `ingredient-match.py` measured again after the reference grew to 436 entries. 2026-10-13: `ingredient-match.py` added, the third import check, and fixed three times the same day (form words, Arabic endings, مسحوق as powder, `=` whole-name aliases, ground spices accept powder); the ingredient editor gains *Other names* (aliases); `ingredient-lines.py` added, the second import check; `structured-data-check.py` fixed after its first real run: Arabic addresses, sitemap order and fallbacks, `--verbose`. 2026-10-12: `structured-data-check.py` added, the first import check (D-19). Earlier, 2026-10-06: the rewrites folder, `09-reviewed-captures/`, noted. 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
 
 **Five** authoring tools and one research script. Four are single HTML files: open them in a browser, no
 install, no server, no Python. The fifth, `capture-draft.py`, is a Python script
@@ -462,10 +462,20 @@ cups and spoons when the entry is measured in ml or carries `convert.cup_g`; fro
 count when it carries `convert.piece_g`. On 21 October a data pass gave 103 entries
 cup or piece weights and 22 entries missing nutrition — the ones that blocked most
 lines in samples 4–6 — taking the share of those samples' lines it can count from
-**27% to 74%**. Of the rest, 260 lines have no quantity or are a pinch; the others
+**27% to 74%**; the Egyptian forms below took it to **75%** (English 79%, Arabic 64% —
+most of the Arabic rest is lines the source gives no amount for). Of the rest, 260 lines have no quantity or are a pinch; the others
 need weights on less common entries, a later pass. The weights are standard
 kitchen weights (a 240 ml cup; a medium item; a clove of garlic), Claude's first
 pass, to be reviewed in the ingredient editor.
+
+**Egyptian amounts** (21 October, after the first run on a real Egyptian page, which
+counted 6 of 14 lines and then 14 of 14): the parser reads **معلقة / معلقه / معالق**
+(ملعقة with its letters swapped) and **معلقتين** as spoons, **مكعب** as a unit (a stock
+cube, which the list turns into 500 ml, §47), **a dual as two** (جزرتين, بيضتين,
+بصلتان), and **م كبيره / م صغيره**. In the list, **a counted item's Arabic singular is
+one** (بصلة, بصلايه — one onion), but only for an entry counted one by one and a word
+with the singular ending, so *قرفة* stays without a quantity. Checked against every
+saved line (3,218): 29 changed, each a line that now reads right.
 
 **Not yet:** the list and the estimate speak English units on an Arabic recipe
 (*2 cup*, *cube*); seasoning scales linearly, not as §6 scales a Matbakh recipe.
@@ -489,7 +499,7 @@ contradiction. **B** waits for a chef's thresholds; **C** for a larger catalogue
 
 ## Testing the import prototype and the pre-filter
 
-    python3 tools/tests/run-tests.py            # 23 cases, offline
+    python3 tools/tests/run-tests.py            # 29 cases, offline
     python3 tools/tests/run-tests.py --online   # + a missing page and a page with no recipe
 
 The pages in `tests/fixtures/` are **made up for the tests** — no one's recipe text,
@@ -497,7 +507,8 @@ so they live in this public repository. They match against the vault's reference
 so the cases test behaviour (an unknown line kept, a range kept, a pinch not
 counted, Arabic-Indic digits read, a page with no data refused, F, G and H on a
 made-up draft) rather than exact figures, and a growing reference does not break
-them. 25 of 25 pass on 21 October 2026.
+them, including an Egyptian page's ways of writing amounts. 31 of 31 pass on
+21 October 2026, with `--online`.
 
 ## What these do not do
 

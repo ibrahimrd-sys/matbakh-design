@@ -46,8 +46,11 @@ def read(raw_lines, matcher, ref, parse):
         if p["kind"] == "heading":
             continue
         iid, on = matcher.match(p["name"]) if p["name"] else ("", "")
-        p.update(id=iid, matched_on=on, entry=ref.get(iid) if iid else None,
-                 q=_f(p["qty"]), q_max=_f(p["qty_max"]))
+        e = ref.get(iid) if iid else None
+        p.update(id=iid, matched_on=on, entry=e, q=_f(p["qty"]), q_max=_f(p["qty_max"]))
+        if e:
+            _one_by_singular(p, e)
+            _cube_to_ml(p, e)
         out.append(p)
     return out
 
@@ -64,6 +67,24 @@ def _pack_size(p):
         return None
     m = _SIZE.search(p.get("note") or "") or _SIZE.search(p["line"])
     return (float(m.group(1).replace(",", ".")), _SIZE_UNIT[m.group(2).lower()]) if m else None
+
+
+_AR_UNITY = re.compile(r"^[ء-ي]{2,}(?:ة|ه|اية|ايه)(?![ء-ي])")
+
+
+def _one_by_singular(p, e):
+    """Arabic names one counted item by its singular: بصلة / بصلايه is one onion. Only for an
+    entry counted one by one (unit count, or a weight per item) and a word with the singular
+    ending — قرفة (cinnamon) is not one of anything, and it has no weight per item."""
+    if p["q"] is None and not p["unit"] and p["kind"] == "no_quantity" and             (e.get("unit") == "count" or (e.get("convert") or {}).get("piece_g")) and _AR_UNITY.match(p["name"]):
+        p.update(q=1.0, qty="1", kind="count", implied=True)
+
+
+def _cube_to_ml(p, e):
+    """مكعب مرقة: one stock cube is what it makes (philosophy §47)."""
+    mk = e.get("makes")
+    if p["unit"] == "cube" and mk and mk.get("per") == "cube" and p["q"] is not None:
+        p.update(q=p["q"] * mk["ml"], q_max=(p["q_max"] or 0) * mk["ml"] or None, unit="ml")
 
 
 def _dim(unit):

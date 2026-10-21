@@ -5,6 +5,16 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-21b — Egyptian amounts
+
+The first run of `import-recipe.py` on a real Egyptian page counted 6 of 14 lines.
+**`tools/recipe_core/lines.py`** now reads معلقة/معلقه/معالق and معلقتين as spoons,
+مكعب as a unit, an Arabic dual as two, and م كبيره/م صغيره; **`basket.py`** takes a
+counted item's Arabic singular as one and a stock cube as 500 ml (§47). The page now
+counts 14 of 14; 29 of 3,218 saved lines change, each now right; the workbook tests
+and matching are unchanged. Six Egyptian cases added to `tests/run-tests.py` (31 of
+31 with `--online`). In the vault reference, a whole chicken weighs 1.4 kg.
+
 ## 2026-10-21a — one engine under import and capture
 
 `tools/RecipeCoreDesign.md`, approved by Ibrahim 20 October. **`tools/recipe_core/`**

@@ -83,6 +83,20 @@ def main():
          [it["name"] for it in shop["items"]])
     case("AR: a plain-text method is split into steps", len(rec["steps"]) == 2, rec["steps"])
 
+    # ── Egyptian ways of writing amounts ──
+    rec, lines, shop, est = imported("eg-full.html")
+    by = {l["line"]: l for l in lines}
+    case("EG: معلقه صغيرة (the Egyptian spelling) is a teaspoon",
+         by["0.5 معلقه صغيرة قرفه"]["unit"] == "tsp" and by["معلقة صغيرة بابريكا"]["q"] == 1)
+    case("EG: a dual is two — جزرتين = 2 carrots", by["جزرتين كبار"]["q"] == 2 and by["جزرتين كبار"]["id"] == "carrots")
+    case("EG: a counted item's singular is one — بصلايه = 1 onion",
+         by["بصلايه كبيره"]["q"] == 1 and by["بصلايه كبيره"]["id"] == "onion")
+    case("EG: a mass noun's singular is not one — قرفة alone has no quantity", by["قرفة"]["q"] is None)
+    case("EG: مكعب مرقة is one stock cube = 500 ml, bought as one cube",
+         by["مكعب مرقة دجاج"]["unit"] == "ml" and by["مكعب مرقة دجاج"]["q"] == 500
+         and any("cube" in it.get("purchase", "") for it in shop["items"] if it["id"] == "chicken_stock"))
+    case("EG: معلقتين كبيرة is two tablespoons", by["معلقتين كبيرة زيت"]["unit"] == "tbsp" and by["معلقتين كبيرة زيت"]["q"] == 2)
+
     # ── French ──
     rec, lines, shop, est = imported("fr-full.html")
     case("FR: a list comes back; nothing is dropped",
