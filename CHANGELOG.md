@@ -5,6 +5,16 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-21k — unit words agree with their number, in Python and the app
+
+Ibrahim's go: **`recipe_core/basket.py`** and the app's `lib/shopping/units.dart` together.
+English: *2 cups*, *3 pinches*, *1.5 cups*, *½ cup*; abbreviations (g, tbsp, oz) never
+change. Arabic: singular, dual (*2 كوبان*), 3–10 (*3 أكواب*), 11–99 (*11 كوبًا*), past 99 by
+the last two digits, and a fraction in the singular (*1.5 كوب*); abbreviations (جم، مل،
+م.ك) never change. A range agrees with its top (*2–3 أكواب*). On the 207 saved pages, 152
+of 2,173 list amounts change, every one a unit word; Python and the app still match on
+all 215 cases. Four cases added (59 of 59); the app's 14 pass.
+
 ## 2026-10-21j — the shopping list on the phone
 
 Import step 7, `design/shopping-list-design.md` §8 items 1–4. **`tools/export-for-app.py`**

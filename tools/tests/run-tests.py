@@ -220,6 +220,22 @@ def main():
     case("§48: … and 12 tortillas buy two packs of 10",
          by["tortilla"].get("purchase") == "2 × pack of 10", by["tortilla"].get("purchase"))
 
+    # ── unit words agree with their number, in English and Arabic ──
+    W = basket._word
+    case("Plurals EN: one cup, 1.5 cups, 3 pinches; g, tbsp and oz never change",
+         [W("cup", 1), W("cup", 1.5), W("pinch", 3), W("g", 500), W("tbsp", 2), W("oz", 16), W("cup", 0.5)]
+         == ["cup", "cups", "pinches", "g", "tbsp", "oz", "cup"])
+    ar = [W("cup", n, "ar") for n in (1, 2, 3, 10, 11, 25, 99, 100, 102, 103, 111, 0.5, 1.5, 2.5)]
+    case("Plurals AR: كوب، كوبان، أكواب (3–10)، كوبًا (11–99), by the last two digits past 99; a fraction is singular",
+         ar == ["كوب", "كوبان", "أكواب", "أكواب", "كوبًا", "كوبًا", "كوبًا", "كوب", "كوب", "أكواب", "كوبًا",
+                "كوب", "كوب", "كوب"], ar)
+    case("Plurals AR: abbreviations never change — 3 م.ك، 500 جم", W("tbsp", 3, "ar") == "م.ك" and W("g", 500, "ar") == "جم")
+    sh_ar = {it["id"]: it["amount"] for it in
+             basket.shop(basket.read(["2-3 cups water", "2 cups rice", "11 cups flour", "1.5 L milk"], m, ref, parse),
+                         1.0, "ar")["items"]}
+    case("Plurals AR on the list: 2–3 أكواب (a range agrees with its top), 2 كوبان, 11 كوبًا, 1.5 لتر",
+         sh_ar == {"water": "2–3 أكواب", "rice": "2 كوبان", "flour": "11 كوبًا", "milk": "1.5 لتر"}, sh_ar)
+
     # ── the catalogue's list: matbakh.py build (philosophy §48) ──
     built = catalogue_lists()
     case("Catalogue: a sub-recipe's share is scaled once — 200 of 400 ml at 8 servings buys 400 g tomato",

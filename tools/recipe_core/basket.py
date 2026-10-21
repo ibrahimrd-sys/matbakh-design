@@ -201,12 +201,52 @@ def _off(exact, shown):
     return bool(exact) and abs(shown - exact) / exact > 0.05
 
 
+# English plurals: abbreviations (g, tbsp, oz) never take one; one cup, 1.5 cups.
+EN_PLURAL = {"cup": "cups", "rice cup": "rice cups", "spoon": "spoons", "pinch": "pinches",
+             "clove": "cloves", "piece": "pieces", "can": "cans", "packet": "packets", "jar": "jars",
+             "bunch": "bunches", "slice": "slices", "stick": "sticks", "head": "heads",
+             "sprig": "sprigs", "leaf": "leaves", "handful": "handfuls", "cube": "cubes",
+             "pint": "pints", "quart": "quarts", "inch": "inches", "glass": "glasses"}
+# Arabic: (dual, 3–10, 11–99) beside the singular; abbreviations (جم، مل، م.ك) never change.
+# A fraction takes the singular: ½ كوب، 1.5 كوب.
+AR_FORMS = {
+    "كوب": ("كوبان", "أكواب", "كوبًا"), "لتر": ("لتران", "لترات", "لترًا"),
+    "ملعقة": ("ملعقتان", "ملاعق", "ملعقةً"), "رشة": ("رشتان", "رشات", "رشةً"),
+    "فص": ("فصان", "فصوص", "فصًا"), "حبة": ("حبتان", "حبات", "حبةً"),
+    "علبة": ("علبتان", "علب", "علبةً"), "كيس": ("كيسان", "أكياس", "كيسًا"),
+    "برطمان": ("برطمانان", "برطمانات", "برطمانًا"), "حزمة": ("حزمتان", "حزم", "حزمةً"),
+    "شريحة": ("شريحتان", "شرائح", "شريحةً"), "عود": ("عودان", "أعواد", "عودًا"),
+    "رأس": ("رأسان", "رؤوس", "رأسًا"), "عرق": ("عرقان", "عروق", "عرقًا"),
+    "ورقة": ("ورقتان", "أوراق", "ورقةً"), "حفنة": ("حفنتان", "حفنات", "حفنةً"),
+    "مكعب": ("مكعبان", "مكعبات", "مكعبًا"), "أونصة": ("أونصتان", "أونصات", "أونصةً"),
+    "رطل": ("رطلان", "أرطال", "رطلًا"), "كوب أرز": ("كوبا أرز", "أكواب أرز", "كوبًا من الأرز"),
+    "أونصة سائلة": ("أونصتان سائلتان", "أونصات سائلة", "أونصةً سائلة"),
+    "باينت": ("باينتان", "باينتات", "باينتًا"), "كوارت": ("كوارتان", "كوارتات", "كوارتًا"),
+    "بوصة": ("بوصتان", "بوصات", "بوصةً"),
+}
+
+
+def _ar_form(w, n):
+    """The Arabic word for n of it: 1 كوب، 2 كوبان، 3–10 أكواب، 11–99 كوبًا; past 99 by the
+    last two digits (103 أكواب، 111 كوبًا), and 100 or 101 or 102 take the singular."""
+    forms = AR_FORMS.get(w)
+    if not forms or n is None or abs(n - round(n)) > 1e-9:
+        return w
+    k = int(round(n))
+    if k == 2:
+        return forms[0]
+    r = k % 100
+    return forms[1] if 3 <= r <= 10 else forms[2] if r >= 11 else w
+
+
 def _word(unit, n=1, lang="en"):
-    """A unit key as a shopper reads it, in the recipe's language: rice_cup → rice cup(s)
-    or كوب أرز, tbsp → tbsp or م.ك."""
+    """A unit key as a shopper reads it, in the list's language, agreeing with the number
+    shown beside it (the top of a range): cup → cups, كوب → كوبان / أكواب / كوبًا."""
     words = UNIT_WORDS.get(lang, UNIT_WORDS["en"])
     w = words.get(unit, UNIT_WORDS["en"].get(unit, unit))
-    return w + "s" if lang == "en" and w == "rice cup" and n and n > 1 else w
+    if lang == "ar":
+        return _ar_form(w, n)
+    return EN_PLURAL.get(w, w) if n is not None and n > 1 + 1e-9 else w
 
 
 def _show(lo, hi, dim, lang="en"):
@@ -222,7 +262,7 @@ def _show(lo, hi, dim, lang="en"):
     shown = [_ladder(x) for x in ends]
     approx = "≈" if any(_off(x, y) for x, y in zip(ends, shown)) else ""
     amt = "–".join(_fmt(y / div) for y in shown)
-    return (approx + amt + " " + _word(unit, lo, lang)).strip()
+    return (approx + amt + " " + _word(unit, round(shown[-1] / div, 2), lang)).strip()
 
 
 def shop(lines, factor=1.0, lang="en"):
@@ -249,7 +289,7 @@ def shop(lines, factor=1.0, lang="en"):
             if p["q"] is None or dim == "other":
                 q = (_fmt(p["q"] * factor) + ("–" + _fmt(p["q_max"] * factor) if p["q_max"] else "")
                      if p["q"] is not None else "")
-                extras.append((q + " " + _word(p["unit"], p["q"], lang)).strip() if q
+                extras.append((q + " " + _word(p["unit"], round((p["q_max"] or p["q"]) * factor, 2), lang)).strip() if q
                               else PHRASES.get(lang, PHRASES["en"])["as_needed"])
                 continue
             lo, hi = sums.get(dim, (0.0, 0.0))
@@ -271,7 +311,7 @@ def shop(lines, factor=1.0, lang="en"):
                 shown = [_spoon(x, only) for x in ends] if only in ("tsp", "tbsp") else ends
                 approx = "≈" if any(_off(x, y) for x, y in zip(ends, shown)) else ""
                 amounts.append((approx + "–".join(_fmt(y) for y in shown) + " "
-                                + _word(only, shown[-1], lang)).strip())
+                                + _word(only, round(shown[-1], 2), lang)).strip())
             elif d == "volume" and e.get("unit") != "ml" and (e.get("convert") or {}).get("cup_g"):
                 # cups and spoons mixed, of something sold by weight: say it in grams
                 k = e["convert"]["cup_g"] / 240
