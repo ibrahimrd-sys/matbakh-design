@@ -5,6 +5,20 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-21j — the shopping list on the phone
+
+Import step 7, `design/shopping-list-design.md` §8 items 1–4. **`tools/export-for-app.py`**
+writes into the Flutter app the vault's reference (JSON), the authored catalogue
+recipes' shopping items, and parity cases from `basket.shop()` — the fixture pages,
+the §48 test lines and the 207 saved pages of fresh samples 4–6 — none of it in the
+app's git. **In the app** (`~/Develop/matbakh`, commit `2ab1d10`): `lib/shopping/`, the
+list of contributions with the cook's edits apart, saved as one JSON file, saves queued
+so two never overlap; its engine, `basket.shop()` in Dart, matching it character for
+character on all 215 cases (Python's rounding of halves to even included); and the list
+screen — four groups in aisle order, the source line under each item, staples one tap
+from the list, *set amount*, a recipe taken off whole — reached from the recipe list,
+with the pilot recipes to add. 14 app tests pass. Not yet run on a phone.
+
 ## 2026-10-21i — aisle and staple on the reference; the list follows §48
 
 Two new ingredient fields (`philosophy.md` §48): **`aisle`**, one of nine in the order a

@@ -3,7 +3,7 @@
 *Written 26 August 2026. One file per tool question; there is no second copy of
 this document.*
 
-**Last updated:** 2026-10-21 — the shopping list follows `philosophy.md` §48: staples from the reference's `staple` field, on the list and unticked; aisle order; whole packs for every unit; grams and spoons on §6.3's ladder; `ingredient-editor.html` keeps `aisle` and `staple`. Earlier the same day: `import-recipe.py` shown as the mock-up shows it (step 6's five fixes); the line parser reads Egyptian amounts (معلقة, مكعب, duals, م كبيره) after the first real import run; `recipe_core/`, the engine shared by two new scripts: `import-recipe.py` (import plan step 5: a page in, a shopping list and an estimate out, no AI) and `capture-prefilter.py` (the §7 pre-filter, checks A D E F G H); `capture-draft.py --from-page-data`; `tests/run-tests.py`; the three import checks now run on the shared engine with unchanged output (RecipeCoreDesign.md). 2026-10-20: `ingredient-editor.html` keeps the new `makes` field (`philosophy.md` §47). 2026-10-19: `ingredient-match.py` measured again after the reference grew to 436 entries. 2026-10-13: `ingredient-match.py` added, the third import check, and fixed three times the same day (form words, Arabic endings, مسحوق as powder, `=` whole-name aliases, ground spices accept powder); the ingredient editor gains *Other names* (aliases); `ingredient-lines.py` added, the second import check; `structured-data-check.py` fixed after its first real run: Arabic addresses, sitemap order and fallbacks, `--verbose`. 2026-10-12: `structured-data-check.py` added, the first import check (D-19). Earlier, 2026-10-06: the rewrites folder, `09-reviewed-captures/`, noted. 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
+**Last updated:** 2026-10-21 — `export-for-app.py`, the Flutter app's data and its parity cases. Earlier the same day: the shopping list follows `philosophy.md` §48: staples from the reference's `staple` field, on the list and unticked; aisle order; whole packs for every unit; grams and spoons on §6.3's ladder; `ingredient-editor.html` keeps `aisle` and `staple`. Earlier the same day: `import-recipe.py` shown as the mock-up shows it (step 6's five fixes); the line parser reads Egyptian amounts (معلقة, مكعب, duals, م كبيره) after the first real import run; `recipe_core/`, the engine shared by two new scripts: `import-recipe.py` (import plan step 5: a page in, a shopping list and an estimate out, no AI) and `capture-prefilter.py` (the §7 pre-filter, checks A D E F G H); `capture-draft.py --from-page-data`; `tests/run-tests.py`; the three import checks now run on the shared engine with unchanged output (RecipeCoreDesign.md). 2026-10-20: `ingredient-editor.html` keeps the new `makes` field (`philosophy.md` §47). 2026-10-19: `ingredient-match.py` measured again after the reference grew to 436 entries. 2026-10-13: `ingredient-match.py` added, the third import check, and fixed three times the same day (form words, Arabic endings, مسحوق as powder, `=` whole-name aliases, ground spices accept powder); the ingredient editor gains *Other names* (aliases); `ingredient-lines.py` added, the second import check; `structured-data-check.py` fixed after its first real run: Arabic addresses, sitemap order and fallbacks, `--verbose`. 2026-10-12: `structured-data-check.py` added, the first import check (D-19). Earlier, 2026-10-06: the rewrites folder, `09-reviewed-captures/`, noted. 2026-10-01: `capture-draft.py` added; its fallback turned off; its captures folder and pre-filter design noted.
 
 **Five** authoring tools and one research script. Four are single HTML files: open them in a browser, no
 install, no server, no Python. The fifth, `capture-draft.py`, is a Python script
@@ -25,6 +25,7 @@ recipe pages publish their own recipe data.
 | `capture-prefilter.py` | a `capture-draft.py` draft | structural flags for the chef (checks A, D, E, F, G, H) — **flags only** |
 | `recipe_core/` | — | the engine under the four import scripts and the pre-filter: page reader, line parser, matcher, shopping list and estimate, checks |
 | `tests/run-tests.py` | — | the import prototype's and the pre-filter's cases, on made-up pages |
+| `export-for-app.py` | the vault's reference and recipes | the Flutter app's reference, pilot recipes and shopping-list parity cases |
 
 **Nothing is uploaded by the four editors.** Files are read in the browser and stay on your machine.
 That is also why they cannot save in place — a web page may not write to disk.
@@ -545,6 +546,20 @@ counted, Arabic-Indic digits read, a page with no data refused, F, G and H on a
 made-up draft) rather than exact figures, and a growing reference does not break
 them, including an Egyptian page's ways of writing amounts. 47 of 47 pass on
 21 October 2026, with `--online`.
+
+## export-for-app.py
+
+Import step 7 (`design/shopping-list-design.md` §6). Writes into the Flutter app
+(`~/Develop/matbakh`, or `--app PATH`): the vault's reference as
+`assets/ref/ingredients.json`; each authored catalogue recipe's shopping items from
+`matbakh.py build`, at its base servings, as `assets/recipes/<id>.json`; and
+`test/parity/`, the cases that hold the app's list to `recipe_core/basket.py`
+character for character — the fixture pages and the §48 test lines, and every saved
+page of fresh samples 4–6 (207 pages, 2,375 lines). A case's lines are what the list
+is given: the parser's quantity with a package's stated size applied, so the parity
+test checks the list's own work — adding, rounding, packs — and not the parser's.
+**None of it is in the app's git**: it is vault data and real sites' text. Rerun it
+whenever the reference, a recipe or `basket.py` changes, then `flutter test`.
 
 ## What these do not do
 

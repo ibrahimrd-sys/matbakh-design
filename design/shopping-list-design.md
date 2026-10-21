@@ -7,6 +7,12 @@ shopping list, which import shares with the catalogue's recipes."*
 > **Approved by Ibrahim, 21 October 2026, all six decisions in §9 as proposed**
 > (`philosophy.md` §48). The rules already decided are cited to where they were
 > decided; the text below is kept as it was proposed.
+>
+> **Built the same day, §8 items 1–4:** the faults in §7 fixed; `aisle` and `staple`
+> in the reference; `tools/export-for-app.py`; in the app, `lib/shopping/` (the list,
+> its engine and its store) and the list screen, reached from the recipe list, with the
+> pilot recipes to add. The engine matches `basket.py` on 8 fixture cases and 207
+> saved pages. Next is item 5, step 7's import parts.
 
 **Last updated:** 2026-10-21
 
