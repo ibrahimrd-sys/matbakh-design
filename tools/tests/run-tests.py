@@ -113,6 +113,11 @@ def main():
          [it["amount"] for it in shop_s["items"] if it["id"] == "granulated_sugar"])
     case("EN: 'a tiny pinch' is a pinch", any(l["line"] == "1 tiny pinch cinnamon" and l["unit"] == "pinch" for l in lines_s))
 
+    case("EN: a rice cooker's cup is a unit — '1.9 rice cup water' is water, not rice",
+         any(l["line"] == "1.9 rice cup water" and l["id"] == "water" and l["unit"] == "rice_cup" for l in lines_s)
+         and any(it["id"] == "jasmine_rice" and it["amount"] == "2 rice cups" for it in shop_s["items"]),
+         [(l["line"], l["id"], l["unit"]) for l in lines_s if "rice cup" in l["line"]])
+
     # ── French ──
     rec, lines, shop, est = imported("fr-full.html")
     case("FR: a list comes back; nothing is dropped",

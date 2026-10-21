@@ -101,6 +101,7 @@ UNITS = [
     # English
     ("tbsp", 1, r"tablespoons?|tbsps?\.?|tbs\.?|tbl\.?|(?-i:T)\b"),    # capital T is a tablespoon
     ("tsp", 1, r"teaspoons?|tsps?\.?|(?-i:t)\b"),                      # small t is a teaspoon
+    ("rice_cup", 1, r"rice\s+cups?"),                                  # a rice cooker's cup, 180 ml
     ("cup", 1, r"cups?|c\.(?=\s)"),
     ("fl_oz", 1, r"fl\.?\s?oz\.?|fluid ounces?"),
     ("oz", 1, r"ounces?|oz\.?"),

@@ -5,6 +5,13 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-21e — the rice cooker's cup
+
+Ibrahim's run on Made With Lau's egg fried rice listed *1.9 rice cup water* as rice:
+the site measures in rice-cooker cups. **`lines.py`** reads *rice cup* as a unit and
+**`basket.py`** gives it 180 ml; the list prints unit names as words (*2 rice cups*).
+The recipe now counts 15 of 15. One case added (38 of 38).
+
 ## 2026-10-21d — fourth real run: sugar in grams, a tiny pinch
 
 An allrecipes peach pie: **`basket.py`** lists cups and spoons mixed, of something

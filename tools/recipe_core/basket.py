@@ -22,7 +22,8 @@ import math, re
 # grams per unit of mass, millilitres per unit of volume
 MASS = {"g": 1, "kg": 1000, "mg": 0.001, "oz": 28.35, "lb": 453.6}
 VOLUME = {"ml": 1, "l": 1000, "cl": 10, "dl": 100, "cup": 240, "tbsp": 15, "tsp": 5,
-          "spoon": 15, "fl_oz": 29.57, "pint": 473, "quart": 946}
+          "spoon": 15, "fl_oz": 29.57, "pint": 473, "quart": 946,
+          "rice_cup": 180}        # a rice cooker's cup
 COUNTED = {"", "piece", "clove"} # "2 eggs", "1 piece ginger", "2 cloves garlic" (garlic is counted in cloves)
 PACKED = {"packet", "can", "jar", "stick"}   # weighed by the size the line gives: "1 (16 ounce) package tofu"
 TOO_SMALL = {"pinch"}           # a pinch counts for nothing in an estimate
@@ -126,6 +127,12 @@ def _fmt(x):
     return str(int(x)) if float(x).is_integer() else f"{x:g}"
 
 
+def _word(unit, n=1):
+    """A unit key as a shopper reads it: rice_cup → rice cup(s), fl_oz → fl oz."""
+    w = {"rice_cup": "rice cup", "fl_oz": "fl oz"}.get(unit, unit)
+    return w + "s" if w == "rice cup" and n and n > 1 else w
+
+
 def _show(lo, hi, dim):
     """A total in the unit a shopper reads: g or kg, ml or L, items."""
     unit, div = {"mass": ("g", 1), "volume": ("ml", 1), "count": ("", 1)}[dim]
@@ -175,7 +182,7 @@ def shop(lines, factor=1.0, lang="en"):
             if only and d != "count" and not (only in ("g", "ml") and lo >= 1000):
                 # all in one unit: say it the way the recipe does (but 1500 g reads as 1.5 kg)
                 k = MASS.get(only, VOLUME.get(only, 1))
-                amounts.append((_fmt(lo / k) + ("–" + _fmt(hi / k) if hi != lo else "") + " " + only).strip())
+                amounts.append((_fmt(lo / k) + ("–" + _fmt(hi / k) if hi != lo else "") + " " + _word(only, hi / k)).strip())
             elif d == "volume" and e.get("unit") != "ml" and (e.get("convert") or {}).get("cup_g"):
                 # cups and spoons mixed, of something sold by weight: say it in grams
                 k = e["convert"]["cup_g"] / 240
