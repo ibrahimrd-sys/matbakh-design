@@ -2307,6 +2307,18 @@ and edits nothing.*
   still shown beneath it as published.
 - **The list is free.** Cost on it stays premium (§40).
 
+## Addendum — 21 Oct 2026: the language of a combined list
+
+- **DECIDED (Ibrahim, 21 October).** A list holding several recipes and imports
+  uses **the app's language setting for every line**: each item's name from the
+  reference's bilingual `name`, unit words in that language and agreeing with
+  their number (*2 كوبان*, *3 أكواب*, *11 كوبًا*, *2 cups*), and a Matbakh
+  recipe's title in that language. **An imported line with no match in the
+  reference stays in its original wording and is marked as unmatched.** The
+  source line shown under an item is the source's own words.
+- This is the list only. A single import's own page keeps the recipe's language
+  (step 6, 21 October), and whether imports are translated stays open (§44.3).
+
 ---
 
 ## Decision log
@@ -2390,3 +2402,4 @@ and edits nothing.*
 | 19 Oct 2026 | **`white_beans_pods` renamed `white_beans_dry`** — it held dried beans, not pods; §46's `_dry` ending | 46 |
 | 20 Oct 2026 | **Stock is used in ml and bought in cubes:** `chicken_stock`, `beef_stock`, `vegetable_stock` in `ml` with prepared-broth nutrition; `makes: { per: cube, ml: 500 }` rounds the shopping list up to whole cubes; never grams of powder | 47, 6 |
 | 21 Oct 2026 | **The app's shopping list:** one list of contributions (a recipe or an import each), worked out when shown, the cook's edits apart, stored on the phone; four groups with **staples on the list, unticked** (new field `staple`); **aisle order** (new field `aisle`); the list alone rounds to packs, every unit; imports' displayed amounts take the §6.3 ladder; the list is free | 48, 6, 16, 44 |
+| 21 Oct 2026 | **A combined list speaks the app's language:** every item's name from the reference's bilingual names, unit words in that language and agreeing with their number; an imported line with no match keeps its original wording, marked as unmatched. A single import's page keeps the recipe's language | 48, 44 |

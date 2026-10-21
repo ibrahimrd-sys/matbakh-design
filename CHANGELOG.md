@@ -5,6 +5,16 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-21l — a combined list speaks the app's language
+
+Decided by Ibrahim, filed as a **`philosophy.md` §48 addendum**: every line of a combined
+list in the app's language — names from the reference's bilingual names, unit words
+agreeing with their number, a Matbakh recipe's title in that language — and an imported
+line with no match kept in its own words, marked *not matched* / *غير مطابق*. A single
+import's page keeps the recipe's language. In the app (`3f8286f`): titles kept per
+language, the screen's words, headings and reading direction follow the list's language,
+taken from the app's locale; a list saved before still opens. 17 app tests pass.
+
 ## 2026-10-21k — unit words agree with their number, in Python and the app
 
 Ibrahim's go: **`recipe_core/basket.py`** and the app's `lib/shopping/units.dart` together.

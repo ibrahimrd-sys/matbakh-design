@@ -498,7 +498,9 @@ On the 2,839 saved step 3 lines, 10 matches change, each now right (*Cloves (gro
 step keeps its words and drops the address.
 
 **Shown as the mock-up shows it** (step 6's five fixes, 21 October,
-`04-research/step6-review-2026-10-21.md`): **in the recipe's language** — an Arabic
+`04-research/step6-review-2026-10-21.md`): **in the recipe's language** (a single
+import's page; the app's combined list uses the app's language, `philosophy.md` §48
+addendum) — an Arabic
 recipe gets the badge *وصفة مستوردة — لم يختبرها مطبخ*, Arabic headings and Arabic units
 (كوب، م.ك، م.ص، جم، مكعب); **the list in three groups** — recognised, recognised with
 no amount, not recognised (*غير مصنف*) — **staples** (the reference's `staple`:

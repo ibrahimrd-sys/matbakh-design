@@ -55,7 +55,9 @@ contribution.
    A range stays a range; *a pinch* and *as needed* have no amount.
 7. **Three groups, staples apart and unticked, the source line under every item**
    (step 6 fix 2, accepted 21 October).
-8. **Unit words in the recipe's language** (step 6 fix 3).
+8. **Unit words in the recipe's language** (step 6 fix 3). *(For a combined list,
+   decided 21 October: the app's language for every line; an unmatched import line
+   keeps its own words, marked — `philosophy.md` §48 addendum.)*
 9. **A substitute changes the list for that session only** (§43.4).
 10. **On the device only** until the permit (R-16, proposed): the list stays on
     the phone, with no account and no sync.
