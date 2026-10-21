@@ -68,11 +68,22 @@ def given(p):
     return dict(id=p["id"] or None, text=p["line"], q=q, qMax=q_max, unit=unit)
 
 
+def est(lines, factor, servings, ref):
+    """basket.estimate() and rounded(), as JSON: what the app's estimate must give."""
+    e = basket.estimate(lines, factor, servings, ref)
+    return dict(factor=factor, servings=servings, total=e["total"], per_serving=e["per_serving"],
+                counted=e["counted"], of=e["of"], not_counted=[list(x) for x in e["not_counted"]],
+                ranges_at_middle=e["ranges_at_middle"], alternatives=[list(x) for x in e["alternatives"]],
+                confidence=e["confidence"], shown_total=basket.rounded(e["total"]),
+                shown_per_serving=basket.rounded(e["per_serving"]) if e["per_serving"] else None)
+
+
 def case(name, raw, lang, m, ref):
     lines = basket.read(raw, m, ref, parse)
     shop = basket.shop(lines, 1.0, lang)
     ids = sorted({p["id"] for p in lines if p["id"]})
     return dict(name=name, lang=lang, lines=[given(p) for p in lines],
+                estimates=[est(lines, 1.0, 4, ref), est(lines, 2.0, 8, ref)],
                 entries={i: entry(ref[i]) for i in ids},
                 expect=dict(items=[{k: it.get(k) for k in ("id", "name", "amount", "lines", "buy", "staple",
                                                           "aisle", "unclear", "purchase")}

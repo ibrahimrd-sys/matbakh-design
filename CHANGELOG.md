@@ -5,6 +5,20 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-21o — the estimate in the app
+
+Import step 7. In the app (`cf26c93`), **`lib/import/estimate.dart`**: `basket.estimate()`,
+`_grams()` and `rounded()` in Dart — calories, protein, carbohydrate and fat for the recipe
+and per serving, every line it could not count listed with why, a range at its middle and
+said so, the alternative a line names counted when the first has no nutrition, the 1–3
+confidence, and the shown figures (calories to 10, or 25 above 500). `read()` gains the
+alternatives rule. **`export-for-app.py`** writes Python's estimate into every page case,
+as given and scaled ×2 (4 and 8 servings): 6 on the sample, 430 on the vault's pages.
+**Identical to Python on all, to the last bit**; a deliberate break fails them. The
+sample gains a 13th ingredient, mirin, with no nutrition, so a fresh copy tests the
+alternatives too. App 24 of 24. Not yet shown on a screen: that comes with the import
+screen.
+
 ## 2026-10-21n — the parser and matcher in the app
 
 Import step 7, the next part. In the app (`bcf9e4d`), **`lib/import/`**: `lines.py`,

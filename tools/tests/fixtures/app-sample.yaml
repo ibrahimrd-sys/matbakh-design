@@ -1,6 +1,6 @@
 # APP SAMPLE — MADE UP. Not catalogue, not the vault's reference.
 #
-# Committed into the Flutter app (by export-for-app.py --sample) so a fresh copy
+# 13 ingredients. Committed into the Flutter app (by export-for-app.py --sample) so a fresh copy
 # builds and its tests run without the vault. Every name is a real ingredient, but
 # the pack sizes, weights and nutrition here are round invented numbers, and the
 # recipes are invented for the tests. Do not cite them.
@@ -147,6 +147,17 @@ reference:
     staple: true
     nutrition: { kcal: 0, protein: 0, carb: 0, fat: 0, fiber: 0 }
 
+  mirin:
+    # no nutrition on purpose: the estimate counts the alternative a line names
+    glyph: jar
+    name: { en: Mirin, ar: ميرين }
+    aliases: []
+    diet: []
+    unit: ml
+    cls: continuous
+    buy: { en: bottle, ar: زجاجة }
+    aisle: jars_tins
+
 # Invented recipes, in the shape export-for-app.py writes a catalogue recipe:
 # their shopping items at the base servings.
 recipes:
@@ -185,7 +196,8 @@ imports:
   - name: sample import (en)
     lang: en
     lines: ["2 cups red lentils", "1 large onion, diced", "4 cloves garlic", "2-3 cups chicken broth",
-            "1 tbsp olive oil", "salt to taste", "1 cup frobnicated zizzle", "11 cups water"]
+            "1 tbsp olive oil", "salt to taste", "1 cup frobnicated zizzle", "11 cups water",
+            "1 tbsp mirin, or lemon juice", "1 pinch salt"]
   - name: sample import (ar)
     lang: ar
     lines: ["2 كوب أرز", "3 حبات طماطم", "بصلة", "ملعقة زيت زيتون", "ملح حسب الرغبة", "رشة كمون"]
