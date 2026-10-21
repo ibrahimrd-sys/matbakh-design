@@ -475,7 +475,8 @@ estimate undercounts it rather than guessing. On the list, cups and spoons mixed
 something sold by weight are given in grams (sugar 1 cup + 1 tbsp = 212 g); *tiny*
 joins the size words (*1 tiny pinch salt*). A **rice cup** (a rice cooker's cup,
 180 ml) is a unit — Made With Lau measures in it, and without it *1.9 rice cup water*
-went on the list as rice.
+went on the list as rice. A **stalk** of something counted by the piece is one piece
+(*2 stalks scallions*, *عود كرفس*), unless the line gives the stick a size.
 
 **Egyptian amounts** (21 October, after the first run on a real Egyptian page, which
 counted 6 of 14 lines and then 14 of 14): the parser reads **معلقة / معلقه / معالق**
@@ -517,7 +518,7 @@ contradiction. **B** waits for a chef's thresholds; **C** for a larger catalogue
 
 ## Testing the import prototype and the pre-filter
 
-    python3 tools/tests/run-tests.py            # 36 cases, offline
+    python3 tools/tests/run-tests.py            # 37 cases, offline
     python3 tools/tests/run-tests.py --online   # + a missing page and a page with no recipe
 
 The pages in `tests/fixtures/` are **made up for the tests** — no one's recipe text,
@@ -525,7 +526,7 @@ so they live in this public repository. They match against the vault's reference
 so the cases test behaviour (an unknown line kept, a range kept, a pinch not
 counted, Arabic-Indic digits read, a page with no data refused, F, G and H on a
 made-up draft) rather than exact figures, and a growing reference does not break
-them, including an Egyptian page's ways of writing amounts. 38 of 38 pass on
+them, including an Egyptian page's ways of writing amounts. 39 of 39 pass on
 21 October 2026, with `--online`.
 
 ## What these do not do

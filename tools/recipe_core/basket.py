@@ -53,6 +53,7 @@ def read(raw_lines, matcher, ref, parse):
         if e:
             _one_by_singular(p, e)
             _cube_to_ml(p, e)
+            _stalk_is_one(p, e)
         out.append(p)
     return out
 
@@ -96,6 +97,13 @@ def _one_by_singular(p, e):
     ending — قرفة (cinnamon) is not one of anything, and it has no weight per item."""
     if p["q"] is None and not p["unit"] and p["kind"] == "no_quantity" and             (e.get("unit") == "count" or (e.get("convert") or {}).get("piece_g")) and _AR_UNITY.match(p["name"]):
         p.update(q=1.0, qty="1", kind="count", implied=True)
+
+
+def _stalk_is_one(p, e):
+    """'2 stalks scallions', '2 sticks celery': a stalk of something counted by the piece
+    is one piece. A stick with a stated size ('1 (4 oz) stick butter') keeps its size."""
+    if p["unit"] == "stick" and (e.get("convert") or {}).get("piece_g") and not _pack_size(p):
+        p["unit"] = ""
 
 
 def _cube_to_ml(p, e):

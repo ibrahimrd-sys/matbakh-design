@@ -118,6 +118,9 @@ def main():
          and any(it["id"] == "jasmine_rice" and it["amount"] == "2 rice cups" for it in shop_s["items"]),
          [(l["line"], l["id"], l["unit"]) for l in lines_s if "rice cup" in l["line"]])
 
+    case("EN: a stalk of something counted by the piece is one — 2 stalks scallions = 2",
+         any(l["line"] == "2 stalks scallions (chopped)" and l["id"] == "spring_onion" and l["unit"] == "" and l["q"] == 2 for l in lines_s))
+
     # ── French ──
     rec, lines, shop, est = imported("fr-full.html")
     case("FR: a list comes back; nothing is dropped",

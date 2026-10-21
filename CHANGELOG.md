@@ -5,6 +5,14 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-21f — a stalk is one
+
+Rasa Malaysia's claypot chicken rice: *2 stalks scallions* was listed as *2 stick* and
+not weighed. **`basket.py`** counts a stalk or stick as one piece when the entry has a
+weight per piece and the line gives no size; every saved stalk line (scallions,
+celery, cinnamon sticks, عود كرفس) now reads right. The recipe counts 19 of 20. One
+case added (39 of 39).
+
 ## 2026-10-21e — the rice cooker's cup
 
 Ibrahim's run on Made With Lau's egg fried rice listed *1.9 rice cup water* as rice:
