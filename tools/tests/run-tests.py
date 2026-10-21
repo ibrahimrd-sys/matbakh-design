@@ -42,6 +42,40 @@ def imported(fixture, servings=None):
     return rec, lines, basket.shop(lines, factor, lang), basket.estimate(lines, factor, servings or base)
 
 
+def catalogue_lists():
+    """Build the repo's fixture recipe with a sub-recipe and a repeated ingredient
+    added, and read three amounts off its shopping list."""
+    import copy, importlib.util, os, tempfile
+    content = HERE.parent.parent / "content"
+    cwd = os.getcwd()
+    os.chdir(content)
+    try:
+        spec = importlib.util.spec_from_file_location("matbakh", content / "matbakh.py")
+        mb = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mb)
+        base = mb.load("recipes/molokhia_bil_farakh.yaml")
+        sub = dict(id="test_sauce", servings={"base": 1},
+                   steps=[{"station": base["steps"][0]["station"],
+                           "tiles": [{"do": "chop", "item": "tomato", "amt": 400}]}])
+        sub["yield"] = {"amount": 400, "unit": "ml"}
+        mb.all_recipes = lambda: {"test_sauce": sub}
+        rec = copy.deepcopy(base)
+        rec["uses"] = [{"id": "test_sauce", "amt": 200}]
+        rec["steps"][0]["tiles"].append({"do": "chop", "item": "onion", "amt": 1})
+        out = {}
+        with tempfile.TemporaryDirectory() as d:
+            f = pathlib.Path(d) / "parent.yaml"
+            f.write_text(yaml.safe_dump(rec, allow_unicode=True), encoding="utf-8")
+            for n in (4, 8):
+                items = {i["id"]: i for i in mb.build(str(f), "en", n)["items"]}
+                out[f"sub{n}"] = items["tomato"]["amount"]
+                if n == 4:
+                    out["onion"] = items["onion"]["amount"]
+        return out
+    finally:
+        os.chdir(cwd)
+
+
 def main():
     for s in (sys.stdout, sys.stderr):
         s.reconfigure(encoding="utf-8", errors="replace")
@@ -168,6 +202,14 @@ def main():
          any("butter" in x.lower() and "more" in x for x in f["H"]), f["H"])
     case("Pre-filter H: '10 minutes' is not read as a quantity of flour",
          not any("flour" in x.lower() for x in f["H"]), f["H"])
+
+    # ── the catalogue's list: matbakh.py build (philosophy §48) ──
+    built = catalogue_lists()
+    case("Catalogue: a sub-recipe's share is scaled once — 200 of 400 ml at 8 servings buys 400 g tomato",
+         built["sub8"] == 400, built["sub8"])
+    case("Catalogue: the same share at the base servings buys 200 g", built["sub4"] == 200, built["sub4"])
+    case("Catalogue: an ingredient used twice, not carried, is bought twice — 2 + 1 onions",
+         built["onion"] == 3, built["onion"])
 
     # ── online: a missing page and a redirect ──
     if "--online" in sys.argv:

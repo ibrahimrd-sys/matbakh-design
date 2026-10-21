@@ -2,7 +2,7 @@
 
 **Status:** Living document. Sections marked SETTLED are decided and should not be relitigated without a stated reason. Sections marked OPEN are unresolved.
 
-**Last updated:** 2026-10-20
+**Last updated:** 2026-10-21
 
 ---
 
@@ -2276,6 +2276,37 @@ and edits nothing.*
   keeps the field. A recipe line already in cubes (*1 chicken bouillon cube*) is
   for the importer to turn into millilitres at the same rate.
 
+## 48. The app's shopping list — SETTLED (21 October 2026)
+
+- **DECIDED (Ibrahim, 21 October), all six points of
+  `design/shopping-list-design.md` as proposed.** Import step 7 needs a
+  shopping list on the phone that both Matbakh's recipes and imports feed.
+- **One list, built from contributions.** Each recipe or import added is one
+  contribution: its lines, already scaled by its own rules (§6 for a Matbakh
+  recipe, linear for an import), with its servings. The list is their sum,
+  worked out each time it is shown; the cook's own edits are kept apart, so a
+  recipe can be taken off whole and merging with the cook's list is one more
+  contribution. Items keep the reference id and the exact amount beside the
+  purchase. **Stored on the phone, one JSON file, no account and no sync**
+  (R-16).
+- **Staples are on the list, unticked,** in their own group after *To buy*,
+  *Amount unclear* and *غير مصنف* — never left off. Which entries are staples
+  is a new reference field, `staple: true`: salt, black pepper, water, ice, the
+  cooking oils, sugar and flour. Onion and garlic are bought like anything else;
+  §16.1's wider set stays for discovery, where assuming them present is
+  harmless.
+- **Aisle order.** A new reference field, `aisle`, from a fixed set — produce,
+  butcher, chiller, freezer, bakery, dry goods, jars and tins, spices, drinks —
+  filled from the `buy` hints and reviewed in the ingredient editor. Within each
+  group the list runs in aisle order (MB-01). *(One row added to §11's field
+  table would be an insertion, so `staple` and `aisle` are recorded here, as
+  `makes` was in §47.)*
+- **The list alone rounds to packs,** for every unit: whole packs from `pack`,
+  whole units from `makes` (§47), a range bought for its top. **Displayed amounts
+  take §6.3's ladder for imports too** (*237 g* reads *240 g*), the source line
+  still shown beneath it as published.
+- **The list is free.** Cost on it stays premium (§40).
+
 ---
 
 ## Decision log
@@ -2358,3 +2389,4 @@ and edits nothing.*
 | 19 Oct 2026 | **`ginger` merged into `ginger_fresh`**, its names kept as aliases — §46's one-entry-per-form rule | 46 |
 | 19 Oct 2026 | **`white_beans_pods` renamed `white_beans_dry`** — it held dried beans, not pods; §46's `_dry` ending | 46 |
 | 20 Oct 2026 | **Stock is used in ml and bought in cubes:** `chicken_stock`, `beef_stock`, `vegetable_stock` in `ml` with prepared-broth nutrition; `makes: { per: cube, ml: 500 }` rounds the shopping list up to whole cubes; never grams of powder | 47, 6 |
+| 21 Oct 2026 | **The app's shopping list:** one list of contributions (a recipe or an import each), worked out when shown, the cook's edits apart, stored on the phone; four groups with **staples on the list, unticked** (new field `staple`); **aisle order** (new field `aisle`); the list alone rounds to packs, every unit; imports' displayed amounts take the §6.3 ladder; the list is free | 48, 6, 16, 44 |

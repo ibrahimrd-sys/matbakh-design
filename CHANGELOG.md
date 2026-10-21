@@ -5,6 +5,20 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-21h — the app's shopping list, decided; two list faults fixed
+
+Import step 7 opens with the phone's own shopping list. **`design/shopping-list-design.md`**,
+approved by Ibrahim with all six decisions as proposed, is filed as **`philosophy.md`
+§48**: one list of contributions (a recipe or an import each), worked out when shown,
+stored on the phone; four groups with staples on the list, unticked (a new reference
+field, `staple`); aisle order (a new field, `aisle`); the list alone rounds to packs, for
+every unit; imports' displayed amounts take §6.3's ladder; the list is free.
+**`content/matbakh.py build`**: a sub-recipe's share was scaled by the servings twice (at
+8 servings of a 4-serving recipe, its ingredients bought four times over), and an
+ingredient used twice without `carried` kept only its first amount; both fixed, the
+three authored recipes' builds unchanged in both languages at 2, 4 and 8 servings.
+Three cases added to `tools/tests/run-tests.py`, failing on the old code (48 of 48).
+
 ## 2026-10-21g — step 6: the import shown as the mock-up shows it
 
 Step 6 (vault `04-research/step6-review-2026-10-21.md`), accepted by Ibrahim with

@@ -4,9 +4,9 @@
 `02-strategy/import-test-plan-2026-10-12.md` §4): "it depends on the app's own
 shopping list, which import shares with the catalogue's recipes."*
 
-> **Proposed — not approved.** Nothing here is built. The rules already decided
-> are cited to where they were decided; everything else is marked *proposed*, and
-> §9 lists the decisions this needs from Ibrahim.
+> **Approved by Ibrahim, 21 October 2026, all six decisions in §9 as proposed**
+> (`philosophy.md` §48). The rules already decided are cited to where they were
+> decided; the text below is kept as it was proposed.
 
 **Last updated:** 2026-10-21
 

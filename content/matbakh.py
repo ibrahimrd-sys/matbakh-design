@@ -424,19 +424,16 @@ def build_items(rec, factor=1.0, scale_fixed=False):
     quantities happens once, after everything is summed — snapping twice would
     round a half-batch up and then up again.
     """
-    seen, out = {}, []
+    out = {}
     for step in rec.get("steps") or []:
         for tile in tiles_of(step):
             for it in items_of(tile):
                 iid = it.get("id", "")
                 if not iid or iid.startswith("@") or it.get("carried") or "amt" not in it:
                     continue
-                if iid in seen:
-                    continue
                 ref = ING.get(iid)
                 if not ref:
                     continue
-                seen[iid] = True
                 cls = it.get("cls") or tile.get("cls") or ref.get("cls") or "continuous"
                 # `fixed` means "does not scale with servings" — water for
                 # boiling stays the same for two people or eight. But taking a
@@ -444,14 +441,19 @@ def build_items(rec, factor=1.0, scale_fixed=False):
                 # sauce genuinely contains 37.5% of its water. So a roll-up
                 # share applies to everything, including fixed.
                 amount = it["amt"] * (factor if scale_fixed else eff(cls, factor))
-                out.append(dict(id=iid, item=dict(
+                # Used twice and not carried, it is bought twice: the two add up
+                # (philosophy §48), as the validator's warning says they will.
+                if iid in out:
+                    out[iid]["raw"] += amount
+                    continue
+                out[iid] = dict(id=iid, item=dict(
                     id=iid, name=ref.get("name", {}), glyph=ref.get("glyph"),
                     unit=ref.get("unit"), cls=cls,
                     divisible=bool(ref.get("divisible")),
                     buy=ref.get("buy", {}), pack=ref.get("pack"),
                     makes=ref.get("makes")),
-                    raw=amount))
-    return out
+                    raw=amount)
+    return list(out.values())
 
 
 def eff(cls, factor):
@@ -587,7 +589,14 @@ def build(path, loc, servings=None):
             for r0, i0 in zip(raw, its):
                 if i0.get("intermediate") or r0.get("carried") or "amt" not in r0:
                     continue
-                purchases.setdefault(i0["id"], dict(item=i0, amt=r0["amt"]))
+                # Scaled here, once, by the item's own class: a sub-recipe's
+                # share below is scaled already, and the two are summed as they
+                # are, never multiplied by the factor again.
+                amt = r0["amt"] * eff(i0["cls"], factor)
+                if i0["id"] in purchases:
+                    purchases[i0["id"]]["amt"] += amt
+                else:
+                    purchases[i0["id"]] = dict(item=i0, amt=amt)
 
         page = dict(station=name, ordered=bool(step.get("ordered")),
                     heat=step.get("heat"), photo=step.get("photo"), tiles=tiles)
@@ -629,7 +638,7 @@ def build(path, loc, servings=None):
     items = []
     for iid, p in purchases.items():
         i0 = p["item"]
-        v = p["amt"] * eff(i0["cls"], factor)
+        v = p["amt"]
         item = dict(id=iid, name=i0["name"],
                     amount=snap(v, i0["unit"], i0.get("divisible")),
                     unit=i0["unit"], cls=i0["cls"], buy=i0["buy"],
