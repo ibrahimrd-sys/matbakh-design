@@ -17,7 +17,7 @@ lexicon/. Adding a language means translating the lexicon once, plus the prose
 fields of each recipe — never the vocabulary again.
 """
 
-import sys, os, glob, math, json, pathlib
+import sys, os, glob, math, json, pathlib, re
 import yaml
 
 ROOT = pathlib.Path(__file__).parent
@@ -809,6 +809,56 @@ def list_field_problems():
     return errors
 
 
+UNIT_SYSTEMS = {"metric": {"g", "ml"}, "kitchen": {"cup", "tbsp", "tsp", "piece"},
+                "imperial": {"oz", "lb", "fl_oz"}}
+KITCHEN_TSP = {"tsp": 1, "tbsp": 3, "cup": 48}
+
+
+def units_problems():
+    """Check `units` (added 21 Oct 2026, philosophy §30 addendum): one authored
+    equivalence — metric, kitchen, imperial — per ingredient. Liquids use the stated
+    rule (a cup is 240 ml), so an entry in ml carries none; and while an entry still has
+    `convert`, the two must agree."""
+    errors = []
+    for iid, v in ING.items():
+        u = v.get("units")
+        if u is None:
+            continue
+        if not isinstance(u, dict) or not u:
+            errors.append(f"'{iid}': units must be {{ metric: 190 g, kitchen: 1 cup, imperial: 6.7 oz }}")
+            continue
+        if v.get("unit") == "ml":
+            errors.append(f"'{iid}': measured in ml — liquids follow the stated rule (a cup is 240 ml); no units")
+            continue
+        got = {}
+        for system, val in u.items():
+            m = re.match(r"^\s*(\d+(?:\.\d+)?)\s*([a-z_]+)\s*$", str(val))
+            if system not in UNIT_SYSTEMS:
+                errors.append(f"'{iid}': units has '{system}' — only metric, kitchen, imperial")
+            elif not m or float(m.group(1)) <= 0:
+                errors.append(f"'{iid}': units {system} '{val}' is not an amount and a unit")
+            elif m.group(2) not in UNIT_SYSTEMS[system]:
+                errors.append(f"'{iid}': units {system} in '{m.group(2)}' — "
+                              f"{system} is one of {', '.join(sorted(UNIT_SYSTEMS[system]))}")
+            else:
+                got[system] = (float(m.group(1)), m.group(2))
+        if "metric" in got and got["metric"][1] != "g":
+            errors.append(f"'{iid}': units metric must be in g for an entry in {v.get('unit')}")
+        if "metric" not in got or "kitchen" not in got:
+            continue
+        (mq, _), (kq, ku) = got["metric"], got["kitchen"]
+        conv = v.get("convert") or {}
+        if ku == "piece" and conv.get("piece_g") and abs(mq / kq - conv["piece_g"]) > conv["piece_g"] * 0.02:
+            errors.append(f"'{iid}': units say {mq / kq:g} g a piece, convert says {conv['piece_g']} — "
+                          f"one record, not two that disagree; retire convert")
+        if ku in KITCHEN_TSP and conv.get("cup_g"):
+            cup = mq / (kq * KITCHEN_TSP[ku]) * 48
+            if abs(cup - conv["cup_g"]) > conv["cup_g"] * 0.02:
+                errors.append(f"'{iid}': units say {cup:g} g a cup, convert says {conv['cup_g']} — "
+                              f"one record, not two that disagree; retire convert")
+    return errors
+
+
 def status_block():
     import datetime
     f = _status_facts()
@@ -1021,9 +1071,9 @@ def main():
             parts.append(f"{stubs} stub(s)")
         parts += [f"{bad} failing", f"{warn} warning(s)"]
         a_err, a_warn = alias_problems()
-        a_err += makes_problems() + list_field_problems()
+        a_err += makes_problems() + list_field_problems() + units_problems()
         if a_err or a_warn:
-            print("\ningredient reference — aliases, makes, aisle and staple")
+            print("\ningredient reference — aliases, makes, aisle, staple, units")
             for e in a_err:
                 print(f"  error    {e}")
             for w in a_warn:

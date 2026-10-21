@@ -124,7 +124,7 @@ def as_text(r):
         out += ["", L["no_steps"]]
 
     def item(it):
-        line = f"  {it['name']} — {it['amount']}"
+        line = f"  {it['name']} — {it.get('pair') or it['amount']}"   # metric and kitchen where the entry's units allow (§30)
         if it.get("purchase"):
             line += f"  → {L['buy']} {it['purchase']}"
         return [line] + [f"      ↳ {l}" for l in it["lines"]]

@@ -5,6 +5,25 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-21t — units: one authored equivalence, metric and kitchen shown
+
+Ibrahim's decisions (option 2a, then all six points of `design/units-design.md`), filed as a
+**`philosophy.md` §30 addendum**: §30 kept — three values authored per ingredient, none
+taken from a generic table. **A new ingredient field, `units`** — `{ metric: 190 g,
+kitchen: 1 cup, imperial: 6.7 oz }`, kitchen including *piece* — scaled for a line's
+amount; liquids by one stated rule (a cup is 240 ml); `convert` retired into it entry by
+entry. **`content/matbakh.py check`** refuses a malformed value, a unit in the wrong
+system, `units` on an entry in ml, and a disagreement with the entry's `convert` (and now
+imports `re`). **`ingredient-editor.html`**: a *Units* group, checked, kept on save (555
+entries round-trip). **`recipe_core/basket.py`**: each list item gains `pair` — *480 ml · 2
+cups*, *440 g · 2.25 cups*, *370 g · 3.5 pieces* — when every part of it can be said through
+the entry's own equivalence, else none; the estimate weighs by `units` before `convert`.
+**`import-recipe.py`** prints the pair. **The app** (`lib/shopping/units_pair.dart`): the
+same, shown on the shopping list and the import check sheet, identical to Python on every
+parity case. No entry has `units` yet, so only liquids show a pair today; **the vault's
+`04-research/units-review-2026-10-21.xlsx`** asks Ibrahim for the 150 most-used entries.
+Six Python cases added (65 of 65); the app 59 of 59.
+
 ## 2026-10-21s — share to Matbakh, Android and the app side
 
 Import step 7. In the app (`7ce5c42`): **Android** — the manifest takes plain text shared

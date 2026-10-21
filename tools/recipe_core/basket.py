@@ -56,6 +56,86 @@ PHRASES = {
 _OR = re.compile(r"\b(?:or)\b|أو|(?<![ء-ي])او(?![ء-ي])", re.I)
 
 
+# ── units: one authored equivalence per ingredient (philosophy §30, addendum 21 Oct) ──
+# `units: { metric: 190 g, kitchen: 1 cup, imperial: 6.7 oz }` — entered by a person,
+# scaled for a line's amount, never taken from a generic table. Liquids (an entry in ml)
+# follow one stated rule instead: a Matbakh cup is 240 ml, a tablespoon 15, a teaspoon 5.
+KITCHEN_TSP = {"tsp": 1, "tbsp": 3, "cup": 48}          # spoons are cup/16 and cup/48 (§11)
+_UNITS_VALUE = re.compile(r"^\s*(\d+(?:\.\d+)?)\s*([a-z_]+)\s*$")
+
+
+def units_of(e):
+    """The entry's equivalence as {system: (amount, unit)}, or {} — for an ml entry, the
+    stated rule for liquids."""
+    if not e:
+        return {}
+    if e.get("unit") == "ml" and not e.get("units"):
+        return {"metric": (240.0, "ml"), "kitchen": (1.0, "cup")}
+    out = {}
+    for system, v in (e.get("units") or {}).items():
+        m = _UNITS_VALUE.match(str(v))
+        if m:
+            out[system] = (float(m.group(1)), m.group(2))
+    return out
+
+
+def metric_per(e, unit):
+    """Metric (g or ml) in one `unit` of this entry, from its authored equivalence —
+    or None. Kitchen volume units relate to each other as tsp : tbsp : cup = 1 : 3 : 48."""
+    u = units_of(e)
+    if "metric" not in u or "kitchen" not in u:
+        return None
+    (m, _), (k, ku) = u["metric"], u["kitchen"]
+    if not k:
+        return None
+    if ku == "piece":
+        return m / k if unit in COUNTED else None
+    if ku in KITCHEN_TSP and unit in VOLUME:
+        return m / (k * KITCHEN_TSP[ku] * 5) * VOLUME[unit]   # through the teaspoon, 5 ml
+    return None
+
+
+def _pair(e, sums, lang):
+    """'370 g · 2 cups': the item in metric and kitchen measure, from the entry's own
+    equivalence; None when any part of it cannot be expressed so."""
+    u = units_of(e)
+    if "metric" not in u or "kitchen" not in u or not sums:
+        return None
+    mu = u["metric"][1]
+    lo = hi = 0.0
+    for d, (a, b) in sums.items():
+        if d == "mass" and mu == "g" or d == "volume" and mu == "ml":
+            k = 1.0
+        elif d == "volume":
+            k = metric_per(e, "ml")
+        elif d == "count":
+            k = metric_per(e, "")
+        else:
+            k = None
+        if k is None:
+            return None
+        lo, hi = lo + a * k, hi + b * k
+    metric = _show(lo, hi, "mass" if mu == "g" else "volume", lang)
+    (m, _), (k, ku) = u["metric"], u["kitchen"]
+    if ku == "piece":
+        per = m / k
+        step = 0.5 if e.get("divisible") else 1.0
+        ends = [lo / per] + ([hi / per] if hi != lo else [])
+        shown = [max(step, round(x / step) * step) for x in ends]
+        unit = "piece"
+    else:
+        per_tsp = m / (k * KITCHEN_TSP[ku])                  # metric in one teaspoon
+        top = hi / per_tsp
+        unit = "cup" if top >= 12 else "tbsp" if top >= 3 else "tsp"
+        size = KITCHEN_TSP[unit] * per_tsp
+        step = {"cup": 0.25, "tbsp": 0.5, "tsp": 0.25}[unit]
+        ends = [lo / size] + ([hi / size] if hi != lo else [])
+        shown = [max(step, round(x / step) * step) for x in ends]
+    approx = "≈" if any(_off(x, y) for x, y in zip(ends, shown)) else ""
+    kitchen = (approx + "–".join(_fmt(y) for y in shown) + " " + _word(unit, round(shown[-1], 2), lang)).strip()
+    return metric + " · " + kitchen
+
+
 def _f(x):
     try:
         return float(x) if x not in (None, "") else None
@@ -319,7 +399,9 @@ def shop(lines, factor=1.0, lang="en"):
             else:
                 amounts.append(_show(lo, hi, d, lang))
         ph = PHRASES.get(lang, PHRASES["en"])
+        pair = _pair(e, sums, lang)
         item = dict(id=iid, name=name, amount=" + ".join(amounts + extras),
+                    pair=" + ".join([pair] + extras) if pair else None,
                     lines=[p["line"] for p in ps], buy=((e.get("buy") or {}).get(lang) or ""),
                     staple=e.get("staple") is True, aisle=e.get("aisle"),
                     unclear=not amounts)        # recognised, but the source gives no amount
@@ -350,16 +432,21 @@ def _grams(p, e):
     size = _pack_size(p)
     if size:
         q, unit = q * size[0], size[1]
+    authored = metric_per(e, unit)                    # the entry's own units first (§30)
     if unit in MASS:
         return q * MASS[unit], None
     if unit in VOLUME:
         ml = q * VOLUME[unit]
         if e.get("unit") == "ml":
             return ml, None
+        if authored is not None:
+            return q * authored, None
         if conv.get("cup_g"):
             return ml * conv["cup_g"] / 240, None
         return None, "no weight per cup for this ingredient"
     if unit in COUNTED:
+        if authored is not None:
+            return q * authored, None
         if conv.get("piece_g"):
             return q * conv["piece_g"], None
         return None, "no weight per item for this ingredient"

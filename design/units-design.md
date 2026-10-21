@@ -5,10 +5,8 @@ and kitchen units together. He chose (option "2a") to keep `philosophy.md` §30 
 written — three unit values authored per ingredient, no computed conversion — and to
 show the pair on the shopping list and the import check sheet only.*
 
-> **Proposed — not approved.** §30 settled the rule on 20 September and left four
-> points open: field names and storage, the default pair, blanks, and authoring cost.
-> Ibrahim's choice settles the default pair. The rest is proposed here, and §7 lists
-> the decisions it needs.
+> **Approved by Ibrahim, 21 October 2026, all six decisions in §7 as proposed**
+> (`philosophy.md`, addendum to §30 of 21 Oct). The text below is kept as proposed.
 
 **Last updated:** 2026-10-21
 

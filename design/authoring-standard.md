@@ -4,7 +4,7 @@
 **Written:** 15 August 2026. Verified against `content/matbakh.py`, `_template.yaml`,
 `lexicon/activities.yaml` (81 activities), `lexicon/chrome.yaml` and
 `ref/ingredients.yaml` (177 entries) as they stand today.
-**Last updated:** 2026-10-21 — Appendix C: `aisle` and `staple`, where the shopping list puts an entry (`philosophy.md` §48). 2026-10-20: Appendix C: `makes`, what one bought unit makes (`philosophy.md` §47). 2026-10-13: Appendix C: the ingredient record gains `aliases` (`philosophy.md` §45), and a leading `=` marks a whole-name-only alias. Earlier, 2026-09-30: `philosophy.md` §33–§42 folded in: page grouping,
+**Last updated:** 2026-10-21 — Appendix C: `units`, one authored equivalence (`philosophy.md` §30, addendum of 21 Oct); earlier the same day, `aisle` and `staple`, where the shopping list puts an entry (`philosophy.md` §48). 2026-10-20: Appendix C: `makes`, what one bought unit makes (`philosophy.md` §47). 2026-10-13: Appendix C: the ingredient record gains `aliases` (`philosophy.md` §45), and a leading `=` marks a whole-name-only alias. Earlier, 2026-09-30: `philosophy.md` §33–§42 folded in: page grouping,
 the board page, upfront preparations, time and timers by attendance, heat and
 fat, cuts and the Cut Library, ingredient states as library photographs (§39,
 29 Sept), the finished-product page. Where a decision is
@@ -791,7 +791,11 @@ cube, ml: 500 }`, and the shopping list counts cubes — `philosophy.md` §47),
 spices, drinks* — the list runs in that order; absent for what is not bought, such
 as water or a sauce made at home), `staple: true` (salt, black pepper, water, the
 cooking oils, sugar, flour: on the list, set apart and unticked — `philosophy.md`
-§48), and `nutrition` per 100 g.
+§48), `units` (one amount of the ingredient entered three ways — `{ metric: 190 g,
+kitchen: 1 cup, imperial: 6.7 oz }`; kitchen is cup, tbsp, tsp or piece; a unit with no
+sensible value left out; none on an entry in ml, which follows the stated rule of a
+240 ml cup; it replaces `convert` entry by entry — `philosophy.md` §30, addendum of
+21 October), and `nutrition` per 100 g.
 
 **`aliases` — other names the ingredient is known by** (13 October 2026,
 `philosophy.md` §45). A list, in any language: the French word (*lait*), the

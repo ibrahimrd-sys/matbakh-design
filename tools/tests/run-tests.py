@@ -236,6 +236,30 @@ def main():
     case("Plurals AR on the list: 2–3 أكواب (a range agrees with its top), 2 كوبان, 11 كوبًا, 1.5 لتر",
          sh_ar == {"water": "2–3 أكواب", "rice": "2 كوبان", "flour": "11 كوبًا", "milk": "1.5 لتر"}, sh_ar)
 
+    # ── units: one authored equivalence, metric and kitchen shown (§30, addendum 21 Oct) ──
+    import copy
+    uref = copy.deepcopy(ref)
+    uref["lentils_raw"]["units"] = {"metric": "190 g", "kitchen": "1 cup", "imperial": "6.7 oz"}
+    uref["onion"]["units"] = {"metric": "110 g", "kitchen": "1 piece"}
+    uref["granulated_sugar"]["units"] = {"metric": "200 g", "kitchen": "1 cup"}
+    ush = {it["id"]: it for it in basket.shop(basket.read(
+        ["2 cups chicken broth", "1 tbsp milk", "1 cup lentils", "250 g lentils", "2 onions", "150 g onion",
+         "2 cans tomatoes", "3 tbsp sugar"], m, uref, parse))["items"]}
+    case("Units: a liquid by the stated rule — 2 cups broth is 480 ml · 2 cups; 1 tbsp milk 15 ml · 1 tbsp",
+         ush["chicken_stock"]["pair"] == "480 ml · 2 cups" and ush["milk"]["pair"] == "15 ml · 1 tbsp",
+         (ush["chicken_stock"]["pair"], ush["milk"]["pair"]))
+    case("Units: an authored equivalence adds mixed lines — 1 cup + 250 g lentils is 440 g · 2.25 cups",
+         ush["lentils_raw"]["pair"] == "440 g · 2.25 cups", ush["lentils_raw"]["pair"])
+    case("Units: piece is a kitchen measure — 2 onions + 150 g is 370 g · 3.5 pieces",
+         ush["onion"]["pair"] == "370 g · 3.5 pieces", ush["onion"]["pair"])
+    case("Units: small amounts in spoons — 3 tbsp sugar at 200 g a cup is ≈40 g · 3 tbsp",
+         ush["granulated_sugar"]["pair"] == "≈40 g · 3 tbsp", ush["granulated_sugar"]["pair"])
+    case("Units: no authored equivalence, no pair — the can stays as published",
+         ush["tomato"]["pair"] is None, ush["tomato"]["pair"])
+    case("Units: the estimate weighs by the authored equivalence before convert — 1 cup lentils = 190 g",
+         basket._grams(dict(kind="measured", unit="cup", q=1.0, q_max=None, line="1 cup lentils", note=""),
+                       uref["lentils_raw"])[0] == 190.0)
+
     # ── the catalogue's list: matbakh.py build (philosophy §48) ──
     built = catalogue_lists()
     case("Catalogue: a sub-recipe's share is scaled once — 200 of 400 ml at 8 servings buys 400 g tomato",

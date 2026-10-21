@@ -46,7 +46,7 @@ from recipe_core.match import Matcher
 from recipe_core.page import parse_html
 
 FIELDS = ("glyph", "name", "aliases", "diet", "unit", "cls", "divisible", "pack", "convert",
-          "makes", "buy", "aisle", "staple", "nutrition")
+          "makes", "buy", "aisle", "staple", "units", "nutrition")
 SAMPLES = ("step3-fresh4-lines-2026-10-19.csv", "step3-fresh5-lines-2026-10-20.csv",
            "step3-fresh6-lines-2026-10-20.csv")
 TEST_LINES = ["237 g beef", "13 g butter", "103 g flour", "1/3 tsp salt", "1 tsp black pepper",
@@ -85,8 +85,8 @@ def case(name, raw, lang, m, ref):
     return dict(name=name, lang=lang, lines=[given(p) for p in lines],
                 estimates=[est(lines, 1.0, 4, ref), est(lines, 2.0, 8, ref)],
                 entries={i: entry(ref[i]) for i in ids},
-                expect=dict(items=[{k: it.get(k) for k in ("id", "name", "amount", "lines", "buy", "staple",
-                                                          "aisle", "unclear", "purchase")}
+                expect=dict(items=[{k: it.get(k) for k in ("id", "name", "amount", "pair", "lines", "buy",
+                                                          "staple", "aisle", "unclear", "purchase")}
                                    for it in shop["items"]],
                             notMatched=shop["not_matched"]))
 

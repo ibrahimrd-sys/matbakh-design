@@ -225,6 +225,17 @@ function check(){
       out.push({k,lvl:'error',msg:`${nm} — unit must be one of ${UNITS.join(', ')}`});
     if(v.makes && v.unit !== 'ml')
       out.push({k,lvl:'error',msg:`${nm} — makes counts millilitres; the unit must be ml`});
+    if(v.units){
+      const sys = {metric:['g'], kitchen:['cup','tbsp','tsp','piece'], imperial:['oz','lb','fl_oz']};
+      if(v.unit === 'ml')
+        out.push({k,lvl:'error',msg:`${nm} — measured in ml: liquids follow the stated rule (a cup is 240 ml), no units`});
+      Object.entries(v.units).forEach(([s,val])=>{
+        const m = /^\s*(\d+(?:\.\d+)?)\s*([a-z_]+)\s*$/.exec(String(val));
+        if(!sys[s]) out.push({k,lvl:'error',msg:`${nm} — units has "${s}"; only metric, kitchen, imperial`});
+        else if(!m || !(parseFloat(m[1]) > 0) || !sys[s].includes(m[2]))
+          out.push({k,lvl:'error',msg:`${nm} — units ${s} "${val}": an amount and one of ${sys[s].join(', ')}`});
+      });
+    }
     if(v.aisle && !AISLES[v.aisle])
       out.push({k,lvl:'error',msg:`${nm} — unknown aisle "${v.aisle}"`});
     if(v.divisible !== undefined && v.cls !== 'discrete')
@@ -387,6 +398,15 @@ function paintForm(){
     </div>
 
     <div class="grp">
+      <span class="eyebrow">Units — the same amount three ways</span>
+      ${v.unit==='ml' ? `<div class="f"><div></div><div class="hint">Measured in ml: liquids follow the stated rule — a cup is 240 ml, a tablespoon 15, a teaspoon 5. Nothing to enter.</div></div>` : `
+      <div class="f"><label>Metric</label><input id="i_um" value="${esc((v.units&&v.units.metric)||'')}" placeholder="190 g"></div>
+      <div class="f"><label>Kitchen</label><input id="i_uk" value="${esc((v.units&&v.units.kitchen)||'')}" placeholder="1 cup · 1 tbsp · 1 tsp · 1 piece"></div>
+      <div class="f"><label>Imperial</label><input id="i_ui" value="${esc((v.units&&v.units.imperial)||'')}" placeholder="6.7 oz"></div>
+      <div class="f"><div></div><div class="hint">One amount of this ingredient, entered three ways — the list shows metric and kitchen side by side (philosophy §30). Leave a unit blank when it makes no sense.</div></div>`}
+    </div>
+
+    <div class="grp">
       <span class="eyebrow">Nutrition, per 100 ${v.unit==='ml'?'ml':'g'}</span>
       <div class="nut">${NUT.map(n=>`<div><label>${n}</label>
         <input id="i_${n}" class="num" type="number" step="0.01" value="${nut[n]??''}"></div>`).join('')}</div>
@@ -418,6 +438,13 @@ function paintForm(){
   put('i_buyar', e=>{ v.buy = v.buy||{}; v.buy.ar = e.target.value; });
   put('i_aisle', e=>{ v.aisle = e.target.value || undefined; });
   put('i_staple', e=>{ if(e.target.value === 'true') v.staple = true; else delete v.staple; });
+  [['i_um','metric'],['i_uk','kitchen'],['i_ui','imperial']].forEach(([id, sys]) => put(id, e=>{
+    const val = e.target.value.trim();
+    v.units = v.units || {};
+    if(val) v.units[sys] = val; else delete v.units[sys];
+    if(!Object.keys(v.units).length) delete v.units;
+    paintRail();
+  }));
   NUT.forEach(n => put('i_'+n, e=>{
     const x = parseFloat(e.target.value);
     v.nutrition = v.nutrition||{};
@@ -499,6 +526,8 @@ function toYaml(){
       L.push('  convert: { ' + bits.join(', ') + ' }');
     }
     if(v.makes) L.push(`  makes: { per: ${q(v.makes.per)}, ml: ${v.makes.ml} }`);
+    if(v.units) L.push('  units: { ' + ['metric','kitchen','imperial'].filter(s=>v.units[s])
+      .map(s=>`${s}: ${q(v.units[s])}`).join(', ') + ' }');
     if(v.buy) L.push(`  buy: { en: ${q(v.buy.en)}, ar: ${q(v.buy.ar)} }`);
     if(v.aisle) L.push('  aisle: ' + v.aisle);
     if(v.staple) L.push('  staple: true');

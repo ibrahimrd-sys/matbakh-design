@@ -14,7 +14,7 @@ reference:
     unit: count
     cls: discrete
     divisible: true
-    convert: { piece_g: 100 }
+    units: { metric: 100 g, kitchen: 1 piece, imperial: 3.5 oz }
     buy: { en: loose, ar: بالوزن }
     aisle: produce
     nutrition: { kcal: 40, protein: 1, carb: 9, fat: 0, fiber: 2 }
@@ -95,7 +95,7 @@ reference:
     unit: g
     cls: continuous
     pack: 500
-    convert: { cup_g: 190 }
+    units: { metric: 190 g, kitchen: 1 cup, imperial: 6.7 oz }
     buy: { en: 500 g bag, ar: كيس ٥٠٠ جم }
     aisle: dry_goods
     nutrition: { kcal: 350, protein: 24, carb: 60, fat: 1, fiber: 11 }
@@ -141,7 +141,7 @@ reference:
     diet: []
     unit: g
     cls: seasoning
-    convert: { cup_g: 290 }
+    units: { metric: 6 g, kitchen: 1 tsp }
     buy: { en: have it, ar: موجود }
     aisle: spices
     staple: true

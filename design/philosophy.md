@@ -2319,6 +2319,32 @@ and edits nothing.*
 - This is the list only. A single import's own page keeps the recipe's language
   (step 6, 21 October), and whether imports are translated stays open (§44.3).
 
+## Addendum — 21 Oct 2026: §30's open points settled — one authored equivalence, metric and kitchen shown
+
+- **DECIDED (Ibrahim, 21 October), all six points of `design/units-design.md` as
+  proposed**, keeping §30 as written: three unit values authored per ingredient, no
+  computed conversion.
+- **One equivalence per ingredient, entered by a person** — a field `units`, e.g.
+  `{ metric: 190 g, kitchen: 1 cup, imperial: 6.7 oz }`: this much in metric is this
+  much in kitchen measure is this much in imperial, for this ingredient. A line's amount
+  is shown in another of the three by scaling that equivalence; the equivalence itself
+  is never taken from a generic table.
+- **`units` replaces §11's `convert`** (`cup_g`, `piece_g`) entry by entry — one record,
+  not two numbers that can disagree; until an entry's `convert` is gone, the validator
+  refuses a disagreement, and the estimate reads `units` first.
+- **Kitchen measure includes *piece*** for counted things (an onion, an egg).
+- **Liquids:** one stated rule, authored once — *a Matbakh cup is 240 ml, a tablespoon
+  15 ml, a teaspoon 5 ml* (and a fluid ounce 29.57 ml) — not the same 240 typed into
+  every entry measured in ml.
+- **Shown: metric and kitchen** (the default pair; fixed until the settings screen
+  lets the cook choose, as §30 asks), **metric first** — *370 g · 2 cups* — on the
+  **shopping list and the import check sheet only**; an imported recipe's own lines stay
+  as published (§44). Rounded by §6.3, ≈ past 5%. An ingredient with no `units` shows
+  its one amount. A unit with no sensible value is left out of the record.
+- **Authoring:** a review workbook ranked by use, Claude's suggestions in their own
+  column, marked; **only Ibrahim's answers enter `units`**; first round, the 150
+  most-used entries.
+
 ---
 
 ## Decision log
@@ -2402,4 +2428,5 @@ and edits nothing.*
 | 19 Oct 2026 | **`white_beans_pods` renamed `white_beans_dry`** — it held dried beans, not pods; §46's `_dry` ending | 46 |
 | 20 Oct 2026 | **Stock is used in ml and bought in cubes:** `chicken_stock`, `beef_stock`, `vegetable_stock` in `ml` with prepared-broth nutrition; `makes: { per: cube, ml: 500 }` rounds the shopping list up to whole cubes; never grams of powder | 47, 6 |
 | 21 Oct 2026 | **The app's shopping list:** one list of contributions (a recipe or an import each), worked out when shown, the cook's edits apart, stored on the phone; four groups with **staples on the list, unticked** (new field `staple`); **aisle order** (new field `aisle`); the list alone rounds to packs, every unit; imports' displayed amounts take the §6.3 ladder; the list is free | 48, 6, 16, 44 |
+| 21 Oct 2026 | **Units: one authored equivalence per ingredient** (`units`: metric, kitchen, imperial — kitchen includes *piece*), scaled for a line's amount, never from a generic table; replaces `convert` entry by entry; liquids by one stated rule (cup 240 ml, tbsp 15, tsp 5); **metric and kitchen shown**, metric first, on the shopping list and the import check sheet; authored through a ranked workbook, only Ibrahim's answers entering | 30, 11, 6, 48 |
 | 21 Oct 2026 | **A combined list speaks the app's language:** every item's name from the reference's bilingual names, unit words in that language and agreeing with their number; an imported line with no match keeps its original wording, marked as unmatched. A single import's page keeps the recipe's language | 48, 44 |
