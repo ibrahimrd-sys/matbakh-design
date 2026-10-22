@@ -97,9 +97,10 @@ ingredients, filed at `03-catalogue/ref/conversion-to-weight.xlsx`. The rule abo
 unchanged and was met — only his answers entered. **37 entries now carry `units`**; four
 counted things took the cup weight into `convert` and keep `units` free for their piece
 equivalence; fifteen ml-measured entries were left to §4's stated rule. Three rows
-(coriander ground, allspice, baking soda) differ from the stored guess by 50% or more and
-are **held back** as likely doubled or halved rows, and nine have no entry or need a
-mapping call. The ranked workbook still covers the rest, and the counts in §6 above are
+(coriander ground, allspice, baking soda) differed from the stored guess by 50% or more and
+were held back as likely doubled or halved; **Ibrahim ruled the same day — allspice 96,
+coriander ground 80, baking soda 110 — and all three are authored, so `units` stands at 40
+entries.** Nine rows still have no entry or need a mapping call. The ranked workbook still covers the rest, and the counts in §6 above are
 from 21 October.
 
 **One thing §2 did not foresee:** `shop()` reads `convert.cup_g` alone to decide that

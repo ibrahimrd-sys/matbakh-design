@@ -5,6 +5,18 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-22b — the three held-back rows, ruled
+
+Ibrahim on the three rows `2026-10-22a` held back, each 50% or more from the stored value
+and reading as doubled or halved: **allspice 96** and **coriander ground 80** — the
+reference was right, the sheet's 240 being the weight of a cup of water and its 192 double
+its own 96 for cloves, fennel and cumin; **baking soda 110** — the *sheet* was right, the
+reference's 220 being Claude's unreviewed guess, double. All three are authored in `units`
+with their `convert.cup_g` retired, taking it to **40 entries**. The sheet's two superseded
+rows are recorded in the vault's DIRECTORY so they are not read back from the file; it
+stays the authored source for everything else. `check` clean, 65 of 65, the app 59 of 59
+after re-export.
+
 ## 2026-10-22a — units authored: Ibrahim's conversion table into the reference
 
 **The first entries with `units`.** Ibrahim's own cup-to-gram table — 69 ingredients,
