@@ -5,6 +5,18 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-22d — Red Wine is the vinegar; caster sugar keeps 188
+
+The last two mapping calls on the conversion table, and **neither changes the reference**.
+**Red Wine**, filed under Oil in the sheet, is `red_wine_vinegar` — measured in ml, so §4's
+stated rule covers it and no value of its own enters, as with the four other vinegars.
+**Caster sugar** maps to `granulated_sugar`, which **keeps the 188** of the sheet's own
+*White sugar* row: caster's 200 would be a second equivalence for one entry, and only one
+is allowed, so it is recorded in the vault's DIRECTORY as superseded along with the
+allspice and coriander rows. **Two rows remain unmapped** — *potato flour*, and *lemon
+juice*, where the question is larger than the row: `lemon` already carries `cup_g: 244`,
+the weight of a cup of lemon *juice* sitting on a counted fruit.
+
 ## 2026-10-22c — four new entries: sage, marjoram, savory, mustard seed
 
 The conversion table's four orphan rows become entries, at Ibrahim's word:
