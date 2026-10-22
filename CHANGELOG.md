@@ -5,6 +5,21 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-22c — four new entries: sage, marjoram, savory, mustard seed
+
+The conversion table's four orphan rows become entries, at Ibrahim's word:
+`sage_dry`, `marjoram_dry`, `savory_dry` and `mustard_seeds`, in the dried-herb
+family's shape, each taking its weight from the sheet as `units` (32.16, 27, 70 and
+96 g a cup). **The reference is at 559 entries, `units` at 44.** **Savory's Arabic name
+is not confirmed, and the entry says so in a comment:** صعتر and زعتر both mean thyme in
+common use, which `thyme_dry` already holds, so no dialect word is guessed — a wrong
+alias would false-match — and the transliteration سافوري stands until he gives the right
+one. Nutrition on all four is Claude's first pass from standard tables (hanging decision
+6 of the units design). `check` clean, 65 of 65, the app 59 of 59 after re-export. **Four
+rows still need a mapping call:** caster sugar, potato flour, *Red Wine* (filed under Oil
+— the drink or the vinegar?) and *lemon juice*, which the 20 October rule keeps on its
+fruit though 244 g/cup is the juice.
+
 ## 2026-10-22b — the three held-back rows, ruled
 
 Ibrahim on the three rows `2026-10-22a` held back, each 50% or more from the stored value
