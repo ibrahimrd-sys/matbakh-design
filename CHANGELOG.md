@@ -5,6 +5,20 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-22e — potato flour gets its own entry, not potato starch
+
+The sheet's *Potato flour* row was mapped to `potato_starch` as asked, then flagged: the
+two are different products — flour is milled from the whole cooked potato, starch is the
+extracted starch alone, and they do not substitute in baking; 160 is the flour's figure,
+starch running nearer 190. **Ibrahim split them.** `potato_flour` is a new entry carrying
+the 160 and the words *potato flour* / دقيق البطاطس, so an imported line naming it matches;
+`potato_starch` is **left without a weight** until one is authored, and the `units` written
+there a moment earlier were taken back out. The alias had to go on the new entry rather than
+the starch — two entries claiming the same words is the duplicate `heavy_cream` /
+`cooking_cream` already has open. **560 entries, 45 with `units`.** `check` clean, 65 of 65,
+the app 59 of 59. **Only *lemon juice* is left unmapped**, and it is a correction to `lemon`
+— which carries `cup_g: 244`, the juice's weight on a counted fruit — rather than a missing row.
+
 ## 2026-10-22d — Red Wine is the vinegar; caster sugar keeps 188
 
 The last two mapping calls on the conversion table, and **neither changes the reference**.
