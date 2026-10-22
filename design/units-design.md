@@ -8,7 +8,7 @@ show the pair on the shopping list and the import check sheet only.*
 > **Approved by Ibrahim, 21 October 2026, all six decisions in §7 as proposed**
 > (`philosophy.md`, addendum to §30 of 21 Oct). The text below is kept as proposed.
 
-**Last updated:** 2026-10-21
+**Last updated:** 2026-10-22
 
 ---
 
@@ -88,6 +88,24 @@ Claude's *suggested* triple from standard kitchen references in its own column, 
 as a suggestion. Ibrahim accepts, corrects or blanks each value; **only his answers
 enter `units`.** First round: the 150 most-used entries; the rest show one unit until
 done.
+
+### What actually happened — 22 October 2026
+
+The ranked workbook (`04-research/units-review-2026-10-21.xlsx`) is still out. The
+authoring arrived by another route instead: **Ibrahim's own cup-to-gram table**, 69
+ingredients, filed at `03-catalogue/ref/conversion-to-weight.xlsx`. The rule above is
+unchanged and was met — only his answers entered. **37 entries now carry `units`**; four
+counted things took the cup weight into `convert` and keep `units` free for their piece
+equivalence; fifteen ml-measured entries were left to §4's stated rule. Three rows
+(coriander ground, allspice, baking soda) differ from the stored guess by 50% or more and
+are **held back** as likely doubled or halved rows, and nine have no entry or need a
+mapping call. The ranked workbook still covers the rest, and the counts in §6 above are
+from 21 October.
+
+**One thing §2 did not foresee:** `shop()` reads `convert.cup_g` alone to decide that
+something sold by weight is listed in grams, so the retirement it prescribes breaks the
+list display for every entry that completes it (`recipe_core/basket.py:395`, and the app's
+`lib/shopping/compute.dart:125`). Open, with one case failing.
 
 ## 7. Decisions this needs from Ibrahim
 

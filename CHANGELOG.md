@@ -5,6 +5,33 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-22a — units authored: Ibrahim's conversion table into the reference
+
+**The first entries with `units`.** Ibrahim's own cup-to-gram table — 69 ingredients,
+`g/cup` with the tablespoon and teaspoon derived, the same derivation the reference
+already states — becomes the authored source for `units`, filed in the vault at
+`03-catalogue/ref/conversion-to-weight.xlsx`. It arrives by a different route than
+`units-design.md` §6's ranked workbook; the rule it has to satisfy is the same one —
+**only his answers enter `units`** — and it does.
+
+**Written** (vault `82e313b`): **37 entries** gain `units: { metric: N g, kitchen: 1 cup }`,
+their `convert.cup_g` retiring into it entry by entry as §2 requires, with the standing
+`# tbsp = cup_g/16` comment following to `metric/16`. **Four counted things** — onion,
+garlic, tomato, cloves — take the cup weight into `convert.cup_g` instead, leaving `units`
+free for the piece equivalence §2's own example gives them. **Fifteen ml-measured entries
+are left out:** §4's stated rule covers them and `check` refuses an entry that restates it
+— which is how the first pass was caught writing them. `check`: 0 reference errors, 555
+entries. **Sixteen of the 37 replace a value Claude guessed** (hanging decision 6), all
+within 14%; 21 are weights the reference never had.
+
+**Found, not fixed — `basket.py` cannot survive the retirement it was designed for.**
+`shop()` decides *sold by weight, so say it in grams* from `convert.cup_g` alone
+(`recipe_core/basket.py:395`), so an entry whose weight has moved to `units` falls back to
+volume: `sugar 1 cup + 1 tbsp` now shows **260 ml** where §6.3 wants 210 g, and the case
+fails (64 of 65). The estimate path reads `units` first and passes. The fix is to prefer
+`metric_per(e, "cup")` there and in the app's twin, `lib/shopping/compute.dart:125`, which
+must move together for parity. **Open.**
+
 ## 2026-10-21t — units: one authored equivalence, metric and kitchen shown
 
 Ibrahim's decisions (option 2a, then all six points of `design/units-design.md`), filed as a
