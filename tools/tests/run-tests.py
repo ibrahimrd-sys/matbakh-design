@@ -142,8 +142,10 @@ def main():
          be["1 tsp Coriander (ground)"] == "coriander_ground", be["1 tsp Coriander (ground)"])
 
     _, lines_s, shop_s, _ = imported("en-full.html")
-    case("EN: cups and spoons of something sold by weight are listed in grams — sugar 1 cup + 1 tbsp = 212 g, shown 210 g (§6.3)",
-         any(it["id"] == "granulated_sugar" and it["amount"] == "210 g" for it in shop_s["items"]),
+    # 188 g a cup, authored by Ibrahim (conversion-to-weight.xlsx, 22 Oct), read from
+    # `units` now that the entry's `convert.cup_g` has retired into it: 188 + 188/16.
+    case("EN: cups and spoons of something sold by weight are listed in grams — sugar 1 cup + 1 tbsp = 199.75 g, shown 200 g (§6.3)",
+         any(it["id"] == "granulated_sugar" and it["amount"] == "200 g" for it in shop_s["items"]),
          [it["amount"] for it in shop_s["items"] if it["id"] == "granulated_sugar"])
     case("EN: 'a tiny pinch' is a pinch", any(l["line"] == "1 tiny pinch cinnamon" and l["unit"] == "pinch" for l in lines_s))
 

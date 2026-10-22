@@ -392,9 +392,12 @@ def shop(lines, factor=1.0, lang="en"):
                 approx = "≈" if any(_off(x, y) for x, y in zip(ends, shown)) else ""
                 amounts.append((approx + "–".join(_fmt(y) for y in shown) + " "
                                 + _word(only, round(shown[-1], 2), lang)).strip())
-            elif d == "volume" and e.get("unit") != "ml" and (e.get("convert") or {}).get("cup_g"):
-                # cups and spoons mixed, of something sold by weight: say it in grams
-                k = e["convert"]["cup_g"] / 240
+            elif d == "volume" and e.get("unit") != "ml"                     and (metric_per(e, "ml") or (e.get("convert") or {}).get("cup_g")):
+                # cups and spoons mixed, of something sold by weight: say it in grams.
+                # The entry's own equivalence first (§30), then `convert` — which is
+                # what retiring cup_g into `units` entry by entry (units-design §2)
+                # needs, or the weight disappears here the moment an entry is done.
+                k = metric_per(e, "ml") or e["convert"]["cup_g"] / 240
                 amounts.append(_show(lo * k, hi * k, "mass", lang))
             else:
                 amounts.append(_show(lo, hi, d, lang))
