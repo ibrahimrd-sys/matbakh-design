@@ -1,8 +1,8 @@
 # Matbakh — App Design Philosophy
 
-**Status:** Living document. Sections marked SETTLED are decided and should not be relitigated without a stated reason. Sections marked OPEN are unresolved.
+**Status:** Living document. Sections marked SETTLED are decided and should not be relitigated without a stated reason. Sections marked OPEN are unresolved. **A heading that says SUPERSEDED or SUPERSEDED IN PART names what replaced it and when — read that first; the body below is left exactly as it was filed** (§49).
 
-**Last updated:** 2026-10-21
+**Last updated:** 2026-10-23
 
 ---
 
@@ -30,7 +30,7 @@ Method gets the screen. Cost gets the notification. Nutrition gets a panel.
 
 ---
 
-## 3. Core principles — SETTLED
+## 3. Core principles — SETTLED, SUPERSEDED IN PART by §34 (28 Sept 2026): principle 4's grouping wording only
 
 1. **The page is the unit, not the scroll.** A step is a destination, not a position in a stream. No scrolling anywhere in cook mode. The cook always knows where they are and how far is left.
 
@@ -51,7 +51,7 @@ Method gets the screen. Cost gets the notification. Nutrition gets a panel.
 
 ## 4. Cook mode (the reader) — SETTLED
 
-### 4.1 Page structure
+### 4.1 Page structure — SUPERSEDED IN PART by §34 (28 Sept 2026): the grouping wording and the sear/deglaze example only
 
 - **A page may hold multiple actions if they are order-independent and share one station.** All knife prep — onion, garlic, tomato, coriander — is one page with four tiles. "Sear the chicken" and "deglaze" are two pages.
 - **Target: 6–10 pages typical, 14 hard ceiling.** Exceeding it is an editorial signal: either the recipe is genuinely a project dish and should be labelled as such, or the steps are over-atomised and need merging.
@@ -112,7 +112,7 @@ Turning a page is nearly free. What is expensive is losing your place — return
 | **Digits + unit symbols** | Quantity — 200 g, 20 min, 180 °C |
 | **Words** | Only the name of the thing, and irreducible judgement |
 
-### 5.2 Reducing the residue
+### 5.2 Reducing the residue — SUPERSEDED IN PART by §35 (28 Sept 2026): the heat line's levels and carrier only; spice level unchanged
 
 The hard cases are doneness cues — *until translucent*, *until the water runs clear*. A wordless app that quietly drops these has removed the cooking knowledge and kept the arithmetic. Two of the three are recoverable:
 
@@ -130,7 +130,7 @@ A settings toggle for Eastern Arabic numerals may be offered, but Western is the
 
 **Digits are the only element on the page that changes** — via serving scaling, unit toggles and live pricing. They must therefore be a **live text layer over a static visual grammar**, never baked into an icon or composite step graphic. Easy to violate accidentally once someone starts producing composite artwork.
 
-### 5.5 Four surfaces, and what each one's cost scales with — SETTLED 2 September 2026
+### 5.5 Four surfaces, and what each one's cost scales with — SETTLED 2 September 2026, SUPERSEDED IN PART by §39 (29 Sept 2026): "irreducibly recipe-specific" for ingredient states only
 
 A cook in front of the reader asks four questions. Each is answered on a different surface, at a different size, and — the part that decides the economics — each scales with something different.
 
@@ -210,7 +210,7 @@ Indicative: stir-fry and sear ×2 · braise and stew ×4 · baking ×2 with a ti
 
 Simmering 6 portions takes about as long as 4; browning 6 takes noticeably longer. Rather than model this, **mark mass-sensitive timed steps** — when scaled, the timer is presented alongside the doneness photo rather than as the authority. The clock becomes advisory; the target state becomes the truth. Scaling error is routed into a mechanism already being built.
 
-### 6.7 Three numbers, not one
+### 6.7 Three numbers, not one — SUPERSEDED IN PART by §30 (20 Sept 2026): the dual-unit paragraphs only
 
 **Exact** (internal, unrounded) → **Displayed** (rounded, what the cook reads) → **Purchase** (rounded up to pack size, shopping list only).
 
@@ -278,7 +278,7 @@ Egypt → Gulf is not a translation problem. It is a wholesale-data-sourcing pro
 
 ---
 
-## 11. Schema fields — SETTLED, and now implemented
+## 11. Schema fields — SETTLED, and now implemented; SUPERSEDED IN PART by §30 (20 Sept 2026): the 29 Aug household-measure addition only
 
 Cheap to decide now, very expensive to retrofit across 500 recipes.
 
@@ -609,7 +609,7 @@ Entertaining and hosting was §13.4 here until 13 August 2026, when it was promo
 ### 16.5 Step granularity — PARTIALLY SETTLED
 Working answer: granularity governed by **hands**, not grammar — a step ends when you next need to look at the screen. Section 4.1's order-independence rule operationalises this, but it has not yet been tested against real recipes at volume.
 
-### 16.6 Doneness photography and the tile carrier — SCOPE OPEN, PINNED TO THE PILOT
+### 16.6 Doneness photography and the tile carrier — SCOPE OPEN, PINNED TO THE PILOT; SUPERSEDED IN PART by §39 (29 Sept 2026): "recipe-specific under every option" for ingredient states only
 
 *Revised 2 September 2026; previously “Doneness photography — SCOPE UNDECIDED”.*
 
@@ -635,7 +635,7 @@ Dietary requirements, personal preferences, heat, vegan/vegetarian, kids-suitabl
 
 At minimum it needs cuisine, course, protein, spice level, dietary exclusion (*vegetarian as written*, not *could be made vegetarian*), effort, and whether a dish holds well — that last one only matters for entertaining, which is why it surfaced now.
 
-## 17. Pricing and the free surface — SETTLED (29 August 2026)
+## 17. Pricing and the free surface — SETTLED (29 August 2026), SUPERSEDED by §25 (20 Sept 2026): the model is reversed — free catalogue, paid premium features
 
 ### 17.1 What is free, permanently
 
@@ -842,7 +842,7 @@ here is everything, prepped — plus at most one tight shot for the single harde
 or least-obvious cut in that recipe, drawn from the Cut Library where the cut
 already exists there.
 
-### 20.2 Scope, granularity, scale reference and board sufficiency — OPEN
+### 20.2 Scope, granularity, scale reference and board sufficiency — OPEN; SUPERSEDED IN PART by §33 (27 Sept 2026): the first item, scope and granularity, only
 
 Four things are deliberately not settled here, and none of them may be defaulted
 into by starting the shoot.
@@ -1054,7 +1054,7 @@ on the baseline path.
 - **The prose note is scoped to the substitute-selection moment.** It does not
   appear anywhere in baseline cook mode.
 
-### 22.2 What is OPEN — PM-15
+### 22.2 What is OPEN — PM-15; SUPERSEDED IN PART by §28 (24 Sept 2026): the swappability question only; PM-15's other items stay open
 
 - **Whether changes-the-cook substitutes become swappable later** — each with
   its own timer and doneness cue, and possibly its own photograph. Costed
@@ -1256,7 +1256,7 @@ not resolved:
 
 ---
 
-## 26. Recipe tag vocabulary — SETTLED (24 September 2026)
+## 26. Recipe tag vocabulary — SETTLED (24 September 2026), SUPERSEDED IN PART by §32 (24 Sept 2026): `main_protein`'s seven values, now eight
 
 **PM-07 is closed.** The vocabulary that §16.7 has waited on since 1 August is
 final. `design/tag-proposal.md` carries the full reasoning and is now
@@ -2347,6 +2347,52 @@ and edits nothing.*
 
 ---
 
+## 49. A superseded section says so in its heading — SETTLED (23 October 2026)
+
+*A rule about this file rather than about the app. It changes no decision and reverses
+nothing; it makes the ones already reversed legible.*
+
+**The problem it fixes.** Append-never-insert keeps the reasoning as filed on the day,
+which is why §17 still reads *SETTLED (29 August 2026)* although §25 reversed it on
+20 September. The Decision log at the end has recorded that correctly since the day it
+happened — and it did not help: on 22 October §17 was read, believed and quoted into a
+session's work before a search turned up §25. The log sits 1,700 lines from the place
+the misreading happens.
+
+**The rule.** A section that a later section supersedes **carries that in its heading**:
+the name of what replaced it, the date, and — where the supersession is partial — what
+part. The body below is **not touched**, and neither is the original status label, which
+stays in front of the new one.
+
+```
+## 17. Pricing and the free surface — SETTLED (29 August 2026),
+   SUPERSEDED by §25 (20 Sept 2026): the model is reversed
+### 5.2 Reducing the residue — SUPERSEDED IN PART by §35 (28 Sept 2026):
+   the heat line's levels and carrier only; spice level unchanged
+```
+
+**Why this is not an edit in the sense append-never-insert forbids.** The convention
+protects the *reasoning as filed* — the argument, its wording, its date — so the record
+of what was thought on the day stays honest. A status label is not reasoning; it is how
+the file already tells a reader where a section stands, and it already evolves (§43 and
+§44 read SETTLED IN PART). Adding *superseded* to that vocabulary records a fact about
+the section rather than rewriting what it says.
+
+**Applied, 23 October 2026, to every section a later one supersedes** — eleven headings:
+§3 (principle 4's grouping) and §4.1 by §34; §5.2's heat line by §35; §5.5 and §16.6 on
+ingredient states by §39; §6.7's dual-unit paragraphs and §11's household-measure
+addition by §30; §17 by §25; §20.2's first item by §33; §22.2's swappability question by
+§28; §26's seven `main_protein` values by §32. **Three addenda that say "Supersedes
+nothing" — §36, §38 and §40 — were left alone**, and so was §44's note that an earlier
+wording *the same day* is superseded, which is not a section.
+
+**What this does not do.** It does not reconcile the ripples a supersession leaves. §25's
+four — the ownership positioning, T-02's *visible to owners*, the competitor study's
+Axis 7 comparisons, and M-02's numeric base case — are still open, and marking §17 does
+not close them.
+
+---
+
 ## Decision log
 
 | Date | Decision | Section |
@@ -2430,3 +2476,4 @@ and edits nothing.*
 | 21 Oct 2026 | **The app's shopping list:** one list of contributions (a recipe or an import each), worked out when shown, the cook's edits apart, stored on the phone; four groups with **staples on the list, unticked** (new field `staple`); **aisle order** (new field `aisle`); the list alone rounds to packs, every unit; imports' displayed amounts take the §6.3 ladder; the list is free | 48, 6, 16, 44 |
 | 21 Oct 2026 | **Units: one authored equivalence per ingredient** (`units`: metric, kitchen, imperial — kitchen includes *piece*), scaled for a line's amount, never from a generic table; replaces `convert` entry by entry; liquids by one stated rule (cup 240 ml, tbsp 15, tsp 5); **metric and kitchen shown**, metric first, on the shopping list and the import check sheet; authored through a ranked workbook, only Ibrahim's answers entering | 30, 11, 6, 48 |
 | 21 Oct 2026 | **A combined list speaks the app's language:** every item's name from the reference's bilingual names, unit words in that language and agreeing with their number; an imported line with no match keeps its original wording, marked as unmatched. A single import's page keeps the recipe's language | 48, 44 |
+| 23 Oct 2026 | **A superseded section says so in its heading.** Append-never-insert keeps the body as filed, so §17 still read SETTLED five weeks after §25 reversed it — and on 22 October it was read, believed and quoted before a search found §25; the Decision log had it right all along, 1,700 lines away. A superseded heading now names what replaced it, the date, and the part, with the original label kept in front of it. Applied to **eleven headings** (§3, §4.1, §5.2, §5.5, §6.7, §11, §16.6, §17, §20.2, §22.2, §26); the three addenda that supersede nothing were left alone. **No decision changes.** §25's four open ripples stay open | 49 |

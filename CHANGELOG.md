@@ -5,6 +5,28 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-23a — a superseded section says so in its heading
+
+**`philosophy.md` §49, settled.** Append-never-insert keeps a section's body as filed, which
+is why §17 still read *SETTLED (29 August 2026)* five weeks after §25 reversed it — and on
+22 October it was read, believed and quoted into a session's work before a search turned up
+§25. The Decision log had recorded the reversal correctly all along, 1,700 lines away from
+where the misreading happens. **A superseded heading now names what replaced it, the date,
+and — where partial — the part, with the original status label kept in front of it.** The
+body and the original label are untouched: a status label is how the file already tells a
+reader where a section stands, and it already evolves (§43, §44 read SETTLED IN PART).
+
+**Applied to eleven headings:** §3 (principle 4's grouping) and §4.1 by §34; §5.2's heat
+line by §35; §5.5 and §16.6 on ingredient states by §39; §6.7's dual-unit paragraphs and
+§11's household-measure addition by §30; §17 by §25; §20.2's first item by §33; §22.2's
+swappability question by §28; §26's seven `main_protein` values by §32. The three addenda
+that say *Supersedes nothing* — §36, §38, §40 — were left alone, as was §44's note about an
+earlier wording the same day, which is not a section. The file's Status line now explains
+the third label a reader will meet. **No decision changes**, and §25's four open ripples —
+the ownership positioning, T-02's *visible to owners*, the study's Axis 7 comparisons, and
+M-02's numeric base case — stay open. The vault's handover, which carried both the old
+warning and §17's content as though current, follows.
+
 ## 2026-10-22e — potato flour gets its own entry, not potato starch
 
 The sheet's *Potato flour* row was mapped to `potato_starch` as asked, then flagged: the
