@@ -232,7 +232,7 @@ Four constraints fall straight out of that line:
 - **`loop`** — it repeats with no gap. First and last frame must match, or the
   loop jumps.
 - **`autoplay`** — it starts with no press, so it must make sense from frame one.
-  No title cards, no slow build.
+  No title cards, no slow build. **Split by surface, 26 October 2026** (`philosophy.md` §51): this holds on the **recipe screen**, where there is room. On a **step page** a clip is **summoned by a press** and is not on the page until asked for — these clips run 18 to 31 seconds, which was never going to autoplay in a corner of a step page beside the utensil, its layers and the time column. **Everything else here is unchanged**, `muted` included: there is still no audio, ever. A summoned clip must still make sense from frame one, because nobody will watch a build-up twice.
 - **`cover`** — it gets cropped like a step photo. Same rule: subject in the
   middle 65%.
 

@@ -2402,7 +2402,10 @@ not close them.
 
 ---
 
-## 50. The step page is the utensil's surface — SETTLED (26 October 2026)
+## 50. The step page is the utensil's surface — SETTLED (26 October 2026),
+   SUPERSEDED IN PART by §51 (26 Oct 2026): the doneness bullet only — the photograph
+   is a thumbnail that enlarges on tap rather than sitting open at the foot, and
+   technique clips, which §50 did not mention, are summoned by a press
 
 *Closes **PM-09**. Supersedes in part §21.1, §21.2 and §36. Ibrahim's design,
 given and recorded the same day.*
@@ -2483,6 +2486,74 @@ borrow the glyph's square. C-06 still measures it.
 these illustrations or commissioned separately; the lid and other state variants;
 §21.2's scope, authored-versus-derived, and the 24-of-81 finding; §16.6's tile;
 and the Arabic names for the six locations.
+
+---
+
+## 51. Doneness is a thumbnail that enlarges; a clip is summoned — SETTLED (26 October 2026)
+
+*Supersedes in part §50, filed earlier the same day, and reverses `asset-spec.md`
+§3's autoplay constraint for the step page. Ibrahim's decision; the reasoning
+below includes the objection he decided against, because §50 was wrong once today
+and a recorded objection is cheaper than a rediscovered one.*
+
+**The problem.** §50 put the doneness photograph **at the foot** of the step page
+and said nothing about technique clips. §36's open item — *"fit on one phone
+screen without scrolling"* — is the pressure: the location band, the utensil with
+its layers, the time-and-temperature column and a photograph do not obviously fit
+a phone. Ibrahim proposed putting both behind a button.
+
+**The decision, and it is not the same for the two.**
+
+- **The doneness photograph stays visible as a thumbnail at the foot, and
+  tapping it enlarges.** The tap is **optional**, not the price of seeing it.
+- **A technique clip is summoned by a press.** It is not on the page until asked
+  for.
+
+**Why they differ, which is the content of this section.** A doneness photograph
+*is the judgement the step turns on*. §16.6 settles that there is one per
+**genuine decision point**, not one per page, so on a page that has one it is the
+reason that page exists — and §16.6 and §5.5 both rest the **trust claim** on it
+being a real photograph of the real dish. A clip is **supplementary**: it
+demonstrates a technique that a still cannot show, and the cook who already knows
+the technique never needs it.
+
+**The objection, recorded rather than resolved away.** §1's counter-top posture is
+hands busy, flour on them, attention divided, and a doneness photograph is wanted
+at exactly the moment of judging *is this done?* — when the hands are dirtiest. A
+mandatory press at that moment works against the design centre, and §3's *one
+mandatory gesture* counts it. **The thumbnail answers this**: the photograph is on
+screen without a press, and the press only buys magnification. A full pop-up for
+doneness was considered and declined for this reason. **For a clip the press is
+accepted**, because a clip is not the judgement and is not needed every time.
+
+**What this reverses in the asset spec.** `asset-spec.md` §3 specifies
+`<video autoplay loop muted playsinline>` and draws the consequence that a clip
+*"starts with no press, so it must make sense from frame one."* **On the step page
+that no longer holds.** The rule now **splits by surface**: autoplay where there is
+room — the recipe screen, where the prototype's clips live — and **summoned on the
+step page, where there is not**. The prototype's clips run **18 to 31 seconds**,
+which was never going to sit autoplaying in a corner of a step page, so the spec
+and §36's one-screen problem were already in conflict; this resolves it in the
+spec's less convenient direction. **`muted` is untouched** — there is still no
+audio, ever — and so is *one technique per clip*.
+
+**What the thumbnail buys the illustration.** The space freed goes to the utensil
+and its layers, which is the right trade: by §50 the illustration **is** the
+instruction, and the photograph is the proof. More room for the instruction, and
+the proof still on screen.
+
+**What this does not decide.** §16.6 stands untouched: **how many doneness
+photographs a recipe needs** (its 4–6 estimate is still an estimate, and it
+records that no number goes in until the pilot measures one) and **what the 44 px
+tile carries** are both still open, and the pilot's ~150 tile judgements still
+answer them. This section decides **presentation on the step page**, which §16.6
+never covered. Whether the thumbnail is *enough* at thumbnail size, and whether a
+summoned clip is reached for in practice, are two more things the pilot can
+measure, and should.
+
+**Open.** The thumbnail's size, and the press target for a clip — whether it is the
+illustration itself, a glyph in the time column, or something in the location band.
+Both are layout, and both wait on the prototype page §36 asked for.
 
 ---
 
@@ -2571,3 +2642,4 @@ and the Arabic names for the six locations.
 | 21 Oct 2026 | **A combined list speaks the app's language:** every item's name from the reference's bilingual names, unit words in that language and agreeing with their number; an imported line with no match keeps its original wording, marked as unmatched. A single import's page keeps the recipe's language | 48, 44 |
 | 23 Oct 2026 | **A superseded section says so in its heading.** Append-never-insert keeps the body as filed, so §17 still read SETTLED five weeks after §25 reversed it — and on 22 October it was read, believed and quoted before a search found §25; the Decision log had it right all along, 1,700 lines away. A superseded heading now names what replaced it, the date, and the part, with the original label kept in front of it. Applied to **eleven headings** (§3, §4.1, §5.2, §5.5, §6.7, §11, §16.6, §17, §20.2, §22.2, §26); the three addenda that supersede nothing were left alone. **No decision changes.** §25's four open ripples stay open | 49 |
 | 26 Oct 2026 | **The step page is the utensil's surface, which closes PM-09.** Every recipe page is one step in one location: a **drawn location** in a top band so it does not compete with the instruction area; the **utensil carrying the food layers**, ingredients added together forming one combined layer, the layers coming from the ingredient art rather than from the utensil library; **time and temperature in a uniform column, one row per layer**, beside the layers; a **doneness photograph at the foot**, still a real photograph (§5.5). **The premise §21.2 and §36 reasoned from was wrong:** the utensil never competed with the glyph for one 44 px square — it has its own surface, roughly **780 device px on a phone, 1400–1800 on a tablet**. The 44 px came from `asset-spec.md` §1, which is titled *Icons* and governs the SVG glyph set; the illustrated library is a different asset class, decided in §36 after that spec was written. Ibrahim caught it on 26 October, after a brief had been written for Nadine on the wrong figure. **Two consequences of the layering:** every layer must stay individually visible, so the vessel is drawn as a **cut-away** rather than from above — the prototype draws the pot both ways to settle it by eye; and each vessel ships a named **`contents-zone`** layer, since the app places the layers. **The library divides in three** — 23 vessels, 3 surfaces, 13 hand tools of 40 candidates. **Locations are a second asset class of six**, taken from the lexicon's `station_hint` values (bench 34, stove 19, board 10, serve 6, oven 5, grill 4), and their spec inverts the utensils': small, simple and required to stay quiet. Bears on **C-05** — the 24-of-81 tool-drawing glyphs are relieved, not resolved | 50, 21, 36 |
+| 26 Oct 2026 | **Doneness is a thumbnail that enlarges; a technique clip is summoned.** §36's open *fit on one phone screen without scrolling* is the pressure, and Ibrahim proposed putting both behind a button. **They are decided differently.** A doneness photograph **stays visible as a thumbnail at the foot and enlarges on tap** — the tap is optional, not the price of seeing it — because the photograph *is* the judgement the step turns on (§16.6: one per genuine decision point, not one per page) and §5.5 and §16.6 both rest the trust claim on it. A **full pop-up was declined**: §1's counter-top posture means the photograph is wanted when the hands are dirtiest, and §3 counts a mandatory press. **A clip is summoned by a press**, because it is supplementary — it shows what a still cannot, and a cook who knows the technique never needs it. **This reverses `asset-spec.md` §3's `autoplay`** and its *"starts with no press"* consequence **for the step page only**: the rule now splits by surface, autoplay where there is room and summoned where there is not. The prototype's clips run 18–31 seconds, so that spec and §36's one-screen problem were already in conflict. `muted` and one-technique-per-clip are untouched. The space freed goes to the illustration, which is the instruction. **§16.6 is untouched** — how many doneness photographs a recipe needs, and what the 44 px tile carries, both still wait on the pilot, which can also measure whether a thumbnail suffices and whether a summoned clip is reached for. **Open:** the thumbnail's size and the clip's press target, both layout, both waiting on §36's prototype page | 51, 50, 16.6 |

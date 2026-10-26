@@ -5,6 +5,39 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-26b — doneness is a thumbnail that enlarges; a clip is summoned
+
+**`philosophy.md` §51, settled.** §50 put the doneness photograph at the foot of the step page
+and said nothing about technique clips. §36's open item — *fit on one phone screen without
+scrolling* — is the pressure, and Ibrahim proposed putting both behind a button. **They are
+decided differently, and that difference is the section.**
+
+**The doneness photograph stays visible as a thumbnail and enlarges on tap.** The tap is
+**optional**, not the price of seeing it. It *is* the judgement the step turns on — §16.6 settles
+one per **genuine decision point**, not one per page, so on a page that has one it is the reason
+that page exists — and §5.5 and §16.6 both rest the **trust claim** on it being a real
+photograph of the real dish. **A full pop-up was considered and declined:** §1's counter-top
+posture means it is wanted at the moment of judging *is this done?*, when the hands are
+dirtiest, and §3 counts a mandatory press. The objection is recorded in §51 rather than resolved
+away.
+
+**A technique clip is summoned by a press**, because it is supplementary — it shows what a still
+cannot, and a cook who knows the technique never needs it.
+
+**This reverses `asset-spec.md` §3's `autoplay` for the step page only.** That spec draws the
+consequence that a clip *"starts with no press, so it must make sense from frame one."* The rule
+now **splits by surface**: autoplay on the recipe screen, where there is room; summoned on the
+step page, where there is not. The prototype's clips run **18 to 31 seconds**, so the spec and
+§36's one-screen problem were already in conflict — this resolves it in the spec's less
+convenient direction. **`muted` and one-technique-per-clip are untouched**, and a summoned clip
+must still read from frame one.
+
+**The space freed goes to the illustration**, which by §50 is the instruction while the
+photograph is the proof. **§16.6 is untouched:** how many doneness photographs a recipe needs,
+and what the 44 px tile carries, both still wait on the pilot — which can also measure whether a
+thumbnail suffices and whether a summoned clip is reached for. **Open:** the thumbnail's size
+and the clip's press target, both layout, both waiting on §36's prototype page.
+
 ## 2026-10-26a — the step page is the utensil's surface
 
 **`philosophy.md` §50, settled. PM-09 is closed.** Every recipe page is **one step in one
