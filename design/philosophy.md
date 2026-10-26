@@ -2,7 +2,7 @@
 
 **Status:** Living document. Sections marked SETTLED are decided and should not be relitigated without a stated reason. Sections marked OPEN are unresolved. **A heading that says SUPERSEDED or SUPERSEDED IN PART names what replaced it and when — read that first; the body below is left exactly as it was filed** (§49).
 
-**Last updated:** 2026-10-23
+**Last updated:** 2026-10-26
 
 ---
 
@@ -635,7 +635,7 @@ Dietary requirements, personal preferences, heat, vegan/vegetarian, kids-suitabl
 
 At minimum it needs cuisine, course, protein, spice level, dietary exclusion (*vegetarian as written*, not *could be made vegetarian*), effort, and whether a dish holds well — that last one only matters for entertaining, which is why it surfaced now.
 
-## 17. Pricing and the free surface — SETTLED (29 August 2026), SUPERSEDED by §25 (20 Sept 2026): the model is reversed — free catalogue, paid premium features
+## 17. Pricing and the free surface — SETTLED (29 August 2026), SUPERSEDED IN PART by §25 (20 Sept 2026): the catalogue is free, so §17.4's "revenue from new catalogue content" falls — but §17.1–17.2's line, free weekly prices and paid dish cost, is **kept** by §27 and re-affirmed by §43.5 (12 Oct 2026)
 
 ### 17.1 What is free, permanently
 
@@ -891,7 +891,9 @@ dish. That single line does most of the work in this section, because the
 column a cost lands in is decided by what it varies with, and §5.5 already
 names that as the whole economic question.
 
-### 21.1 What is settled
+### 21.1 What is settled — SUPERSEDED IN PART by §50 (26 Oct 2026): point 2's open
+   visual carrier is answered, and the step page displaces the pre-commit surface as
+   the first job; the locale-bound column and the division of labour are unchanged
 
 **Utensils are a first-class reference layer**, parallel to the ingredient
 reference: what equipment a recipe requires is a fact about the recipe, and the
@@ -936,7 +938,10 @@ unchanged, for the same reason — every product that has asked users to maintai
 an inventory has died on the maintenance burden. Staples are assumed present
 and unset rather than set: a knife, a board, one pot, one pan.
 
-### 21.2 The visual layer, the scope, and authored-vs-derived — OPEN
+### 21.2 The visual layer, the scope, and authored-vs-derived — OPEN,
+   SUPERSEDED IN PART by §50 (26 Oct 2026): the first bullet only — the carrier is
+   settled and its "the tile is 44 px" premise was the wrong asset class; scope,
+   authored-vs-derived and the 24-of-81 finding all stand
 
 Four things are deliberately not settled, and the fourth changes what the
 question is, so it is resolved first.
@@ -1789,7 +1794,10 @@ competitor study, market documents and `DIRECTORY.md`. None is edited here.
 
 ---
 
-## 36. Utensil and equipment library; page illustration — SETTLED IN PART (28 September 2026)
+## 36. Utensil and equipment library; page illustration — SETTLED IN PART (28 September 2026),
+   SUPERSEDED IN PART by §50 (26 Oct 2026): the layered step page is closed and PM-09
+   with it; the OPEN "legibility of a layered scene at the 44 px tile" item falls —
+   the illustrations are not the icon class that 44 px belongs to
 
 *Bears on D-14 / PM-14 / KS-05 / KS-06 and PM-09. Supersedes nothing: §21.2's
 carrier question stays open, and this records its leading candidate.*
@@ -2381,7 +2389,8 @@ the section rather than rewriting what it says.
 **Applied, 23 October 2026, to every section a later one supersedes** — eleven headings:
 §3 (principle 4's grouping) and §4.1 by §34; §5.2's heat line by §35; §5.5 and §16.6 on
 ingredient states by §39; §6.7's dual-unit paragraphs and §11's household-measure
-addition by §30; §17 by §25; §20.2's first item by §33; §22.2's swappability question by
+addition by §30; §17 **in part** by §25 — its §17.4 consequence only, since §27 and
+§43.5 keep the free-prices/paid-dish-cost line; §20.2's first item by §33; §22.2's swappability question by
 §28; §26's seven `main_protein` values by §32. **Three addenda that say "Supersedes
 nothing" — §36, §38 and §40 — were left alone**, and so was §44's note that an earlier
 wording *the same day* is superseded, which is not a section.
@@ -2390,6 +2399,90 @@ wording *the same day* is superseded, which is not a section.
 four — the ownership positioning, T-02's *visible to owners*, the competitor study's
 Axis 7 comparisons, and M-02's numeric base case — are still open, and marking §17 does
 not close them.
+
+---
+
+## 50. The step page is the utensil's surface — SETTLED (26 October 2026)
+
+*Closes **PM-09**. Supersedes in part §21.1, §21.2 and §36. Ibrahim's design,
+given and recorded the same day.*
+
+**The design.** Every page of a recipe is **one step in one location**, in four
+parts:
+
+- **A drawn location** in a **top band** — stove, oven, grill, board, bench,
+  serve — with a little non-prose information beside it. It is at the top
+  deliberately, **so that it does not compete with the instruction area.**
+- **The utensil, carrying the food layers**, as the main area. Ingredients added
+  at the same moment are **one combined layer**; layers accumulate as the recipe
+  advances. The layers come from the ingredient artwork and the board, and may
+  carry text — so the utensil holds another library's work, not its own.
+- **Time and temperature in a uniform column**, **one row per layer**, beside the
+  layers rather than over them.
+- **A doneness photograph at the foot**, on the steps that need one. §5.5
+  unchanged: it stays a real photograph.
+
+**What this closes.** PM-09's last question — whether a utensil appears as a
+visual element — is **yes**, and the step page is **where**. §21.2 declined to
+settle the carrier ahead of PM-09 because *"the tile is 44 px and already has one
+open carrier competing for it"*; §36 recorded the layered page as PM-09's
+*leading candidate* and left its legibility *"at the 44 px tile"* open.
+
+**The premise both were reasoning from was wrong, and that is the useful part of
+this section.** The utensil was never going to compete with the activity glyph
+inside one 44 px square. It has **its own surface, rendered large** — on the
+order of **780 device pixels on a phone and 1400 to 1800 on a tablet**, estimated
+from the existing prototypes, since the step page is not built. §21.2's *"a
+second thing in the same square"* objection, and §3's one-mandatory-gesture and
+§4.4's squint test as applied to it, **do not arise**. **What the 44 px tile
+carries is still open — §16.6 — and is simply a different question.**
+
+**How the error surfaced, because this kind will recur.** The brief written for
+Nadine on 25 October took the 44 px figure from **§1 of `asset-spec.md`** and
+sized her drawings to it: about 8 mm on a phone, nothing finer than a road sign.
+That section is titled **Icons** and governs the stroke-drawn SVG glyph set. The
+illustrated library is a **different asset class**, decided in §36 *after* the
+spec was written, and the spec never covered it — so a number was taken from the
+nearest document that had one. Ibrahim caught it on 26 October. The brief is now
+draft 2, and `asset-spec.md` §1 states what it governs.
+
+**Two consequences that fall out of the layering, not out of taste.**
+
+- **Every layer must stay individually visible**, because each has its own row of
+  time and temperature beside it. A vessel drawn from directly above shows only
+  its top layer; from three-quarters, the top layer hides the rest. This points
+  to a **cut-away** — near side-on with the inside shown — and the prototype
+  draws the pot **both ways** so the angle is settled by looking rather than by
+  argument. The angle governs the whole set, so it is decided once.
+- **The app places the layers, so registration is a delivered fact rather than an
+  inference.** Each vessel ships a named **`contents-zone`** layer marking where
+  food sits.
+
+**The library divides in three**, because only some tools hold food: **vessels**
+(food goes in — visible interior, contents zone), **surfaces** (food goes on) and
+**hand tools** (neither). Of the 40 candidates: **23 vessels, 3 surfaces, 13 hand
+tools**, with `baladi_oven` unresolved and probably a location. This is a
+**drawing** spec, not a reference-schema change; §21.2's scope-and-granularity
+question is untouched.
+
+**Locations are a second asset class, and the project already held the list.**
+The six values of the lexicon's **`station_hint`** field, carried by all 81
+activities, with the number each serves: **bench 34, stove 19, board 10, serve 6,
+oven 5, grill 4** (`any`, 3, is not a place). Their spec **inverts** the
+utensils': they render small in a band, so they are simple and few-stroked, and
+they are required to stay **quiet** — context, not instruction. If the band pulls
+the eye from the pot it has failed.
+
+**Bears on C-05.** The measured finding that **24 of 81 activity glyphs draw a
+tool rather than the act** was filed as *either a defect at four times the scale,
+or utensil-as-carrier already de facto.* Giving the utensil its own surface
+**relieves** that tension rather than resolving it — the tool no longer has to
+borrow the glyph's square. C-06 still measures it.
+
+**What stays open.** Whether the equipment check's small mark is derived from
+these illustrations or commissioned separately; the lid and other state variants;
+§21.2's scope, authored-versus-derived, and the 24-of-81 finding; §16.6's tile;
+and the Arabic names for the six locations.
 
 ---
 
@@ -2477,3 +2570,4 @@ not close them.
 | 21 Oct 2026 | **Units: one authored equivalence per ingredient** (`units`: metric, kitchen, imperial — kitchen includes *piece*), scaled for a line's amount, never from a generic table; replaces `convert` entry by entry; liquids by one stated rule (cup 240 ml, tbsp 15, tsp 5); **metric and kitchen shown**, metric first, on the shopping list and the import check sheet; authored through a ranked workbook, only Ibrahim's answers entering | 30, 11, 6, 48 |
 | 21 Oct 2026 | **A combined list speaks the app's language:** every item's name from the reference's bilingual names, unit words in that language and agreeing with their number; an imported line with no match keeps its original wording, marked as unmatched. A single import's page keeps the recipe's language | 48, 44 |
 | 23 Oct 2026 | **A superseded section says so in its heading.** Append-never-insert keeps the body as filed, so §17 still read SETTLED five weeks after §25 reversed it — and on 22 October it was read, believed and quoted before a search found §25; the Decision log had it right all along, 1,700 lines away. A superseded heading now names what replaced it, the date, and the part, with the original label kept in front of it. Applied to **eleven headings** (§3, §4.1, §5.2, §5.5, §6.7, §11, §16.6, §17, §20.2, §22.2, §26); the three addenda that supersede nothing were left alone. **No decision changes.** §25's four open ripples stay open | 49 |
+| 26 Oct 2026 | **The step page is the utensil's surface, which closes PM-09.** Every recipe page is one step in one location: a **drawn location** in a top band so it does not compete with the instruction area; the **utensil carrying the food layers**, ingredients added together forming one combined layer, the layers coming from the ingredient art rather than from the utensil library; **time and temperature in a uniform column, one row per layer**, beside the layers; a **doneness photograph at the foot**, still a real photograph (§5.5). **The premise §21.2 and §36 reasoned from was wrong:** the utensil never competed with the glyph for one 44 px square — it has its own surface, roughly **780 device px on a phone, 1400–1800 on a tablet**. The 44 px came from `asset-spec.md` §1, which is titled *Icons* and governs the SVG glyph set; the illustrated library is a different asset class, decided in §36 after that spec was written. Ibrahim caught it on 26 October, after a brief had been written for Nadine on the wrong figure. **Two consequences of the layering:** every layer must stay individually visible, so the vessel is drawn as a **cut-away** rather than from above — the prototype draws the pot both ways to settle it by eye; and each vessel ships a named **`contents-zone`** layer, since the app places the layers. **The library divides in three** — 23 vessels, 3 surfaces, 13 hand tools of 40 candidates. **Locations are a second asset class of six**, taken from the lexicon's `station_hint` values (bench 34, stove 19, board 10, serve 6, oven 5, grill 4), and their spec inverts the utensils': small, simple and required to stay quiet. Bears on **C-05** — the 24-of-81 tool-drawing glyphs are relieved, not resolved | 50, 21, 36 |

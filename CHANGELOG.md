@@ -5,6 +5,47 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-26a — the step page is the utensil's surface
+
+**`philosophy.md` §50, settled. PM-09 is closed.** Every recipe page is **one step in one
+location**: a **drawn location** in a top band, placed there so it does not compete with the
+instruction area; the **utensil carrying the food layers**, with ingredients added at the same
+moment forming one combined layer; **time and temperature in a uniform column, one row per
+layer**, beside the layers rather than over them; and a **doneness photograph at the foot**,
+still a real photograph (§5.5). The food layers come from the ingredient artwork, so the
+utensil holds another library's work — its interior stays light and neutral.
+
+**The premise §21.2 and §36 were reasoning from was wrong, which is the useful part.** Both
+sequenced the utensil behind PM-09 because *"the tile is 44 px and already has one open
+carrier competing for it"*. The utensil never competed for that square: it has **its own
+surface, rendered large** — roughly **780 device px on a phone, 1400–1800 on a tablet**,
+estimated from the prototypes, since the step page is not built. **What the 44 px tile carries
+is still open (§16.6) and is a different question.**
+
+**How the 44 px got there.** An illustration brief written for Nadine on 25 October took the
+figure from **`asset-spec.md` §1**, which is titled **Icons** and governs the stroke-drawn SVG
+glyph set. The illustrated library is a different asset class, decided in §36 *after* that spec
+was written and never covered by it. The brief had told her *nothing finer than a road sign*;
+detail cannot be added back to a crude drawing, so the error pushed the irreversible way.
+Ibrahim caught it. `asset-spec.md` now states what it governs, in its header and under §1.
+
+**Two consequences of the layering, not of taste.** Every layer needs its own row beside it, so
+every layer must stay visible — which points to a **cut-away** rather than a view from above,
+and the prototype draws **the pot twice** to settle by eye the angle that governs all forty
+drawings. And because the app places the layers, each vessel ships a named **`contents-zone`**
+layer for registration. The library divides by whether a tool holds food: **23 vessels, 3
+surfaces, 13 hand tools**.
+
+**Locations are a second asset class of six, and the repo already held the list** — the
+`station_hint` values in `content/lexicon/activities.yaml`, carried by all 81 activities:
+bench 34, stove 19, board 10, serve 6, oven 5, grill 4 (`any`, 3, is not a place). Their spec
+**inverts** the utensils': small, wide, simple, and required to stay quiet.
+
+**Marked per §49:** §21.1, §21.2 and §36 now carry SUPERSEDED IN PART in their headings, with
+the part named and the original labels and bodies untouched. **Open:** whether the equipment
+check's small mark is derived from these illustrations or commissioned separately; lid and other
+state variants; the six Arabic location names.
+
 ## 2026-10-23a — a superseded section says so in its heading
 
 **`philosophy.md` §49, settled.** Append-never-insert keeps a section's body as filed, which

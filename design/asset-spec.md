@@ -6,6 +6,14 @@ looks odd, it is because that is what the screen actually renders.
 
 This is the document to hand a photographer or an illustrator.
 
+**What it does not cover — added 26 October 2026.** The **illustrated utensil and
+location library** is a fourth asset class, decided in `philosophy.md` §36 after
+this spec was written and given its surface in §50. **None of the sizes here
+apply to it**; its spec is the illustration brief. The three classes below are
+the only ones this file governs, and §1's figures are the smallest in the
+project, so borrowing them is the specific mistake to avoid — it was made once,
+on 25 October 2026, and §50 records how.
+
 ---
 
 ## The principle that governs all three
@@ -31,6 +39,10 @@ setup matters more than a good camera.
 ---
 
 ## 1. Icons
+
+*Scope: the **SVG glyph set** — one stroke-drawn file per glyph key, `chop.svg`,
+`whisk.svg`. **Not** the illustrated utensil and location library, which renders
+far larger; see the header and `philosophy.md` §50.*
 
 ### Where they appear, and at what size
 
