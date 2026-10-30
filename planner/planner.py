@@ -47,6 +47,71 @@ from math import exp
 from typing import Iterable
 
 
+# ────────────────────────────────────────────────────────── the tag vocabulary
+# philosophy §26 (closed 24 Sept 2026), with §32's `lamb`. Every list is
+# closed: a value outside it is an authoring error, never a new category.
+#
+# The planner reads the six single-valued fields below. It does NOT read
+# `contains_override`: matbakh.py's derive_diet() folds it into the derived
+# `contains` list before a recipe reaches here, so `contains` is the only
+# dietary input. Nor does it ever read `main_protein` for diet — that field is
+# the dish's claim, not its ingredient list (§26): a soup made with chicken
+# stock is not a poultry dish, but it is not vegetarian either.
+
+CUISINES = frozenset({
+    "egyptian", "levantine", "gulf", "north_african", "turkish", "persian",
+    "italian", "french", "chinese", "indian", "american", "mexican",
+    "japanese", "greek", "spanish", "thai", "latin_american", "eastern_european",
+})
+COURSES = frozenset({
+    "main", "side", "salad", "soup", "bread", "sauce", "dip", "pickle",
+    "dessert", "breakfast", "drink", "component",
+})
+MAIN_PROTEINS = frozenset({
+    "beef", "lamb", "poultry", "seafood", "pork", "vegetarian", "mixed", "none",
+})
+SPICE_LEVELS = frozenset({0, 1, 2, 3})
+EFFORTS = frozenset({"easy", "moderate", "involved"})
+HOLDS = frozenset({"serve_immediately", "warm", "room", "cold", "better_next_day"})
+
+TAG_FIELDS = {
+    "course": COURSES, "cuisine": CUISINES, "main_protein": MAIN_PROTEINS,
+    "spice": SPICE_LEVELS, "effort": EFFORTS, "holds": HOLDS,
+}
+
+
+def missing_tags(recipe: dict) -> list[str]:
+    """The planner's tags this recipe lacks, or carries with a value outside
+    its closed list — the two are treated alike.
+
+    An incomplete dish is SHOWN, marked with what it lacks, and counted — not
+    excluded (philosophy §54). Unlike unknown dietary data, a missing tag
+    cannot hurt anyone. But no missing tag is guessed: where one is needed, the
+    dish counts against the host's limits, falls outside their preferences, or
+    is set aside where they can see it — never filed as a main, as the August
+    fallback did.
+    """
+    return [f for f, allowed in TAG_FIELDS.items() if recipe.get(f) not in allowed]
+
+
+def demanding(recipe: dict) -> bool:
+    """Counts against max_involved. Unknown effort counts: a host is better
+    told a menu may be too much than surprised by it on the night."""
+    return recipe.get("effort") not in EFFORTS or recipe["effort"] == "involved"
+
+
+def serve_at_once(recipe: dict) -> bool:
+    """Counts against max_immediate. Unknown `holds` counts, for the same reason."""
+    return recipe.get("holds") not in HOLDS or recipe["holds"] == "serve_immediately"
+
+
+def _check_vocabulary(name: str, values: Iterable, allowed: frozenset) -> None:
+    """A planner argument outside the vocabulary would silently match nothing."""
+    bad = sorted(set(values) - allowed, key=str)
+    if bad:
+        raise ValueError(f"{name}: not in the vocabulary: {', '.join(map(str, bad))}")
+
+
 # ─────────────────────────────────────────────────────────── the local record
 
 @dataclass
@@ -195,7 +260,11 @@ def admissible(recipe: dict, store: Store) -> tuple[bool, str]:
         return False, f"contains {', '.join(sorted(p.excludes & set(contains)))}"
     if p.dislikes & set(recipe.get("ingredients", [])):
         return False, "contains something you have excluded"
-    if recipe.get("spice", 0) > p.spice_max:
+    # Unknown heat passes every cook, marked through missing_tags() rather than
+    # hidden (§55). The ceiling is a stated preference, not a dietary rule, so
+    # an unrecorded spice level is a missing tag like any other (§54).
+    spice = recipe.get("spice")
+    if spice in SPICE_LEVELS and spice > p.spice_max:
         return False, "spicier than you asked for"
     return True, ""
 
@@ -325,15 +394,23 @@ def suggest_home(catalogue: list[dict], store: Store, today: date,
     """
     have = pantry(store, today=today)
     allowed = SLOT_EFFORT.get(slot, SLOT_EFFORT["weeknight"])
-    due, untried, withheld = [], [], 0
+    due, untried, withheld, untagged = [], [], 0, 0
 
     for r in catalogue:
+        # Sub-recipes are never suggested on their own (§26: `component` is
+        # what keeps them out, which is why `hidden` was removed).
+        if r.get("course") == "component":
+            continue
         ok, why_not = admissible(r, store)
         if not ok:
             if why_not == "dietary data incomplete":
                 withheld += 1
             continue
-        if r.get("effort") not in allowed:
+        miss = missing_tags(r)
+        if miss:
+            untagged += 1
+        # Unknown effort is shown in every slot, marked, rather than guessed.
+        if "effort" not in miss and r["effort"] not in allowed:
             continue
 
         ings = set(r.get("ingredients", []))
@@ -356,24 +433,29 @@ def suggest_home(catalogue: list[dict], store: Store, today: date,
                 reason = f"you stopped partway through last time, on step {step}"
             due.append({"id": r["id"], "title": r["title"],
                         "score": round(a * st * (1 + 0.25 * overlap), 3),
-                        "reason": reason, "cost": r.get("cost", 0)})
+                        "reason": reason, "cost": r.get("cost", 0),
+                        "tags_missing": miss})
         else:
             untried.append({"id": r["id"], "title": r["title"],
                             "pantry": round(overlap, 2), "cost": r.get("cost", 0),
                             "reason": (f"you already have {int(overlap*100)}% of the ingredients"
-                                       if overlap >= 0.5 else "fits tonight")})
+                                       if overlap >= 0.5 else "fits tonight"),
+                            "tags_missing": miss})
 
     due.sort(key=lambda x: -x["score"])
     untried.sort(key=lambda x: (-x["pantry"], x["cost"]))
     return {"due": due[:n], "untried": untried[:n],
             "untried_total": len(untried),
-            "withheld_for_incomplete_data": withheld}
+            "withheld_for_incomplete_data": withheld,
+            "shown_with_incomplete_tags": untagged}
 
 
 # ───────────────────────────────────────────────────────── event / hosting
 
 def plan_event(catalogue: list[dict], store: Store, today: date,
-               covers: int, budget: float, cuisine: str | None = None,
+               covers: int, budget: float,
+               prefer_cuisines: Iterable[str] | None = None,
+               prefer_proteins: Iterable[str] | None = None,
                offer_saved: bool = True,
                need_courses: tuple[str, ...] = ("main", "main", "side", "salad"),
                max_involved: int = 1, max_immediate: int = 2,
@@ -390,10 +472,45 @@ def plan_event(catalogue: list[dict], store: Store, today: date,
       max_involved  — how many demanding dishes one cook can actually run
       max_immediate — how many dishes need serving the instant they are done
 
+    `prefer_cuisines` and `prefer_proteins` are the host's preferences (§13:
+    "Mexican, beef and chicken preferred over seafood"; §52). They ORDER, they
+    never remove: a dish is outside the preference if its cuisine or its
+    protein is not among those named, menus with fewer such dishes come first,
+    and each one is named on its option with what it misses, so the host sees
+    the trade they are offered. No weight is invented — the order is the whole
+    mechanism, and a dish missing both counts once, like a dish missing one.
+    Neither is a dietary rule: a guest who cannot eat fish is a
+    `Profile.excludes` entry, checked against `contains`.
+
     Returns the menu, its cost, its reasons, and — per discovery-draft §9 —
-    the count of dishes excluded for incomplete dietary data, so the shelf
-    never lies about its own size.
+    the counts of dishes excluded for incomplete dietary data and for
+    incomplete tags, so the shelf never lies about its own size.
     """
+    if prefer_cuisines is not None:
+        prefer_cuisines = frozenset(prefer_cuisines)
+        _check_vocabulary("prefer_cuisines", prefer_cuisines, CUISINES)
+    if prefer_proteins is not None:
+        prefer_proteins = frozenset(prefer_proteins)
+        _check_vocabulary("prefer_proteins", prefer_proteins, MAIN_PROTEINS)
+    # A component is never a course of its own; asking for one is a caller error.
+    _check_vocabulary("need_courses", need_courses, COURSES - {"component"})
+
+    def outside_preference(dishes: list[dict]) -> list[str]:
+        out = []
+        for r in dishes:
+            misses = []
+            # An unrecorded cuisine or protein is outside the preference — it
+            # cannot be shown to meet it — and says so rather than printing None.
+            if prefer_cuisines is not None and r.get("cuisine") not in prefer_cuisines:
+                misses.append(r.get("cuisine") if r.get("cuisine") in CUISINES
+                              else "cuisine not recorded")
+            if prefer_proteins is not None and r.get("main_protein") not in prefer_proteins:
+                misses.append(r.get("main_protein") if r.get("main_protein") in MAIN_PROTEINS
+                              else "protein not recorded")
+            if misses:
+                out.append(f"{r['title']} ({', '.join(map(str, misses))})")
+        return out
+
     # A TESTED MENU BEATS A COMPUTED ONE. Offer what the cook has actually
     # served before anything assembled — they already know it works at scale.
     recalled = []
@@ -404,10 +521,7 @@ def plan_event(catalogue: list[dict], store: Store, today: date,
                 continue
             if rec["now"]["cost"] > budget:
                 continue
-            if cuisine:
-                cs = {r.get("cuisine") for r in catalogue if r["id"] in m["dishes"]}
-                if cuisine not in cs:
-                    continue
+            served = [r for r in catalogue if r["id"] in m["dishes"]]
             recalled.append({
                 "kind": "served before",
                 "name": rec["name"],
@@ -417,32 +531,50 @@ def plan_event(catalogue: list[dict], store: Store, today: date,
                 "menu": rec["dishes"],
                 "cost": rec["now"]["cost"],
                 "headroom": round(budget - rec["now"]["cost"], 2),
+                "outside_preference": outside_preference(served),
                 "reason": (f"you served this {m['times_served']} time"
                            f"{'s' if m['times_served'] > 1 else ''}, last "
                            f"{m['days_ago']} days ago" +
                            (f" for {m['covers']}" if m["covers"] != covers else "")),
             })
 
-    pool, withheld = [], 0
+    pool, withheld, untagged, unplaced = [], 0, 0, []
     for r in catalogue:
+        if r.get("course") == "component":
+            continue
         ok, why = admissible(r, store)
         if not ok:
             if why == "dietary data incomplete":
                 withheld += 1
             continue
-        if cuisine and r.get("cuisine") != cuisine:
+        miss = missing_tags(r)
+        if miss:
+            untagged += 1
+        # Without a course a dish has no place in a menu, and guessing one is
+        # how a drink became a main. It is shown to the host instead, so they
+        # can place it themselves.
+        if "course" in miss:
+            unplaced.append({"id": r["id"], "title": r["title"], "tags_missing": miss})
             continue
         pool.append(r)
+    # Saved menus keep their own order within each level of fit (stable sort).
+    recalled.sort(key=lambda x: len(x["outside_preference"]))
+    shelf = {"withheld_for_incomplete_data": withheld,
+             "shown_with_incomplete_tags": untagged,
+             "no_course_to_place": unplaced}
 
     by_course: dict[str, list[dict]] = {}
     for r in pool:
-        by_course.setdefault(r.get("course", "main"), []).append(r)
+        by_course.setdefault(r["course"], []).append(r)
 
-    # candidates per course, best-first, capped so the search stays small
+    # candidates per course, best-first, capped so the search stays small.
+    # Preferred proteins go first, so the cap never cuts a preferred dish in
+    # favour of one the host ranked below it.
     ranked: dict[str, list[dict]] = {}
     for course, rs in by_course.items():
         ranked[course] = sorted(
-            rs, key=lambda r: -(affinity(store, r["id"]) * staleness(store, r["id"], today))
+            rs, key=lambda r: (len(outside_preference([r])),
+                               -(affinity(store, r["id"]) * staleness(store, r["id"], today)))
         )[:8]
 
     need = list(need_courses)
@@ -450,7 +582,7 @@ def plan_event(catalogue: list[dict], store: Store, today: date,
         if len(ranked.get(c, [])) < need.count(c):
             return {"ok": False,
                     "reason": f"not enough {c} dishes match — {len(ranked.get(c, []))} available, {need.count(c)} needed",
-                    "withheld_for_incomplete_data": withheld}
+                    **shelf}
 
     # build every admissible combination, then score
     def course_options(c: str, k: int):
@@ -475,9 +607,9 @@ def plan_event(catalogue: list[dict], store: Store, today: date,
         cost = sum(r["cost"] * covers for r in m)
         if cost > budget:
             continue
-        if sum(1 for r in m if r.get("effort") == "involved") > max_involved:
+        if sum(1 for r in m if demanding(r)) > max_involved:
             continue
-        if sum(1 for r in m if r.get("holds") == "serve_immediately") > max_immediate:
+        if sum(1 for r in m if serve_at_once(r)) > max_immediate:
             continue
 
         known = [r for r in m if times_cooked(store, r["id"]) > 0]
@@ -491,20 +623,22 @@ def plan_event(catalogue: list[dict], store: Store, today: date,
             "menu": [{"id": r["id"], "title": r["title"], "course": r.get("course"),
                       "cost": round(r["cost"] * covers, 2),
                       "note": (f"you have made this {times_cooked(store, r['id'])} times"
-                               if times_cooked(store, r["id"]) else "new to you")}
+                               if times_cooked(store, r["id"]) else "new to you"),
+                      "tags_missing": missing_tags(r)}
                      for r in m],
             "cost": round(cost, 2),
             "headroom": round(budget - cost, 2),
             "you_have_cooked": f"{len(known)} of {len(m)}",
+            "outside_preference": outside_preference(m),
             "score": round(score, 3),
         })
 
-    results.sort(key=lambda x: -x["score"])
+    results.sort(key=lambda x: (len(x["outside_preference"]), -x["score"]))
     if results or recalled:
         return {"ok": True,
                 "served_before": recalled[:top],
                 "options": results[:top],
-                "withheld_for_incomplete_data": withheld, "reason": None}
+                **shelf, "reason": None}
 
     # NEVER RETURN ZERO SILENTLY (discovery-draft §9).
     # Name the binding constraint and show what would work, so the host relaxes
@@ -512,13 +646,13 @@ def plan_event(catalogue: list[dict], store: Store, today: date,
     diag = []
     for m in menus:
         cost = sum(r["cost"] * covers for r in m)
-        inv = sum(1 for r in m if r.get("effort") == "involved")
-        imm = sum(1 for r in m if r.get("holds") == "serve_immediately")
+        inv = sum(1 for r in m if demanding(r))
+        imm = sum(1 for r in m if serve_at_once(r))
         diag.append((cost, inv, imm, m))
     if not diag:
         return {"ok": False, "binding": "structure",
                 "reason": "no combination of courses is possible from what matches",
-                "withheld_for_incomplete_data": withheld}
+                **shelf}
 
     diag.sort(key=lambda x: x[0])
     cheapest_cost, inv, imm, cheapest = diag[0]
@@ -536,7 +670,7 @@ def plan_event(catalogue: list[dict], store: Store, today: date,
                          "cost": round(r["cost"] * covers, 2)} for r in cheapest],
             "budget_needed": round(cheapest_cost, 2),
             "or_drop_to": max(1, len(need) - 1),
-            "withheld_for_incomplete_data": withheld,
+            **shelf,
         }
 
     blocked_effort = sum(1 for d in within_budget if d[1] > max_involved)
@@ -548,5 +682,5 @@ def plan_event(catalogue: list[dict], store: Store, today: date,
                    + (f"need more than {max_involved} demanding dish(es)"
                       if blocked_effort >= blocked_holds else
                       f"need more than {max_immediate} served the moment they are done")),
-        "withheld_for_incomplete_data": withheld,
+        **shelf,
     }

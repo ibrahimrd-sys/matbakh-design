@@ -2,7 +2,7 @@
 
 **Status:** Living document. Sections marked SETTLED are decided and should not be relitigated without a stated reason. Sections marked OPEN are unresolved. **A heading that says SUPERSEDED or SUPERSEDED IN PART names what replaced it and when — read that first; the body below is left exactly as it was filed** (§49).
 
-**Last updated:** 2026-10-26
+**Last updated:** 2026-10-30
 
 ---
 
@@ -388,7 +388,7 @@ If music returns, the only shape worth considering is licensed instrumental
 audio Matbakh owns outright: offline, duckable, no third party. That is a
 Ramadan sponsorship asset, not a launch feature.
 
-## 13. Entertaining — WORKED THROUGH, NOT BUILT
+## 13. Entertaining — WORKED THROUGH, NOT BUILT; SUPERSEDED IN PART by §52 and §53 (30 Oct 2026): protein and cuisine in menu suggestion are preferences, not constraints
 Proposed menus, budget, shopping list. A genuinely different mode with different physics.
 
 Argued through 1 August 2026. The conclusion is that it is **two features, not one**, and the split matters more than anything else here: one is a document, the other is a change to the reader. They ship separately and in that order.
@@ -1194,7 +1194,7 @@ never inferred**.
 - **The output is an effective-covers figure per dish**, fed into §6's existing
   scaling class and `max_scale_factor`. No second scaling system.
 
-### 24.2 What is OPEN — PM-16, and one blocker that is not PM-16
+### 24.2 What is OPEN — PM-16, and one blocker that is not PM-16; SUPERSEDED IN PART by §56 (30 Oct 2026): the default split is even
 
 **The blocker first: `course` is not an authored tag yet.** It is proposed in
 `design/tag-proposal.md` (a draft of 1 August, closed list) and §11 still records
@@ -2557,6 +2557,295 @@ Both are layout, and both wait on the prototype page §36 asked for.
 
 ---
 
+## 52. Protein is a preference on a party menu, not a filter — SETTLED (30 October 2026), SUPERSEDED IN PART by §53 (30 Oct 2026): cuisine is a preference too
+
+*An addendum to §13, per append-never-insert. §13 listed protein among the axes
+of a "constrained selection"; for protein, this replaces that without editing it.*
+
+**Decided by Ibrahim, 30 October 2026.** When a host names the proteins they
+want, the planner **orders** menus by them and **never removes** a dish for
+falling outside them.
+
+- **Menus with fewer dishes outside the named proteins come first.** Among menus
+  that fit equally well, the existing order stands: the cook's own record,
+  variety, and use of the budget.
+- **Every dish outside them is named on its menu**, with its protein, so the
+  host sees the trade they are being offered rather than a silent compromise.
+- **Saved menus are ordered the same way and never dropped** for it.
+- **If no menu fits the preference at all, a menu is still offered.** A
+  preference can never empty the shelf.
+- **No weight is invented for it.** The order is the whole mechanism: a number
+  saying how much a preference is worth against the cook's record would be a
+  placeholder with nothing measured behind it (§16.6's reasoning).
+
+**Why.** §13's own brief says it: *beef and chicken **preferred** over seafood.*
+A preference that silently removes everything else is a rule the host did not
+state, and it hides the seafood dish the host might have accepted on a smaller
+budget. The code of 30 October briefly made it a hard filter; this reverses that
+before it shipped anywhere.
+
+**What it is not.** It is not dietary. A guest who cannot eat fish is a stated
+Profile exclusion, checked against the derived `contains`, and that stays a
+hard rule (§16.3: hard rules apply only to dietary exclusions). `main_protein`
+is the dish's claim (§26), never its diet.
+
+**Unchanged:** cuisine is still a filter on the party menu. Whether it should
+become a preference too is not decided here.
+
+---
+
+## 53. Cuisine is a preference on a party menu too — SETTLED (30 October 2026)
+
+*An addendum to §52, per append-never-insert. §52 left cuisine as a filter and
+said whether it should become a preference was not decided; this decides it.*
+
+**Decided by Ibrahim, 30 October 2026.** Cuisine on a party menu works exactly
+as §52 made protein work: it **orders** menus and **never removes** a dish.
+
+- **A dish is outside the host's preference if its cuisine or its protein is
+  not among those named.** Menus with fewer such dishes come first; among
+  equals, the existing order stands.
+- **Each such dish is named with what it misses**, cuisine, protein or both
+  (*Sayyadeya: egyptian, seafood*).
+- **A dish missing both counts once, like a dish missing one.** Counting it
+  twice would quietly rank cuisine and protein against each other, which is a
+  weight nobody has stated (§52).
+- **Saved menus are ordered the same way and never dropped.** The old filter
+  kept a saved menu if *any* of its dishes was of the cuisine; now each dish is
+  judged.
+- **A host may name more than one cuisine**, as with proteins.
+
+**Why.** The worked brief of §13 asks for *Mexican* in the same breath as
+*beef and chicken preferred*, and a host who wants a Mexican evening may still
+take a Levantine salad over no salad at all. A filter would have hidden it, and
+§16.3 keeps hard rules for dietary exclusions only.
+
+**Unchanged:** dietary exclusions, dislikes, the spice ceiling and the budget
+stay hard filters. The variety term in a menu's score, which favours a spread
+of cuisines, still applies within menus that fit the preference equally well.
+
+---
+
+## 54. A dish with missing tags is shown, not hidden — SETTLED (30 October 2026), SUPERSEDED IN PART by §55 (30 Oct 2026): unknown spice is shown to every cook
+
+**Decided by Ibrahim, 30 October 2026.** When a recipe lacks one of the tags the
+planner reads — `course`, `cuisine`, `main_protein`, `spice`, `effort`, `holds` —
+or carries a value outside §26's lists, the planner **shows it, marks which tags
+are missing, and counts it.** It does not exclude it. Earlier the same day the
+code excluded such dishes; that was never filed and is reversed here.
+
+**No missing tag is guessed.** Where the planner needs the tag, the dish is
+placed on the side the host would rather know about:
+
+- **No `course`:** it cannot fill a course in a party menu, so it is set aside
+  in a list the host sees, to place themselves. Filing it as a main, as the
+  August code did, is how a drink becomes a main course.
+- **No `effort` or `holds`:** it counts against the host's limits on demanding
+  dishes and on dishes served the moment they are done. A host is better told a
+  menu may be too much than surprised on the night. In the weekly suggestions,
+  unknown effort is shown on weeknights and weekends alike.
+- **No `cuisine` or `main_protein`:** it falls outside the host's preference
+  (§52, §53), named as *cuisine not recorded* or *protein not recorded*.
+
+**Why it differs from dietary data.** A dish whose dietary status is unknown is
+still excluded, and stays excluded (§11): a wrong vegetarian claim costs a guest
+their dinner. A missing tag cannot hurt anyone; hiding the dish only shrinks the
+shelf, and early in the catalogue's life that could be most of it.
+
+**Unchanged:** a recipe with no recorded spice level still passes only a cook
+with no spice ceiling. That rule sits with the dietary checks and is not
+decided here.
+
+---
+
+## 55. A dish with no recorded spice level is shown to every cook — SETTLED (30 October 2026)
+
+*An addendum to §54, per append-never-insert. §54 left this rule unchanged and
+undecided; this decides it.*
+
+**Decided by Ibrahim, 30 October 2026.** A recipe whose spice level is not
+recorded, or is outside §26's four levels, is shown to **every** cook,
+whatever spice ceiling they have set. It is marked as missing its spice tag,
+like any other missing tag under §54.
+
+**What it replaces.** Earlier the same day the code let such a dish through only
+for a cook with no ceiling, and before that, since August, it treated a missing
+level as no heat at all. Neither was filed.
+
+**Why.** The spice ceiling is a stated **preference**, not a dietary rule: a
+dish hotter than a cook likes is unwelcome, not dangerous. §16.3 keeps hard
+rules for dietary exclusions, and §54 settled that a missing tag shows a dish
+rather than hiding it. The mark is what tells a cook with a low ceiling to
+check before cooking.
+
+**Unchanged:** a dish whose **recorded** spice level is above the cook's ceiling
+is still left out. That is the ceiling doing what the cook asked.
+
+---
+
+## 56. Course-weighted serving splits evenly by default — SETTLED (30 October 2026), SUPERSEDED IN PART by §57 (30 Oct 2026): partly weighted courses decided
+
+*An addendum to §24, per append-never-insert. §24.2 listed the default split as
+open under PM-16; this decides it.*
+
+**Decided by Ibrahim, 30 October 2026.** When a course on a party menu holds
+more than one dish and the cook has set no weights for that occasion, the
+course's per-guest target is **divided evenly** among its dishes. Three dishes
+sharing the mains each take a third of the mains target.
+
+**Why it matters.** §24.2 named the default as the piece that stops the
+mechanism computing unattended: without one, every multi-dish course needs the
+cook's judgement before a single quantity exists. With it, the party plan can
+produce quantities and a priced shopping list the moment a menu is chosen, and
+the cook's weights become an adjustment rather than a prerequisite.
+
+**Why even.** It is the only split that claims nothing about the dishes. Any
+other default — by cost, by `effort`, by `main_protein` — would have the app
+deciding which dish is the centrepiece, which §24 settled is the cook's
+judgement for that evening, never a fact about the recipe.
+
+**Unchanged:** §24's watch-point stands. If dishes usually go unweighted and the
+even split gives implausible quantities, that counts against this default, not
+against the mechanism, and the default is what to revisit.
+
+**Still open under PM-16:** the per-course target numbers themselves, still
+waiting on catering research and still not filled with placeholders; and which
+courses take part. **Not decided here:** how the split works when the cook
+weights some dishes in a course and leaves others unset.
+
+**Not built.** The mechanism is not in `planner.py`; it cannot compute until the
+targets exist.
+
+---
+
+## 57. A partly weighted course gives its unweighted dishes an even share of what is left — SETTLED (30 October 2026), SUPERSEDED IN PART by §58 (30 Oct 2026): weights that use up the course warn the cook
+
+*An addendum to §56, per append-never-insert. §56 left partly weighted courses
+undecided; this decides them.*
+
+**Decided by Ibrahim, 30 October 2026.** When the cook weights some dishes in a
+course and leaves others unset, each weighted dish takes the share the cook gave
+it, and **the unweighted dishes divide what is left of the course's per-guest
+target evenly among them.** A mains course of three, with the lamb set at half:
+the lamb takes half, and the two unweighted mains take a quarter each.
+
+**It follows §56's reasoning.** The cook's judgement is applied exactly where the
+cook gave it, and nowhere else; where they gave none, the even split claims
+nothing about the dishes. With no weights set at all this is §56's even split,
+so the two rules are one rule.
+
+**What it implies about a weight.** For "what is left" to mean anything, a
+weight is a **share of the course's target** — a half, a third — rather than a
+relative number compared only with other weights. That reading is recorded here
+as a consequence of this decision, not as a separate one.
+
+**Not decided here:** what happens when the weighted shares use up the whole
+target, or more, leaving the unweighted dishes nothing. The arithmetic gives them
+zero, which would put a dish on the menu with no quantity; that is a case for the
+interface — to warn, or to stop the cook setting it — and it waits on the planner
+screen.
+
+**Not built**, for the same reason as §56: the per-course targets do not exist yet.
+
+---
+
+## 58. The cook is warned when weights use up the whole course — SETTLED (30 October 2026), SUPERSEDED IN PART by §59 and §60 (30 Oct 2026): a dish left with nothing stays at zero, shown; a fully weighted course over its target warns too
+
+*An addendum to §57, per append-never-insert. §57 left this case to the
+interface; this decides what the interface does.*
+
+**Decided by Ibrahim, 30 October 2026.** When the shares the cook has set in a
+course reach the whole of its per-guest target, or go past it, while at least
+one dish in that course is still unweighted, the planner **warns the cook**. It
+does not stop them setting the weight.
+
+**Why a warning and not a block.** The weights are the cook's judgement for the
+evening (§24), and the warning is there to catch a slip, not to overrule a
+choice: a cook may mean to serve one dish as a token. Stopping them would have
+the app deciding the arithmetic matters more than their intent. The warning says
+what the arithmetic does, and the cook decides.
+
+**What the warning has to say.** Which dish or dishes would get no quantity, and
+that this is because the weights already cover the course. The wording and
+where it appears belong to the planner screen, which is not designed.
+
+**Not decided here:**
+
+- **What an unweighted dish gets if the cook goes ahead.** The arithmetic of §57
+  gives it nothing.
+- **A fully weighted course whose shares add up to more than the whole target.**
+  No dish is left with nothing, but the course comes to more than its target.
+  This section does not say whether that warns too.
+
+**Not built.**
+
+---
+
+## 59. A dish left with nothing stays at zero, and is shown at zero — SETTLED (30 October 2026), SUPERSEDED IN PART by §60 (30 Oct 2026): its open question, the over-target warning, decided
+
+*An addendum to §58, per append-never-insert. §58 left open what an unweighted
+dish gets if the cook goes ahead past the warning; this decides it.*
+
+**Decided by Ibrahim, 30 October 2026.** If the cook keeps weights that use up
+the whole course, an unweighted dish in that course **keeps a quantity of zero**,
+and the party plan **shows it at zero** rather than hiding it or quietly giving
+it a share.
+
+**Why.** It is what the cook's own weights say, and §58 has already told them
+so. Giving the dish a share anyway would undo a choice the cook made with the
+warning in front of them; dropping it from the menu would hide that it is still
+there. Showing the zero keeps the plan honest about both.
+
+**What follows from it, recorded as consequences rather than separate
+decisions:**
+
+- **The dish stays on the menu**, at zero, until the cook changes a weight or
+  removes it.
+- **A zero quantity buys nothing.** The dish adds no lines to the consolidated
+  shopping list and nothing to the menu's cost.
+
+**How the zero looks** belongs to the planner screen, which is not designed.
+
+**Still open from §58:** whether a fully weighted course whose shares come to
+more than the whole target warns too.
+
+**Not built.**
+
+---
+
+## 60. A fully weighted course over its target warns too — SETTLED (30 October 2026)
+
+*An addendum to §58 and §59, per append-never-insert. Both left this case open;
+this decides it.*
+
+**Decided by Ibrahim, 30 October 2026.** When **every** dish in a course is
+weighted and the shares add up to **more than** the course's per-guest target,
+the planner **warns the cook**, as §58 does when weights leave a dish with
+nothing. No dish is left at zero here; the warning is that the course as a
+whole now comes to more than its target.
+
+**It follows §58 in kind.** A warning, not a block: the cook may mean to serve
+more than the target — a hungry table, a dish meant to be taken home — and the
+weights are their judgement for the evening (§24). The warning catches the slip
+and leaves the choice with them.
+
+**What follows from it, recorded as a consequence rather than a separate
+decision:** if the cook goes ahead, each dish keeps the share they set, so the
+course is planned, bought and costed **above** its target. As with §59, the plan
+shows what the cook's weights say rather than quietly correcting it.
+
+**What the warning has to say:** that the shares come to more than the whole
+course. Its wording and where it appears belong to the planner screen, which is
+not designed.
+
+**With this, how a course's target is split is fully decided** (§56–§60). What
+remains open under PM-16 is the target numbers themselves and which courses take
+part.
+
+**Not built.**
+
+---
+
 ## Decision log
 
 | Date | Decision | Section |
@@ -2643,3 +2932,12 @@ Both are layout, and both wait on the prototype page §36 asked for.
 | 23 Oct 2026 | **A superseded section says so in its heading.** Append-never-insert keeps the body as filed, so §17 still read SETTLED five weeks after §25 reversed it — and on 22 October it was read, believed and quoted before a search found §25; the Decision log had it right all along, 1,700 lines away. A superseded heading now names what replaced it, the date, and the part, with the original label kept in front of it. Applied to **eleven headings** (§3, §4.1, §5.2, §5.5, §6.7, §11, §16.6, §17, §20.2, §22.2, §26); the three addenda that supersede nothing were left alone. **No decision changes.** §25's four open ripples stay open | 49 |
 | 26 Oct 2026 | **The step page is the utensil's surface, which closes PM-09.** Every recipe page is one step in one location: a **drawn location** in a top band so it does not compete with the instruction area; the **utensil carrying the food layers**, ingredients added together forming one combined layer, the layers coming from the ingredient art rather than from the utensil library; **time and temperature in a uniform column, one row per layer**, beside the layers; a **doneness photograph at the foot**, still a real photograph (§5.5). **The premise §21.2 and §36 reasoned from was wrong:** the utensil never competed with the glyph for one 44 px square — it has its own surface, roughly **780 device px on a phone, 1400–1800 on a tablet**. The 44 px came from `asset-spec.md` §1, which is titled *Icons* and governs the SVG glyph set; the illustrated library is a different asset class, decided in §36 after that spec was written. Ibrahim caught it on 26 October, after a brief had been written for Nadine on the wrong figure. **Two consequences of the layering:** every layer must stay individually visible, so the vessel is drawn as a **cut-away** rather than from above — the prototype draws the pot both ways to settle it by eye; and each vessel ships a named **`contents-zone`** layer, since the app places the layers. **The library divides in three** — 23 vessels, 3 surfaces, 13 hand tools of 40 candidates. **Locations are a second asset class of six**, taken from the lexicon's `station_hint` values (bench 34, stove 19, board 10, serve 6, oven 5, grill 4), and their spec inverts the utensils': small, simple and required to stay quiet. Bears on **C-05** — the 24-of-81 tool-drawing glyphs are relieved, not resolved | 50, 21, 36 |
 | 26 Oct 2026 | **Doneness is a thumbnail that enlarges; a technique clip is summoned.** §36's open *fit on one phone screen without scrolling* is the pressure, and Ibrahim proposed putting both behind a button. **They are decided differently.** A doneness photograph **stays visible as a thumbnail at the foot and enlarges on tap** — the tap is optional, not the price of seeing it — because the photograph *is* the judgement the step turns on (§16.6: one per genuine decision point, not one per page) and §5.5 and §16.6 both rest the trust claim on it. A **full pop-up was declined**: §1's counter-top posture means the photograph is wanted when the hands are dirtiest, and §3 counts a mandatory press. **A clip is summoned by a press**, because it is supplementary — it shows what a still cannot, and a cook who knows the technique never needs it. **This reverses `asset-spec.md` §3's `autoplay`** and its *"starts with no press"* consequence **for the step page only**: the rule now splits by surface, autoplay where there is room and summoned where there is not. The prototype's clips run 18–31 seconds, so that spec and §36's one-screen problem were already in conflict. `muted` and one-technique-per-clip are untouched. The space freed goes to the illustration, which is the instruction. **§16.6 is untouched** — how many doneness photographs a recipe needs, and what the 44 px tile carries, both still wait on the pilot, which can also measure whether a thumbnail suffices and whether a summoned clip is reached for. **Open:** the thumbnail's size and the clip's press target, both layout, both waiting on §36's prototype page | 51, 50, 16.6 |
+| 30 Oct 2026 | **Protein is a preference on a party menu, not a filter.** When a host names proteins, menus with fewer dishes outside them come first and every such dish is named with its protein; saved menus are ordered the same way; nothing is removed, and a menu is still offered when none fits. **No weight is invented** — the order is the mechanism. Not dietary: a guest who cannot eat fish stays a hard Profile exclusion on `contains`. Reverses the hard filter written into the planner earlier the same day, before it shipped. Cuisine stays a filter | 52 |
+| 30 Oct 2026 | **Cuisine is a preference on a party menu too.** As §52 for protein: it orders menus and never removes a dish. A dish is outside the preference if its cuisine or its protein is not among those named, and is named with what it misses; **a dish missing both counts once**, so cuisine and protein are never weighed against each other. Saved menus are judged dish by dish, no longer kept if any one dish matched. Several cuisines may be named. Dietary exclusions, dislikes, spice ceiling and budget stay hard | 53 |
+| 30 Oct 2026 | **A dish with missing tags is shown, not hidden.** It is marked with which of the planner's six tags it lacks and counted, never excluded; no tag is guessed. Without `course` it is set aside where the host can place it, never filed as a main; unknown `effort` or `holds` counts against the host's limits; unrecorded cuisine or protein is outside the preference. Unknown dietary data stays excluded — a missing tag cannot hurt anyone, a wrong diet claim can. Reverses an unfiled exclusion written into the planner earlier the same day | 54 |
+| 30 Oct 2026 | **A dish with no recorded spice level is shown to every cook**, whatever their spice ceiling, marked as missing its spice tag (§54). The ceiling is a stated preference, not a dietary rule. A dish whose recorded level is above the ceiling is still left out. Replaces an unfiled rule of the same day that passed such a dish only for a cook with no ceiling | 55 |
+| 30 Oct 2026 | **Course-weighted serving splits evenly by default.** When a course holds several dishes and the cook has set no weights for the occasion, the course's per-guest target is divided evenly among them — the only default that claims nothing about the dishes, where any other would have the app choosing the centrepiece. It lets the party plan produce quantities unattended. §24's watch-point stands. Still open under PM-16: the target numbers and which courses take part; not decided: partly weighted courses. Not built | 56 |
+| 30 Oct 2026 | **A partly weighted course gives its unweighted dishes an even share of what is left.** Weighted dishes take the shares the cook gave them; the unweighted ones divide the rest of the course's per-guest target evenly. With no weights at all this is §56's even split. Implies a weight is a share of the course target. Not decided: weighted shares that use up the whole target, which waits on the planner screen. Not built | 57 |
+| 30 Oct 2026 | **The cook is warned when weights use up the whole course.** When the shares set in a course reach or pass its per-guest target while a dish there is still unweighted, the planner warns, naming the dish that would get no quantity; it does not block. The weights are the cook's judgement, and a warning catches a slip without overruling a choice. Wording waits on the planner screen. Not decided: what the unweighted dish gets if the cook goes ahead; whether a fully weighted course over its target warns. Not built | 58 |
+| 30 Oct 2026 | **A dish left with nothing stays at zero, and is shown at zero.** If the cook keeps weights that use up the course past §58's warning, an unweighted dish keeps a quantity of zero and the party plan shows it so — neither hidden nor given a share the cook's weights do not allow. Consequences: it stays on the menu until the cook changes a weight or removes it, and adds nothing to the shopping list or the cost. How the zero looks waits on the planner screen. Not built | 59 |
+| 30 Oct 2026 | **A fully weighted course over its target warns too.** When every dish in a course is weighted and the shares come to more than the course target, the planner warns, as §58 does; it does not block. If the cook goes ahead, each dish keeps its share and the course is planned, bought and costed above its target. Wording waits on the planner screen. With this, how a course's target is split is fully decided; the numbers and which courses take part remain open (PM-16). Not built | 60 |

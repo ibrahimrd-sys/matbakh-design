@@ -4,43 +4,43 @@ from planner import *
 TODAY = date(2026, 8, 13)
 
 CAT = [
- dict(id="molokhia", title="Molokhia bil farakh", course="main", cuisine="egyptian",
+ dict(id="molokhia", title="Molokhia bil farakh", course="main", cuisine="egyptian", main_protein="poultry",
       effort="moderate", holds="warm", spice=1, cost=2.10,
       contains=["meat","poultry","dairy"], ingredients=["chicken_whole","molokhia_frozen","ghee","garlic"]),
- dict(id="koshari", title="Koshari", course="main", cuisine="egyptian",
+ dict(id="koshari", title="Koshari", course="main", cuisine="egyptian", main_protein="vegetarian",
       effort="involved", holds="warm", spice=1, cost=0.85,
       contains=["gluten"], ingredients=["rice","lentils_raw","pasta","onion"]),
- dict(id="mahshi", title="Mahshi", course="main", cuisine="egyptian",
+ dict(id="mahshi", title="Mahshi", course="main", cuisine="egyptian", main_protein="vegetarian",
       effort="involved", holds="better_next_day", spice=0, cost=1.40,
       contains=[], ingredients=["rice","onion","tomato_paste"]),
- dict(id="fattah", title="Fattah", course="main", cuisine="egyptian",
+ dict(id="fattah", title="Fattah", course="main", cuisine="egyptian", main_protein="beef",
       effort="moderate", holds="serve_immediately", spice=0, cost=2.60,
       contains=["meat","gluten","dairy"], ingredients=["beef","rice","ghee","garlic"]),
- dict(id="samak", title="Sayyadeya", course="main", cuisine="egyptian",
+ dict(id="samak", title="Sayyadeya", course="main", cuisine="egyptian", main_protein="seafood",
       effort="moderate", holds="warm", spice=1, cost=3.10,
       contains=["fish"], ingredients=["fish_filet","rice","onion"]),
- dict(id="tagine", title="Vegetable tagine", course="main", cuisine="north_african",
+ dict(id="tagine", title="Vegetable tagine", course="main", cuisine="north_african", main_protein="vegetarian",
       effort="easy", holds="warm", spice=2, cost=1.20,
       contains=[], ingredients=["onion","carrot","chickpea","tomato_paste"]),
- dict(id="salata", title="Baladi salad", course="salad", cuisine="egyptian",
+ dict(id="salata", title="Baladi salad", course="salad", cuisine="egyptian", main_protein="vegetarian",
       effort="easy", holds="cold", spice=0, cost=0.55,
       contains=[], ingredients=["tomato","cucumber","onion","lemon"]),
- dict(id="tabbouleh", title="Tabbouleh", course="salad", cuisine="levantine",
+ dict(id="tabbouleh", title="Tabbouleh", course="salad", cuisine="levantine", main_protein="vegetarian",
       effort="easy", holds="cold", spice=0, cost=0.70,
       contains=["gluten"], ingredients=["bulgur","tomato","lemon"]),
- dict(id="rocket", title="Rocket and lemon", course="salad", cuisine="egyptian",
+ dict(id="rocket", title="Rocket and lemon", course="salad", cuisine="egyptian", main_protein="vegetarian",
       effort="easy", holds="cold", spice=0, cost=0.45,
       contains=[], ingredients=["lemon","olive_oil"]),
- dict(id="rice_verm", title="Rice with vermicelli", course="side", cuisine="egyptian",
+ dict(id="rice_verm", title="Rice with vermicelli", course="side", cuisine="egyptian", main_protein="vegetarian",
       effort="easy", holds="warm", spice=0, cost=0.40,
       contains=["gluten"], ingredients=["rice","vermicelli","ghee"]),
- dict(id="bamia", title="Bamia", course="side", cuisine="egyptian",
+ dict(id="bamia", title="Bamia", course="side", cuisine="egyptian", main_protein="beef",
       effort="easy", holds="warm", spice=1, cost=0.95,
       contains=["meat"], ingredients=["okra","tomato_paste","onion"]),
- dict(id="baba", title="Baba ghanoush", course="dip", cuisine="levantine",
+ dict(id="baba", title="Baba ghanoush", course="dip", cuisine="levantine", main_protein="vegetarian",
       effort="easy", holds="room", spice=0, cost=0.60,
       contains=["sesame"], ingredients=["eggplant","sesame_paste","lemon"]),
- dict(id="mystery", title="Unlabelled dish", course="main", cuisine="egyptian",
+ dict(id="mystery", title="Unlabelled dish", course="main", cuisine="egyptian", main_protein="vegetarian",
       effort="easy", holds="warm", spice=0, cost=1.00,
       contains=None, ingredients=["onion"]),   # diet unknown — must be excluded
 ]
@@ -77,7 +77,7 @@ print("  12 covers · Egyptian · budget 1,500 EGP (~$31) · no seafood · two v
 
 guest_store = Store(cooks=store.cooks, lists=store.lists,
                     profile=Profile(household=12, excludes={"fish","shellfish"}, spice_max=1))
-r = plan_event(CAT, guest_store, TODAY, covers=12, budget=31.25, cuisine=None,
+r = plan_event(CAT, guest_store, TODAY, covers=12, budget=31.25,
                need_courses=("main","main","side","salad"))
 if not r["ok"]:
     print(f"   NO MENU FITS — binding constraint: {r['binding']}")
@@ -94,6 +94,7 @@ else:
             print(f"     {d['course']:<7} {d['title']:<24} ${d['cost']:>5.2f}  ({d['note']})")
         print()
 print(f"  {r['withheld_for_incomplete_data']} dish(es) excluded: dietary data incomplete")
+print(f"  {r['shown_with_incomplete_tags']} dish(es) shown with tags incomplete")
 
 print("\n═══ THE SAME EVENT ON HALF THE BUDGET ═══")
 r2 = plan_event(CAT, guest_store, TODAY, covers=12, budget=15.0)

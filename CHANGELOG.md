@@ -5,6 +5,86 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-10-30 — the planner reads the closed tag vocabulary; preferences, and untagged dishes shown
+
+**`planner/` brought in line with `philosophy.md` §26 and §32.** The planner was written in
+August, before the tag vocabulary closed, and its tag-coupled tests were deferred until it did.
+Most of this applies decisions already made. **Nine decisions are new. The first is `philosophy.md` §52,
+settled by Ibrahim the same day — protein on a party menu is a preference, not a filter.** Menus
+with fewer dishes outside the host's named proteins come first, every such dish is named with its
+protein, saved menus are ordered the same way, and nothing is removed — a menu is still offered
+when none fits. No weight is invented; the order is the mechanism. §13's heading now says it is
+superseded in part. It reverses a hard filter written earlier the same day, before it shipped.
+
+**The second is `philosophy.md` §53, also Ibrahim's, the same day — cuisine is a preference too.**
+A dish is outside the preference if its cuisine or its protein is not among those named, and is
+named with what it misses; a dish missing both counts once, so the two are never weighed against
+each other. Saved menus are judged dish by dish; the old filter kept one if any dish matched.
+§52's heading and §13's now say they are superseded in part.
+
+**The third is `philosophy.md` §54, also Ibrahim's, the same day — a dish with missing tags is
+shown, not hidden.** It is marked with what it lacks and counted. No tag is guessed: without a
+course it is set aside for the host to place, unknown effort or holds counts against the host's
+limits, and an unrecorded cuisine or protein is outside the preference. Unknown dietary data stays
+excluded. It reverses an exclusion written into the code earlier the same day, never filed.
+
+**The fourth is `philosophy.md` §55, also Ibrahim's — a dish with no recorded spice level is
+shown to every cook**, whatever their ceiling, marked as missing its spice tag. The ceiling is a
+preference, not a dietary rule; a recorded level above it is still left out. §54's heading now
+says it is superseded in part.
+
+**The fifth is `philosophy.md` §56, also Ibrahim's — course-weighted serving splits evenly by
+default** (PM-16's default split). When a course holds several dishes and the cook sets no
+weights, its per-guest target is divided evenly: the only default that claims nothing about the
+dishes. §24.2's heading now says it is superseded in part. **No code:** the mechanism still waits
+on the target numbers.
+
+**The sixth is `philosophy.md` §57, also Ibrahim's — a partly weighted course gives its unweighted
+dishes an even share of what is left.** Weighted dishes take the shares the cook set; the rest
+divide the remainder evenly, which with no weights at all is §56's even split. A weight is
+therefore a share of the course target. §56's heading now says it is superseded in part. No code.
+
+**The seventh is `philosophy.md` §58, also Ibrahim's — the cook is warned when weights use up the
+whole course** while a dish there is unweighted, naming the dish that would get nothing. A
+warning, not a block: the weights are the cook's judgement. Wording waits on the planner screen.
+Not decided at the time: what that dish gets if the cook goes ahead (§59, below), and whether a
+fully weighted course over its target warns too (§60, below). §57's heading now says it is superseded in part. No code.
+
+**The eighth is `philosophy.md` §59, also Ibrahim's — a dish left with nothing stays at zero, and
+is shown at zero.** It stays on the menu until the cook changes a weight or removes it, and adds
+nothing to the shopping list or the cost. §58's heading now says it is superseded in part. No
+code.
+
+**The ninth is `philosophy.md` §60, also Ibrahim's — a fully weighted course over its target warns
+too.** A warning, not a block; if the cook goes ahead, each dish keeps its share and the course is
+planned, bought and costed above its target. With it, how a course's target is split is fully
+decided (§56–§60). §58's and §59's headings now say they are superseded in part. No code.
+
+- **The six tags it plans over are held as closed lists** (`course`, `cuisine`, `main_protein`,
+  `spice`, `effort`, `holds`) and a test fails if they drift from §26 and §32.
+- **A dish with a missing or out-of-vocabulary tag is shown, marked and counted, never guessed**
+  (§54). The old code filed an untagged dish as a main. Each dish carries `tags_missing`; both
+  decisions return `shown_with_incomplete_tags` beside the dietary count, and `plan_event` returns
+  `no_course_to_place` for dishes it cannot put in a course.
+- **Unknown spice is no longer assumed mild; it is shown to every cook, marked** (§55). Since
+  August a missing level had silently counted as no heat. Saved-menu recall follows the same rule.
+- **`course: component` is never suggested** (§26's reason for removing `hidden`), and cannot be
+  requested as an event-menu course.
+- **`plan_event` takes cuisine and protein preferences** (`prefer_cuisines`, `prefer_proteins`,
+  §52, §53), replacing the `cuisine` filter: they order menus and saved menus and name each dish
+  outside them in `outside_preference`. The per-course candidate
+  cap ranks preferred dishes first, so it never cuts one in favour of a dish ranked below it.
+  **`main_protein` is never read as diet:** dietary exclusion stays on the derived `contains`.
+- **`contains_override` is deliberately not read:** `matbakh.py`'s `derive_diet()` already folds
+  it into `contains`.
+- **`test_planner_tags.py`, new: 28 tests.** With `test_planner_core.py`'s 17, 45 pass. Nineteen
+  of the twenty-eight fail against the previous `planner.py`; the other nine lock behaviour that
+  already existed but was untested. `test_planner.py`'s catalogue gained `main_protein`, and its
+  output is unchanged apart from the new count.
+
+**Not touched:** `season` and `occasion` (no decision says how the planner uses them), and
+course-weighted serving (§24), which still waits on PM-16.
+
 ## 2026-10-26b — doneness is a thumbnail that enlarges; a clip is summoned
 
 **`philosophy.md` §51, settled.** §50 put the doneness photograph at the foot of the step page

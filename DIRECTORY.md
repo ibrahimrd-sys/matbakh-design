@@ -4,7 +4,7 @@
 Written 26 August 2026. Companion to `README.md`, which explains the *loop*;
 this explains the *contents*.
 
-**Last updated:** 2026-10-06
+**Last updated:** 2026-10-30
 
 The vault, `matbakh-private/`, has its own `DIRECTORY.md` beside this one. It is
 not described here — this file is in a public repository.
@@ -136,7 +136,7 @@ screens render blank with no visible error.
 | File | Status | What it is |
 |---|---|---|
 | `planner.py` | **CANON** | Remembers, never predicts. Local-only, which also helps on the privacy side. |
-| `test_planner.py`, `test_planner_core.py` | **CANON** | 17 tests, Python 3.10–3.13. |
+| `test_planner.py`, `test_planner_core.py`, `test_planner_tags.py` | **CANON** | `test_planner.py` is the demo; the other two hold 45 tests — 17 that do not depend on tags, and 28 written on 30 Oct 2026 once the tag vocabulary closed (§26, §32). Python 3.10–3.13. |
 | `README.md` | **CANON** | How it works and what it deliberately does not do. |
 | ~~`__pycache__/`~~ | **REMOVED 26 Aug** | Build junk. Already gitignored; it was only ever on disk. |
 

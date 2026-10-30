@@ -150,8 +150,45 @@ without touching the data model — **provided it preserves the explanation
 contract.** An engine that cannot say why in one sentence from the cook's own
 record cannot be used here, however good its recommendations.
 
+## The tag vocabulary it plans over
+
+The planner reads six of the closed tags settled on 24 September 2026
+(`philosophy §26`, with `lamb` added by `§32`): `course`, `cuisine`,
+`main_protein`, `spice`, `effort` and `holds`. The lists are held in
+`planner.py` and a test fails if they drift from the filed ones.
+
+* **A dish missing one of them, or carrying a value outside its list, is
+shown, marked and counted, never guessed** (`philosophy §54`). Each dish
+carries `tags_missing`, and both decisions report `shown_with_incomplete_tags`
+beside the dietary count. Where a tag is needed it is never guessed: with no
+course, the dish is set aside in `no_course_to_place` for the host to place,
+never filed as a main as the first version did; unknown effort or holds counts
+against the host's limits; an unrecorded cuisine or protein is outside the
+preference. Unknown **dietary** data is still excluded.
+* **Unknown spice is shown to every cook, whatever their ceiling** (`philosophy
+§55`), marked like any missing tag. The ceiling is a preference, not a dietary
+rule; a recorded level above it is still left out.
+* **`course: component` is never suggested**, and cannot be asked for as a
+course of an event menu.
+* **Cuisine and protein are preferences on event menus** (`prefer_cuisines`,
+`prefer_proteins`, `philosophy §52` and `§53`). A dish is outside the
+preference if its cuisine or its protein is not among those named; menus with
+fewer such dishes come first, and each one is named in `outside_preference`
+with what it misses. A dish missing both counts once. Saved menus are ordered
+the same way. Nothing is removed, and no weight is invented: the order is the
+mechanism. These are the host's menu choices, not dietary rules. **Diet is always `contains`**, never `main_protein`:
+a soup made with chicken stock is not a poultry dish, but it is not vegetarian
+either.
+* **`contains_override` is not read here.** `matbakh.py` folds it into the
+derived `contains` before a recipe reaches the planner.
+
+`season` and `occasion` are not read: nothing decided yet says how the planner
+should use them.
+
 ## Files
 
 * `planner.py` — the algorithm
 * `test\\\\\\\_planner.py` — a plausible year of cooking history, both decisions
+* `test_planner_core.py` — the logic that does not depend on tags
+* `test_planner_tags.py` — the logic that does, written once the vocabulary closed
 

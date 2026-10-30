@@ -3,8 +3,10 @@
 Matbakh planner — core logic tests (vocabulary-independent).
 
 These assertions lock the behaviour that does NOT depend on the recipe tag
-vocabulary (course / cuisine / effort / holds / spice level), which is still
-unsettled (PM-07). They cover the parts that are safe to freeze now:
+vocabulary (course / cuisine / effort / holds / spice level). They were written
+on 14 Aug 2026, while that vocabulary was still open (PM-07); it closed on
+24 Sept 2026 (philosophy §26), and the tag-coupled assertions deferred below now
+live in test_planner_tags.py. These cover:
 
   - the two signals: affinity and staleness
   - the multiplicative combination that is the algorithm's central claim
@@ -15,7 +17,7 @@ unsettled (PM-07). They cover the parts that are safe to freeze now:
 Dietary classes (meat, dairy, ...) are treated as stable: they are derived from
 the ingredient reference, not from the recipe-tag vocabulary PM-07 will settle.
 
-Deliberately NOT tested here (would couple to PM-07 and cause rework):
+Deliberately NOT tested here — see test_planner_tags.py:
   - suggest_home effort-slot filtering
   - plan_event course/cuisine/effort/holds scoring and the binding-constraint
     diagnostics

@@ -59,7 +59,7 @@ matbakh-design/
 │   ├── recipes/               _template.yaml + one schema FIXTURE
 │   └── ref/                   the 12-entry fallback sample
 │
-├── planner/               the planning algorithm + 17 tests
+├── planner/               the planning algorithm + 45 tests
 ├── tools/                 four single-file browser authoring editors
 ├── assets/                photos, clips, media.js
 │
