@@ -2,7 +2,7 @@
 
 *Written 1 October 2026, before the first run against the live API.*
 
-**Last updated:** 2026-10-06 — §6: a chef's rewrites of captures go to `09-reviewed-captures/` (release 2026.10.06). Earlier, 2026-10-04: §7: checks F–H (duplicate entries, temperature units, list against method) added to the pre-filter design, with the Boeuf Bourguignon capture as their worked example (release 2026.10.04). Earlier, 2026-10-01: the fallback turned off (release 2026.10.01c); §7, the pre-filter engine's design, added; captures go to `08-unreviewed-captures/`; the consumer-app idea logged as HD-07.
+**Last updated:** 2026-11-01 — test-cooked only if critical (`philosophy.md` §63). 2026-10-06: §6: a chef's rewrites of captures go to `09-reviewed-captures/` (release 2026.10.06). Earlier, 2026-10-04: §7: checks F–H (duplicate entries, temperature units, list against method) added to the pre-filter design, with the Boeuf Bourguignon capture as their worked example (release 2026.10.04). Earlier, 2026-10-01: the fallback turned off (release 2026.10.01c); §7, the pre-filter engine's design, added; captures go to `08-unreviewed-captures/`; the consumer-app idea logged as HD-07.
 
 This is the procedure for running `tools/capture-draft.py` against the real
 Anthropic API: first once to prove it works, then as a routine. What the tool is,
@@ -135,7 +135,9 @@ the dish ought to be made.
 **A wrong draft is cheap: correct it by hand, or run it again.** What must never
 happen is a draft treated as a recipe. It goes to a chef, who rewrites it to
 `design/authoring-standard.md` in `recipe-editor.html`, and the result is
-test-cooked before it goes anywhere near the catalogue.
+test-cooked before it goes anywhere near the catalogue. *(1 Nov 2026: test-cooked
+if its tier is critical, chef-reviewed if forgiving — `philosophy.md` §62–§63. A
+draft is still never a recipe.)*
 
 ---
 
@@ -196,8 +198,8 @@ it: `ToolsReadme.md` § capture-prefilter.py. The design below is unchanged.*
 **It is a triage layer for the chef's queue, not authoring.** It reads a draft
 that `capture-draft.py` has already produced, and attaches structural flags so
 a chef can review the draft faster. The chef still reviews every draft, rewrites
-it to `design/authoring-standard.md`, and the dish is still test-cooked. None of
-that changes.
+it to `design/authoring-standard.md`, and the dish is still test-cooked *(if
+critical — `philosophy.md` §63, 1 Nov 2026)*. None of that changes.
 
 **It is not the consumer capture-and-author app** — an app in which cooks capture
 recipes that are then authored to Matbakh's specs. That idea was discussed on
@@ -208,7 +210,8 @@ separate matter entirely:
 - **Open, unapproved, and explicitly not being planned toward.**
 - **It would reopen settled positions:** import-your-own-recipes, which is
   recorded as structurally unavailable (competitor study, Appendix A §3); the
-  test-cooked promise; and one recipe per dish (§9).
+  test-cooked promise (since 1 Nov 2026, for critical recipes — `philosophy.md`
+  §63); and one recipe per dish (§9).
 
 The pre-filter is a smaller, approved-to-design extension of an internal tool.
 **It does not move toward automating authoring,** and building it is not a step

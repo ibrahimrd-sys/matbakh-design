@@ -5,6 +5,36 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-11-01 — production: recipes chef-reviewed, only critical recipes test-cooked; no arc on the step page
+
+**Five decisions of Ibrahim's, all 1 November 2026, from the production research of
+28 October – 1 November** (vault, `04-research/low-cost-production-plan-2026-11-01.md`,
+a plan and not itself a filing). Nothing is built.
+
+- **`philosophy.md` §61 — the utilities are the product; the recipes are their data.**
+  Supersedes nothing.
+- **§62 — recipes are gathered and chef-reviewed, not authored from scratch.** Facts
+  only from published versions; reviewing is not cooking. Answers PM-01 in part.
+- **§63 — only critical recipes are test-cooked**: safety-critical and
+  technique-critical, including every hand-action recipe. Forgiving recipes are
+  reviewed only.
+- **§64 — timing errors in untested recipes are accepted, and found by cooks**,
+  through §8's telemetry and §38's report card. Forgiving recipes only.
+- **§65 — no arc on the step page.** The arc stays §4.4's map.
+
+**Headings marked superseded in part (§49):** §5.5, §6.1, §14, §17.3, §18, §28, §31.
+
+**Carried into the files that state the old rule, each with a dated note:**
+`design/authoring-standard.md` (the status ladder and the checklist),
+`content/recipes/_template.yaml`, `tools/CaptureDraftRunReadme.md`,
+`tools/ToolsReadme.md`. **Left as is, and why:** the prototypes' *"the tested
+recipe is N servings"* (molokhia is critical, so still true);
+`step-imagery-decision.md` and `step-imagery-research.md`, dated research.
+
+**Open, not decided:** how a reviewed-only recipe reaches `published` when
+`tested` means *cooked* (PM-26), and the positioning documents that call the
+test-cooked catalogue the only true moat (PM-27).
+
 ## 2026-10-30 — the planner reads the closed tag vocabulary; preferences, and untagged dishes shown
 
 **`planner/` brought in line with `philosophy.md` §26 and §32.** The planner was written in

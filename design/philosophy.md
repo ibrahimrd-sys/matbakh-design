@@ -2,7 +2,7 @@
 
 **Status:** Living document. Sections marked SETTLED are decided and should not be relitigated without a stated reason. Sections marked OPEN are unresolved. **A heading that says SUPERSEDED or SUPERSEDED IN PART names what replaced it and when — read that first; the body below is left exactly as it was filed** (§49).
 
-**Last updated:** 2026-10-30
+**Last updated:** 2026-11-01
 
 ---
 
@@ -130,7 +130,7 @@ A settings toggle for Eastern Arabic numerals may be offered, but Western is the
 
 **Digits are the only element on the page that changes** — via serving scaling, unit toggles and live pricing. They must therefore be a **live text layer over a static visual grammar**, never baked into an icon or composite step graphic. Easy to violate accidentally once someone starts producing composite artwork.
 
-### 5.5 Four surfaces, and what each one's cost scales with — SETTLED 2 September 2026, SUPERSEDED IN PART by §39 (29 Sept 2026): "irreducibly recipe-specific" for ingredient states only
+### 5.5 Four surfaces, and what each one's cost scales with — SETTLED 2 September 2026, SUPERSEDED IN PART by §39 (29 Sept 2026): "irreducibly recipe-specific" for ingredient states only; SUPERSEDED IN PART by §65 (1 Nov 2026): the arc is not on the step page — it stays the map's (§4.4)
 
 A cook in front of the reader asks four questions. Each is answered on a different surface, at a different size, and — the part that decides the economics — each scales with something different.
 
@@ -157,7 +157,7 @@ Three of the four are settled, and they are settled because each has exactly one
 
 ## 6. Serving scaling — SETTLED
 
-### 6.1 Frame
+### 6.1 Frame — SUPERSEDED IN PART by §63 and §64 (1 Nov 2026): "the one that was cooked and tested" holds for test-cooked recipes; a reviewed-only recipe's base is chef-reviewed, not cooked
 
 The base recipe is the one that was cooked and tested. Every other serving count is a derivation the kitchen never saw. The app always shows which state it is in, and **returning to the tested base is one tap.** A scaled recipe is a calculation; the ×1 is the promise.
 
@@ -436,7 +436,7 @@ Full orchestration — a live plan tracking the cook's position across three dis
 
 ---
 
-## 14. Sub-recipes — SETTLED
+## 14. Sub-recipes — SETTLED, SUPERSEDED IN PART by §63 (1 Nov 2026): a sub-recipe is test-cooked only if its tier is critical
 
 A recipe may consume another: a tahini sauce, a dressing, a spice mix, a dough.
 
@@ -655,7 +655,7 @@ The line is: **free is the raw data; paid is the data applied to a dish.**
 Knowing what tomatoes cost this week does not tell a cook what koshari costs,
 how much to buy, or how to make it.
 
-### 17.3 Why the free thing is never the paid thing
+### 17.3 Why the free thing is never the paid thing — SUPERSEDED IN PART by §62 and §63 (1 Nov 2026): "authored, test-cooked and photographed once" now holds for critical recipes only
 
 A free tier carved out of the catalogue would give away fixed assets — each
 recipe authored, test-cooked and photographed once, at real cost — to someone
@@ -675,7 +675,7 @@ Any recurring revenue must come from new catalogue content, not from access to
 prices. That constraint is now fixed.
 
 
-## 18. Palate adjustment — SETTLED (29 August 2026)
+## 18. Palate adjustment — SETTLED (29 August 2026), SUPERSEDED IN PART by §63 (1 Nov 2026): "the test-cooked promise" holds for critical recipes only
 
 After cooking a recipe as authored, a cook may adjust ingredient quantities to
 taste. The adjustment belongs to the cook, never to the catalogue.
@@ -1362,7 +1362,7 @@ concrete terms.
 
 ---
 
-## 28. Substitution scope and mechanism — SETTLED IN PART (24 September 2026)
+## 28. Substitution scope and mechanism — SETTLED IN PART (24 September 2026), SUPERSEDED IN PART by §63 (1 Nov 2026): "exactly as test-cooked" holds for critical recipes only; substitutes still never enter the instruction set
 
 *A further addendum, per append-never-insert. It stacks after §26 and §27 and
 edits neither, and it does not edit §22: **§22.2's open list is superseded on
@@ -1504,7 +1504,7 @@ display-preference setting.
 
 ---
 
-## 31. Wine, and what "halal" can claim — SETTLED IN PART (2 September 2026)
+## 31. Wine, and what "halal" can claim — SETTLED IN PART (2 September 2026), SUPERSEDED IN PART by §63 (1 Nov 2026): "a tested recipe" holds for critical recipes only; the no-fork rule is unchanged
 
 *Decided in a chat session on 2 September and carried until now only by that
 session's handoff note, which sat outside both repositories; filed here on 24
@@ -2846,6 +2846,131 @@ part.
 
 ---
 
+## 61. The utilities are the product; the recipes are their data — SETTLED (1 November 2026)
+
+*Ibrahim's decision, 1 November 2026, from the production research of 28 October –
+1 November (vault, `04-research/low-cost-production-plan-2026-11-01.md` §1).
+Supersedes nothing; it sharpens §1.*
+
+**The decision.** What Matbakh sells is **the utilities around the recipes** — the
+timers, the indicative price engine, the planner, the shopping list and the
+near-wordless step page. The recipes are the data those utilities run on.
+
+**Two consequences, recorded as consequences rather than separate decisions.**
+
+- **Cost goes where a utility depends on it**, not where content would look
+  better.
+- **The main risk is data, not imagery.** A wrong time or quantity is a utility
+  failure.
+
+**What this does not decide.** Which images a recipe carries, and from where, is
+§5.5, §16.6, §39, §50 and §51, unchanged; the AI hero and the missing dish-state
+photograph the plan proposes for reviewed-only recipes are open (PM-21).
+
+---
+
+## 62. Recipes are gathered and chef-reviewed, not authored from scratch — SETTLED IN PART (1 November 2026)
+
+*Ibrahim's decision, 1 November 2026 (plan §2, D-b). Supersedes in part §17.3.
+Answers PM-01 in part.*
+
+**The decision.** A recipe is **gathered** from published versions of the dish —
+facts only: ingredients, quantities, method; no source wording and no photographs
+enter the vault — and **reviewed by Ibrahim as a seasoned chef**, with his notes
+entered: *why this version* (§9), the NEVER note and the doneness cues. **Reviewing
+is not cooking.** Which recipes are also cooked is §63.
+
+**What it changes.** The launch promise written into the PM log (§3) —
+*"500 curated, individually test-cooked, founder-authored recipes"* — loses
+*founder-authored* in the sense of written from nothing. The recipe is still one
+per dish (§9), still the chef's judgement, and still in the structured format
+against the closed lexicon.
+
+**Weighed and set aside.** `02-strategy/recipe-aggregation-economics-report.md`
+(29 Sept, reference) advised against building volume by removing testing. It
+was read against this decision; §63 keeps testing where a failure is unsafe or
+the dish fails.
+
+**Not decided.** The per-recipe pipeline (plan §3, *proposed*) and its 1–1.5 h
+figure, which is unmeasured (PM-25). How a reviewed-only recipe moves through
+`status: draft → tested → published` (PM-26).
+
+---
+
+## 63. Only critical recipes are test-cooked — SETTLED (1 November 2026)
+
+*Ibrahim's decision, 1 November 2026 (plan §2, D-c; §4). Supersedes in part §6.1,
+§14, §17.3, §18, §28 and §31, each where it promises that every recipe was
+cooked.*
+
+**The decision.** Every recipe is tiered:
+
+| Tier | Examples | Treatment |
+|---|---|---|
+| **Safety-critical** | Poultry, mince, eggs, seafood, rice held warm | **Test-cooked** |
+| **Technique-critical** | Baking, deep-frying, caramel, doughs, béchamel; every hand-action recipe (wrapping, folding, rolling, shaping) | **Test-cooked** |
+| **Forgiving** | Most stews, soups, salads, casseroles | **Reviewed only** (§62) |
+
+The critical share — 25–30% is assumed — is **counted from the tagged catalogue,
+not forecast.** Each test cook is also the capture session for that recipe's cut
+and state photographs, clips and real photographs (§33, §39, §51).
+
+**What holds.** KS-03 — *never shoot an untested recipe* — holds for recipes: no
+recipe that was not cooked is photographed as if it was. **Where a section above
+promises that every recipe was cooked, the promise now holds for the critical
+tiers only;** each such heading says so (§49).
+
+**Not decided here.** The hero and dish-state doneness for reviewed-only recipes
+(PM-21); standalone library shoot days (PM-22); who cooks (PM-23); how a
+reviewed-only recipe is labelled in the schema (PM-26); and what the positioning
+documents, which call the test-cooked catalogue *the only true moat*, now say
+(PM-27). The plan's *"chef-reviewed"* and *"test-cooked"* marketing split
+(plan §7.7) is proposed, not decided.
+
+---
+
+## 64. Timing errors in untested recipes are accepted, and found by cooks — SETTLED IN PART (1 November 2026)
+
+*Ibrahim's decision, 1 November 2026 (plan §2, D-d). Supersedes in part §6.1's
+"the ×1 is the promise" for reviewed-only recipes. §8 is unchanged.*
+
+**The decision.** In a reviewed-only recipe a time may be wrong. **That is
+accepted.** Errors are found by cooks, through the channels already settled —
+§8's abandon-step telemetry and §38's report card — and corrected in versioned
+recipe data that reaches every cook.
+
+**Its limit, a consequence of §63.** Safety-critical recipes are test-cooked, so
+this acceptance covers forgiving recipes only. It is never an acceptance of an
+unsafe time.
+
+**Not decided.** Time ranges where sources disagree, a timer that ends with a cue
+and a one-tap *+2 min*, a passive signal from many cooks tapping *+2 min* on one
+step, and measuring review's miss rate on 20–30 recipes before they are cooked —
+all plan §7.3–7.5, all *proposed*. The safety rules and plausibility checks
+(plan §7.1–7.2) are proposed and not built.
+
+---
+
+## 65. No arc on the step page — SETTLED (1 November 2026)
+
+*Ibrahim's decision, 1 November 2026; dated at filing, since the plan records it
+only as "the week of 26 Oct". Supersedes in part §5.5's first row. §4.4 is
+unchanged.*
+
+**The decision.** **The step page carries no arc.** Its parts are §50's four, as
+§51 presents them: the location band, the utensil with its layers, the
+time-and-temperature column, the doneness thumbnail, and a clip summoned by a
+press.
+
+**What is kept.** The arc is **§4.4's map** — the thumbnail overview, the progress
+indicator, *"one screen, no scroll"* — and it stays. §3's principle 5 (*the map
+never steals your position*), the 14-page ceiling's justification, §38's report
+card (the cook taps the wrong step **on the page map**) and the 17 px arc
+thumbnail in `asset-spec.md` all stand. §5.5's *Where am I?* is answered by the
+map, not by the step page.
+
+---
+
 ## Decision log
 
 | Date | Decision | Section |
@@ -2941,3 +3066,8 @@ part.
 | 30 Oct 2026 | **The cook is warned when weights use up the whole course.** When the shares set in a course reach or pass its per-guest target while a dish there is still unweighted, the planner warns, naming the dish that would get no quantity; it does not block. The weights are the cook's judgement, and a warning catches a slip without overruling a choice. Wording waits on the planner screen. Not decided: what the unweighted dish gets if the cook goes ahead; whether a fully weighted course over its target warns. Not built | 58 |
 | 30 Oct 2026 | **A dish left with nothing stays at zero, and is shown at zero.** If the cook keeps weights that use up the course past §58's warning, an unweighted dish keeps a quantity of zero and the party plan shows it so — neither hidden nor given a share the cook's weights do not allow. Consequences: it stays on the menu until the cook changes a weight or removes it, and adds nothing to the shopping list or the cost. How the zero looks waits on the planner screen. Not built | 59 |
 | 30 Oct 2026 | **A fully weighted course over its target warns too.** When every dish in a course is weighted and the shares come to more than the course target, the planner warns, as §58 does; it does not block. If the cook goes ahead, each dish keeps its share and the course is planned, bought and costed above its target. Wording waits on the planner screen. With this, how a course's target is split is fully decided; the numbers and which courses take part remain open (PM-16). Not built | 60 |
+| 1 Nov 2026 | **The utilities are the product; the recipes are their data.** Matbakh sells the timers, the indicative price engine, the planner, the shopping list and the near-wordless step page; the recipes are what they run on. Cost goes where a utility depends on it, and the main risk is data, not imagery. Supersedes nothing. | 61 |
+| 1 Nov 2026 | **Recipes are gathered and chef-reviewed, not authored from scratch.** Facts from published versions, no source wording or photographs; reviewed by Ibrahim as chef, his notes entered; reviewing is not cooking. Answers PM-01 in part. The pipeline and its 1–1.5 h figure are not decided. §17.3 marked superseded in part. | 62 |
+| 1 Nov 2026 | **Only critical recipes are test-cooked.** Safety-critical (poultry, mince, eggs, seafood, rice held warm) and technique-critical (baking, deep-frying, caramel, doughs, béchamel, every hand-action recipe) are cooked; forgiving recipes are reviewed only. The share is counted from the catalogue. KS-03 holds for recipes. §6.1, §14, §17.3, §18, §28 and §31 marked superseded in part. | 63 |
+| 1 Nov 2026 | **Timing errors in untested recipes are accepted, and found by cooks.** Through §8's telemetry and §38's report card, corrected in versioned data; forgiving recipes only, never an unsafe time. Ranges, the +2 min cue and the miss-rate measurement stay proposed. §6.1 marked superseded in part. | 64 |
+| 1 Nov 2026 | **No arc on the step page.** The page is §50's four parts as §51 presents them. The arc stays §4.4's map; the report card, the 14-page ceiling and the 17 px thumbnail stand. §5.5 marked superseded in part. | 65 |

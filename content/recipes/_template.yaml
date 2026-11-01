@@ -44,7 +44,8 @@ nutrition_per_serving:
 # A recipe this one consumes — a sauce, a dressing, a spice mix, a dough.
 #
 # The sub-recipe is a first-class recipe with its own file, authored and
-# test-cooked ONCE. Fix it there and every dish using it is fixed. It needs a
+# test-cooked ONCE (if its tier is critical — philosophy.md §63, 1 Nov 2026;
+# otherwise chef-reviewed). Fix it there and every dish using it is fixed. It needs a
 # `yield` block; this recipe states how much of that yield it takes.
 #
 # Its ingredients roll into this recipe's shopping list, scaled by
