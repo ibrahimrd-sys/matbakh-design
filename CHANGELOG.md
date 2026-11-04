@@ -5,6 +5,19 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-11-04 — production: arranging is not a hand action
+
+**One decision of Ibrahim's, 4 November 2026**, from the ratatouille page map
+(vault, `04-research/ratatouille-page-map-2026-11-04.md`). Nothing is built.
+
+- **`philosophy.md` §66 — arranging is not a hand action.** Arranging prepared
+  pieces in a vessel, such as ratatouille's spiral of slices, does not make a recipe
+  technique-critical under §63. Ratatouille stays forgiving and is reviewed only.
+  Supersedes nothing. PM-21 is unchanged and still covers its hero and doneness
+  photographs.
+
+**Also:** `DIRECTORY.md` points to the renamed handover, `handover-2026-11-04.md`.
+
 ## 2026-11-01 — production: recipes chef-reviewed, only critical recipes test-cooked; no arc on the step page
 
 **Five decisions of Ibrahim's, all 1 November 2026, from the production research of

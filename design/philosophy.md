@@ -2,7 +2,7 @@
 
 **Status:** Living document. Sections marked SETTLED are decided and should not be relitigated without a stated reason. Sections marked OPEN are unresolved. **A heading that says SUPERSEDED or SUPERSEDED IN PART names what replaced it and when — read that first; the body below is left exactly as it was filed** (§49).
 
-**Last updated:** 2026-11-01
+**Last updated:** 2026-11-04
 
 ---
 
@@ -2971,6 +2971,27 @@ map, not by the step page.
 
 ---
 
+## 66. Arranging is not a hand action — SETTLED (4 November 2026)
+
+*Ibrahim's decision, 4 November 2026, from the ratatouille page map (vault,
+`04-research/ratatouille-page-map-2026-11-04.md`). Clarifies §63's
+technique-critical tier. Supersedes nothing.*
+
+**The decision.** Arranging prepared pieces in a vessel, as ratatouille lays its
+slices in a spiral, is **not a hand action** under §63. A hand-action recipe is
+still one with wrapping, folding, rolling or shaping. **Ratatouille stays
+forgiving**, so it is reviewed only (§62).
+
+**What follows for ratatouille.** Under the production plan, both of its
+dish-state doneness photographs are omitted and its hero is AI-generated. Both
+remain open under PM-21, as does the conflict this creates with *`photo` and
+`doneness` travel together* (§11; `authoring-standard.md` §4.2).
+
+**Not decided here.** Whether an arranged step needs frames or a clip (sketch
+S-04, D3; PM-20); the tier of any other recipe; PM-21.
+
+---
+
 ## Decision log
 
 | Date | Decision | Section |
@@ -3071,3 +3092,4 @@ map, not by the step page.
 | 1 Nov 2026 | **Only critical recipes are test-cooked.** Safety-critical (poultry, mince, eggs, seafood, rice held warm) and technique-critical (baking, deep-frying, caramel, doughs, béchamel, every hand-action recipe) are cooked; forgiving recipes are reviewed only. The share is counted from the catalogue. KS-03 holds for recipes. §6.1, §14, §17.3, §18, §28 and §31 marked superseded in part. | 63 |
 | 1 Nov 2026 | **Timing errors in untested recipes are accepted, and found by cooks.** Through §8's telemetry and §38's report card, corrected in versioned data; forgiving recipes only, never an unsafe time. Ranges, the +2 min cue and the miss-rate measurement stay proposed. §6.1 marked superseded in part. | 64 |
 | 1 Nov 2026 | **No arc on the step page.** The page is §50's four parts as §51 presents them. The arc stays §4.4's map; the report card, the 14-page ceiling and the 17 px thumbnail stand. §5.5 marked superseded in part. | 65 |
+| 4 Nov 2026 | **Arranging is not a hand action.** Arranging prepared pieces in a vessel, such as ratatouille's spiral, does not make a recipe technique-critical under §63; ratatouille stays forgiving. Supersedes nothing. | 66 |
