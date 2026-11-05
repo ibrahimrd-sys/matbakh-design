@@ -145,6 +145,8 @@ or a layout problem, and imagery of any kind is the wrong tool for it. Worth
 knowing before spending anything, because it is the one collision that survives
 every option in this document.
 
+*Note, 5 November 2026 — `philosophy.md` §67.* The collision is filed. **Decided (Ibrahim):** a `to_taste` tile is authored as words with no amount, and costing converts *to taste* to a quantity by a set rule. The rule is not yet set. **Still open:** the glyph — a glyph of its own for `to_taste`, or the tile's amount slot (digits for `season`, the words for `to_taste`) to tell them apart.
+
 *(A correction to earlier notes: the handover lists `cut_wedges`/`zest` as a
 collision pair. On disk they carry distinct glyphs. Three pairs share a glyph,
 not four.)*

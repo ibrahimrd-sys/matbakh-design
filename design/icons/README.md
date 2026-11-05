@@ -38,3 +38,5 @@ Two things this example surfaced, both open in C-05:
   `chop`/`mince`, `baste`/`brush`, `season`/`to_taste`, and — until it was fixed
   — `cut_wedges`/`zest`. A shared glyph is fine only where the two never co-occur
   in one recipe. `season` and `to_taste` co-occur in molokhia.
+
+  *Note, 5 November 2026 — `philosophy.md` §67.* The collision is filed. **Decided (Ibrahim):** a `to_taste` tile is authored as words with no amount, and costing converts *to taste* to a quantity by a set rule. The rule is not yet set. **Still open:** the glyph — a glyph of its own for `to_taste`, or the tile's amount slot (digits for `season`, the words for `to_taste`) to tell them apart.

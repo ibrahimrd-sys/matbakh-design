@@ -2,7 +2,7 @@
 
 **Status:** Living document. Sections marked SETTLED are decided and should not be relitigated without a stated reason. Sections marked OPEN are unresolved. **A heading that says SUPERSEDED or SUPERSEDED IN PART names what replaced it and when — read that first; the body below is left exactly as it was filed** (§49).
 
-**Last updated:** 2026-11-04
+**Last updated:** 2026-11-05
 
 ---
 
@@ -2992,6 +2992,41 @@ S-04, D3; PM-20); the tier of any other recipe; PM-21.
 
 ---
 
+## 67. `to_taste` is costed by a set rule; the `season`/`to_taste` collision — SETTLED IN PART (5 November 2026)
+
+*Ibrahim's decision, 5 November 2026, from the step-page test maps (vault,
+`04-research/lobster-page-map-2026-11-05.md`). Supersedes nothing. §5.2's
+*to taste stays as words* holds.*
+
+**The collision, filed.** `season` and `to_taste` both draw `salt`. It has been
+recorded since August as the one collision no imagery can fix: the two are the
+same physical act, and what differs is intent (`step-imagery-decision.md` §2).
+In molokhia and the enchilada map they fell on different pages. **On page 6 of
+the lobster test map they fall on one page**, where the cook sees two identical
+glyphs. The test recipes are experiments with the page, not catalogue recipes;
+the finding is about the page.
+
+**DECIDED — the quantity.** A `to_taste` tile is authored as words, with no
+amount, and the page shows *to taste* (§5.2). For costing, *to taste* is
+converted to a quantity by **a set rule**.
+
+**Why.** Recipe costing relies on the quantities entered (§6.7). Today a tile
+with no `amt` is skipped by costing and by the shopping list, with no warning
+(`content/matbakh.py`, the purchase pass), so every to-taste ingredient costs
+nothing.
+
+**Not decided here.**
+- **The rule itself:** its quantities, whether per ingredient or per class, and
+  how it scales. §6.2's sub-linear seasoning class may bear on it.
+- **Whether the converted quantity also feeds** the shopping list and
+  nutrition, or costing only.
+- **The glyph:** a glyph of its own for `to_taste`, or the tile's amount slot,
+  which shows digits for `season` and the words for `to_taste`, to tell them
+  apart.
+- **Nothing is built.** `matbakh.py` still skips to-taste tiles.
+
+---
+
 ## Decision log
 
 | Date | Decision | Section |
@@ -3093,3 +3128,4 @@ S-04, D3; PM-20); the tier of any other recipe; PM-21.
 | 1 Nov 2026 | **Timing errors in untested recipes are accepted, and found by cooks.** Through §8's telemetry and §38's report card, corrected in versioned data; forgiving recipes only, never an unsafe time. Ranges, the +2 min cue and the miss-rate measurement stay proposed. §6.1 marked superseded in part. | 64 |
 | 1 Nov 2026 | **No arc on the step page.** The page is §50's four parts as §51 presents them. The arc stays §4.4's map; the report card, the 14-page ceiling and the 17 px thumbnail stand. §5.5 marked superseded in part. | 65 |
 | 4 Nov 2026 | **Arranging is not a hand action.** Arranging prepared pieces in a vessel, such as ratatouille's spiral, does not make a recipe technique-critical under §63; ratatouille stays forgiving. Supersedes nothing. | 66 |
+| 5 Nov 2026 | **`to_taste` is costed by a set rule.** A `to_taste` tile is authored as words with no amount; costing converts *to taste* to a quantity by a set rule, not yet set. The `season`/`to_taste` glyph collision is filed, and its fix is open. Supersedes nothing. | 67 |

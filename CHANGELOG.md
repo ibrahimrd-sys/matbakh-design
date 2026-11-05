@@ -5,6 +5,23 @@ than the top entry, so this cannot quietly fall behind.
 
 Format: `## YYYY-MM-DD — release`
 
+## 2026-11-05 — the season/to_taste collision filed; to_taste costed by a set rule
+
+**One decision of Ibrahim's, 5 November 2026**, from the step-page test maps
+(vault, `04-research/lobster-page-map-2026-11-05.md`). Nothing is built.
+
+- **`philosophy.md` §67, settled in part.** A `to_taste` tile is authored as words
+  with no amount, and costing converts *to taste* to a quantity by a set rule.
+  **Open:** the rule itself, whether it feeds the shopping list and nutrition,
+  and the glyph fix.
+
+**Carried into the files that discuss the collision, each with a dated note:**
+`design/step-imagery-decision.md`, `design/storyboard-companion.md`,
+`design/icons/README.md`, `design/authoring-standard.md` (whose pilot list named
+three pairs and not this one), `design/worked-page-maps.md`, and the `amt` line
+in `content/recipes/_template.yaml`. `DIRECTORY.md` points to the renamed
+handover, `handover-2026-11-05.md`.
+
 ## 2026-11-04 — production: arranging is not a hand action
 
 **One decision of Ibrahim's, 4 November 2026**, from the ratatouille page map

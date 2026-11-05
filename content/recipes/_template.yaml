@@ -97,7 +97,9 @@ intermediates:
 #   item:      ingredient id from ref/ingredients.yaml, or @intermediate
 #   items:     when one action touches two things; displayed amount comes
 #              from the first item that has one
-#   amt:       in the ingredient's own unit
+#   amt:       in the ingredient's own unit. Omit it on a to_taste tile:
+#              costing converts "to taste" by a set rule, not yet set
+#              (philosophy §67, 5 Nov 2026)
 #   carried:   true when this is the SAME physical ingredient as an earlier
 #              step — stops the shopping list double-counting it
 #   short:     key from the shorts block below

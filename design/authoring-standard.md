@@ -4,7 +4,7 @@
 **Written:** 15 August 2026. Verified against `content/matbakh.py`, `_template.yaml`,
 `lexicon/activities.yaml` (81 activities), `lexicon/chrome.yaml` and
 `ref/ingredients.yaml` (177 entries) as they stand today.
-**Last updated:** 2026-11-01 — `status` and the checklist: only critical recipes are test-cooked (`philosophy.md` §63); how a reviewed-only recipe is marked is open (PM-26). 2026-10-21: Appendix C: `units`, one authored equivalence (`philosophy.md` §30, addendum of 21 Oct); earlier the same day, `aisle` and `staple`, where the shopping list puts an entry (`philosophy.md` §48). 2026-10-20: Appendix C: `makes`, what one bought unit makes (`philosophy.md` §47). 2026-10-13: Appendix C: the ingredient record gains `aliases` (`philosophy.md` §45), and a leading `=` marks a whole-name-only alias. Earlier, 2026-09-30: `philosophy.md` §33–§42 folded in: page grouping,
+**Last updated:** 2026-11-05 — the `season`/`to_taste` collision and to-taste costing (`philosophy.md` §67). 2026-11-01: `status` and the checklist: only critical recipes are test-cooked (`philosophy.md` §63); how a reviewed-only recipe is marked is open (PM-26). 2026-10-21: Appendix C: `units`, one authored equivalence (`philosophy.md` §30, addendum of 21 Oct); earlier the same day, `aisle` and `staple`, where the shopping list puts an entry (`philosophy.md` §48). 2026-10-20: Appendix C: `makes`, what one bought unit makes (`philosophy.md` §47). 2026-10-13: Appendix C: the ingredient record gains `aliases` (`philosophy.md` §45), and a leading `=` marks a whole-name-only alias. Earlier, 2026-09-30: `philosophy.md` §33–§42 folded in: page grouping,
 the board page, upfront preparations, time and timers by attendance, heat and
 fat, cuts and the Cut Library, ingredient states as library photographs (§39,
 29 Sept), the finished-product page. Where a decision is
@@ -744,6 +744,8 @@ attendance classes, confirmed 30 September, are in `design/activity-attendance.m
 > Three pairs are flagged as possible icon collisions and are under test in the
 > pilot: **chop/mince**, **cut_wedges/zest**, **baste/brush**. If both members of
 > a pair appear in one recipe, note whether the shared picture confused you.
+
+*Note, 5 November 2026 — `philosophy.md` §67.* A fourth pair shares a glyph: **`season`/`to_taste`**, both `salt`, filed as a collision on 5 Nov. Author `to_taste` as words with **no `amt`**; costing will convert it by a set rule, not yet set. Until that is built, a to-taste ingredient costs nothing.
 
 ## Appendix B — closed vocabularies
 

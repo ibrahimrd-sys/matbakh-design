@@ -171,6 +171,8 @@ taste, and they share `salt.svg`. Different pages, so it does not bite — the
 same luck molokhia had. **Second recipe in a row where the collision is
 survived by accident rather than by design.**
 
+*Note, 5 November 2026 — `philosophy.md` §67.* The collision is filed. **Decided (Ibrahim):** a `to_taste` tile is authored as words with no amount, and costing converts *to taste* to a quantity by a set rule. The rule is not yet set. **Still open:** the glyph — a glyph of its own for `to_taste`, or the tile's amount slot (digits for `season`, the words for `to_taste`) to tell them apart. The third co-occurrence, on one page, is in the vault's lobster test map.
+
 **`brush` / `baste` is genuinely ambiguous here rather than colliding.**
 Brushing reserved marinade onto skewers *during* grilling is `baste` by
 station and `brush` by gesture. The shared glyph means the reader cannot tell —

@@ -4,7 +4,7 @@
 Written 26 August 2026. Companion to `README.md`, which explains the *loop*;
 this explains the *contents*.
 
-**Last updated:** 2026-11-04
+**Last updated:** 2026-11-05
 
 The vault, `matbakh-private/`, has its own `DIRECTORY.md` beside this one. It is
 not described here — this file is in a public repository.
@@ -233,7 +233,7 @@ And the standing traps, which no cleanup removes:
 | Recipe catalogue, ingredient reference | `matbakh-private/03-catalogue/` |
 | The app itself (Flutter) | A separate private repository — not described here |
 | Project tracker (canonical) | `matbakh-private/02-strategy/matbakh_pm_log.md` |
-| Handover | `matbakh-private/02-strategy/handover-2026-11-04.md` — the filename carries its latest revision's date |
+| Handover | `matbakh-private/02-strategy/handover-2026-11-05.md` — the filename carries its latest revision's date |
 | Financials, strategy, research, partners, legal | `matbakh-private/01-` … `07-` |
 | Refresh the log's measured half | `cd content && python3 matbakh.py status --write ../../matbakh-private/02-strategy/matbakh_pm_log.md` |
 
